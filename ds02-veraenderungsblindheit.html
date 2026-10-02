@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Siehst du, was sich ändert? – Psycho-Labor</title>
+<link rel="stylesheet" href="assets/lab.css">
+<style>
+  .stage-wrap { position: relative; margin: 10px auto 0; max-width: 860px; }
+  .stage {
+    position: relative; width: 100%; aspect-ratio: 8 / 5;
+    border-radius: 16px; overflow: hidden; background: #8f9399;
+    box-shadow: var(--shadow); touch-action: manipulation; user-select: none; -webkit-user-select: none;
+  }
+  .stage svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .stage .blank { position: absolute; inset: 0; background: #8f9399; }
+  .stage .layer { visibility: hidden; }
+  .stage .layer.on { visibility: visible; }
+  .stage .mark { position: absolute; border: 5px solid var(--warm); border-radius: 50%; pointer-events: none; animation: pulse 1s ease-in-out infinite alternate; }
+  .stage .tapdot { position: absolute; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 50%; background: var(--ink); opacity: .7; pointer-events: none; }
+  @keyframes pulse { from { transform: scale(.94); } to { transform: scale(1.06); } }
+  .stage.tapmode { cursor: crosshair; outline: 4px dashed var(--accent); outline-offset: 4px; }
+  .trial-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .timer { font: 700 22px var(--font-display); color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  .trial-msg { min-height: 30px; font-size: 19px; margin: 14px 0 0; }
+  .trial-msg.good { color: var(--ok); font-weight: 600; }
+  .trial-msg.bad { color: var(--warm); font-weight: 600; }
+  .center { text-align: center; }
+  .compare td, .compare th { padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--line); }
+  .compare { width: 100%; border-collapse: collapse; font-size: 18px; }
+  .compare th { font-size: 15px; color: var(--ink-soft); font-weight: 600; }
+  .side-by-side { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .side-by-side .stage { aspect-ratio: 8 / 5; }
+</style>
+</head>
+<body>
+
+<header class="lab-top">
+  <a class="lab-logo" href="index.html"><span id="logo"></span>Psycho-Labor</a>
+  <span class="lab-title">DS 2 · Veränderungsblindheit</span>
+  <div class="lab-progress" aria-hidden="true"></div>
+</header>
+
+<main class="lab-main">
+
+  <!-- 1 Frage -->
+  <section class="step" id="s-frage">
+    <span class="kicker">Selbstversuch · Wahrnehmung</span>
+    <h1>Siehst du, was sich direkt vor deinen Augen verändert?</h1>
+    <p class="lead">Gleich wechseln sich zwei Bilder immer wieder ab. In jedem Paar ist genau ein Detail anders. Deine Aufgabe: Finde es so schnell wie möglich.</p>
+    <div class="card">
+      <h3>So läuft es ab</h3>
+      <ol>
+        <li>Du gibst zuerst eine Vorhersage ab.</li>
+        <li>Dann siehst du sieben Bildpaare. Tippe auf <strong>„Gefunden!“</strong>, sobald du die Änderung siehst, und danach auf die Stelle im Bild.</li>
+        <li>Am Ende vergleichst du dein Ergebnis mit dem Kurs und mit der Forschung.</li>
+      </ol>
+      <p class="small">Dauer: etwa 15 Minuten. Halte das iPad quer und setz dich bequem hin.</p>
+    </div>
+    <div class="private"><span class="lock"></span><span>Deine Ergebnisse bleiben auf diesem iPad. Es wird nichts ins Internet gesendet. Dies ist ein Selbstversuch, kein Test – schnell oder langsam sagt nichts über dich als Person.</span></div>
+    <div class="actions">
+      <button class="btn big" data-next>Los geht’s</button>
+      <button class="btn secondary" id="btn-alt" hidden>Mein letztes Ergebnis ansehen</button>
+    </div>
+  </section>
+
+  <!-- 2 Vorhersage -->
+  <section class="step" id="s-vorhersage">
+    <span class="kicker">Schritt 1 · Vorhersage</span>
+    <h2>Was glaubst du?</h2>
+    <div class="card">
+      <h3>Wie viele Sekunden brauchst du im Durchschnitt, um eine Änderung zu finden?</h3>
+      <div class="slider-row">
+        <input type="range" id="pred" min="1" max="40" value="5" step="1" aria-label="Vorhergesagte Sekunden">
+        <div class="slider-value" id="pred-out">5 s</div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Welche Änderungen findet man schneller?</h3>
+      <div class="choices" id="hyp">
+        <button class="choice" data-value="mitte">Änderungen an Dingen, die im <strong>Mittelpunkt</strong> des Bildes stehen</button>
+        <button class="choice" data-value="rand">Änderungen an <strong>Nebensachen</strong> am Rand</button>
+        <button class="choice" data-value="gleich">Da gibt es <strong>keinen Unterschied</strong></button>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn secondary" data-prev>Zurück</button>
+      <button class="btn big" id="btn-start-trials" disabled>Weiter zum Versuch</button>
+    </div>
+  </section>
+
+  <!-- 3 Durchführung -->
+  <section class="step" id="s-versuch">
+    <div class="trial-head">
+      <div><span class="kicker" id="trial-kicker">Bild 1 von 7</span><h2 id="trial-title" style="margin:0">Bereit?</h2></div>
+      <div class="timer" id="timer">0,0 s</div>
+    </div>
+    <div class="stage-wrap">
+      <div class="stage" id="stage">
+        <svg class="layer" id="layer-a" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid meet"></svg>
+        <svg class="layer" id="layer-b" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="blank" id="blank"></div>
+      </div>
+    </div>
+    <p class="trial-msg" id="trial-msg"></p>
+    <div class="actions" style="justify-content:center">
+      <button class="btn big" id="btn-go">Start</button>
+      <button class="btn big warm" id="btn-found" hidden>Gefunden!</button>
+      <button class="btn big" id="btn-nexttrial" hidden>Nächstes Bild</button>
+    </div>
+  </section>
+
+  <!-- 4 Mein Ergebnis -->
+  <section class="step" id="s-ergebnis">
+    <span class="kicker">Schritt 2 · Mein Ergebnis</span>
+    <h2>Das hast du beobachtet</h2>
+    <div class="stat-row" id="stats"></div>
+    <div class="card"><div id="mychart"></div><p class="small">Jeder Punkt ist ein Bild. Der schwarze Strich ist dein Durchschnitt, der orange Kreis deine Vorhersage. Nicht gefundene Änderungen zählen mit 60 Sekunden.</p></div>
+    <div class="card accent" id="pred-compare"></div>
+    <div class="actions">
+      <button class="btn big" data-next>Weiter: Kursvergleich</button>
+    </div>
+  </section>
+
+  <!-- 5 Kursvergleich -->
+  <section class="step" id="s-kurs">
+    <span class="kicker">Schritt 3 · Kursvergleich</span>
+    <h2>Dein Ergebnis für den Kurs</h2>
+    <p>Zeig diesen QR-Code deiner Lehrkraft. Sie scannt ihn mit der Kamera – so erscheint dein Ergebnis <strong>ohne Namen</strong> im Kursdiagramm am Beamer.</p>
+    <div class="card">
+      <div class="qr-box">
+        <div id="qr"></div>
+        <div style="flex:1;min-width:220px">
+          <p class="small" style="margin-bottom:6px">Im Code stehen nur deine Zeiten und deine Vorhersage – sonst nichts.</p>
+          <p class="small" style="margin-bottom:6px">Falls das Scannen nicht klappt, kann deine Lehrkraft diesen Code eintippen:</p>
+          <div class="code" id="code"></div>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn secondary" data-prev>Zurück</button>
+      <button class="btn big" data-next>Weiter: Was sagt die Forschung?</button>
+    </div>
+  </section>
+
+  <!-- 6 Forschung und Denkwerkzeug -->
+  <section class="step" id="s-forschung">
+    <span class="kicker">Schritt 4 · Was die Forschung sagt</span>
+    <h2>Veränderungsblindheit</h2>
+    <div class="card">
+      <p>Diesen Flacker-Test haben <strong>Ronald Rensink, Kevin O’Regan und James Clark (1997)</strong> entwickelt. Ihre Ergebnisse:</p>
+      <ul>
+        <li><strong>Ohne</strong> die kurze graue Lücke fällt eine Änderung fast sofort auf, weil das Auge die Bewegung bemerkt.</li>
+        <li><strong>Mit</strong> Lücke brauchten die Versuchspersonen oft viele Bildwechsel – selbst bei großen Änderungen.</li>
+        <li>Änderungen an <strong>Nebensachen</strong> wurden deutlich langsamer entdeckt als Änderungen an Dingen im Mittelpunkt des Interesses.</li>
+      </ul>
+      <p>Ihre Deutung: Wir speichern eine Szene nicht wie ein Foto ab. Bewusst sehen wir vor allem das, worauf sich unsere <strong>Aufmerksamkeit</strong> richtet.</p>
+    </div>
+    <div class="card gold">
+      <h3>Und im echten Leben?</h3>
+      <p>In der „Tür-Studie“ (Simons & Levin, 1998) fragte ein Forscher Passanten nach dem Weg. Während des Gesprächs trugen zwei Personen eine Tür zwischen ihnen hindurch – und dahinter wurde der Fragende gegen eine andere Person ausgetauscht. Etwa die Hälfte der Passanten bemerkte den Wechsel nicht.</p>
+    </div>
+
+    <h3 style="margin-top:28px">Denkwerkzeug: Beobachtung oder Deutung?</h3>
+    <p>Eine <strong>Beobachtung</strong> beschreibt, was tatsächlich gemessen oder gesehen wurde. Eine <strong>Deutung</strong> erklärt, warum es so ist – oder verallgemeinert. Ordne zu.</p>
+    <div class="card" id="sort"></div>
+    <details class="hint"><summary>Kleine Hilfe</summary><div>Frag dich bei jedem Satz: Könnte man das mit einer Stoppuhr oder einem Foto direkt überprüfen? Dann ist es eine Beobachtung. Steckt ein „weil“, ein „alle“ oder eine Aussage über das Gehirn oder über Menschen darin? Dann ist es eine Deutung.</div></details>
+    <div class="actions">
+      <button class="btn" id="btn-check">Prüfen</button>
+      <span id="sort-score" class="small"></span>
+    </div>
+    <div class="card accent" style="margin-top:22px">
+      <h3>Was zeigt unser Kursergebnis – und was nicht?</h3>
+      <p>Besprecht zu zweit: Wir sind nur 7 Personen. Die Bilder unterscheiden sich nicht nur darin, ob die Änderung in der Mitte oder am Rand liegt, sondern auch in Größe, Farbe und Art der Änderung. Und wir haben vorher geübt.</p>
+      <details class="hint"><summary>Kleine Hilfe</summary><div>Mögliche Gedanken: Ein Unterschied bei 7 Personen kann Zufall sein. Vielleicht war das Auto einfach größer als das Segelboot. Wer das Bücherregal zuerst gesehen hat, kannte den Ablauf schon. Die Forschung hat solche Störfaktoren mit vielen Personen und sorgfältig gewählten Bildern ausgeschlossen.</div></details>
+    </div>
+    <div class="actions">
+      <button class="btn big" data-next>Weiter: Was heißt das für mich?</button>
+    </div>
+  </section>
+
+  <!-- 7 Mitnehmen -->
+  <section class="step" id="s-mitnehmen">
+    <span class="kicker">Schritt 5 · Was heißt das für mich?</span>
+    <h2>Mitnehmen</h2>
+    <div class="merksatz"><strong>Merksatz:</strong> Wahrnehmung ist <strong>selektiv</strong>. Von der Fülle der Reize gelangt nur ein kleiner Teil in unser Bewusstsein – vor allem das, worauf sich unsere Aufmerksamkeit richtet. <strong>Veränderungsblindheit</strong> zeigt: Wir behalten von einer Szene viel weniger, als wir glauben.</div>
+    <div class="card">
+      <h3>Nur für dich</h3>
+      <div class="private"><span class="lock"></span><span>Diese Notiz bleibt auf deinem iPad und wird nicht geteilt.</span></div>
+      <p>Wo im Alltag könnte dir etwas entgehen, weil deine Aufmerksamkeit gerade woanders ist? Denk zum Beispiel an das Handy beim Gehen, an Gespräche, an deinen Social-Media-Feed.</p>
+      <textarea id="note" placeholder="Meine Gedanken …"></textarea>
+    </div>
+    <div class="card">
+      <label style="display:flex;gap:12px;align-items:center;font-size:17px"><input type="checkbox" id="print-note" style="width:24px;height:24px"> Meine private Notiz in die Zusammenfassung aufnehmen</label>
+      <div class="actions">
+        <button class="btn" id="btn-print">Zusammenfassung als PDF speichern</button>
+        <a class="btn secondary" href="index.html">Zur Übersicht</a>
+      </div>
+      <p class="small">Tipp: Im Druckfenster oben rechts auf „Teilen“ tippen und „In Dateien sichern“ wählen.</p>
+    </div>
+  </section>
+
+  <!-- Druckansicht -->
+  <section class="print-only" id="print"></section>
+</main>
+
+<script src="assets/lab.js"></script>
+<script src="assets/qrcode.js"></script>
+<script src="assets/szenen-ds02.js"></script>
+<script>
+(function () {
+  "use strict";
+  var $ = Lab.$;
+  $("#logo").innerHTML = Lab.logo;
+  Lab.$$(".lock").forEach(function (el) { el.innerHTML = Lab.lockIcon; });
+
+  var SHOW_MS = 240, BLANK_MS = 80, MAX_S = 60;   /* Zeiten wie bei Rensink u. a. (1997) */
+  var state = Lab.load("ds02", null) || {};
+  state.pred = state.pred || 5;
+  var scenes = window.SZENEN_DS02;
+
+  var steps = Lab.Steps({ onShow: function (id) {
+    if (id === "s-ergebnis") renderResult();
+    if (id === "s-kurs") renderQR();
+    if (id === "s-mitnehmen") $("#note").value = Lab.load("ds02-note", "");
+  } });
+
+  if (state.done) {
+    var alt = $("#btn-alt"); alt.hidden = false;
+    alt.addEventListener("click", function () { steps.goto("s-ergebnis"); });
+  }
+
+  /* ---------- Vorhersage ---------- */
+  var pred = $("#pred"), predOut = $("#pred-out");
+  pred.value = state.pred;
+  function upd() { predOut.textContent = pred.value + " s"; state.pred = +pred.value; }
+  pred.addEventListener("input", upd); upd();
+  Lab.choiceGroup($("#hyp"), function (v) { state.hyp = v; $("#btn-start-trials").disabled = false; });
+  $("#btn-start-trials").addEventListener("click", function () {
+    state.id = Lab.uid(); state.times = {}; state.found = {}; state.done = false;
+    order = [scenes[0]].concat(Lab.shuffle(scenes.slice(1)));
+    ti = -1; nextTrial(); steps.goto("s-versuch");
+  });
+
+  /* ---------- Versuch ---------- */
+  var order = [], ti = -1, cur = null, running = false, phaseTimer = null, tickTimer = null;
+  var startT = 0, pausedAt = 0, pausedTotal = 0, phase = 0, mode = "idle";
+  var stage = $("#stage"), A = $("#layer-a"), B = $("#layer-b"), blank = $("#blank");
+  var btnGo = $("#btn-go"), btnFound = $("#btn-found"), btnNext = $("#btn-nexttrial"), msg = $("#trial-msg"), timer = $("#timer");
+
+  function elapsed() { return ((mode === "tap" ? pausedAt : performance.now()) - startT - pausedTotal) / 1000; }
+  function showLayer(which) { A.classList.toggle("on", which === "a"); B.classList.toggle("on", which === "b"); blank.style.display = which === "blank" ? "block" : "none"; }
+  function clearMarks() { Lab.$$(".mark,.tapdot", stage).forEach(function (m) { m.remove(); }); }
+
+  function nextTrial() {
+    ti++; clearMarks(); stage.classList.remove("tapmode");
+    if (ti >= order.length) { finish(); return; }
+    cur = order[ti];
+    A.innerHTML = cur.draw("a"); B.innerHTML = cur.draw("b");
+    $("#trial-kicker").textContent = "Bild " + (ti + 1) + " von " + order.length;
+    $("#trial-title").textContent = cur.type === "kontrolle" ? "Probebild: " + cur.name : cur.name;
+    msg.className = "trial-msg";
+    msg.textContent = cur.type === "kontrolle"
+      ? "Zum Eingewöhnen: Hier wechseln die Bilder ohne graue Lücke. Tippe auf „Start“."
+      : "Tippe auf „Start“. Die Zeit läuft, bis du die Änderung gefunden hast.";
+    showLayer("blank"); timer.textContent = "0,0 s";
+    btnGo.hidden = false; btnFound.hidden = true; btnNext.hidden = true; mode = "idle";
+  }
+
+  function loop() {
+    if (mode !== "run") return;
+    var seq = cur.type === "kontrolle" ? [["a", SHOW_MS], ["b", SHOW_MS]] : [["a", SHOW_MS], ["blank", BLANK_MS], ["b", SHOW_MS], ["blank", BLANK_MS]];
+    var p = seq[phase % seq.length];
+    showLayer(p[0]); phase++;
+    phaseTimer = setTimeout(loop, p[1]);
+    if (elapsed() >= MAX_S) giveUp();
+  }
+  function tick() { if (mode === "run") timer.textContent = Lab.sec(elapsed()); }
+
+  btnGo.addEventListener("click", function () {
+    btnGo.hidden = true; btnFound.hidden = false; msg.textContent = "";
+    startT = performance.now(); pausedTotal = 0; phase = 0; mode = "run";
+    loop(); tickTimer = setInterval(tick, 100);
+  });
+
+  btnFound.addEventListener("click", function () {
+    if (mode !== "run") return;
+    mode = "tap"; pausedAt = performance.now(); clearTimeout(phaseTimer);
+    showLayer("a"); stage.classList.add("tapmode");
+    btnFound.hidden = true;
+    msg.className = "trial-msg"; msg.textContent = "Tippe jetzt auf die Stelle im Bild, die sich verändert.";
+  });
+
+  stage.addEventListener("click", function (ev) {
+    if (mode !== "tap") return;
+    var r = stage.getBoundingClientRect();
+    var vx = (ev.clientX - r.left) / r.width * 800, vy = (ev.clientY - r.top) / r.height * 500;
+    var c = cur.change, pad = 30;
+    var dot = document.createElement("div"); dot.className = "tapdot";
+    dot.style.left = (ev.clientX - r.left) + "px"; dot.style.top = (ev.clientY - r.top) + "px"; stage.appendChild(dot);
+    if (vx >= c.x - pad && vx <= c.x + c.w + pad && vy >= c.y - pad && vy <= c.y + c.h + pad) {
+      record(elapsed(), true);
+      msg.className = "trial-msg good";
+      msg.textContent = "Richtig! Geändert hat sich " + cur.what + ". Deine Zeit: " + Lab.sec(state.times[cur.id]);
+      reveal();
+    } else {
+      msg.className = "trial-msg bad"; msg.textContent = "Leider nicht. Such weiter – die Zeit läuft wieder.";
+      setTimeout(function () {
+        dot.remove(); stage.classList.remove("tapmode");
+        pausedTotal += performance.now() - pausedAt; mode = "run"; btnFound.hidden = false; loop();
+      }, 900);
+    }
+  });
+
+  function giveUp() {
+    if (mode !== "run") return;
+    mode = "tap"; pausedAt = performance.now(); clearTimeout(phaseTimer);
+    record(MAX_S, false);
+    msg.className = "trial-msg bad"; msg.textContent = "Nach 60 Sekunden aufgelöst: Geändert hat sich " + cur.what + ". Das passiert sehr vielen!";
+    btnFound.hidden = true; reveal();
+  }
+
+  function record(t, ok) {
+    clearInterval(tickTimer);
+    state.times[cur.id] = Math.round(Math.min(t, MAX_S) * 10) / 10;
+    state.found[cur.id] = ok;
+    timer.textContent = Lab.sec(state.times[cur.id]);
+    Lab.save("ds02", state);
+  }
+
+  function reveal() {
+    mode = "reveal"; stage.classList.remove("tapmode");
+    var c = cur.change, m = document.createElement("div"); m.className = "mark";
+    m.style.left = (c.x - 14) / 8 + "%"; m.style.top = (c.y - 14) / 5 + "%";
+    m.style.width = (c.w + 28) / 8 + "%"; m.style.height = (c.h + 28) / 5 + "%";
+    stage.appendChild(m);
+    var flip = true; showLayer("a");
+    phaseTimer = setInterval(function () { if (mode !== "reveal") { clearInterval(phaseTimer); return; } flip = !flip; showLayer(flip ? "a" : "b"); }, 700);
+    btnNext.hidden = false; btnNext.textContent = ti + 1 >= order.length ? "Zu meinem Ergebnis" : "Nächstes Bild";
+  }
+  btnNext.addEventListener("click", function () { clearInterval(phaseTimer); mode = "idle"; nextTrial(); });
+
+  function finish() { state.done = true; Lab.save("ds02", state); steps.goto("s-ergebnis"); }
+
+  /* ---------- Auswertung ---------- */
+  function vals(type) { return scenes.filter(function (s) { return s.type === type; }).map(function (s) { return state.times ? state.times[s.id] : NaN; }); }
+
+  function renderResult() {
+    if (!state.times) return;
+    var k = vals("kontrolle")[0], mi = Lab.mean(vals("mitte")), ra = Lab.mean(vals("rand")), fl = Lab.mean(vals("mitte").concat(vals("rand")));
+    var notFound = scenes.filter(function (s) { return state.found && state.found[s.id] === false; }).length;
+    $("#stats").innerHTML =
+      '<div class="stat"><div class="lbl">Ohne Flackern (Probebild)</div><div class="val">' + Lab.sec(k) + "</div></div>" +
+      '<div class="stat"><div class="lbl">Mit Flackern: Mittelpunkt</div><div class="val">' + Lab.sec(mi) + '</div><div class="sub">Durchschnitt aus 3 Bildern</div></div>' +
+      '<div class="stat"><div class="lbl">Mit Flackern: Nebensache</div><div class="val">' + Lab.sec(ra) + '</div><div class="sub">Durchschnitt aus 3 Bildern</div></div>' +
+      '<div class="stat"><div class="lbl">Nicht gefunden</div><div class="val">' + notFound + '</div><div class="sub">von 7 Bildern</div></div>';
+    $("#mychart").innerHTML = Lab.dotPlot([
+      { label: "Ohne Flackern", color: "#545b6b", values: [k] },
+      { label: "Mittelpunkt", color: "#0e6b68", values: vals("mitte"), highlight: state.pred },
+      { label: "Nebensache", color: "#d9643f", values: vals("rand"), highlight: state.pred }
+    ], { aria: "Meine Suchzeiten" });
+    var hypText = { mitte: "Änderungen im Mittelpunkt werden schneller gefunden", rand: "Änderungen an Nebensachen werden schneller gefunden", gleich: "es gibt keinen Unterschied" }[state.hyp] || "–";
+    var obs = isNaN(mi) || isNaN(ra) ? "–" : (Math.abs(mi - ra) < 1 ? "Bei dir waren beide etwa gleich schnell." : (mi < ra ? "Bei dir waren Änderungen im Mittelpunkt schneller gefunden." : "Bei dir waren Änderungen an Nebensachen schneller gefunden."));
+    $("#pred-compare").innerHTML = "<h3>Vorhersage und Beobachtung</h3><p>Du hast <strong>" + state.pred + " s</strong> vorhergesagt; mit Flackern hast du im Durchschnitt <strong>" + Lab.sec(fl) + "</strong> gebraucht.</p><p>Deine Vermutung war: " + hypText + ". " + obs + "</p><p class=\"small\">Wichtig: Das ist eine Beobachtung bei einer Person und sieben Bildern. Ob sie allgemein gilt, zeigt erst der Vergleich mit dem Kurs und mit der Forschung.</p>";
+  }
+
+  /* Datenformat für die Auswertung: ds02.id.kontrolle.strasse.fruehstueck.park.wohnzimmer.strand.schreibtisch.vorhersage.hypothese (Zeiten in Zehntelsekunden) */
+  function payload() {
+    var h = { mitte: "m", rand: "r", gleich: "g" }[state.hyp] || "x";
+    return ["ds02", state.id].concat(scenes.map(function (s) { return Math.round((state.times[s.id] || 0) * 10); })).concat([state.pred, h]).join(".");
+  }
+  function renderQR() {
+    if (!state.times) return;
+    var p = payload();
+    $("#qr").innerHTML = Lab.qrSVG(Lab.resultURL(p), 230);
+    $("#code").textContent = p;
+  }
+
+  /* ---------- Denkwerkzeug ---------- */
+  var check = Lab.sortTask($("#sort"), [
+    { text: "Ich habe beim Strandbild 14 Sekunden gebraucht.", answer: "b", why: "Das wurde gemessen." },
+    { text: "Ohne graue Lücke habe ich die Änderung sofort gesehen.", answer: "b", why: "Das hast du direkt erlebt und gemessen." },
+    { text: "Unser Gehirn speichert nicht jedes Detail einer Szene.", answer: "d", why: "Das ist eine Erklärung dafür, warum die Suche so lange dauert." },
+    { text: "Im Kurs lag der Durchschnitt bei Nebensachen höher als bei Dingen im Mittelpunkt.", answer: "b", why: "Das ist ein gemessenes Kursergebnis – auch wenn es nur für 7 Personen gilt." },
+    { text: "Wir sehen nur, worauf sich unsere Aufmerksamkeit richtet.", answer: "d", why: "Das ist eine allgemeine Erklärung, die über unsere Messung hinausgeht." },
+    { text: "Wer Änderungen übersieht, ist einfach unaufmerksam.", answer: "d", why: "Eine Deutung – und eine fragwürdige: Veränderungsblindheit betrifft fast alle Menschen, sie ist kein Persönlichkeitsmerkmal." }
+  ], { b: "Beobachtung", d: "Deutung" });
+  $("#btn-check").addEventListener("click", function () { var n = check(); $("#sort-score").textContent = n + " von 6 richtig"; });
+
+  /* ---------- Mitnehmen und Druck ---------- */
+  $("#note").addEventListener("input", function () { Lab.save("ds02-note", this.value); });
+  $("#btn-print").addEventListener("click", function () {
+    var k = vals("kontrolle")[0], mi = Lab.mean(vals("mitte")), ra = Lab.mean(vals("rand"));
+    var note = $("#print-note").checked ? Lab.esc($("#note").value).replace(/\n/g, "<br>") : "";
+    $("#print").innerHTML =
+      "<h2>Selbstversuch: Veränderungsblindheit</h2><p class=\"small\">Psycho-Labor · DS 2 · " + new Date().toLocaleDateString("de-DE") + "</p>" +
+      '<div class="card"><h3>Meine Ergebnisse</h3><p>Ohne Flackern: <strong>' + Lab.sec(k) + "</strong> · Mit Flackern, Mittelpunkt: <strong>" + Lab.sec(mi) + "</strong> · Mit Flackern, Nebensache: <strong>" + Lab.sec(ra) + "</strong> · Vorhersage: " + state.pred + " s</p>" + $("#mychart").innerHTML + "</div>" +
+      '<div class="merksatz">' + $(".merksatz").innerHTML + "</div>" +
+      '<div class="card"><h3>Forschung</h3><p>Rensink, O’Regan & Clark (1997): Mit kurzer Lücke werden selbst große Änderungen oft erst nach vielen Bildwechseln entdeckt; Nebensachen langsamer als Dinge im Mittelpunkt. Simons & Levin (1998): Etwa die Hälfte bemerkte nicht, dass ihr Gesprächspartner ausgetauscht wurde.</p></div>' +
+      (note ? '<div class="card"><h3>Meine Notiz</h3><p>' + note + "</p></div>" : "");
+    window.print();
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kursauswertung – Psycho-Labor</title>
+<link rel="stylesheet" href="assets/lab.css">
+<style>
+  .lab-main { max-width: 1100px; }
+  .toast { position: fixed; left: 50%; top: 76px; transform: translateX(-50%); background: var(--ok); color: #fff; padding: 12px 22px; border-radius: 999px; font-weight: 600; box-shadow: var(--shadow); z-index: 30; }
+  .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .tabs .choice { min-height: 48px; padding: 8px 16px; }
+  table.data { width: 100%; border-collapse: collapse; font-size: 16px; }
+  table.data th, table.data td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: right; font-variant-numeric: tabular-nums; }
+  table.data th:first-child, table.data td:first-child { text-align: left; }
+  .big-n { font: 700 56px var(--font-display); color: var(--accent); line-height: 1; }
+  .questions li { margin-bottom: 8px; font-size: 20px; }
+  .demo-flag { display: inline-block; background: var(--warm-soft); color: #8a3a1e; border-radius: 999px; padding: 4px 12px; font-size: 14px; font-weight: 600; margin-left: 8px; }
+</style>
+</head>
+<body>
+<header class="lab-top">
+  <a class="lab-logo" href="index.html"><span id="logo"></span>Psycho-Labor</a>
+  <span class="lab-title">Kursauswertung (Lehrkraft)</span>
+</header>
+
+<main class="lab-main">
+  <div id="toast" class="toast" hidden></div>
+  <div class="tabs" id="tabs"></div>
+  <div id="view"></div>
+
+  <div class="card no-print" style="margin-top:28px">
+    <h3>So kommen Ergebnisse hierher</h3>
+    <p>Scannen Sie den QR-Code auf dem iPad einer Schülerin mit der Kamera-App Ihres iPads. Es öffnet sich diese Seite, und das Ergebnis wird <strong>nur auf Ihrem Gerät</strong> gespeichert. Jeder Scan öffnet einen neuen Tab – zeigen Sie am Ende einfach den letzten am Beamer.</p>
+    <p>Alternativ den Code von Hand eingeben:</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <input id="manual" placeholder="z. B. ds02.k3f9.12.98…" style="flex:1;min-width:260px;min-height:52px;border:2px solid var(--line);border-radius:12px;padding:0 14px;font:17px ui-monospace,Menlo,monospace">
+      <button class="btn" id="btn-add">Hinzufügen</button>
+    </div>
+  </div>
+</main>
+
+<script src="assets/lab.js"></script>
+<script src="assets/bausteine.js"></script>
+<script>
+(function () {
+  "use strict";
+  var $ = Lab.$, B = window.BAUSTEINE;
+  $("#logo").innerHTML = Lab.logo;
+  var keys = Object.keys(B).filter(function (k) { return B[k] && B[k].decode; });
+  var active = Lab.load("auswertung-aktiv", keys[0]);
+
+  function list(k) { return Lab.load("kurs-" + k, []); }
+  function add(code, silent) {
+    code = String(code || "").trim();
+    var parts = code.split("."), k = parts[0];
+    if (!B[k] || !B[k].decode) { if (!silent) alert("Unbekannter Code."); return false; }
+    var rec = B[k].decode(parts);
+    if (!rec) { if (!silent) alert("Der Code ist unvollständig."); return false; }
+    var arr = list(k);
+    if (arr.some(function (c) { return c.split(".")[1] === parts[1]; })) { toast("Dieses Ergebnis ist schon gespeichert."); active = k; return true; }
+    arr.push(code); Lab.save("kurs-" + k, arr); active = k; Lab.save("auswertung-aktiv", k);
+    if (!silent) toast("Ergebnis " + arr.length + " gespeichert");
+    return true;
+  }
+  function toast(t) { var el = $("#toast"); el.textContent = t; el.hidden = false; clearTimeout(el._t); el._t = setTimeout(function () { el.hidden = true; }, 2600); }
+
+  /* Ergebnis aus dem QR-Code (#d=...) übernehmen und Anker entfernen */
+  var m = /[#&]d=([^&]+)/.exec(window.location.hash);
+  if (m) { add(decodeURIComponent(m[1])); try { history.replaceState(null, "", window.location.pathname); } catch (e) {} }
+
+  $("#btn-add").addEventListener("click", function () { if (add($("#manual").value)) { $("#manual").value = ""; render(); } });
+
+  function render() {
+    $("#tabs").innerHTML = keys.map(function (k) { return '<button class="choice' + (k === active ? " selected" : "") + '" data-k="' + k + '">DS ' + B[k].ds + " · " + B[k].titel + "</button>"; }).join("");
+    Lab.$$("#tabs .choice").forEach(function (b) { b.addEventListener("click", function () { active = b.getAttribute("data-k"); Lab.save("auswertung-aktiv", active); render(); }); });
+
+    var cfg = B[active], codes = list(active), recs = codes.map(function (c) { return cfg.decode(c.split(".")); }).filter(Boolean);
+    var demo = codes.some(function (c) { return c.split(".")[1].indexOf("bsp") === 0; });
+    var html = '<span class="kicker">' + Lab.esc(cfg.thema) + "</span><h1>" + Lab.esc(cfg.titel) + (demo ? '<span class="demo-flag">enthält Beispieldaten</span>' : "") + "</h1>";
+    html += '<div class="grid2" style="grid-template-columns:200px 1fr"><div class="card center" style="text-align:center"><div class="big-n">' + recs.length + '</div><div class="small">Ergebnisse</div></div>';
+    if (!recs.length) {
+      html += '<div class="card"><p>Noch keine Ergebnisse. Scannen Sie die QR-Codes der Schülerinnen.</p></div></div>';
+    } else {
+      var groups = cfg.gruppen.map(function (g) { return { label: g.label, color: g.color, values: recs.map(function (r) { return r[g.key]; }) }; });
+      html += '<div class="card">' + Lab.dotPlot(groups, { aria: "Kursergebnis", rowH: 92 }) + '<p class="small">Jeder Punkt ist eine Person (Durchschnitt ihrer Bilder). Der Strich zeigt den Kursdurchschnitt.</p></div></div>';
+      var predM = Lab.mean(recs.map(function (r) { return r.vorhersage; }));
+      var flM = Lab.mean(recs.map(function (r) { return (r.mitte + r.rand) / 2; }));
+      var hyp = { mitte: 0, rand: 0, gleich: 0 }; recs.forEach(function (r) { if (r.hypothese in hyp) hyp[r.hypothese]++; });
+      html += '<div class="grid2"><div class="card"><h3>Vorhersage und Ergebnis</h3><p>Vorhergesagt im Mittel: <strong>' + Lab.sec(predM) + "</strong><br>Tatsächlich mit Flackern: <strong>" + Lab.sec(flM) + "</strong></p><p>Vermutungen: Mittelpunkt schneller " + hyp.mitte + " · Nebensache schneller " + hyp.rand + " · kein Unterschied " + hyp.gleich + "</p></div>";
+      html += '<div class="card gold"><h3>Was die Forschung fand</h3><p>' + Lab.esc(cfg.befund) + "</p></div></div>";
+      html += '<div class="card accent"><h3>Fragen für das Gespräch</h3><ol class="questions">' + cfg.fragen.map(function (q) { return "<li>" + Lab.esc(q) + "</li>"; }).join("") + "</ol></div>";
+      html += '<details class="card no-print"><summary style="cursor:pointer;font-weight:600">Einzelwerte anzeigen</summary><table class="data"><tr><th>Nr.</th>' + cfg.gruppen.map(function (g) { return "<th>" + g.label + "</th>"; }).join("") + "<th>Vorhersage</th></tr>" +
+        recs.map(function (r, i) { return "<tr><td>" + (i + 1) + "</td>" + cfg.gruppen.map(function (g) { return "<td>" + Lab.sec(r[g.key]) + "</td>"; }).join("") + "<td>" + r.vorhersage + " s</td></tr>"; }).join("") + "</table></details>";
+    }
+    html += '<div class="actions no-print"><button class="btn secondary" id="btn-demo">Beispieldaten laden</button><button class="btn secondary" id="btn-undo">Letztes Ergebnis entfernen</button><button class="btn warm" id="btn-clear">Alle Ergebnisse löschen</button></div>';
+    $("#view").innerHTML = html;
+
+    $("#btn-demo").addEventListener("click", function () { cfg.beispiel().forEach(function (c) { add(c, true); }); render(); });
+    $("#btn-undo").addEventListener("click", function () { var a = list(active); a.pop(); Lab.save("kurs-" + active, a); render(); });
+    $("#btn-clear").addEventListener("click", function () { if (confirm("Alle Ergebnisse dieses Bausteins auf diesem Gerät löschen?")) { Lab.save("kurs-" + active, []); render(); } });
+  }
+  render();
+})();
+</script>
+</body>
+</html>
