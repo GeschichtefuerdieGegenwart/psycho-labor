@@ -88,6 +88,7 @@
   /* groups: [{label, color, values:[...], highlight: number|null}] */
   Lab.dotPlot = function (groups, opt) {
     opt = opt || {};
+    var fmt = opt.fmt || Lab.sec;
     var W = 820, rowH = opt.rowH || 78, left = 230, right = 30, top = 18, bottom = 46;
     var H = top + bottom + rowH * groups.length;
     var all = [];
@@ -113,7 +114,7 @@
       var m = Lab.mean(vals);
       if (!isNaN(m)) {
         s += '<line x1="' + x(m) + '" y1="' + (cy - 26) + '" x2="' + x(m) + '" y2="' + (cy + 26) + '" stroke="#1d2230" stroke-width="4" stroke-linecap="round"/>';
-        s += '<text x="' + (x(m) + 10) + '" y="' + (cy - 14) + '" font-size="15" font-weight="700" fill="#1d2230">Ø ' + Lab.sec(m) + "</text>";
+        s += '<text x="' + (x(m) + 10) + '" y="' + (cy - 14) + '" font-size="15" font-weight="700" fill="#1d2230">Ø ' + fmt(m) + "</text>";
       }
       if (g.highlight != null && !isNaN(g.highlight)) {
         s += '<circle cx="' + x(g.highlight) + '" cy="' + cy + '" r="12" fill="none" stroke="#d9643f" stroke-width="4"/>';

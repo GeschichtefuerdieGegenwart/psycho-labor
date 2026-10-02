@@ -82,16 +82,10 @@
     if (!recs.length) {
       html += '<div class="card"><p>Noch keine Ergebnisse. Scannen Sie die QR-Codes der Schülerinnen.</p></div></div>';
     } else {
-      var groups = cfg.gruppen.map(function (g) { return { label: g.label, color: g.color, values: recs.map(function (r) { return r[g.key]; }) }; });
-      html += '<div class="card">' + Lab.dotPlot(groups, { aria: "Kursergebnis", rowH: 92 }) + '<p class="small">Jeder Punkt ist eine Person (Durchschnitt ihrer Bilder). Der Strich zeigt den Kursdurchschnitt.</p></div></div>';
-      var predM = Lab.mean(recs.map(function (r) { return r.vorhersage; }));
-      var flM = Lab.mean(recs.map(function (r) { return (r.mitte + r.rand) / 2; }));
-      var hyp = { mitte: 0, rand: 0, gleich: 0 }; recs.forEach(function (r) { if (r.hypothese in hyp) hyp[r.hypothese]++; });
-      html += '<div class="grid2"><div class="card"><h3>Vorhersage und Ergebnis</h3><p>Vorhergesagt im Mittel: <strong>' + Lab.sec(predM) + "</strong><br>Tatsächlich mit Flackern: <strong>" + Lab.sec(flM) + "</strong></p><p>Vermutungen: Mittelpunkt schneller " + hyp.mitte + " · Nebensache schneller " + hyp.rand + " · kein Unterschied " + hyp.gleich + "</p></div>";
-      html += '<div class="card gold"><h3>Was die Forschung fand</h3><p>' + Lab.esc(cfg.befund) + "</p></div></div>";
+      var out = cfg.render(recs);
+      html += '<div class="card">' + out.main + "</div></div>" + out.rest;
+      html += '<div class="card gold"><h3>Was die Forschung fand</h3><p>' + cfg.befund + "</p></div>";
       html += '<div class="card accent"><h3>Fragen für das Gespräch</h3><ol class="questions">' + cfg.fragen.map(function (q) { return "<li>" + Lab.esc(q) + "</li>"; }).join("") + "</ol></div>";
-      html += '<details class="card no-print"><summary style="cursor:pointer;font-weight:600">Einzelwerte anzeigen</summary><table class="data"><tr><th>Nr.</th>' + cfg.gruppen.map(function (g) { return "<th>" + g.label + "</th>"; }).join("") + "<th>Vorhersage</th></tr>" +
-        recs.map(function (r, i) { return "<tr><td>" + (i + 1) + "</td>" + cfg.gruppen.map(function (g) { return "<td>" + Lab.sec(r[g.key]) + "</td>"; }).join("") + "<td>" + r.vorhersage + " s</td></tr>"; }).join("") + "</table></details>";
     }
     html += '<div class="actions no-print"><button class="btn secondary" id="btn-demo">Beispieldaten laden</button><button class="btn secondary" id="btn-undo">Letztes Ergebnis entfernen</button><button class="btn warm" id="btn-clear">Alle Ergebnisse löschen</button></div>';
     $("#view").innerHTML = html;

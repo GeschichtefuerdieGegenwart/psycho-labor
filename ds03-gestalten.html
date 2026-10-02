@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Wie baut mein Gehirn Bilder? – Psycho-Labor</title>
+<link rel="stylesheet" href="assets/lab.css">
+<style>
+  .fig { width: 100%; max-width: 560px; aspect-ratio: 4 / 3; display: block; margin: 0 auto; border-radius: 16px; background: #fffdf9; box-shadow: var(--shadow); }
+  .fig.small { max-width: 300px; }
+  .model { display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch; margin: 14px 0; }
+  .model .box { flex: 1 1 120px; background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; font-size: 16px; text-align: center; }
+  .model .box b { display: block; font-size: 17px; }
+  .model .box.brain { flex: 2 1 240px; background: var(--accent); color: #fff; border-color: var(--accent); }
+  .model .box.brain span { display: inline-block; margin: 4px 3px 0; padding: 3px 10px; border-radius: 999px; background: rgba(255,255,255,.18); font-size: 15px; }
+  .model .box.brain span.done { text-decoration: line-through; opacity: .7; }
+  .model .box.brain span.now { background: var(--warm); }
+  .entry { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; margin-top: 18px; }
+  .entry button { -webkit-appearance: none; appearance: none; text-align: left; border: 0; cursor: pointer; border-radius: var(--radius); padding: 20px; background: var(--paper); box-shadow: var(--shadow); font: 500 17px var(--font); color: var(--ink); min-height: 140px; }
+  .entry button b { display: block; font: 700 21px var(--font-display); margin: 6px 0; }
+  .entry button .tag { font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
+  .entry button.b .tag { color: var(--warm); }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin: 4px 0 14px; }
+  .chips span { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 15px; background: var(--line); color: var(--ink-soft); }
+  .chips span.done { background: var(--accent); color: #fff; }
+  .chips span.now { background: var(--warm); color: #fff; }
+  .controls { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; align-items: center; margin: 14px 0 4px; }
+  .controls input[type=range] { max-width: 360px; }
+  .reveal { display: none; }
+  .reveal.on { display: block; animation: fade .35s ease; }
+  .law-name { font: 700 26px var(--font-display); color: var(--accent); margin: 0 0 6px; }
+  .quiz-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin-top: 12px; }
+  .quiz-grid .choice { min-height: 52px; padding: 8px 12px; font-size: 16px; text-align: center; }
+  .choice.right { border-color: var(--ok); background: var(--ok-soft); }
+  .choice.wrong { border-color: var(--warm); background: var(--warm-soft); }
+  .flash { position: relative; }
+  .flash .cover { position: absolute; inset: 0; display: grid; place-items: center; background: #fffdf9; border-radius: 16px; font: 600 20px var(--font); color: var(--ink-soft); }
+  .readtext { font-size: 24px; line-height: 1.7; background: var(--paper); border-radius: 16px; padding: 24px 28px; box-shadow: var(--shadow); }
+  .side { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 720px) { .side { grid-template-columns: 1fr; } }
+  .photo-wrap { position: relative; max-width: 760px; margin: 0 auto; touch-action: none; }
+  #photo-canvas { width: 100%; height: auto; display: block; border-radius: 14px; background: #e9e4da; box-shadow: var(--shadow); }
+  .photo-tools { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin: 12px 0; }
+  select, input[type=text] { min-height: 52px; border: 2px solid var(--line); border-radius: 12px; padding: 0 14px; font: 18px var(--font); background: var(--paper); color: var(--ink); }
+  input[type=text] { flex: 1; min-width: 240px; }
+  .rules li { margin-bottom: 10px; }
+  .rules .own { color: var(--ink-soft); font-style: italic; }
+</style>
+</head>
+<body>
+<header class="lab-top">
+  <a class="lab-logo" href="index.html"><span id="logo"></span>Psycho-Labor</a>
+  <span class="lab-title">DS 3 · Wie baut mein Gehirn Bilder?</span>
+  <div class="lab-progress" aria-hidden="true"></div>
+</header>
+
+<main class="lab-main">
+
+<!-- 0 Start -->
+<section class="step" id="s-start">
+  <span class="kicker">Gestalt-Labor · Wahrnehmung</span>
+  <h1>Wie baut mein Gehirn Bilder?</h1>
+  <p class="lead">Dein Auge liefert nur Lichtpunkte. Trotzdem siehst du Dinge, Gruppen und Gesichter. Heute findest du heraus, nach welchen Regeln dein Gehirn das macht.</p>
+  <div class="card">
+    <h3>Erinnerung an DS 2: Der Weg vom Reiz zur Wahrnehmung</h3>
+    <div class="model">
+      <div class="box"><b>Reiz</b>Licht, Schall …</div>
+      <div class="box"><b>Sinnesorgan</b>Auge, Ohr …</div>
+      <div class="box"><b>Weiterleitung</b>Nervenbahnen</div>
+      <div class="box brain"><b>Gehirn</b><span class="done">auswählen</span><span class="now">ordnen</span><span class="now">ergänzen</span></div>
+      <div class="box"><b>Wahrnehmung</b>„Ich sehe …“</div>
+    </div>
+    <p class="small">Letzte Stunde: Das Gehirn <strong>wählt aus</strong>. Heute: Es <strong>ordnet</strong> und <strong>ergänzt</strong>.</p>
+  </div>
+  <div class="entry">
+    <button data-goto="s-ordnen"><span class="tag">Teil A · zu zweit · 20 Min.</span><b>Das Gehirn ordnet</b>Sieben Entdeckungen: Probiert aus, findet die Regel, vergleicht mit der Forschung.</button>
+    <button class="b" data-goto="s-teilb"><span class="tag">Teil B · allein · 12 Min.</span><b>Das Gehirn ergänzt</b>Drei kurze Selbstversuche auf deinem eigenen iPad.</button>
+    <button data-goto="s-mitnehmen"><span class="tag">Zum Schluss · zu zweit</span><b>Fotojagd</b>Findet Gestaltgesetze im Schulhaus und beschriftet eure Fotos.</button>
+  </div>
+  <div class="private"><span class="lock"></span><span>Alles bleibt auf diesem iPad. Es wird nichts ins Internet gesendet.</span></div>
+</section>
+
+<!-- 1 Teil A: Entdeckungen -->
+<section class="step" id="s-ordnen">
+  <span class="kicker">Teil A · Das Gehirn ordnet · zu zweit</span>
+  <div class="chips" id="chips"></div>
+  <div id="card"></div>
+</section>
+
+<!-- 2 Teil A: Quiz -->
+<section class="step" id="s-quiz">
+  <span class="kicker">Teil A · Überprüft euch</span>
+  <h2>Welches Gesetz steckt dahinter?</h2>
+  <p>Tippt bei jedem Bild auf das passende Gesetz. Ihr bekommt sofort eine Rückmeldung.</p>
+  <div id="quiz"></div>
+  <div class="card accent" id="rules-box">
+    <h3>Eure Regeln – fürs Arbeitsblatt</h3>
+    <p class="small">Übertragt die Fachbegriffe und eure eigenen Formulierungen auf das Arbeitsblatt (Spalten 1 und 2).</p>
+    <ol class="rules" id="rules"></ol>
+  </div>
+  <div class="actions"><button class="btn big" data-goto="s-teilb">Weiter zu Teil B</button><button class="btn secondary" data-goto="s-start">Zur Übersicht</button></div>
+</section>
+
+<!-- 3 Teil B: Einleitung -->
+<section class="step" id="s-teilb">
+  <span class="kicker">Teil B · Das Gehirn ergänzt · allein</span>
+  <h2>Jetzt arbeitet jede für sich</h2>
+  <div class="card warm">
+    <p><strong>Nimm dein eigenes iPad.</strong> Schau nicht zur Nachbarin – sonst funktionieren die Versuche nicht. Drei kurze Selbstversuche, dann zeigst du deinen QR-Code.</p>
+    <ol><li>Ein Blitzbild (10 Sekunden)</li><li>Zwei kurze Texte lesen (2 Minuten)</li><li>Wer gewinnt: Nähe oder Ähnlichkeit? (2 Minuten)</li></ol>
+  </div>
+  <div class="actions"><button class="btn big" id="btn-b-start">Starten</button></div>
+</section>
+
+<!-- 4 Kontext -->
+<section class="step" id="s-kontext">
+  <span class="kicker">Teil B · Versuch 1 von 3</span>
+  <h2>Das Blitzbild</h2>
+  <p>Du siehst gleich für einen kurzen Moment eine Zeichenfolge. Achte auf das Zeichen <strong>in der Mitte</strong>.</p>
+  <div class="flash"><svg class="fig" id="kontext-fig" viewBox="0 0 400 300"></svg><div class="cover" id="kontext-cover">Bereit? Tippe auf „Zeigen“.</div></div>
+  <div class="actions" style="justify-content:center"><button class="btn big" id="btn-flash">Zeigen</button></div>
+  <div class="card" id="kontext-q" hidden>
+    <h3>Was stand in der Mitte?</h3>
+    <div class="choices" id="kontext-choices">
+      <button class="choice" data-value="b">der Buchstabe B</button>
+      <button class="choice" data-value="d">die Zahl 13</button>
+      <button class="choice" data-value="x">etwas anderes / weiß nicht</button>
+    </div>
+  </div>
+</section>
+
+<!-- 5 Lesen -->
+<section class="step" id="s-lesen">
+  <span class="kicker">Teil B · Versuch 2 von 3</span>
+  <h2 id="lesen-title">Lesen</h2>
+  <p>Lies den Text <strong>leise, aber Wort für Wort</strong>. Tippe auf „Fertig“, sobald du am Ende bist.</p>
+  <div class="readtext" id="readtext" hidden></div>
+  <div class="actions" style="justify-content:center"><button class="btn big" id="btn-read">Text zeigen</button><button class="btn big warm" id="btn-readdone" hidden>Fertig</button></div>
+</section>
+
+<!-- 6 Wettstreit -->
+<section class="step" id="s-wettstreit">
+  <span class="kicker">Teil B · Versuch 3 von 3</span>
+  <h2>Wer gewinnt: Nähe oder Ähnlichkeit?</h2>
+  <p>Die Farben gruppieren die Punkte zu <strong>Zeilen</strong>. Schiebe den Regler langsam nach rechts: Die Punkte rücken senkrecht näher zusammen. Ab wann siehst du eher <strong>Spalten</strong>?</p>
+  <svg class="fig" id="wett-fig" viewBox="0 0 400 300"></svg>
+  <div class="controls"><input type="range" id="wett" min="26" max="80" value="26" step="1" aria-label="Waagerechter Abstand"></div>
+  <div class="actions" style="justify-content:center"><button class="btn big" id="btn-kipp">Hier kippt es zu Spalten</button><button class="btn secondary" id="btn-nokipp">Es kippt gar nicht</button></div>
+</section>
+
+<!-- 7 Kurs -->
+<section class="step" id="s-kurs">
+  <span class="kicker">Teil B · Kursvergleich</span>
+  <h2>Dein Ergebnis für den Kurs</h2>
+  <p>Zeig diesen QR-Code deiner Lehrkraft. Dein Ergebnis erscheint <strong>ohne Namen</strong> im Kursdiagramm.</p>
+  <div class="card"><div class="qr-box"><div id="qr"></div><div style="flex:1;min-width:220px"><p class="small">Im Code stehen nur deine Antwort beim Blitzbild, deine Lesezeiten und dein Kipppunkt.</p><p class="small">Falls das Scannen nicht klappt:</p><div class="code" id="code"></div></div></div></div>
+  <p class="small">Noch nicht weiterklicken – die Auflösung besprechen wir gemeinsam.</p>
+  <div class="actions"><button class="btn big" data-next>Auflösung</button></div>
+</section>
+
+<!-- 8 Ergänzen: Auflösung -->
+<section class="step" id="s-ergaenzen">
+  <span class="kicker">Teil B · Was steckt dahinter?</span>
+  <h2>Dein Gehirn ergänzt mit Wissen</h2>
+  <div class="card">
+    <h3>1 · Das Blitzbild</h3>
+    <div class="side"><svg class="fig" viewBox="0 0 400 300" id="aufl-a"></svg><svg class="fig" viewBox="0 0 400 300" id="aufl-b"></svg></div>
+    <p style="margin-top:14px" id="aufl-text"></p>
+    <p>Das Zeichen in der Mitte ist <strong>in beiden Fällen genau dasselbe</strong>. Ob wir „B“ oder „13“ sehen, entscheidet die Umgebung: Zwischen Buchstaben erwarten wir einen Buchstaben, zwischen Zahlen eine Zahl. Das zeigten schon <strong>Bruner und Minturn (1955)</strong>.</p>
+  </div>
+  <div class="card">
+    <h3>2 · Lesen mit vertauschten Buchstaben</h3>
+    <p id="lesen-res"></p>
+    <p><strong>Mythos-Check:</strong> Im Internet heißt es oft: „Laut einer Studie der Universität Cambridge ist die Reihenfolge der Buchstaben egal.“ Diese Cambridge-Studie gibt es nicht. Forschende fanden aber: Vertauschte Buchstaben in der Wortmitte stören weniger, als man denkt – sie <strong>verlangsamen</strong> das Lesen trotzdem, etwa um ein Zehntel (Rayner u. a., 2006). Wir lesen nicht Buchstabe für Buchstabe, sondern ergänzen mit unserem Wissen über Wörter.</p>
+  </div>
+  <div class="card">
+    <h3>3 · Nähe gegen Ähnlichkeit</h3>
+    <p id="wett-res"></p>
+    <p>Gestaltgesetze können gegeneinander arbeiten. Wann eines „gewinnt“, ist bei jeder Person etwas anders – auch das ist <strong>subjektive</strong> Wahrnehmung.</p>
+  </div>
+  <div class="card gold">
+    <h3>Und das hier?</h3>
+    <div class="side"><svg class="fig small" viewBox="0 0 400 300" id="pareidolie"></svg><p>Siehst du ein Gesicht? Es ist nur eine Steckdose. Unser Gehirn sucht ständig nach bekannten Mustern – besonders nach Gesichtern. Darum sehen wir Gesichter in Wolken, Autos oder Steckdosen.</p></div>
+  </div>
+  <div class="merksatz"><strong>Zwei Richtungen:</strong> <strong>Bottom-up</strong> (von unten nach oben): Das Gehirn ordnet die Reize nach Gestaltgesetzen. <strong>Top-down</strong> (von oben nach unten): Vorwissen und Erwartungen ergänzen, was wir sehen.</div>
+  <div class="actions"><button class="btn big" data-next>Weiter: Prüfen</button></div>
+</section>
+
+<!-- 9 Prüfen -->
+<section class="step" id="s-pruefen">
+  <span class="kicker">Prüfen · Denkwerkzeug</span>
+  <h2>Beschreiben oder erklären?</h2>
+  <div class="card">
+    <p>Die Gestaltgesetze <strong>beschreiben</strong> sehr genau, <em>wie</em> wir Dinge gruppieren. Mit ihnen kann man sogar <strong>vorhersagen</strong>, was jemand sehen wird. Aber <em>warum</em> arbeitet das Gehirn so?</p>
+    <details class="hint"><summary>Eine mögliche Erklärung</summary><div>In der Natur gehören Dinge, die nah beieinander liegen, gleich aussehen oder sich gemeinsam bewegen, meistens zum selben Gegenstand – zum Beispiel die Flecken eines Tieres im Gebüsch. Forschende vermuten deshalb: Unser Gehirn hat durch Evolution und Erfahrung gelernt, auf diese Hinweise zu setzen. Meistens liegt es damit richtig – manchmal täuscht es sich.</div></details>
+  </div>
+  <h3 style="margin-top:24px">Echte Anwendung oder nur ein Vergleich?</h3>
+  <p>Manche Bücher erklären mit den Gestaltgesetzen auch Vorurteile oder Beziehungen. Prüft: Wird hier wirklich <strong>Wahrnehmung</strong> geordnet – oder ist es nur ein <strong>Vergleich</strong>, der nach einer Erklärung klingt?</p>
+  <div class="card" id="sort"></div>
+  <details class="hint"><summary>Kleine Hilfe</summary><div>Gestaltgesetze gelten für das, was wir <strong>sehen</strong> (Punkte, Linien, Formen, Bewegungen). Geht es um ein Urteil über Menschen, um Vertrauen oder Meinungen, braucht man andere Erklärungen – zum Beispiel Erwartungen und Erfahrungen (DS 4).</div></details>
+  <div class="actions"><button class="btn" id="btn-check">Prüfen</button><span id="sort-score" class="small"></span></div>
+  <div class="actions"><button class="btn big" data-next>Weiter: Fotojagd</button></div>
+</section>
+
+<!-- 10 Mitnehmen -->
+<section class="step" id="s-mitnehmen">
+  <span class="kicker">Mitnehmen · Fotojagd zu zweit</span>
+  <h2>Gestaltgesetze im Alltag</h2>
+  <div class="card warm"><strong>Auftrag:</strong> Sucht im Schulhaus drei Beispiele für verschiedene Gestaltgesetze (Schilder, Logos, Regale, Plakate, Fenster …). Fotografiert sie, markiert mit dem Stift, wo das Gesetz wirkt, und schreibt einen Satz dazu. Speichert jedes Bild und schickt es per AirDrop oder IServ an eure Lehrkraft.</div>
+  <div class="photo-tools">
+    <label class="btn" for="photo-in">Foto aufnehmen</label>
+    <input type="file" id="photo-in" accept="image/*" capture="environment" hidden>
+    <button class="btn secondary" id="btn-clear-draw">Markierung löschen</button>
+  </div>
+  <div class="photo-wrap"><canvas id="photo-canvas" width="1200" height="900"></canvas></div>
+  <div class="photo-tools">
+    <select id="photo-law" aria-label="Gesetz">
+      <option>Figur-Grund</option><option>Nähe</option><option>Ähnlichkeit</option><option>Geschlossenheit</option><option>Gute Fortsetzung</option><option>Gemeinsames Schicksal</option><option>Prägnanz</option><option>Top-down: Vorwissen ergänzt</option>
+    </select>
+    <input type="text" id="photo-text" maxlength="90" placeholder="Warum? Ein Satz …">
+    <button class="btn warm" id="btn-photo-save">Bild speichern / teilen</button>
+  </div>
+  <div class="merksatz" style="margin-top:22px"><strong>Merksatz:</strong> Unser Gehirn baut aus Reizen ein geordnetes Bild. Es <strong>ordnet</strong> nach Gestaltgesetzen (z. B. Nähe, Ähnlichkeit, Geschlossenheit) und <strong>ergänzt</strong> mit Vorwissen. Darum sehen wir oft mehr, als tatsächlich da ist.</div>
+  <div class="card">
+    <h3>Nur für dich</h3>
+    <div class="private"><span class="lock"></span><span>Diese Notiz bleibt auf deinem iPad.</span></div>
+    <p>Wo lenken Apps, Werbung oder Webseiten deinen Blick mit diesen Regeln? Denk an App-Symbole, rote Zahlen-Punkte, Menüs …</p>
+    <textarea id="note" placeholder="Meine Gedanken …"></textarea>
+  </div>
+  <div class="actions"><button class="btn" id="btn-print">Zusammenfassung als PDF</button><a class="btn secondary" href="index.html">Zur Übersicht</a></div>
+</section>
+
+<section class="print-only" id="print"></section>
+</main>
+
+<script src="assets/lab.js"></script>
+<script src="assets/qrcode.js"></script>
+<script src="assets/figuren-ds03.js"></script>
+<script>
+(function () {
+  "use strict";
+  var $ = Lab.$, $$ = Lab.$$, F = window.FIGUREN_DS03;
+  $("#logo").innerHTML = Lab.logo;
+  $$(".lock").forEach(function (el) { el.innerHTML = Lab.lockIcon; });
+  var st = Lab.load("ds03", null) || {};
+  st.rules = st.rules || {}; st.seen = st.seen || {};
+  function save() { Lab.save("ds03", st); }
+
+  var steps = Lab.Steps({ onShow: function (id) {
+    if (id === "s-ordnen") renderCard();
+    if (id === "s-quiz") { renderQuiz(); renderRules(); }
+    if (id === "s-kurs") renderQR();
+    if (id === "s-ergaenzen") renderAufloesung();
+    if (id === "s-mitnehmen") $("#note").value = Lab.load("ds03-note", "");
+    if (id !== "s-ordnen") stopAnim();
+  } });
+  $$("[data-goto]").forEach(function (b) { b.addEventListener("click", function () { steps.goto(b.getAttribute("data-goto")); }); });
+
+  /* ================= Teil A: sieben Entdeckungen ================= */
+  var anim = null;
+  function stopAnim() { if (anim) { cancelAnimationFrame(anim); anim = null; } }
+
+  var CARDS = [
+    { key: "figurGrund", name: "Figur-Grund-Prinzip", ask: "Was siehst du?",
+      choices: ["eine Vase", "zwei Gesichter", "mal das eine, mal das andere"], tip: "Die meisten Menschen sehen abwechselnd Vase und Gesichter – aber nie beides gleichzeitig.",
+      prompt: "Wenn ihr die Gesichter seht: Was passiert dann mit der Vase?",
+      def: "Wir teilen jedes Bild in eine <strong>Figur</strong> (das, was wir betrachten) und einen <strong>Hintergrund</strong>. Beides gleichzeitig als Figur zu sehen, ist nicht möglich. Das ist kein Gesetz neben den anderen, sondern die Grundlage jeder Wahrnehmung.",
+      ex: "Schrift auf Papier, ein Logo auf einem Plakat, das Gesicht einer Freundin in einer Menschenmenge.",
+      build: function (fig, ctl) { var sw = false; fig.innerHTML = F.figurGrund(sw); ctl.innerHTML = '<button class="btn secondary">Farben tauschen</button>'; ctl.firstChild.onclick = function () { sw = !sw; fig.innerHTML = F.figurGrund(sw); }; } },
+    { key: "naehe", name: "Gesetz der Nähe", ask: "Schiebt den Regler ganz nach links und ganz nach rechts. Was seht ihr?",
+      choices: ["links Zeilen, rechts Spalten", "links Spalten, rechts Zeilen", "immer dasselbe"], right: 0, tip: "Links liegen die Punkte waagerecht näher zusammen – wir sehen Zeilen. Rechts liegen sie senkrecht näher – wir sehen Spalten.",
+      prompt: "Wir sehen Punkte als zusammengehörig, wenn …",
+      def: "Was <strong>nahe beieinander</strong> liegt, sehen wir als zusammengehörig.",
+      ex: "Absätze in einem Text, Gruppen auf einer Picknickwiese, Tischgruppen im Klassenraum.",
+      build: function (fig, ctl) { ctl.innerHTML = '<span class="small">Zeilen</span><input type="range" min="0" max="100" value="0" aria-label="Abstand"><span class="small">Spalten</span>'; var r = ctl.querySelector("input"); function d() { var t = r.value / 100; fig.innerHTML = F.naehe(28 + 20 * t, 48 - 20 * t); } r.oninput = d; d(); } },
+    { key: "aehnlichkeit", name: "Gesetz der Ähnlichkeit", ask: "Seht ihr eher Zeilen oder eher Spalten?",
+      choices: ["Zeilen", "Spalten", "weder noch"], right: 0, tip: "Alle Punkte haben den gleichen Abstand. Trotzdem sehen fast alle Zeilen – wegen der gleichen Farbe oder Form.",
+      prompt: "Wir sehen Dinge als zusammengehörig, wenn …",
+      def: "Was <strong>gleich aussieht</strong> (Farbe, Form, Größe), sehen wir als zusammengehörig.",
+      ex: "Spielerinnen in gleichen Trikots, sortierte Smarties, gleich gefärbte Buttons in einer App.",
+      build: function (fig, ctl) { var sh = false; fig.innerHTML = F.aehnlichkeit(sh); ctl.innerHTML = '<button class="btn secondary">Farbe ↔ Form</button>'; ctl.firstChild.onclick = function () { sh = !sh; fig.innerHTML = F.aehnlichkeit(sh); }; } },
+    { key: "geschlossenheit", name: "Gesetz der Geschlossenheit", ask: "Was seht ihr in der Mitte?",
+      choices: ["ein helles Dreieck", "nur drei angeschnittene Kreise", "nichts Besonderes"], right: 0, tip: "Fast alle sehen ein Dreieck, das heller wirkt als der Hintergrund. Es ist aber nicht gezeichnet! Dreht die Kreise – und es verschwindet.",
+      prompt: "Unser Gehirn macht aus unvollständigen Formen …",
+      def: "Unvollständige Formen <strong>ergänzen</strong> wir zu geschlossenen Ganzen. Das Dreieck in der Mitte baut allein dein Gehirn (Scheinkontur nach Kanizsa).",
+      ex: "Logos aus einzelnen Strichen, gestrichelte Linien, Piktogramme auf Schildern.",
+      build: function (fig, ctl) { var t = false; fig.innerHTML = F.geschlossenheit(t); ctl.innerHTML = '<button class="btn secondary">Kreise drehen</button>'; ctl.firstChild.onclick = function () { t = !t; fig.innerHTML = F.geschlossenheit(t); }; } },
+    { key: "fortsetzung", name: "Gesetz der guten Fortsetzung", ask: "Aus welchen Linien besteht das Bild?",
+      choices: ["aus einer Wellenlinie und einer Zacken-Linie", "aus vielen kleinen Bögen und Kästchen"], right: 0, tip: "Man könnte das Bild auch in viele kleine Stücke zerlegen. Wir sehen aber zwei durchgehende Linien. Färbt sie ein!",
+      prompt: "Linien, die sich kreuzen, sehen wir so, dass …",
+      def: "Linien sehen wir so, dass sie <strong>möglichst glatt weiterlaufen</strong> – auch über Kreuzungen hinweg.",
+      ex: "Kabelsalat hinter dem Schreibtisch, sich kreuzende Straßen auf einer Karte, Schriftzüge.",
+      build: function (fig, ctl) { var sp = false; fig.innerHTML = F.fortsetzung(sp); ctl.innerHTML = '<button class="btn secondary">Linien einfärben</button>'; ctl.firstChild.onclick = function () { sp = !sp; fig.innerHTML = F.fortsetzung(sp); }; } },
+    { key: "schicksal", name: "Gesetz des gemeinsamen Schicksals", ask: "Vergleicht: Was seht ihr, wenn sich die Punkte bewegen – und wenn sie stillstehen?",
+      choices: ["In Bewegung fällt eine Gruppe auf, still verschwindet sie.", "Es gibt keinen Unterschied."], right: 0, tip: "Einige Punkte bewegen sich gemeinsam. Stehen alle still, ist diese Gruppe nicht mehr zu erkennen.",
+      prompt: "Dinge, die sich gemeinsam bewegen, …",
+      def: "Was sich <strong>gemeinsam in dieselbe Richtung bewegt</strong>, sehen wir als Einheit.",
+      ex: "Ein Vogelschwarm, Autos auf derselben Spur, eine Tanzgruppe, die die gleiche Bewegung macht.",
+      build: function (fig, ctl) {
+        var pts = F.schicksalStart(25), on = true, t0 = performance.now();
+        ctl.innerHTML = '<button class="btn secondary">Bewegung an / aus</button>';
+        ctl.firstChild.onclick = function () { on = !on; };
+        var off = 0;
+        function draw(now) {
+          if (on) off = (now - t0) / 1000;
+          var s = '<rect width="400" height="300" fill="#fffdf9"/>';
+          pts.forEach(function (p, i) {
+            var x, y;
+            if (p.group) { x = 40 + ((p.x - 40 + off * 55) % 320); y = p.y + Math.sin(off * 1.5) * 18; }
+            else { x = p.x + Math.sin(off * 2.1 + i * 1.7) * 14; y = p.y + Math.cos(off * 1.8 + i * 2.3) * 14; }
+            s += '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="9" fill="#0e6b68"/>';
+          });
+          fig.innerHTML = s; anim = requestAnimationFrame(draw);
+        }
+        anim = requestAnimationFrame(draw);
+      } },
+    { key: "praegnanz", name: "Gesetz der Prägnanz (der guten Gestalt)", ask: "Was seht ihr?",
+      choices: ["einen Kreis und ein Quadrat", "drei seltsame Einzelteile"], right: 0, tip: "Dieselben Linien könnten auch drei seltsame Teile sein. Wir sehen aber die einfachste Lösung: Kreis und Quadrat.",
+      prompt: "Unter mehreren Möglichkeiten sehen wir …",
+      def: "Wir sehen immer die <strong>einfachste, regelmäßigste Deutung</strong>. Prägnanz ist das Grundgesetz – die anderen Gesetze sind Sonderfälle davon.",
+      ex: "Überlappende Ringe auf einem Logo; wer 3.012 € verdient, „verdient 3.000 €“.",
+      build: function (fig, ctl) { var sp = false; fig.innerHTML = F.praegnanz(sp); ctl.innerHTML = '<button class="btn secondary">Andere Deutung zeigen</button>'; ctl.firstChild.onclick = function () { sp = !sp; fig.innerHTML = F.praegnanz(sp); }; } }
+  ];
+  var ci = st.ci || 0;
+
+  function renderChips() {
+    $("#chips").innerHTML = CARDS.map(function (c, i) { return '<span class="' + (i === ci ? "now" : (st.seen[c.key] ? "done" : "")) + '">' + (i + 1) + "</span>"; }).join("");
+  }
+  function renderCard() {
+    stopAnim(); renderChips();
+    var c = CARDS[ci];
+    $("#card").innerHTML =
+      '<h2>Entdeckung ' + (ci + 1) + " von " + CARDS.length + "</h2>" +
+      '<svg class="fig" viewBox="0 0 400 300" id="cfig"></svg><div class="controls" id="cctl"></div>' +
+      '<div class="card"><h3>1 · ' + c.ask + '</h3><div class="choices" id="cch">' + c.choices.map(function (t, i) { return '<button class="choice" data-value="' + i + '">' + t + "</button>"; }).join("") + '</div><p class="small" id="ctip" hidden></p></div>' +
+      '<div class="card"><h3>2 · Formuliert die Regel in eigenen Worten</h3><p class="small">' + c.prompt + '</p><textarea id="crule" style="min-height:90px" placeholder="Unsere Regel …"></textarea></div>' +
+      '<div class="actions"><button class="btn" id="crev">3 · Fachbegriff aufdecken</button></div>' +
+      '<div class="card accent reveal" id="cdef"><p class="law-name">' + c.name + "</p><p>" + c.def + '</p><p class="small"><strong>Alltag:</strong> ' + c.ex + '</p><p class="small">Vergleicht mit eurer Regel: Was habt ihr schon gefunden, was fehlt?</p></div>' +
+      '<div class="actions"><button class="btn secondary" id="cprev"' + (ci === 0 ? " hidden" : "") + '>Zurück</button><button class="btn big" id="cnext">' + (ci === CARDS.length - 1 ? "Zum Quiz" : "Nächste Entdeckung") + "</button></div>";
+    c.build($("#cfig"), $("#cctl"));
+    Lab.choiceGroup($("#cch"), function (v) { var tip = $("#ctip"); tip.hidden = false; tip.textContent = c.tip; });
+    var ta = $("#crule"); ta.value = st.rules[c.key] || "";
+    ta.addEventListener("input", function () { st.rules[c.key] = ta.value; save(); });
+    $("#crev").onclick = function () { $("#cdef").classList.add("on"); st.seen[c.key] = true; save(); renderChips(); };
+    if (st.seen[c.key]) $("#cdef").classList.add("on");
+    $("#cnext").onclick = function () { st.seen[c.key] = true; if (ci < CARDS.length - 1) { ci++; st.ci = ci; save(); renderCard(); window.scrollTo(0, 0); } else { save(); steps.goto("s-quiz"); } };
+    $("#cprev").onclick = function () { ci = Math.max(0, ci - 1); st.ci = ci; save(); renderCard(); window.scrollTo(0, 0); };
+  }
+
+  /* ================= Quiz ================= */
+  var LAWS = [["figurGrund", "Figur-Grund"], ["naehe", "Nähe"], ["aehnlichkeit", "Ähnlichkeit"], ["geschlossenheit", "Geschlossenheit"], ["fortsetzung", "Gute Fortsetzung"], ["schicksal", "Gem. Schicksal"], ["praegnanz", "Prägnanz"]];
+  var QUIZ = [
+    { fig: "naehe", q: "Wie viele Gruppen siehst du?", a: "naehe", why: "Je zwei Punktreihen stehen enger zusammen." },
+    { fig: "geschlossenheit", q: "Was siehst du?", a: "geschlossenheit", why: "Die Punkte ergänzen wir zu einem Kreis." },
+    { fig: "aehnlichkeit", q: "Siehst du Zeilen oder Spalten?", a: "aehnlichkeit", why: "Kreise und Kreuze bilden Spalten, obwohl die Abstände gleich sind." },
+    { fig: "schicksal", q: "Die orangen Pfeile fliegen in dieselbe Richtung. Was fällt auf?", a: "schicksal", why: "Gleiche Richtung = eine Gruppe, wie ein Schwarm." },
+    { fig: "fortsetzung", q: "Zwei gebogene Linien – oder zwei Spitzen, die sich berühren?", a: "fortsetzung", why: "Wir sehen zwei glatt durchlaufende Linien." },
+    { fig: "tabelle", q: "Warum liest du hier zwei Blöcke?", a: "naehe", why: "Innerhalb der Blöcke stehen die Striche enger zusammen – wie Spalten in einer Tabelle." },
+    { fig: "praegnanz", q: "Zwei Ringe oder drei seltsame Flächen?", a: "praegnanz", why: "Wir wählen die einfachste Deutung: zwei Kreise." },
+    { fig: "figurGrund", q: "Vase oder Gesichter?", a: "figurGrund", why: "Was Figur ist und was Hintergrund, kann kippen." }
+  ];
+  function renderQuiz() {
+    st.quiz = st.quiz || {};
+    $("#quiz").innerHTML = QUIZ.map(function (it, i) {
+      return '<div class="card" data-i="' + i + '"><div class="grid2" style="align-items:center"><svg class="fig small" viewBox="0 0 400 300">' + F.quiz[it.fig]() + '</svg><div><h3>' + (i + 1) + ". " + it.q + '</h3><div class="quiz-grid">' +
+        LAWS.map(function (l) { return '<button class="choice" data-v="' + l[0] + '">' + l[1] + "</button>"; }).join("") + '</div><p class="small qwhy" hidden></p></div></div></div>';
+    }).join("");
+    $$("#quiz .card").forEach(function (cd) {
+      var it = QUIZ[+cd.getAttribute("data-i")];
+      $$(".choice", cd).forEach(function (b) {
+        b.onclick = function () {
+          $$(".choice", cd).forEach(function (x) { x.classList.remove("right", "wrong"); });
+          var ok = b.getAttribute("data-v") === it.a;
+          b.classList.add(ok ? "right" : "wrong");
+          if (!ok) $('.choice[data-v="' + it.a + '"]', cd).classList.add("right");
+          var w = $(".qwhy", cd); w.hidden = false; w.textContent = (ok ? "Richtig. " : "Nicht ganz. ") + it.why;
+        };
+      });
+    });
+  }
+  function renderRules() {
+    $("#rules").innerHTML = CARDS.map(function (c) { return "<li><strong>" + c.name + "</strong><br><span class=\"own\">" + (st.rules[c.key] ? Lab.esc(st.rules[c.key]) : "– noch keine eigene Regel –") + "</span></li>"; }).join("");
+  }
+
+  /* ================= Teil B ================= */
+  $("#btn-b-start").onclick = function () {
+    st.id = Lab.uid(); st.group = Math.random() < 0.5 ? "buchstaben" : "zahlen"; st.answer = null; st.tn = null; st.ts = null; st.kipp = null;
+    st.textOrder = Math.random() < 0.5 ? ["n", "s"] : ["s", "n"]; save();
+    $("#kontext-fig").innerHTML = F.kontext(st.group); $("#kontext-cover").hidden = false; $("#kontext-cover").textContent = "Bereit? Tippe auf „Zeigen“.";
+    $("#kontext-q").hidden = true; $("#btn-flash").hidden = false; $$("#kontext-choices .choice").forEach(function (b) { b.classList.remove("selected"); });
+    steps.goto("s-kontext");
+  };
+  $("#btn-flash").onclick = function () {
+    var cov = $("#kontext-cover"); $("#btn-flash").hidden = true;
+    cov.hidden = true;
+    setTimeout(function () { cov.hidden = false; cov.textContent = "Weg!"; $("#kontext-q").hidden = false; }, 1200);
+  };
+  Lab.choiceGroup($("#kontext-choices"), function (v) { st.answer = v; save(); setTimeout(function () { startRead(0); steps.goto("s-lesen"); }, 350); });
+
+  /* Lesetest: zwei gleich lange Texte, einer mit vertauschten Buchstaben */
+  var TEXTS = [
+    "Am Montag fährt Lena mit dem Fahrrad zur Schule. Unterwegs trifft sie ihren Freund Jonas, der gerade aus dem Bus steigt. Gemeinsam gehen sie in die Cafeteria und kaufen sich zwei Brezeln für die große Pause.",
+    "Am Freitag geht Marie mit ihrer Schwester in die Stadt. Vor dem Kino warten schon ihre Freundinnen, die Karten für den neuen Film gekauft haben. Danach essen alle zusammen eine riesige Pizza beim Italiener."
+  ];
+  function scramble(text) {
+    var seed = 7;
+    function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+    return text.replace(/[A-Za-zÄÖÜäöüß]{4,}/g, function (w) {
+      var mid = w.slice(1, -1).split(""), orig = mid.join(""), tries = 0, out;
+      do { for (var i = mid.length - 1; i > 0; i--) { var j = Math.floor(rnd() * (i + 1)); var t = mid[i]; mid[i] = mid[j]; mid[j] = t; } out = mid.join(""); tries++; } while (out === orig && tries < 5);
+      return w[0] + out + w[w.length - 1];
+    });
+  }
+  var readIdx = 0, readStart = 0;
+  function startRead(i) {
+    readIdx = i; $("#readtext").hidden = true; $("#btn-read").hidden = false; $("#btn-readdone").hidden = true;
+    $("#lesen-title").textContent = "Lesen · Text " + (i + 1) + " von 2";
+  }
+  $("#btn-read").onclick = function () {
+    var kind = st.textOrder[readIdx], txt = TEXTS[readIdx];
+    $("#readtext").textContent = kind === "s" ? scramble(txt) : txt; $("#readtext").hidden = false;
+    $("#btn-read").hidden = true; $("#btn-readdone").hidden = false; readStart = performance.now();
+  };
+  $("#btn-readdone").onclick = function () {
+    var t = Math.round((performance.now() - readStart) / 100) / 10, kind = st.textOrder[readIdx];
+    if (kind === "s") st.ts = t; else st.tn = t; save();
+    if (readIdx === 0) startRead(1); else { drawWett(); steps.goto("s-wettstreit"); }
+  };
+
+  /* Wettstreit */
+  function drawWett() { $("#wett-fig").innerHTML = F.wettstreit(+$("#wett").value); }
+  $("#wett").addEventListener("input", drawWett);
+  $("#btn-kipp").onclick = function () { st.kipp = Math.round(+$("#wett").value / 38 * 100) / 100; save(); steps.goto("s-kurs"); };
+  $("#btn-nokipp").onclick = function () { st.kipp = 0; save(); steps.goto("s-kurs"); };
+
+  /* Code: ds03.id.gruppe.antwort.kipp.normal.vertauscht  (Zeiten in Zehntelsekunden, kipp x100; 0 = kippt nicht) */
+  function payload() {
+    return ["ds03", st.id || Lab.uid(), st.group === "buchstaben" ? "L" : "Z", st.answer || "x", Math.round((st.kipp || 0) * 100), Math.round((st.tn || 0) * 10), Math.round((st.ts || 0) * 10)].join(".");
+  }
+  function renderQR() { var p = payload(); $("#qr").innerHTML = Lab.qrSVG(Lab.resultURL(p), 230); $("#code").textContent = p; }
+
+  function renderAufloesung() {
+    $("#aufl-a").innerHTML = F.kontext("buchstaben"); $("#aufl-b").innerHTML = F.kontext("zahlen");
+    var ans = { b: "„B“", d: "„13“", x: "etwas anderes" }[st.answer] || "–";
+    $("#aufl-text").innerHTML = st.group ? "Du hast die Fassung <strong>" + (st.group === "buchstaben" ? "zwischen Buchstaben" : "zwischen Zahlen") + "</strong> gesehen und " + ans + " gewählt. Die anderen im Kurs haben zufällig die andere Fassung bekommen." : "";
+    if (st.tn && st.ts) {
+      var diff = Math.round((st.ts / st.tn - 1) * 100);
+      $("#lesen-res").innerHTML = "Du hast für den normalen Text <strong>" + Lab.sec(st.tn) + "</strong> gebraucht, für den Text mit vertauschten Buchstaben <strong>" + Lab.sec(st.ts) + "</strong>" + (diff > 0 ? " – also etwa " + diff + " % länger." : ".") + " Achtung: Die Texte waren verschieden, und manche lesen den zweiten Text schneller, weil sie geübt sind. Darum wurde die Reihenfolge zufällig gewählt.";
+    }
+    $("#wett-res").innerHTML = st.kipp ? "Bei dir kippte das Bild zu Spalten, als der waagerechte Abstand etwa <strong>" + String(st.kipp).replace(".", ",") + "-mal</strong> so groß war wie der senkrechte." : (st.kipp === 0 ? "Bei dir hat die Farbe (Ähnlichkeit) die ganze Zeit gewonnen." : "");
+    $("#pareidolie").innerHTML = F.pareidolie();
+  }
+
+  /* ================= Prüfen ================= */
+  var check = Lab.sortTask($("#sort"), [
+    { text: "In einer Tabelle lesen wir Spalten, weil die Zahlen untereinander enger stehen.", answer: "a", why: "Hier wird wirklich Gesehenes geordnet (Nähe)." },
+    { text: "Wer von jemandem enttäuscht wurde, misstraut ihm danach – das ist das Gesetz der Fortsetzung.", answer: "v", why: "Misstrauen ist keine Linie, die weiterläuft. Das erklären Erfahrungen und Erwartungen besser (DS 4)." },
+    { text: "Ein Vogelschwarm wirkt wie ein einziges Wesen.", answer: "a", why: "Gemeinsame Bewegung ordnet das, was wir sehen (gemeinsames Schicksal)." },
+    { text: "Vorurteile über eine Gruppe entstehen durch das Gesetz der Ähnlichkeit.", answer: "v", why: "Vorurteile sind Urteile und Einstellungen, die gelernt werden. Das Gesetz erklärt nur, dass wir Ähnliches zusammen sehen – nicht, warum wir einer Gruppe Eigenschaften zuschreiben." },
+    { text: "Ein Logo aus einzelnen Strichen erkennen wir als Tier.", answer: "a", why: "Wir ergänzen Lücken zu einer geschlossenen Form (Geschlossenheit)." },
+    { text: "Zwei Menschen, die man oft zusammen sieht, hält man für ein Paar – das ist das Gesetz der Nähe.", answer: "v", why: "Grenzfall: Dass wir zwei Menschen nebeneinander als Gruppe sehen, ist Wahrnehmung. Dass sie „ein Paar“ sind, ist aber eine Deutung mit Vorwissen und Erwartungen." }
+  ], { a: "Anwendung", v: "nur Vergleich" });
+  $("#btn-check").onclick = function () { $("#sort-score").textContent = check() + " von 6 richtig"; };
+
+  /* ================= Fotojagd ================= */
+  var cv = $("#photo-canvas"), cx = cv.getContext("2d"), img = null, strokes = [], drawing = false;
+  function paint() {
+    cx.fillStyle = "#e9e4da"; cx.fillRect(0, 0, cv.width, cv.height);
+    if (img) { var s = Math.max(cv.width / img.width, cv.height / img.height), w = img.width * s, h = img.height * s; cx.drawImage(img, (cv.width - w) / 2, (cv.height - h) / 2, w, h); }
+    else { cx.fillStyle = "#8a8f99"; cx.font = "600 40px -apple-system, sans-serif"; cx.textAlign = "center"; cx.fillText("Tippe auf „Foto aufnehmen“", cv.width / 2, cv.height / 2); }
+    cx.lineCap = "round"; cx.lineJoin = "round"; cx.strokeStyle = "rgba(217,100,63,.85)"; cx.lineWidth = 14;
+    strokes.forEach(function (s) { cx.beginPath(); s.forEach(function (p, i) { if (i) cx.lineTo(p[0], p[1]); else cx.moveTo(p[0], p[1]); }); cx.stroke(); });
+  }
+  function pos(e) { var r = cv.getBoundingClientRect(); return [(e.clientX - r.left) / r.width * cv.width, (e.clientY - r.top) / r.height * cv.height]; }
+  cv.addEventListener("pointerdown", function (e) { if (!img) return; drawing = true; strokes.push([pos(e)]); cv.setPointerCapture(e.pointerId); });
+  cv.addEventListener("pointermove", function (e) { if (!drawing) return; strokes[strokes.length - 1].push(pos(e)); paint(); });
+  cv.addEventListener("pointerup", function () { drawing = false; });
+  $("#btn-clear-draw").onclick = function () { strokes = []; paint(); };
+  $("#photo-in").addEventListener("change", function () {
+    var f = this.files && this.files[0]; if (!f) return;
+    var u = URL.createObjectURL(f), im = new Image();
+    im.onload = function () { img = im; strokes = []; paint(); };
+    im.src = u;
+  });
+  $("#btn-photo-save").onclick = function () {
+    if (!img) { alert("Bitte zuerst ein Foto aufnehmen."); return; }
+    paint();
+    var band = 150, out = document.createElement("canvas"); out.width = cv.width; out.height = cv.height + band;
+    var o = out.getContext("2d"); o.drawImage(cv, 0, 0);
+    o.fillStyle = "#0e6b68"; o.fillRect(0, cv.height, out.width, band);
+    o.fillStyle = "#fff"; o.textAlign = "left"; o.font = "700 44px -apple-system, sans-serif"; o.fillText($("#photo-law").value, 36, cv.height + 62);
+    o.font = "400 32px -apple-system, sans-serif"; o.fillText($("#photo-text").value || "", 36, cv.height + 114);
+    out.toBlob(function (blob) {
+      var name = "gestalt-" + $("#photo-law").value.toLowerCase().replace(/[^a-zäöü]+/g, "-") + ".jpg";
+      var file = new File([blob], name, { type: "image/jpeg" });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) navigator.share({ files: [file], title: "Fotojagd Gestaltgesetze" }).catch(function () {});
+      else { var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove(); }
+    }, "image/jpeg", 0.88);
+  };
+  paint();
+
+  /* ================= Mitnehmen / Druck ================= */
+  $("#note").addEventListener("input", function () { Lab.save("ds03-note", this.value); });
+  $("#btn-print").onclick = function () {
+    $("#print").innerHTML = "<h2>Gestalt-Labor: Wie baut mein Gehirn Bilder?</h2><p class=\"small\">Psycho-Labor · DS 3 · " + new Date().toLocaleDateString("de-DE") + "</p>" +
+      '<div class="card"><h3>Unsere Regeln und die Fachbegriffe</h3><ol>' + CARDS.map(function (c) { return "<li><strong>" + c.name + ":</strong> " + c.def + (st.rules[c.key] ? "<br><em>Unsere Regel: " + Lab.esc(st.rules[c.key]) + "</em>" : "") + "</li>"; }).join("") + "</ol></div>" +
+      '<div class="merksatz">' + $("#s-mitnehmen .merksatz").innerHTML + "</div>" +
+      '<div class="merksatz">' + $("#s-ergaenzen .merksatz").innerHTML + "</div>";
+    window.print();
+  };
+})();
+</script>
+</body>
+</html>
