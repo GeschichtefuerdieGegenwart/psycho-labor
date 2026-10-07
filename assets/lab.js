@@ -49,11 +49,21 @@
       steps.forEach(function (s, k) { s.classList.toggle("active", k === current); });
       if (bar) Lab.$$("span", bar).forEach(function (d, k) { d.className = k < current ? "done" : (k === current ? "now" : ""); });
       window.scrollTo(0, 0);
+      /* Sprungmarke (#s-2-1) für QR-Codes und Wiedereinstieg */
+      if (opts && opts.hash) { try { history.replaceState(null, "", "#" + steps[current].id); } catch (e) {} }
       if (opts && opts.onShow) opts.onShow(steps[current].id, current);
     }
     Lab.$$("[data-next]").forEach(function (b) { b.addEventListener("click", function () { show(current + 1); }); });
     Lab.$$("[data-prev]").forEach(function (b) { b.addEventListener("click", function () { show(current - 1); }); });
-    show(0);
+    var startAt = 0;
+    if (opts && opts.hash && window.location.hash.length > 1) {
+      var hid = decodeURIComponent(window.location.hash.slice(1));
+      var hi = steps.findIndex(function (s) { return s.id === hid; });
+      if (hi >= 0) startAt = hi;
+    }
+    show(startAt);
+    /* Der Browser springt beim Laden zur Sprungmarke – die Schritte beginnen aber immer oben. */
+    if (opts && opts.hash) window.addEventListener("load", function () { setTimeout(function () { window.scrollTo(0, 0); }, 0); });
     return { show: show, get index() { return current; }, goto: function (id) { show(steps.findIndex(function (s) { return s.id === id; })); } };
   };
 
@@ -79,7 +89,9 @@
   /* Adresse der Auswertungsseite der Lehrkraft mit den Daten im Anker (#) –
      der Anker wird beim Öffnen nicht an den Server übertragen. */
   Lab.resultURL = function (payload) {
-    var u = new URL("auswertung.html", window.location.href);
+    /* Läuft die Seite nicht über https (z. B. aus IServ geladen), gilt die feste Adresse des Psycho-Labors. */
+    var base = /^https?:$/.test(window.location.protocol) ? window.location.href : "https://geschichtefuerdiegegenwart.github.io/psycho-labor/";
+    var u = new URL("auswertung.html", base);
     u.hash = "d=" + payload;
     return u.toString();
   };
@@ -96,7 +108,7 @@
     var maxV = opt.max || Math.max(10, Math.ceil((Math.max.apply(null, all.concat([1])) * 1.1) / 5) * 5);
     function x(v) { return left + (W - left - right) * (v / maxV); }
     var s = '<svg class="chart" viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="' + Lab.esc(opt.aria || "Diagramm") + '">';
-    var ticks = 5, step = maxV / ticks;
+    var ticks = opt.ticks || 5, step = maxV / ticks;
     for (var t = 0; t <= ticks; t++) {
       var tv = Math.round(step * t * 10) / 10, tx = x(tv);
       s += '<line x1="' + tx + '" y1="' + top + '" x2="' + tx + '" y2="' + (H - bottom + 6) + '" stroke="#e2dbcf" stroke-width="1"/>';

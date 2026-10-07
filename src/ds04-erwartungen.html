@@ -1,0 +1,874 @@
+<!doctype html>
+<html lang="de" class="dm">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Sehe ich, was ich erwarte? – Psycho-Labor</title>
+<link rel="stylesheet" href="../assets/lab.css">
+<style>
+  .lab-progress span { width: 12px; }
+  @media (max-width: 720px) { .lab-progress { display: none; } }
+  .theme-btn { display: grid; place-items: center; -webkit-appearance: none; appearance: none; border: 1px solid var(--line); background: var(--paper); color: var(--ink); border-radius: 999px; min-width: 44px; min-height: 44px; font-size: 18px; cursor: pointer; }
+  .timebox { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 0 0 10px; font-size: 15px; color: var(--ink-soft); }
+  .timebox b { background: var(--accent-soft); color: var(--accent); border-radius: 999px; padding: 2px 10px; font-weight: 700; }
+  .timebox i { font-style: normal; background: var(--bg); border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; }
+  .plan { width: 100%; border-collapse: collapse; font-size: 16px; }
+  .plan td { padding: 7px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .plan td:first-child { white-space: nowrap; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  .plan tr.end td { font-weight: 700; color: var(--accent); border-bottom: 0; }
+  .goals li { margin-bottom: 6px; }
+  .model { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 4px; }
+  .model span { padding: 6px 12px; border-radius: 999px; background: var(--bg); border: 1px solid var(--line); font-size: 16px; }
+  .model span.done { text-decoration: line-through; color: var(--ink-soft); }
+  .model span.now { background: var(--warm); border-color: var(--warm); color: var(--on-accent); font-weight: 700; }
+  .vignette { border-left: 6px solid var(--gold); background: var(--paper); border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 0 0 16px; font-size: 18px; }
+  .fiction { display: inline-block; font-size: 13px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--gold-ink); background: var(--gold-soft); border-radius: 999px; padding: 2px 10px; margin-bottom: 6px; }
+  .zodiac { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; margin: 12px 0; }
+  .zodiac .choice { min-height: 52px; text-align: center; padding: 8px; font-size: 17px; }
+  .horo { font: 500 24px/1.5 var(--font-display); background: var(--paper); border-radius: var(--radius); padding: 26px 28px; box-shadow: var(--shadow); border: 1px solid var(--line); }
+  .scale7 { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin: 8px 0 2px; }
+  .scale7 button { -webkit-appearance: none; appearance: none; min-height: 48px; border: 2px solid var(--line); border-radius: 12px; background: var(--paper); color: var(--ink); font: 700 18px var(--font); cursor: pointer; }
+  .scale7 button.on { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+  .scale-lbl { display: flex; justify-content: space-between; font-size: 14px; color: var(--ink-soft); }
+  .msg { padding: 14px 0 16px; border-bottom: 1px solid var(--line); }
+  .msg:last-child { border-bottom: 0; }
+  .msg p { margin: 0 0 4px; font-size: 18px; }
+  .wordstage { min-height: 180px; display: grid; place-items: center; font: 700 46px var(--font-display); color: var(--ink); background: var(--paper); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--line); margin: 10px 0; }
+  .wordstage.small-txt { font-size: 22px; font-weight: 500; color: var(--ink-soft); }
+  .cardstage { position: relative; width: 240px; height: 336px; margin: 8px auto 14px; border-radius: 18px; background: var(--bg); display: grid; place-items: center; cursor: pointer; }
+  .cardstage .layer { position: absolute; inset: 0; }
+  .cardstage .layer svg { width: 100%; height: 100%; display: block; }
+  .cardstage .fix { font: 400 56px var(--font); color: var(--ink-soft); }
+  .cardstage .msgc { padding: 18px; text-align: center; font-size: 18px; color: var(--ink-soft); }
+  .resp { display: grid; gap: 12px; }
+  .resp .row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .resp .row > span { width: 72px; font-size: 15px; color: var(--ink-soft); }
+  .resp button { -webkit-appearance: none; appearance: none; min-width: 52px; min-height: 52px; border: 2px solid var(--line); border-radius: 12px; background: var(--paper); color: var(--ink); font: 700 20px var(--font); cursor: pointer; }
+  .resp button.on { border-color: var(--accent); background: var(--accent-soft); }
+  .resp button.suit { font-size: 28px; min-width: 64px; background: #fff; }
+  .resp button.suit.on { background: #e3f1ef; }
+  .resp button.odd { font-size: 16px; font-weight: 600; padding: 0 14px; }
+  .counter { text-align: center; font-size: 15px; color: var(--ink-soft); }
+  .tricks { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin: 8px 0 12px; }
+  .tricks svg { width: 120px; height: auto; }
+  .reslist { margin: 6px 0 0; padding-left: 20px; }
+  .fx { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  @media (max-width: 820px) { .fx { grid-template-columns: 1fr; } }
+  .fx .card { margin: 0; padding: 16px 18px; }
+  .fx h3 { font-size: 19px; margin-bottom: 6px; }
+  .fx .tag { font-size: 13px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: .05em; }
+  .bars { display: grid; gap: 10px; margin: 6px 0; }
+  .bar { display: grid; grid-template-columns: 220px 1fr 70px; gap: 10px; align-items: center; font-size: 16px; }
+  @media (max-width: 720px) { .bar { grid-template-columns: 1fr 70px; } .bar span:first-child { grid-column: 1 / -1; } }
+  .bar .track { height: 22px; background: var(--bg); border-radius: 11px; overflow: hidden; border: 1px solid var(--line); }
+  .bar .fill { height: 100%; background: var(--accent); border-radius: 11px; transition: width .2s; }
+  .bar .fill.w { background: var(--warm); }
+  .bar .fill.g { background: var(--gold); }
+  .bar strong { text-align: right; font-variant-numeric: tabular-nums; }
+  .evidence { width: 100%; border-collapse: collapse; font-size: 16px; }
+  .evidence th { text-align: left; font-size: 14px; color: var(--ink-soft); font-weight: 600; padding: 6px 8px; border-bottom: 2px solid var(--line); }
+  .evidence td { padding: 9px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  @media (max-width: 720px) {
+    .evidence, .evidence tbody, .evidence tr, .evidence td { display: block; }
+    .evidence tr:first-child { display: none; }
+    .evidence tr { border-bottom: 1px solid var(--line); padding: 8px 0; }
+    .evidence td { border: 0; padding: 2px 0; }
+    .evidence td:first-child { font-weight: 700; }
+    .evidence td[data-l]::before { content: attr(data-l) ": "; font-weight: 600; color: var(--ink-soft); }
+  }
+  .dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+  .dot.g { background: var(--ok); } .dot.y { background: var(--gold); } .dot.r { background: var(--warm); }
+  .modes { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 12px 0; }
+  .modes button { -webkit-appearance: none; appearance: none; text-align: left; border: 2px solid var(--line); border-radius: var(--radius); padding: 16px 18px; background: var(--paper); color: var(--ink); font: 500 16px var(--font); cursor: pointer; min-height: 110px; }
+  .modes button b { display: block; font: 700 19px var(--font-display); margin-bottom: 4px; }
+  .modes button.selected { border-color: var(--accent); background: var(--accent-soft); }
+  .scene + .scene { margin-top: 18px; }
+  .end { text-align: center; padding: 36px 20px; }
+  .end .big { font: 700 40px var(--font-display); color: var(--accent); margin: 8px 0; }
+  .end svg { width: 90px; height: 90px; }
+  .print-only h1 { font-size: 20pt; } .print-only h2 { font-size: 14pt; margin-top: 14pt; }
+  .print-only p, .print-only li { font-size: 11pt; }
+</style>
+</head>
+<body>
+<header class="lab-top">
+  <a class="lab-logo" href="index.html"><span id="logo"></span>Psycho-Labor</a>
+  <span class="lab-title">DS 4 · Sehe ich, was ich erwarte?</span>
+  <div class="lab-progress" aria-hidden="true"></div>
+  <button class="theme-btn" id="theme" type="button" aria-label="Hell- oder Dunkelmodus umschalten"><svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 2.5a7.5 7.5 0 0 1 0 15z" fill="currentColor"/></svg></button>
+</header>
+
+<main class="lab-main">
+
+<!-- ===================== 1 Auftrag und Ziel ===================== -->
+<section class="step" id="s-1">
+  <span class="kicker">DS 4 · Wahrnehmung · Erwartungs-Labor</span>
+  <h1>Sehe ich, was ich erwarte?</h1>
+  <p class="lead">Dein Gehirn wählt aus, ordnet und ergänzt. Heute prüfst du, wie stark deine <strong>Erwartungen</strong> bestimmen, was du siehst – und wie du andere Menschen einschätzt.</p>
+  <div class="card">
+    <h3>Der Weg vom Reiz zur Wahrnehmung</h3>
+    <div class="model"><span class="done">auswählen (DS 2)</span><span class="done">ordnen (DS 3)</span><span class="done">ergänzen (DS 3)</span><span class="now">deuten mit Erwartungen (heute)</span></div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <h3>Am Ende kannst du …</h3>
+      <ul class="goals">
+        <li>erklären, wie Erwartungen nach der <strong>Hypothesentheorie</strong> die Wahrnehmung lenken.</li>
+        <li><strong>Primacy-Effekt</strong>, <strong>Halo-Effekt</strong> und <strong>selbsterfüllende Prophezeiung</strong> an Beispielen unterscheiden.</li>
+        <li>beurteilen, was ein Ergebnis aus 7 Personen zeigen kann – und was nicht.</li>
+      </ul>
+      <p class="small"><strong>Dein Produkt:</strong> ein kurzer, fachlich begründeter Rat an Josef für seine ersten Wochen an der neuen Schule.</p>
+    </div>
+    <div class="card">
+      <h3>Fahrplan (90 Minuten)</h3>
+      <table class="plan">
+        <tr><td>0–12</td><td>Abrufstart und Vorhersage</td></tr>
+        <tr><td>12–27</td><td>Selbstversuch (allein)</td></tr>
+        <tr><td>27–37</td><td>Auflösung und Kursergebnis</td></tr>
+        <tr><td>37–52</td><td>Verstehen: Hypothesentheorie</td></tr>
+        <tr><td>52–65</td><td>Anwenden: Josefs erste Tage</td></tr>
+        <tr><td>65–75</td><td>Prüfen: Was zeigen 7 Personen?</td></tr>
+        <tr><td>75–85</td><td>Dein Rat an Josef</td></tr>
+        <tr class="end"><td>85–90</td><td>Abschluss – Tablet umdrehen</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="actions"><button class="btn big" data-next>Los geht's: Abrufstart</button></div>
+  <div class="private"><span class="lock"></span><span>Alles bleibt auf diesem iPad. Es wird nichts ins Internet gesendet. Namen werden nirgends gespeichert.</span></div>
+</section>
+
+<!-- ===================== 2 Aktivieren und vorhersagen ===================== -->
+<section class="step" id="s-1-1">
+  <div class="timebox"><b>⏱ 5 Min.</b><i>allein</i><span>Abrufstart</span></div>
+  <h2>Was weißt du noch?</h2>
+  <p class="small">Drei Fragen zu DS 2 und DS 3. Lege dich fest, dann bekommst du eine Erklärung.</p>
+  <div class="card" id="q-abruf1"></div>
+  <div class="card" id="q-abruf2"></div>
+  <div class="card" id="q-abruf3"></div>
+  <div class="actions"><button class="btn secondary" data-prev>Zurück</button><button class="btn" data-next>Weiter</button></div>
+</section>
+
+<section class="step" id="s-1-2">
+  <div class="timebox"><b>⏱ 7 Min.</b><i>Plenum, dann allein</i><span>Einstieg</span></div>
+  <h2>Josefs Abend vor dem ersten Schultag</h2>
+  <div class="vignette"><span class="fiction">ausgedachter Fall</span><br>Josef wechselt nach der Realschule auf ein berufliches Gymnasium. Am Abend vor dem ersten Tag schreibt ihm sein Cousin: <em>„Am SG sind alle total arrogant. Und pass auf in Mathe – die Lehrer dort halten nichts von Realschülern.“</em></div>
+  <p>Wird Josef seinen ersten Tag anders <strong>sehen</strong> als ohne diese Nachricht? Bevor du heute etwas ausprobierst, halte deine Vermutung fest.</p>
+  <div class="card" id="pred-start"></div>
+  <div class="actions"><button class="btn secondary" data-prev>Zurück</button><button class="btn" data-next id="to-versuch" disabled>Weiter zum Selbstversuch</button></div>
+</section>
+
+<!-- ===================== Selbstversuch ===================== -->
+<section class="step" id="s-2">
+  <div class="timebox"><b>⏱ 15 Min.</b><i>allein</i><span>Selbstversuch</span></div>
+  <h2>Drei kurze Aufgaben</h2>
+  <div class="card">
+    <ol>
+      <li>ein Horoskop und sechs kurze Situationen</li>
+      <li>eine Person, die mit sechs Wörtern beschrieben wird</li>
+      <li>Spielkarten, die ganz kurz aufblitzen</li>
+    </ol>
+    <p>Es gibt keine richtigen oder falschen Antworten. <strong>Antworte spontan</strong> und sprich nicht mit den anderen.</p>
+    <p class="small">Nicht alle bekommen genau dieselben Texte. Das gehört zum Versuch und wird danach vollständig aufgeklärt.</p>
+  </div>
+  <div class="actions"><button class="btn big" data-next>Start</button></div>
+</section>
+
+<section class="step" id="s-2-1">
+  <div class="timebox"><b>Aufgabe 1 von 3</b><i>allein</i></div>
+  <h2>Zum Einstimmen: dein Horoskop für heute</h2>
+  <p>Tippe auf dein Sternzeichen.</p>
+  <div class="zodiac" id="zodiac"></div>
+  <div id="horo-box" hidden>
+    <div class="horo" id="horo-text"></div>
+    <p class="small" style="margin-top:10px">Lies den Text in Ruhe einmal durch.</p>
+    <div class="actions"><button class="btn" data-next>Gelesen – weiter</button></div>
+  </div>
+</section>
+
+<section class="step" id="s-2-2">
+  <div class="timebox"><b>Aufgabe 1 von 3</b><i>allein</i></div>
+  <h2>Wie ist das gemeint?</h2>
+  <p>Stell dir jede Situation kurz vor. Wie freundlich ist das wohl gemeint? Antworte aus dem Bauch.</p>
+  <div class="card" id="msgs"></div>
+  <div class="actions"><button class="btn" data-next id="msgs-next" disabled>Weiter</button><span class="small" id="msgs-left"></span></div>
+</section>
+
+<section class="step" id="s-2-3">
+  <div class="timebox"><b>Aufgabe 2 von 3</b><i>allein</i></div>
+  <h2>Eine Person in sechs Wörtern</h2>
+  <p>Eine Person, die du nicht kennst, wird mit sechs Eigenschaften beschrieben. Die Wörter erscheinen nacheinander. Lies jedes Wort aufmerksam.</p>
+  <div class="wordstage small-txt" id="words">Bereit?</div>
+  <div class="actions" id="words-start"><button class="btn" id="btn-words">Wörter zeigen</button></div>
+  <div id="rate-person" hidden>
+    <div class="card">
+      <h3>Wie stellst du dir diese Person vor?</h3>
+      <div id="person-items"></div>
+      <p class="w-q" style="margin-top:14px">Welcher Satz passt eher?</p>
+      <div class="choices" id="person-type">
+        <button class="choice" data-value="f">eine fähige Person, die ein paar Schwächen hat</button>
+        <button class="choice" data-value="s">eine schwierige Person, die auch ein paar Stärken hat</button>
+      </div>
+    </div>
+    <div class="actions"><button class="btn" data-next id="person-next" disabled>Weiter</button></div>
+  </div>
+</section>
+
+<section class="step" id="s-2-4">
+  <div class="timebox"><b>Aufgabe 3 von 3</b><i>allein</i></div>
+  <h2>Welche Karte war das?</h2>
+  <p id="card-intro">Gleich blitzen Spielkarten <strong>ganz kurz</strong> auf. Sag danach, welche Karte es war: Zahl und Symbol. Bist du unsicher, rate. Wenn dir an einer Karte etwas seltsam vorkam, tippe auf „Etwas war seltsam“.</p>
+  <div class="counter" id="card-count">Übungskarte</div>
+  <div class="cardstage" id="stage" role="button" tabindex="0" aria-label="Karte starten">
+    <div class="layer" id="l-msg"><div class="msgc">Tippe hier, um die Karte zu zeigen.<br><br>Schau auf die Mitte.</div></div>
+    <div class="layer" id="l-fix" hidden style="display:grid;place-items:center"><div class="fix">+</div></div>
+    <div class="layer" id="l-card" hidden></div>
+    <div class="layer" id="l-mask" hidden></div>
+  </div>
+  <div class="card resp" id="resp" hidden>
+    <div class="row" id="r-rank"><span>Zahl</span></div>
+    <div class="row" id="r-suit"><span>Symbol</span></div>
+    <div class="row"><span></span><button class="odd" id="r-odd" type="button">Etwas war seltsam</button></div>
+    <div class="actions" style="margin-top:6px"><button class="btn" id="r-ok" disabled>Antwort speichern</button></div>
+  </div>
+  <div id="cards-done" hidden>
+    <div class="card accent"><h3>Geschafft!</h3><p>Alle drei Aufgaben sind erledigt. Weiter zur Übergabe an den Kurs.</p></div>
+    <div class="actions"><button class="btn" data-next>Weiter</button></div>
+  </div>
+</section>
+
+<section class="step" id="s-2-5">
+  <div class="timebox"><b>Kursvergleich</b></div>
+  <h2>Dein Ergebnis für den Kurs</h2>
+  <p>Zeig diesen QR-Code deiner Lehrkraft. Dein Ergebnis erscheint <strong>ohne Namen</strong> im Kursdiagramm.</p>
+  <div class="card"><div class="qr-box"><div id="qr"></div><div style="flex:1;min-width:220px"><p class="small">Im Code stehen nur Zahlen: wie viele Karten du erkannt hast, deine Einschätzungen und welche Fassung du bekommen hast.</p><p class="small">Falls das Scannen nicht klappt:</p><div class="code" id="code"></div></div></div></div>
+  <div class="card warm"><strong>Warte jetzt, bis alle fertig sind.</strong> Die Auflösung besprechen wir gemeinsam.</div>
+  <div class="actions"><button class="btn big" data-next>Zur Auflösung (erst auf Ansage)</button></div>
+</section>
+
+<!-- ===================== Auflösung ===================== -->
+<section class="step" id="s-3">
+  <div class="timebox"><b>⏱ 10 Min. für die Auflösung</b><i>Plenum, Beamer</i><span>Auflösung 1 von 3</span></div>
+  <h2>Was wurde da geprüft? 1 · Die Spielkarten</h2>
+  <p class="small">Erst vermuten, dann auflösen. Das Kursergebnis zeigt deine Lehrkraft am Beamer.</p>
+  <div class="card"><div id="pred-karten"></div><div id="rev-karten"></div></div>
+  <div class="actions"><button class="btn" data-next>Weiter: das Horoskop</button></div>
+</section>
+
+<section class="step" id="s-3-2">
+  <div class="timebox"><b>Auflösung 2 von 3</b><i>Plenum, Beamer</i></div>
+  <h2>2 · Das Horoskop</h2>
+  <div class="card"><div id="pred-horo"></div><div id="rev-horo"></div></div>
+  <div class="card gold"><strong>Beobachtung oder Deutung?</strong> Beschreibt zuerst das Kursdiagramm: Was sehen wir? Erst danach: Woran könnte das liegen?</div>
+  <div class="actions"><button class="btn secondary" data-prev>Zurück</button><button class="btn" data-next>Weiter: die sechs Wörter</button></div>
+</section>
+
+<section class="step" id="s-3-3">
+  <div class="timebox"><b>Auflösung 3 von 3</b><i>Plenum, Beamer</i></div>
+  <h2>3 · Die Person in sechs Wörtern</h2>
+  <div class="card"><div id="pred-liste"></div><div id="rev-liste"></div></div>
+  <div class="actions"><button class="btn secondary" data-prev>Zurück</button><button class="btn" data-next>Weiter: Was steckt dahinter?</button></div>
+</section>
+
+<!-- ===================== Verstehen in Häppchen ===================== -->
+<section class="step" id="s-4-1">
+  <div class="timebox"><b>⏱ 15 Min. für Teil 4</b><i>zu zweit</i><span>Verstehen 1 von 4</span></div>
+  <h2>Erwartungen steuern das Sehen</h2>
+  <div class="card">
+    <p>Die Psychologen <strong>Jerome Bruner und Leo Postman</strong> sagten: Jede Wahrnehmung beginnt mit einer <strong>Erwartung</strong> – sie nannten sie <strong>Hypothese</strong>. Das Gehirn prüft die Reize an dieser Erwartung.</p>
+    <p>Passen die Reize, geht das Erkennen schnell. Passen sie nicht, braucht das Gehirn länger – oder es <strong>deutet um</strong>: Aus einem roten Pik wird ein Herz.</p>
+    <div id="modell" style="margin-top:8px"></div>
+  </div>
+  <div class="card" id="q-hyp"></div>
+  <div class="actions"><button class="btn secondary" data-prev>Zurück</button><button class="btn" data-next>Weiter</button></div>
+</section>
+
+<section class="step" id="s-4-2">
+  <div class="timebox"><b>Verstehen 2 von 4</b><i>zu zweit</i></div>
+  <h2>Woher kommen Erwartungen?</h2>
+  <div class="card">
+    <p>Erwartungen fallen nicht vom Himmel. Sie entstehen aus drei Quellen:</p>
+    <ul>
+      <li><strong>individuelle Faktoren:</strong> eigene Erfahrungen, Gefühle und Stimmungen, Bedürfnisse, Einstellungen</li>
+      <li><strong>soziale Faktoren:</strong> was andere Menschen sagen, Regeln und Werte einer Gruppe, Kultur</li>
+      <li><strong>Situation:</strong> der Zusammenhang, in dem ein Reiz auftaucht, und wie gut er zu sehen ist</li>
+    </ul>
+  </div>
+  <div class="card" id="q-faktoren"></div>
+  <div class="actions"><button class="btn secondary" data-prev>Zurück</button><button class="btn" data-next>Weiter</button></div>
+</section>
+
+<section class="step" id="s-4-3">
+  <div class="timebox"><b>Verstehen 3 von 4</b><i>zu zweit</i></div>
+  <h2>Wie stark ist die Erwartung?</h2>
+  <div class="card">
+    <p>Nach Bruner und Postman kommt es auf die <strong>Stärke</strong> einer Erwartung an. Schiebe den Regler und beobachte, was sich für Josef ändert.</p>
+    <div id="slider-staerke"></div>
+    <p class="small">Modell zur Veranschaulichung – die Zahlen sind keine Messwerte.</p>
+  </div>
+  <div class="card" id="q-staerke"></div>
+  <div class="actions"><button class="btn secondary" data-prev>Zurück</button><button class="btn" data-next>Weiter</button></div>
+</section>
+
+<section class="step" id="s-4-4">
+  <div class="timebox"><b>Verstehen 4 von 4</b><i>zu zweit</i></div>
+  <h2>Erwartungen bei Menschen: drei Effekte</h2>
+  <div class="fx">
+    <div class="card"><span class="tag">ordnet</span><h3>Primacy-Effekt</h3><p>Was wir <strong>zuerst</strong> erfahren, bildet den Rahmen. Alles Spätere wird darin eingeordnet.</p><p class="small">Asch (1946) – euer Versuch mit den sechs Wörtern</p></div>
+    <div class="card"><span class="tag">färbt ab</span><h3>Halo-Effekt</h3><p>Ein <strong>auffälliges Merkmal</strong> überstrahlt das Urteil über ganz andere Merkmale (Halo = Heiligenschein).</p><p class="small">Thorndike (1920); Nisbett &amp; Wilson (1977): Wer einen Dozenten sympathisch erlebte, fand auch sein Aussehen und seinen Akzent angenehmer – und merkte es nicht.</p></div>
+    <div class="card"><span class="tag">bewirkt</span><h3>Selbsterfüllende Prophezeiung</h3><p>Eine Erwartung verändert das <strong>Verhalten</strong> – und dadurch das Ergebnis. Am Ende scheint sie „bestätigt“.</p><p class="small">Rosenthal &amp; Jacobson (1968): Lehrkräfte erfuhren die Namen angeblicher „Aufblüher“ – in Wahrheit ausgelost.</p></div>
+  </div>
+  <div class="merksatz">Primacy- und Halo-Effekt verändern unser <strong>Urteil</strong>. Die selbsterfüllende Prophezeiung verändert die <strong>Wirklichkeit</strong>.</div>
+  <div class="actions"><button class="btn secondary" data-prev>Zurück</button><button class="btn" data-next>Weiter: kurzer Check</button></div>
+</section>
+
+<section class="step" id="s-4-5">
+  <div class="timebox"><b>Verstehen · Check</b><i>zu zweit</i></div>
+  <h2>Welcher Effekt ist das?</h2>
+  <div class="card" id="q-effekte"></div>
+  <div class="actions"><button class="btn secondary" data-prev>Zurück</button><button class="btn" data-next>Weiter: Anwenden</button></div>
+</section>
+
+<!-- ===================== Anwenden ===================== -->
+<section class="step" id="s-5">
+  <div class="timebox"><b>⏱ 13 Min.</b><i>zu zweit oder allein</i><span>Anwenden</span></div>
+  <h2>Josefs erste Tage</h2>
+  <p>Vier Szenen aus Josefs ersten Wochen (ausgedachter Fall). Welche Erklärung passt am besten? Lege dich fest, begründe mit einem Detail aus der Szene – dann bekommst du eine Rückmeldung.</p>
+  <p class="w-q">Wähle deinen Zugang:</p>
+  <div class="modes" id="modes">
+    <button data-m="beispiel"><b>Mit Beispiel</b>Die erste Szene ist vorgemacht. Hilfekarte nach deinem ersten Versuch.</button>
+    <button data-m="hilfe"><b>Mit Hilfekarte</b>Du startest selbst. Nach deinem ersten Versuch kannst du die Hilfekarte öffnen.</button>
+    <button data-m="ohne"><b>Ohne Hilfe</b>Du arbeitest ganz selbstständig. Für Profis.</button>
+  </div>
+  <div id="scenes" hidden></div>
+  <div id="challenge" hidden>
+    <details class="hint"><summary>Für Schnelle: Zwei Effekte auf einmal</summary><div><p>Schreibe eine eigene Szene aus Ausbildung, Studium oder Social Media, in der <strong>zwei</strong> Effekte zusammenwirken. Tausche mit deiner Partnerin: Findet sie beide?</p><textarea id="challenge-text" aria-label="Eigene Szene"></textarea><p class="small">Bleibt auf deinem iPad.</p></div></details>
+  </div>
+  <div class="actions"><button class="btn secondary" data-prev>Zurück</button><button class="btn" data-next>Weiter: Prüfen</button></div>
+</section>
+
+<!-- ===================== Prüfen ===================== -->
+<section class="step" id="s-6">
+  <div class="timebox"><b>⏱ 10 Min.</b><i>Plenum, dann zu zweit</i><span>Denkwerkzeug</span></div>
+  <h2>Was können 7 Personen zeigen?</h2>
+  <div class="card">
+    <p>Euer Kursergebnis ist eine <strong>Beobachtung an 7 Personen</strong>. Ein <strong>Befund</strong> der Forschung beruht auf vielen Personen – und gilt erst als sicher, wenn andere Forschende ihn <strong>wiederholen</strong> können.</p>
+    <table class="evidence">
+      <tr><th>Phänomen</th><th>Die klassische Studie</th><th>Heute</th></tr>
+      <tr><td><span class="dot g"></span>Trickkarten</td><td data-l="Klassiker">Bruner &amp; Postman (1949), 28 Personen: normale Karten nach 28 ms erkannt, Trickkarten erst nach 114 ms</td><td data-l="Heute">Dass Erwartungen das Erkennen lenken, ist vielfach belegt.</td></tr>
+      <tr><td><span class="dot r"></span>Stimmung durch Hinweise (wie beim Horoskop)</td><td data-l="Klassiker">Srull &amp; Wyer (1979): Wer vorher „feindselige“ Wörter las, beurteilte eine Person deutlich feindseliger.</td><td data-l="Heute">26 Labore wiederholten es 2018: Unterschied fast null.</td></tr>
+      <tr><td><span class="dot y"></span>Erster Eindruck</td><td data-l="Klassiker">Asch (1946): Die Reihenfolge der Wörter verändert den Eindruck.</td><td data-l="Heute">Mit Wortlisten: kleiner Effekt. Bei echten Videos von Menschen (1&nbsp;395 Beurteilende): kein Primacy-Effekt, spätere Eindrücke zählten sogar mehr.</td></tr>
+      <tr><td><span class="dot y"></span>Selbsterfüllende Prophezeiung</td><td data-l="Klassiker">Rosenthal &amp; Jacobson (1968): „Aufblüher“ legten im IQ-Test stärker zu – vor allem in Klasse 1 und 2.</td><td data-l="Heute">Es gibt sie, aber meist klein. Am stärksten, wenn Lehrkräfte die Schüler noch kaum kennen.</td></tr>
+    </table>
+    <p class="small" style="margin-top:8px"><span class="dot g"></span>gut belegt <span class="dot y" style="margin-left:10px"></span>belegt, aber kleiner als gedacht <span class="dot r" style="margin-left:10px"></span>Wiederholung gescheitert</p>
+  </div>
+  <div class="actions"><button class="btn secondary" data-prev>Zurück</button><button class="btn" data-next>Weiter: Was dürfen wir schließen?</button></div>
+</section>
+
+<section class="step" id="s-6-2">
+  <div class="timebox"><b>Denkwerkzeug</b><i>zu zweit</i></div>
+  <h2>Was dürfen wir aus unseren Daten schließen?</h2>
+  <div class="card" id="q-schluss"></div>
+  <div class="merksatz"><strong>Denkwerkzeug Einzelfall vs. Befund:</strong> Ein Kursergebnis beschreibt uns. Ob es allgemein gilt, zeigen erst viele Personen und Wiederholungen. Und über eine einzelne Person sagt es nichts.</div>
+  <div class="actions"><button class="btn secondary" data-prev>Zurück</button><button class="btn" data-next>Weiter: Dein Rat an Josef</button></div>
+</section>
+
+<!-- ===================== Produkt ===================== -->
+<section class="step" id="s-7">
+  <div class="timebox"><b>⏱ 10 Min.</b><i>allein</i><span>Produkt</span></div>
+  <h2>Dein Rat an Josef</h2>
+  <p>Josef liest heimlich mit, was du in Psychologie gelernt hast. Schreibe ihm <strong>4 bis 6 Sätze</strong> für seine ersten Wochen. Nutze <strong>mindestens zwei Fachbegriffe</strong> und <strong>einen Befund</strong> aus der Forschung.</p>
+  <textarea id="rat" aria-label="Dein Rat an Josef" style="min-height:190px"></textarea>
+  <p class="small" id="rat-count"></p>
+  <details class="hint"><summary>Satzanfänge</summary><div><ul>
+    <li>Dein Cousin hat in dir eine starke Erwartung geweckt. Nach Bruner und Postman bedeutet das, …</li>
+    <li>Wenn dir am ersten Tag jemand nett hilft, …</li>
+    <li>Pass auf, dass aus deiner Erwartung keine selbsterfüllende Prophezeiung wird: …</li>
+    <li>Die gute Nachricht aus der Forschung: …</li>
+  </ul></div></details>
+  <div class="card"><h3>Prüfe deinen Text</h3><div id="crit"></div></div>
+  <div class="actions"><button class="btn secondary" id="btn-muster" disabled>Musterlösung vergleichen</button><span class="small" id="muster-hint">Erst nach deinem eigenen Text (mindestens 3 Sätze).</span></div>
+  <div class="card gold" id="muster" hidden></div>
+  <div class="actions"><button class="btn secondary" data-prev>Zurück</button><button class="btn" id="btn-pdf">Als PDF sichern (für GoodNotes)</button><button class="btn" data-next>Weiter: Abschluss</button></div>
+</section>
+
+<!-- ===================== Abschluss ===================== -->
+<section class="step" id="s-8">
+  <div class="timebox"><b>⏱ 5 Min.</b><i>allein</i><span>Abschluss</span></div>
+  <h2>Zurück zu deiner Vorhersage</h2>
+  <div class="card" id="pred-end-old"></div>
+  <div class="card" id="pred-end"></div>
+  <div class="card"><h3>Wie sicher bist du jetzt?</h3><div id="selfcheck"></div></div>
+  <div class="card accent"><strong>Nächstes Mal:</strong> Wie sehr beeinflussen mich andere? Dann geht es auch um Vorurteile – sie sind besonders starke Erwartungen über ganze Gruppen.</div>
+  <div class="actions"><button class="btn secondary" data-prev>Zurück</button><button class="btn big" data-next>Fertig</button></div>
+</section>
+
+<section class="step" id="s-9">
+  <div class="end">
+    <svg viewBox="0 0 64 64" aria-hidden="true"><rect x="16" y="6" width="32" height="52" rx="6" fill="none" stroke="currentColor" stroke-width="4"/><path d="M8 40 a24 24 0 0 0 20 18" fill="none" stroke="currentColor" stroke-width="4"/><path d="M24 54 l5 4 -5 4" fill="none" stroke="currentColor" stroke-width="4"/></svg>
+    <div class="big">Fertig – Tablet umdrehen.</div>
+    <p class="lead">Danke! Deine Antworten bleiben auf diesem iPad.</p>
+    <p class="small"><button class="btn secondary" id="btn-reset" type="button">Alle Eingaben auf diesem iPad löschen</button></p>
+  </div>
+</section>
+
+<section class="print-only" id="print"></section>
+</main>
+
+<script src="../assets/qrcode.js"></script>
+<script src="../assets/lab.js"></script>
+<script src="../assets/widgets.js"></script>
+<script src="../assets/figuren-ds04.js"></script>
+<script>
+/* =====================================================================
+   INHALTE (Datenblock) – getrennt von den Widget-Funktionen
+   ===================================================================== */
+var DATA = {
+  abruf: [
+    { id: "abruf1", frage: "Im Video solltet ihr Pässe zählen – und viele haben den Gorilla übersehen. Wie heißt das?",
+      optionen: [
+        { t: "Veränderungsblindheit", fb: "Naheliegend, denn auch dabei wird etwas übersehen. Veränderungsblindheit heißt aber: Man bemerkt nicht, dass sich etwas <em>verändert</em> – wie beim Flacker-Test. Der Gorilla war ein unerwartetes Objekt, keine Veränderung." },
+        { t: "Unaufmerksamkeitsblindheit", ok: true, fb: "Genau. Wer die Aufmerksamkeit ganz auf eine Aufgabe richtet, übersieht Unerwartetes – selbst mitten im Bild. Bei Simons und Chabris (1999) war das etwa die Hälfte." },
+        { t: "Figur-Grund-Prinzip", fb: "Das Figur-Grund-Prinzip beschreibt, wie wir ein Bild in Figur und Hintergrund teilen. Es erklärt nicht, warum jemand ein ganzes Objekt übersieht." },
+        { t: "Sinnestäuschung", fb: "Bei einer Sinnestäuschung liefert die Wahrnehmung ein falsches Bild. Hier hat das Auge den Gorilla abgebildet – das Gehirn hat ihn nur nicht <em>ausgewählt</em>." }
+      ] },
+    { id: "abruf2", frage: "Dasselbe Zeichen liest du zwischen A und C als „B“, zwischen 12 und 14 als „13“. Was zeigt das?",
+      optionen: [
+        { t: "Bottom-up: Allein die Reize bestimmen, was wir sehen.", fb: "Die Reize waren in beiden Fällen gleich. Wenn nur sie zählten, müssten alle dasselbe sehen. Es muss also noch etwas dazukommen." },
+        { t: "Top-down: Vorwissen und Erwartung ergänzen, was wir sehen.", ok: true, fb: "Richtig. Die Umgebung weckt eine Erwartung (Buchstabe oder Zahl), und die färbt die Deutung. Genau hier setzt die heutige Stunde an." },
+        { t: "Gesetz der Nähe: Nahe Zeichen gehören zusammen.", fb: "Die Nähe erklärt, dass wir die drei Zeichen als Reihe sehen. Sie erklärt aber nicht, warum das mittlere Zeichen einmal „B“ und einmal „13“ ist." }
+      ] },
+    { id: "abruf3", frage: "Jemand sagt: „Das Gesetz der Ähnlichkeit erklärt, warum Menschen Vorurteile haben.“ Was stimmt?",
+      optionen: [
+        { t: "Stimmt – wir stecken Ähnliches in dieselbe Schublade.", fb: "Klingt einleuchtend, ist aber nur ein Vergleich. Das Gesetz beschreibt, wie wir Punkte und Formen gruppieren – nicht, wie wir Menschen bewerten." },
+        { t: "Das ist ein Vergleich, keine Erklärung. Für Urteile über Menschen braucht es eine andere Theorie.", ok: true, fb: "Genau – das war das Denkwerkzeug „Beschreiben vs. Erklären“. Eine solche Theorie lernst du heute kennen." },
+        { t: "Stimmt, aber nur bei Fotos von Menschen.", fb: "Auch bei Fotos ordnet das Gesetz nur Formen und Farben. Ob wir jemanden sympathisch finden, ist eine Deutung – dafür braucht es eine andere Erklärung." }
+      ] }
+  ],
+
+  vorhersage: { id: "vorhersage1", frage: "Wie stark bestimmt das, was ein Mensch <strong>erwartet</strong>, was er sieht und wie er andere einschätzt?",
+    regler: { min: 0, max: 10, start: 5, links: "gar nicht", rechts: "vollständig", fmt: function (v) { return v + " von 10"; } },
+    begruendenText: "Warum glaubst du das? Ein Satz reicht." },
+
+  horoskop: {
+    V: "Heute ist nicht jeder so freundlich, wie er tut. Hinter einem Lächeln oder einer kurzen Nachricht kann mehr stecken, als du denkst. Bleib wachsam und nimm nicht alles für bare Münze.",
+    W: "Heute meinen es die Menschen um dich herum gut mit dir. Hinter einem Lächeln oder einer kurzen Nachricht steckt oft mehr Freundlichkeit, als du denkst. Lass dich darauf ein."
+  },
+  sternzeichen: ["Widder", "Stier", "Zwillinge", "Krebs", "Löwe", "Jungfrau", "Waage", "Skorpion", "Schütze", "Steinbock", "Wassermann", "Fische"],
+
+  nachrichten: [
+    "Du schickst in der Klassengruppe einen langen Vorschlag fürs Referat. Jana antwortet nur: „ok.“",
+    "Am ersten Tag in der neuen Klasse sagst du deinen Namen. Zwei Mitschüler schauen sich an und grinsen.",
+    "Dein Lehrer gibt dir die Arbeit zurück: „Interessanter Lösungsweg. Kommen Sie nachher kurz zu mir.“",
+    "Eine Freundin hat deine Story gesehen, aber nicht reagiert.",
+    "In der Gruppenarbeit sagt jemand: „Du bist ja schon fertig?“",
+    "Jemand aus dem Kurs schreibt: „Hast du heute Nachmittag Zeit? Ich müsste mal was mit dir besprechen.“"
+  ],
+
+  liste: { A: ["intelligent", "fleißig", "impulsiv", "kritisch", "stur", "neidisch"],
+           B: ["neidisch", "stur", "kritisch", "impulsiv", "fleißig", "intelligent"] },
+  personItems: [
+    { t: "Wie sympathisch wirkt die Person?", l: "gar nicht", r: "sehr" },
+    { t: "Wie gern würdest du mit ihr ein Projekt machen?", l: "gar nicht gern", r: "sehr gern" },
+    { t: "Wie glücklich ist diese Person wohl?", l: "unglücklich", r: "glücklich" }
+  ],
+
+  /* Karten: [Zahl, Symbol, gezeigte Farbe]. Trickkarten: Farbe passt nicht zum Symbol. */
+  uebung: [8, "karo", "rot"],
+  karten: [[5, "herz", "rot"], [2, "pik", "schwarz"], [6, "pik", "rot"], [10, "karo", "rot"], [9, "kreuz", "schwarz"],
+           [4, "herz", "schwarz"], [3, "karo", "rot"], [8, "herz", "rot"], [7, "pik", "schwarz"], [7, "kreuz", "rot"]],
+
+  predKarten: { id: "p-karten", festText: "Jetzt auflösen.", frage: "Unter den 10 Karten waren <strong>3 Trickkarten</strong>: Farbe und Symbol passten nicht zusammen – zum Beispiel ein <strong>rotes Pik</strong>. Was glaubst du: Wie viele davon hast du als seltsam bemerkt?",
+    optionen: ["keine", "eine", "zwei", "alle drei"] },
+  predHoro: { id: "p-horo", festText: "Jetzt auflösen.", frage: "Es gab <strong>zwei Horoskope</strong>: eines warnte vor falscher Freundlichkeit („Vorsicht“), eines versprach Wohlwollen. Sie wurden <strong>zufällig</strong> verteilt. Bewertet die „Vorsicht“-Gruppe die Situationen unfreundlicher?",
+    optionen: ["ja, deutlich", "ein bisschen", "nein, kein Unterschied"] },
+  predListe: { id: "p-liste", festText: "Jetzt auflösen.", frage: "Alle haben <strong>dieselben sechs Wörter</strong> gelesen – nur in umgekehrter Reihenfolge: <em>intelligent … neidisch</em> oder <em>neidisch … intelligent</em>. Macht die Reihenfolge einen Unterschied?",
+    optionen: ["ja, deutlich", "ein bisschen", "nein, kein Unterschied"] },
+
+  qHyp: { id: "q-hyp", begruenden: true, frage: "Warum haben viele die <strong>schwarze Herz-Vier</strong> als „4 ♠“ oder „4 ♥“ gemeldet?",
+    optionen: [
+      { t: "Die Karte war zu kurz zu sehen, um überhaupt etwas zu erkennen.", fb: "Dann wären die normalen Karten genauso schlecht erkannt worden. Die meisten haben Zahl und Symbol der normalen Karten aber richtig genannt. Die Zeit allein erklärt es also nicht." },
+      { t: "Die Erwartung „Herz ist rot“ war so stark, dass das Gehirn Form oder Farbe passend gemacht hat.", ok: true, fb: "Genau. Die Erwartung hat den Reiz <strong>umgedeutet</strong>: Entweder gewinnt die Form (Herz – also rot) oder die Farbe (schwarz – also Pik). Bruner und Postman fanden genau diese Reaktionen." },
+      { t: "Die Farben auf dem iPad sind ungenau.", fb: "Rot und Schwarz waren klar zu unterscheiden – bei den normalen Karten klappte es ja. Die Verwechslung passiert im Kopf, nicht auf dem Bildschirm." }
+    ],
+    tipp: "Vergleiche: Wie gut hast du die <em>normalen</em> Karten erkannt? Was ist bei den Trickkarten anders?" },
+
+  qFaktoren: { id: "q-faktoren", frage: "Woher kommt die Erwartung? Ordne jede Zeile einer Quelle zu.",
+    kategorien: [{ k: "i", label: "individuell" }, { k: "s", label: "sozial" }, { k: "x", label: "Situation" }],
+    items: [
+      { t: "Josef hat an der Realschule erlebt, dass er in Mathe gut ist.", k: "i", fb: { i: "Eigene Erfahrung – ein individueller Faktor.", s: "Niemand anderes sagt es ihm hier. Es ist seine eigene Erfahrung.", x: "Es geht nicht um den Zusammenhang eines Reizes, sondern um Josefs Erfahrung." } },
+      { t: "Der Cousin schreibt: „Am SG sind alle arrogant.“", k: "s", fb: { s: "Eine andere Person weckt die Erwartung – ein sozialer Faktor.", i: "Die Erwartung stammt nicht aus Josefs Erfahrung, sondern von seinem Cousin.", x: "Die Nachricht kommt von einer Person. Das ist ein sozialer Einfluss." } },
+      { t: "Josef ist am ersten Tag müde und nervös.", k: "i", fb: { i: "Stimmung und Gefühle gehören zu den individuellen Faktoren.", s: "Müdigkeit und Nervosität kommen aus Josef selbst, nicht von anderen.", x: "Man könnte an die Lage denken – aber Nervosität ist ein Gefühl in Josef, also individuell." } },
+      { t: "In Josefs Freundeskreis gilt: Wer sich meldet, ist ein Streber.", k: "s", fb: { s: "Eine Regel der Gruppe – ein sozialer Faktor.", i: "Das ist keine eigene Erfahrung, sondern eine Regel, die in der Gruppe gilt.", x: "Es geht nicht um einen Reiz im Moment, sondern um eine Gruppennorm." } },
+      { t: "Zwischen 12 und 14 steht ein mehrdeutiges Zeichen.", k: "x", fb: { x: "Der Zusammenhang (Zahlen links und rechts) weckt die Erwartung – ein Faktor der Situation.", i: "Es hängt nicht an deiner Person: Fast alle lesen hier „13“.", s: "Niemand sagt dir etwas – der Zusammenhang im Bild weckt die Erwartung." } },
+      { t: "Die Karte blitzt nur eine Zehntelsekunde auf.", k: "x", fb: { x: "Wie gut ein Reiz zu sehen ist, gehört zur Situation. Je undeutlicher, desto mehr füllt die Erwartung aus.", i: "Die kurze Zeit liegt nicht an dir, sondern an der Situation.", s: "Hier wirkt keine andere Person – nur die Sichtbedingung." } }
+    ] },
+
+  qStaerke: { id: "q-staerke", begruenden: true, frage: "Ergänze: Je <strong>stärker</strong> eine Erwartung ist, desto …",
+    optionen: [
+      { t: "… mehr Hinweise braucht man, um sie zu bestätigen.", fb: "Umgekehrt: Eine starke Erwartung ist schon mit <em>wenigen</em> Hinweisen „bestätigt“. Viele Hinweise braucht man, um sie zu <em>widerlegen</em>." },
+      { t: "… weniger Hinweise reichen als Bestätigung, und desto mehr Gegenbeweise braucht es, um sie zu widerlegen.", ok: true, fb: "Genau – das sind die Kernaussagen von Bruner und Postman. Dazu kommt: Starke Erwartungen springen häufiger an." },
+      { t: "… genauer nimmt man die Wirklichkeit wahr.", fb: "Eine starke Erwartung macht das Erkennen schneller, wenn sie stimmt – aber nicht genauer. Denk an die Trickkarten." }
+    ],
+    tipp: "Schiebe den Regler ganz nach rechts. Was passiert mit den Hinweisen, die Josef zur Bestätigung braucht?" },
+
+  qEffekte: { id: "q-effekte", frage: "Welcher Effekt passt? Ordne zu.",
+    kategorien: [{ k: "p", label: "Primacy" }, { k: "h", label: "Halo" }, { k: "s", label: "Prophezeiung" }],
+    items: [
+      { t: "Die neue Mitschülerin sieht sehr gut aus. Josef hält sie deshalb auch für klug.", k: "h", fb: { h: "Ein auffälliges Merkmal (Aussehen) färbt auf ein ganz anderes (Klugheit) ab.", p: "Es geht nicht um die Reihenfolge von Informationen, sondern um ein Merkmal, das abfärbt.", s: "Niemand ändert hier sein Verhalten. Es bleibt bei Josefs Urteil." } },
+      { t: "Weil ein Lehrer Josef wenig zutraut, nimmt er ihn kaum dran. Josef übt weniger – und schreibt schlechter.", k: "s", fb: { s: "Die Erwartung verändert das Verhalten – und am Ende das Ergebnis.", p: "Hier verändert sich nicht nur ein Eindruck, sondern Josefs Leistung.", h: "Kein Merkmal färbt ab. Entscheidend ist, dass die Erwartung die Wirklichkeit verändert." } },
+      { t: "Melissa erzählt erst, dass Kim hilfsbereit ist, dann, dass sie oft zu spät kommt. Josef findet Kim trotzdem sympathisch.", k: "p", fb: { p: "Die erste Information bildet den Rahmen, die spätere zählt weniger.", h: "Fast – aber hier entscheidet die Reihenfolge. Wäre „unpünktlich“ zuerst gekommen, sähe Josef Kim vielleicht anders.", s: "Kims Verhalten ändert sich nicht. Es geht nur um Josefs Eindruck." } }
+    ] },
+
+  optionenJosef: ["Primacy-Effekt", "Halo-Effekt", "Selbsterfüllende Prophezeiung", "Starke Erwartung: Wenige Hinweise reichen als Bestätigung", "Starke Erwartung: Widersprechendes wird umgedeutet"],
+  hilfekarte: "<strong>Hilfekarte – frag dich:</strong><ul><li>Spielt die <strong>Reihenfolge</strong> der Informationen die Hauptrolle? → Primacy</li><li><strong>Färbt</strong> ein auffälliges Merkmal auf ein anderes <strong>ab</strong>? → Halo</li><li>Ändert sich durch die Erwartung das <strong>Verhalten</strong> – und am Ende das Ergebnis? → Prophezeiung</li><li>Wird etwas <strong>Mehrdeutiges</strong> als Beweis genommen? → wenige Hinweise reichen</li><li>Wird ein <strong>Gegenbeweis weggeredet</strong>? → umgedeutet</li></ul>",
+  szenen: [
+    { id: "j1", titel: "Szene 1 · Erste Stunde",
+      situation: "Josef kommt in die neue Klasse. Zwei Mädchen in der letzten Reihe schauen kurz zu ihm und flüstern. Josef denkt sofort: „Die lästern über mich. Mein Cousin hatte recht.“",
+      beispiel: "Josef hat eine <strong>starke Erwartung</strong> („Am SG sind alle arrogant“), ausgelöst durch seinen Cousin – ein sozialer Faktor. Das Flüstern ist <strong>mehrdeutig</strong>: Es kann alles Mögliche bedeuten. Nach Bruner und Postman reichen bei einer starken Erwartung <strong>wenige Hinweise</strong> als Bestätigung. Also: <em>Starke Erwartung: Wenige Hinweise reichen als Bestätigung.</em> Wähle diese Deutung und schreibe die Begründung in eigenen Worten.",
+      stufen: [
+        ["begruendbar", "Es ist tatsächlich sein erster Eindruck. Der entsteht hier aber aus der Erwartung vom Vorabend – nicht aus der Reihenfolge von Informationen über die Mädchen."],
+        ["kaum", "Für einen Halo-Effekt bräuchte es ein auffälliges Merkmal, das auf andere Merkmale abfärbt. Josef schließt hier nicht von einem Merkmal auf ein anderes."],
+        ["kaum", "Noch hat niemand sein Verhalten geändert, und nichts ist „eingetreten“. Es geht nur um Josefs Deutung."],
+        ["zentral", "Ein kurzer Blick und ein Flüstern sind kein Beweis. Weil Josefs Erwartung stark ist, reicht ihm dieser winzige, mehrdeutige Hinweis als Bestätigung."],
+        ["begruendbar", "Man kann sagen, er deutet ein neutrales Verhalten um. Genauer: Es gibt noch keinen echten Gegenbeweis – nur einen mehrdeutigen Hinweis, der als Bestätigung zählt."]
+      ] },
+    { id: "j2", titel: "Szene 2 · In der Pause",
+      situation: "Tim stellt sich vor: Kapitän der Handballmannschaft, groß, lustig, beliebt. Josef denkt: „Der ist bestimmt auch in Mathe stark – den frag ich bei Problemen.“",
+      stufen: [
+        ["begruendbar", "Tim beginnt mit lauter positiven Infos, das stimmt. Aber Josef schließt nicht aus der Reihenfolge, sondern von einem Merkmal auf ein ganz anderes."],
+        ["zentral", "Auffällige positive Merkmale (sportlich, beliebt) färben auf ein ganz anderes Merkmal ab (Mathe). Dafür gibt es keinen Hinweis – das ist der Halo-Effekt."],
+        ["kaum", "Noch beeinflusst niemand das Verhalten des anderen. Es bleibt bei Josefs Urteil."],
+        ["kaum", "Josef hatte vorher keine Erwartung über Tim, die jetzt bestätigt würde."],
+        ["kaum", "Es gibt keine Information, die Josefs Erwartung widerspricht und umgedeutet wird."]
+      ] },
+    { id: "j3", titel: "Szene 3 · Mathe bei Herrn Brenner",
+      situation: "Herr Brenner sagt: „Ah, Sie kommen von der Realschule? Dann schauen wir mal.“ Josef hört: „Der traut mir nichts zu.“ In den nächsten Wochen meldet er sich kaum und macht die Hausaufgaben nur halb. Nach drei Wochen sagt Herr Brenner: „Von Ihnen kommt wenig.“ Josef denkt: „Wusste ich's doch.“",
+      stufen: [
+        ["begruendbar", "Der erste Satz von Herrn Brenner prägt Josefs Bild – das trifft einen Teil. Der Kern ist aber: Josefs Verhalten und dadurch das Ergebnis ändern sich."],
+        ["kaum", "Kein auffälliges Merkmal färbt auf ein anderes ab."],
+        ["zentral", "Josefs Erwartung verändert sein Verhalten: Er meldet sich nicht, übt weniger. Dadurch tritt genau das ein, was er erwartet hat. Hier erfüllt sich Josefs <em>eigene</em> Erwartung."],
+        ["begruendbar", "Am Anfang stimmt das: Ein mehrdeutiger Satz reicht Josef als Bestätigung. Die Szene geht aber weiter – am Ende hat sich die Wirklichkeit verändert."],
+        ["kaum", "Der Satz am Ende widerspricht Josefs Erwartung nicht – er bestätigt sie. Umgedeutet wird hier nichts."]
+      ] },
+    { id: "j4", titel: "Szene 4 · Zweite Woche",
+      situation: "Jana aus der Klasse bietet Josef an, ihm ihre Mitschriften zu leihen. Josef denkt: „Die will sich nur einschleimen.“ Als Jana ihm eine Woche später wieder hilft, bleibt er misstrauisch.",
+      stufen: [
+        ["begruendbar", "Josefs erster Eindruck vom SG prägt auch dieses Urteil. Genauer erklärt es aber die Hypothesentheorie: Ein Gegenbeweis wird weggedeutet."],
+        ["kaum", "Kein auffälliges Merkmal färbt auf andere ab."],
+        ["kaum", "Josefs Misstrauen verändert hier (noch) nicht Janas Verhalten – sie hilft ja weiter."],
+        ["begruendbar", "Die Erwartung ist stark, das stimmt. Aber hier bestätigt nichts die Erwartung – im Gegenteil: Ein Gegenbeweis wird weggeredet."],
+        ["zentral", "Janas Hilfe widerspricht Josefs Erwartung („alle arrogant“). Statt die Erwartung aufzugeben, deutet er die Hilfe um. Bei starken Erwartungen braucht es viele Gegenbeweise."]
+      ] }
+  ],
+
+  qSchluss: { id: "q-schluss", frage: "Darf man das aus unserem Kursergebnis schließen? Ordne zu.",
+    kategorien: [{ k: "z", label: "zulässig" }, { k: "w", label: "zu weit" }],
+    items: [
+      { t: "„In unserem Kurs wurden die Trickkarten seltener richtig erkannt als die normalen Karten.“", k: "z", fb: { z: "Das beschreibt nur unsere Daten – das ist zulässig.", w: "Doch: Wenn es so in unserem Diagramm steht, ist das eine reine Beschreibung unserer Daten. Erst Verallgemeinerungen gehen zu weit." } },
+      { t: "„Horoskope verändern, wie Menschen Nachrichten deuten.“", k: "w", fb: { w: "Richtig erkannt: 3 gegen 4 Personen sind zu wenige. Und eine Wiederholung mit 26 Laboren fand fast keinen Effekt.", z: "Dafür sind 3 gegen 4 Personen viel zu wenige – ein Unterschied kann reiner Zufall sein. Eine große Wiederholung fand fast keinen Effekt." } },
+      { t: "„Lena hat die Situationen unfreundlich bewertet – sie ist eben misstrauisch.“", k: "w", fb: { w: "Genau. Ein einzelnes Ergebnis ist keine Diagnose über eine Person.", z: "Ein einzelnes Ergebnis aus einer Übung sagt nichts über die Persönlichkeit. Das wäre eine Diagnose – und die stellen wir hier nie." } },
+      { t: "„Ein Unterschied zwischen zwei Gruppen mit je 3 oder 4 Personen kann auch durch Zufall entstehen.“", k: "z", fb: { z: "Genau – bei so kleinen Gruppen reicht eine Person mit ungewöhnlichen Antworten.", w: "Doch, das ist eine vorsichtige und richtige Aussage über kleine Stichproben." } },
+      { t: "„Bei uns war der Unterschied bei den Listen klein. Also gibt es den Primacy-Effekt nicht.“", k: "w", fb: { w: "Richtig: Ein kleiner Kurs kann einen kleinen Effekt leicht übersehen. Fehlender Unterschied ist kein Gegenbeweis.", z: "Ein kleiner Kurs kann einen kleinen Effekt leicht übersehen. Kein Unterschied bei 7 Personen widerlegt keinen Befund." } },
+      { t: "„Der erste Eindruck entscheidet für immer.“", k: "w", fb: { w: "Richtig. Bei echten Begegnungen zählten spätere Eindrücke sogar mehr (Wiedenroth u. a. 2020).", z: "Das geht weit über unsere Daten hinaus – und die Forschung widerspricht: Bei echten Begegnungen zählten spätere Eindrücke sogar mehr." } }
+    ] },
+
+  kriterien: { id: "kriterien", stufen: [
+    { name: "Grundlegend", kriterien: ["Ich nenne mindestens einen Fachbegriff richtig.", "Mein Rat passt zu Josefs Situation."] },
+    { name: "Sicher", kriterien: ["Ich erkläre, wie Josefs Erwartung seine Wahrnehmung lenkt (Hypothesentheorie).", "Ich verwende zwei Fachbegriffe korrekt."] },
+    { name: "Souverän", kriterien: ["Ich nenne einen Befund und sage, wie sicher er ist.", "Ich gebe einen konkreten Tipp, wie Josef seine Erwartung überprüfen kann."] }
+  ] },
+  muster: "<h3>Musterlösung (eine von vielen guten)</h3><p>Lieber Josef, dein Cousin hat in dir eine starke <strong>Erwartungshypothese</strong> geweckt: „Am SG sind alle arrogant.“ Nach Bruner und Postman reichen bei einer starken Erwartung schon wenige, mehrdeutige Hinweise – ein Flüstern, ein Blick – als „Beweis“, und freundliche Gesten werden leicht umgedeutet. Achte deshalb bewusst auf Gegenbeispiele, zum Beispiel wenn Jana dir hilft. Pass auch auf, dass keine <strong>selbsterfüllende Prophezeiung</strong> entsteht: Wenn du dich in Mathe nicht mehr meldest, weil du glaubst, Herr Brenner traue dir nichts zu, wirst du am Ende wirklich schlechter. Die gute Nachricht: In einer Studie mit echten Begegnungen zählten spätere Eindrücke sogar mehr als der erste (Wiedenroth u. a. 2020). Gib dir und den anderen ein paar Wochen.</p><p class='small'>Erfüllt: Fachbegriffe (Erwartungshypothese, selbsterfüllende Prophezeiung), Erklärung nach der Hypothesentheorie, Befund mit Einordnung, konkreter Tipp.</p>",
+
+  selbst: { id: "selbst", ziele: [
+    "Ich kann erklären, wie Erwartungen nach der Hypothesentheorie die Wahrnehmung lenken.",
+    "Ich kann Primacy-Effekt, Halo-Effekt und selbsterfüllende Prophezeiung an Beispielen unterscheiden.",
+    "Ich kann beurteilen, was ein Ergebnis aus 7 Personen zeigen kann – und was nicht."
+  ] }
+};
+
+/* =====================================================================
+   ABLAUF
+   ===================================================================== */
+(function () {
+  "use strict";
+  var $ = Lab.$, $$ = Lab.$$, W = Lab.W, F = window.FIGUREN_DS04, D = DATA;
+  W.use("ds04");
+  var st = Lab.load("ds04-versuch", {});
+  function save() { Lab.save("ds04-versuch", st); }
+  if (!st.id) { st.id = Lab.uid(); st.H = Math.random() < 0.5 ? "V" : "W"; st.L = Math.random() < 0.5 ? "A" : "B"; save(); }
+
+  $("#logo").innerHTML = Lab.logo;
+  $$(".lock").forEach(function (el) { el.innerHTML = Lab.lockIcon; });
+
+  /* ---------- Hell/Dunkel ---------- */
+  var themes = ["auto", "dark", "light"], theme = Lab.load("theme", "auto");
+  function applyTheme() { if (theme === "auto") document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme", theme); $("#theme").title = { auto: "Systemeinstellung", dark: "Dunkel", light: "Hell" }[theme]; }
+  $("#theme").addEventListener("click", function () { theme = themes[(themes.indexOf(theme) + 1) % 3]; Lab.save("theme", theme); applyTheme(); });
+  applyTheme();
+
+  var steps = Lab.Steps({ hash: true, onShow: function (id) {
+    if (id === "s-2-5") renderQR();
+    if (id === "s-3" || id === "s-3-2" || id === "s-3-3") renderAufloesung();
+    if (id === "s-8") renderEnde();
+  } });
+
+  /* ---------- Abrufstart und Vorhersage ---------- */
+  D.abruf.forEach(function (q, i) { W.single($("#q-abruf" + (i + 1)), q); });
+  W.predict($("#pred-start"), D.vorhersage, function () { $("#to-versuch").disabled = false; });
+  if (W.get("vorhersage1", null)) $("#to-versuch").disabled = false;
+
+  /* ---------- Aufgabe 1: Horoskop ---------- */
+  $("#zodiac").innerHTML = D.sternzeichen.map(function (z) { return '<button class="choice" type="button">' + z + "</button>"; }).join("");
+  $$("#zodiac .choice").forEach(function (b) {
+    b.addEventListener("click", function () {
+      $$("#zodiac .choice").forEach(function (x) { x.classList.remove("selected"); }); b.classList.add("selected");
+      $("#horo-text").innerHTML = "<strong>" + b.textContent + "</strong> · " + D.horoskop[st.H]; $("#horo-box").hidden = false;
+    });
+  });
+
+  /* Skala 1–7 */
+  function scale7(root, key, left, right, onChange) {
+    root.innerHTML = '<div class="scale7">' + [1, 2, 3, 4, 5, 6, 7].map(function (v) { return '<button type="button" data-v="' + v + '"' + (st[key] === v ? ' class="on"' : "") + ' aria-label="' + v + '">' + v + "</button>"; }).join("") + '</div><div class="scale-lbl"><span>1 = ' + left + "</span><span>7 = " + right + "</span></div>";
+    $$("button", root).forEach(function (b) { b.addEventListener("click", function () { $$("button", root).forEach(function (x) { x.classList.remove("on"); }); b.classList.add("on"); st[key] = +b.getAttribute("data-v"); save(); onChange(); }); });
+  }
+  $("#msgs").innerHTML = D.nachrichten.map(function (m, i) { return '<div class="msg"><p>' + (i + 1) + ". " + m + '</p><div id="m' + i + '"></div></div>'; }).join("");
+  function msgsUpd() { var left = D.nachrichten.filter(function (m, i) { return !st["m" + i]; }).length; $("#msgs-next").disabled = left > 0; $("#msgs-left").textContent = left ? "Noch " + left + " offen." : ""; }
+  D.nachrichten.forEach(function (m, i) { scale7($("#m" + i), "m" + i, "unfreundlich gemeint", "freundlich gemeint", msgsUpd); });
+  msgsUpd();
+
+  /* ---------- Aufgabe 2: Person in sechs Wörtern ---------- */
+  $("#person-items").innerHTML = D.personItems.map(function (it, i) { return '<div class="msg"><p>' + it.t + '</p><div id="p' + i + '"></div></div>'; }).join("");
+  function personUpd() { $("#person-next").disabled = !(st.p0 && st.p1 && st.p2 && st.e); }
+  D.personItems.forEach(function (it, i) { scale7($("#p" + i), "p" + i, it.l, it.r, personUpd); });
+  Lab.choiceGroup($("#person-type"), function (v) { st.e = v; save(); personUpd(); });
+  if (st.e) { var pb = $('#person-type .choice[data-value="' + st.e + '"]'); if (pb) pb.classList.add("selected"); }
+  if (st.wordsDone) { $("#words").textContent = "Die Wörter wurden gezeigt."; $("#words-start").hidden = true; $("#rate-person").hidden = false; }
+  personUpd();
+  $("#btn-words").addEventListener("click", function () {
+    $("#words-start").hidden = true;
+    var list = D.liste[st.L], i = 0, el = $("#words");
+    el.classList.remove("small-txt");
+    (function next() {
+      if (i < list.length) { el.textContent = list[i++]; setTimeout(next, 1500); }
+      else { el.classList.add("small-txt"); el.textContent = "Die Wörter wurden gezeigt."; st.wordsDone = true; save(); $("#rate-person").hidden = false; }
+    })();
+  });
+
+  /* ---------- Aufgabe 3: Spielkarten (Bruner & Postman 1949) ---------- */
+  var MS = (function () { var m = /[?&]ms=(\d+)/.exec(window.location.search); var v = m ? +m[1] : 120; return Math.max(30, Math.min(1000, v)); })();
+  var SUITS = ["herz", "karo", "pik", "kreuz"];
+  st.antw = st.antw || [];
+  var trial = st.antw.length, practice = !st.uebungDone, busy = false, cur = { r: null, s: null };
+  $("#r-rank").innerHTML += [2, 3, 4, 5, 6, 7, 8, 9, 10].map(function (n) { return '<button type="button" data-r="' + n + '">' + n + "</button>"; }).join("");
+  $("#r-suit").innerHTML += SUITS.map(function (s) { return '<button type="button" class="suit" data-s="' + s + '" style="color:' + (F.NATURAL[s] === "rot" ? F.RED : F.BLACK) + '" aria-label="' + F.NAME[s] + '">' + F.SYM[s] + "</button>"; }).join("");
+  function respUpd() { $("#r-ok").disabled = !((cur.r && cur.s) || cur.s === "x"); }
+  $$("#r-rank button").forEach(function (b) { b.addEventListener("click", function () { $$("#r-rank button").forEach(function (x) { x.classList.remove("on"); }); b.classList.add("on"); cur.r = +b.getAttribute("data-r"); respUpd(); }); });
+  $$("#r-suit button, #r-odd").forEach(function (b) { b.addEventListener("click", function () { $$("#r-suit button, #r-odd").forEach(function (x) { x.classList.remove("on"); }); b.classList.add("on"); cur.s = b.getAttribute("data-s") || "x"; respUpd(); }); });
+  function cardInfo() { return practice ? D.uebung : D.karten[trial]; }
+  function counter() {
+    if (practice) $("#card-count").textContent = "Übungskarte (etwas länger zu sehen)";
+    else if (trial < D.karten.length) $("#card-count").textContent = "Karte " + (trial + 1) + " von " + D.karten.length;
+  }
+  function showLayer(id) { ["#l-msg", "#l-fix", "#l-card", "#l-mask"].forEach(function (l) { $(l).hidden = l !== id; }); }
+  function runCard() {
+    if (busy || trial >= D.karten.length) return;
+    busy = true; $("#resp").hidden = true;
+    var c = cardInfo();
+    $("#l-card").innerHTML = F.karte(c[0], c[1], c[2]); $("#l-mask").innerHTML = F.maske(trial * 13 + 5);
+    showLayer("#l-fix");
+    setTimeout(function () {
+      showLayer("#l-card");
+      var t0 = null, dur = practice ? 400 : MS;
+      requestAnimationFrame(function tick(ts) {
+        if (t0 === null) t0 = ts;
+        if (ts - t0 >= dur - 8) {
+          showLayer("#l-mask");
+          setTimeout(function () { $("#l-msg").innerHTML = '<div class="msgc">Welche Karte war das?<br>Antworte unten.</div>'; showLayer("#l-msg"); $("#resp").hidden = false; busy = false; }, 350);
+        } else requestAnimationFrame(tick);
+      });
+    }, 700);
+  }
+  $("#stage").addEventListener("click", function () { if ($("#resp").hidden) runCard(); });
+  $("#stage").addEventListener("keydown", function (e) { if ((e.key === "Enter" || e.key === " ") && $("#resp").hidden) { e.preventDefault(); runCard(); } });
+  $("#r-ok").addEventListener("click", function () {
+    if (practice) { practice = false; st.uebungDone = true; }
+    else { st.antw.push({ r: cur.r, s: cur.s }); trial++; }
+    save();
+    cur = { r: null, s: null }; $$("#resp button").forEach(function (x) { x.classList.remove("on"); }); respUpd();
+    $("#resp").hidden = true;
+    if (trial >= D.karten.length) { $("#stage").hidden = true; $("#card-count").hidden = true; $("#cards-done").hidden = false; return; }
+    $("#l-msg").innerHTML = '<div class="msgc">Tippe hier für die nächste Karte.<br><br>Schau auf die Mitte.</div>'; showLayer("#l-msg"); counter();
+  });
+  counter();
+  if (trial >= D.karten.length) { $("#stage").hidden = true; $("#card-count").hidden = true; $("#cards-done").hidden = false; }
+
+  /* ---------- Auswertung der eigenen Daten ---------- */
+  function isTrick(c) { return F.NATURAL[c[1]] !== c[2]; }
+  function cardStats() {
+    var nk = 0, tk = 0, tf = 0, tc = 0, details = [];
+    D.karten.forEach(function (c, i) {
+      var a = st.antw[i]; if (!a) return;
+      if (!isTrick(c)) { if (a.r === c[0] && a.s === c[1]) nk++; return; }
+      var kind = a.s === "x" ? "seltsam" : a.s === c[1] ? "form" : (F.NATURAL[a.s] === c[2] ? "farbe" : "anders");
+      if (kind === "seltsam") tk++; else if (kind === "form") tf++; else if (kind === "farbe") tc++;
+      details.push({ c: c, a: a, kind: kind });
+    });
+    return { nk: nk, tk: tk, tf: tf, tc: tc, details: details };
+  }
+  function meanOf(keys) { return Lab.mean(keys.map(function (k) { return st[k]; })); }
+  function complete() { return st.antw.length >= D.karten.length && st.wordsDone && st.e && D.nachrichten.every(function (m, i) { return st["m" + i]; }); }
+  function payload() {
+    var cs = cardStats();
+    return ["ds04", st.id, cs.nk, cs.tk, cs.tf, st.H, Math.round(meanOf(["m0", "m1", "m2", "m3", "m4", "m5"]) * 10), st.L, Math.round(meanOf(["p0", "p1", "p2"]) * 10), st.e].join(".");
+  }
+  function renderQR() {
+    if (!complete()) { $("#qr").innerHTML = '<p class="small">Es fehlen noch Antworten. Geh zurück und beende alle drei Aufgaben.</p>'; $("#code").textContent = "–"; return; }
+    var p = payload(); $("#qr").innerHTML = Lab.qrSVG(Lab.resultURL(p), 230); $("#code").textContent = p;
+  }
+  function cardName(c) { return (c[2] === "rot" ? "rote " : "schwarze ") + F.NAME[c[1]] + "-" + c[0]; }
+  function answerName(a) { if (a.s === "x") return "„etwas war seltsam“"; return "„" + (a.r || "?") + " " + F.SYM[a.s] + "“"; }
+  var KIND = { seltsam: "Du hast bemerkt, dass etwas nicht stimmt.", form: "Die <strong>Form</strong> hat gewonnen – die Farbe wurde passend gemacht.", farbe: "Die <strong>Farbe</strong> hat gewonnen – das Symbol wurde passend gemacht.", anders: "Eine andere Antwort." };
+
+  function fmt1(x) { return isNaN(x) ? "–" : (Math.round(x * 10) / 10).toString().replace(".", ","); }
+
+  function renderAufloesung() {
+    var cs = cardStats();
+    W.predict($("#pred-karten"), D.predKarten, function () { W.reveal($("#rev-karten"), revKarten(cs)); });
+    if (W.get("p-karten", null)) W.reveal($("#rev-karten"), revKarten(cs));
+    W.predict($("#pred-horo"), D.predHoro, function () { W.reveal($("#rev-horo"), revHoro()); });
+    if (W.get("p-horo", null)) W.reveal($("#rev-horo"), revHoro());
+    W.predict($("#pred-liste"), D.predListe, function () { W.reveal($("#rev-liste"), revListe()); });
+    if (W.get("p-liste", null)) W.reveal($("#rev-liste"), revListe());
+  }
+  function revKarten(cs) {
+    return { id: "p-karten", kompakt: true, optionen: D.predKarten.optionen, aufloesung: function (rec) {
+      var tricks = D.karten.filter(isTrick);
+      var h = '<div class="tricks">' + tricks.map(function (c) { return F.karte(c[0], c[1], c[2]); }).join("") + "</div>";
+      h += "<p>Bei dir: <strong>" + cs.nk + " von 7</strong> normalen Karten richtig erkannt, <strong>" + cs.tk + " von 3</strong> Trickkarten als seltsam bemerkt." + (rec && rec.v !== cs.tk ? " Vorhergesagt hattest du " + D.predKarten.optionen[rec.v] + "." : (rec ? " Deine Vorhersage stimmt." : "")) + "</p>";
+      h += '<ul class="reslist">' + cs.details.map(function (d) { return "<li>" + cardName(d.c) + ": deine Antwort " + answerName(d.a) + ". " + KIND[d.kind] + "</li>"; }).join("") + "</ul>";
+      h += '<p style="margin-top:10px"><strong>Bruner und Postman (1949)</strong> machten genau diesen Versuch. Normale Karten wurden im Mittel nach 28 Millisekunden erkannt, Trickkarten erst nach 114 – viermal so lange. Viele sahen ein „lila“ oder „bräunliches“ Pik. Einer rief, als er die Karte endlich erkannte: „Meine Güte, was habe ich gesagt? Das ist eine rote Pik-Sechs!“</p>';
+      return h;
+    } };
+  }
+  function revHoro() {
+    return { id: "p-horo", kompakt: true, optionen: D.predHoro.optionen, aufloesung: function () {
+      var m = meanOf(["m0", "m1", "m2", "m3", "m4", "m5"]);
+      return "<p>Du hast das Horoskop <strong>„" + (st.H === "V" ? "Vorsicht" : "Wohlwollen") + "“</strong> bekommen – egal, welches Sternzeichen du gewählt hast. Deine Situationen hast du im Mittel mit <strong>" + fmt1(m) + "</strong> bewertet (1 = unfreundlich, 7 = freundlich).</p>" +
+        '<div class="card warm" style="margin:10px 0 0"><strong>Aufklärung:</strong> Beide Horoskope waren ausgedacht und wurden zufällig verteilt. Horoskope sagen nachweislich nichts über Menschen voraus (Carlson 1985). Sie dienten hier nur dazu, eine <strong>Erwartung</strong> zu wecken.</div>' +
+        '<p style="margin-top:10px">Ob ein Horoskop wirklich verändert, wie wir andere deuten, prüfen wir gleich in Teil 6 – die Antwort überrascht.</p>';
+    } };
+  }
+  function revListe() {
+    return { id: "p-liste", kompakt: true, optionen: D.predListe.optionen, aufloesung: function () {
+      var m = meanOf(["p0", "p1", "p2"]);
+      return "<p>Du hattest die Reihenfolge <strong>" + D.liste[st.L].join(" – ") + "</strong>. Dein Eindruck lag im Mittel bei <strong>" + fmt1(m) + "</strong> von 7, und du hast gewählt: „" + (st.e === "f" ? "eine fähige Person mit ein paar Schwächen" : "eine schwierige Person mit ein paar Stärken") + "“.</p>" +
+        "<p><strong>Solomon Asch (1946)</strong> fand: Wer mit „intelligent“ begann, sah eher eine fähige Person mit Schwächen. Wer mit „neidisch“ begann, sah eher einen Menschen mit erheblichen Schwächen. Die ersten Wörter bilden den Rahmen, in den die späteren eingeordnet werden. Das heißt <strong>Primacy-Effekt</strong> (Anfangseffekt).</p>";
+    } };
+  }
+
+  /* ---------- Verstehen ---------- */
+  $("#modell").innerHTML = F.modell(darkColors());
+  function darkColors() {
+    var cs = getComputedStyle(document.documentElement);
+    return { ink: cs.getPropertyValue("--ink").trim(), soft: cs.getPropertyValue("--ink-soft").trim(), accent: cs.getPropertyValue("--accent").trim(), warm: cs.getPropertyValue("--warm").trim(), paper: cs.getPropertyValue("--paper").trim(), line: cs.getPropertyValue("--line").trim() };
+  }
+  $("#theme").addEventListener("click", function () { $("#modell").innerHTML = F.modell(darkColors()); });
+  W.single($("#q-hyp"), D.qHyp);
+  W.grid($("#q-faktoren"), D.qFaktoren);
+  W.slider($("#slider-staerke"), { id: "staerke", min: 1, max: 10, start: 3, links: "schwache Erwartung", rechts: "starke Erwartung", aria: "Stärke von Josefs Erwartung „Hier mag mich keiner“",
+    render: function (v) {
+      var best = Math.max(1, Math.round(8 - 0.78 * v)), wid = Math.round(1 + 1.3 * v), akt = v <= 3 ? "selten" : v <= 7 ? "oft" : "fast immer";
+      function bar(lbl, n, max, cls, txt) { return '<div class="bar"><span>' + lbl + '</span><div class="track"><div class="fill ' + cls + '" style="width:' + Math.round(n / max * 100) + '%"></div></div><strong>' + txt + "</strong></div>"; }
+      return '<p class="small" style="margin:6px 0">Josefs Erwartung: <strong>„Hier mag mich keiner.“</strong></p><div class="bars">' +
+        bar("springt an", v, 10, "g", akt) + bar("Hinweise bis zur Bestätigung", best, 7, "", best) + bar("Gegenbeweise bis zur Widerlegung", wid, 14, "w", wid) + "</div>" +
+        '<p style="margin-top:10px">' + (v >= 7 ? "Ein kurzer Blick von zwei Mitschülerinnen reicht Josef schon als „Beweis“. Ein freundliches Hallo übersieht er oder deutet es um." : v >= 4 ? "Josef braucht ein paar Hinweise, bis er sich bestätigt fühlt. Ein, zwei freundliche Gesten reichen aber noch nicht, um ihn umzustimmen." : "Josef braucht mehrere klare Hinweise, bevor er glaubt, dass ihn keiner mag. Ein freundliches Hallo reicht, um die Erwartung zu verwerfen.") + "</p>";
+    } });
+  W.single($("#q-staerke"), D.qStaerke);
+  W.grid($("#q-effekte"), D.qEffekte);
+
+  /* ---------- Anwenden: drei Zugänge ---------- */
+  var sceneIdx = W.get("_szene", 0);
+  function buildScenes() {
+    var box = $("#scenes"); box.innerHTML = ""; box.hidden = false; $("#challenge").hidden = false;
+    var nav = document.createElement("div"); nav.className = "chips-nav";
+    D.szenen.forEach(function (sz, i) {
+      var div = document.createElement("div"); div.className = "card scene"; div.hidden = i !== sceneIdx; box.appendChild(div);
+      W.explore(div, { id: sz.id, titel: sz.titel + " <span class=\"small\">(" + (i + 1) + " von " + D.szenen.length + ")</span>", situation: sz.situation, beispiel: i === 0 ? sz.beispiel : null,
+        frage: "Welche Erklärung passt am besten?", tipp: D.hilfekarte,
+        optionen: D.optionenJosef.map(function (t, k) { return { t: t, stufe: sz.stufen[k][0], fb: sz.stufen[k][1] }; }) });
+      div.querySelector(".w-check").addEventListener("click", sceneNav);
+    });
+    var ctl = document.createElement("div"); ctl.className = "actions"; ctl.id = "scene-nav";
+    ctl.innerHTML = '<button class="btn secondary" type="button" id="sc-prev">Vorige Szene</button><button class="btn" type="button" id="sc-next">Nächste Szene</button><span class="small" id="sc-info"></span>';
+    box.appendChild(ctl);
+    $("#sc-prev").addEventListener("click", function () { showScene(sceneIdx - 1); });
+    $("#sc-next").addEventListener("click", function () { showScene(sceneIdx + 1); });
+    sceneNav();
+  }
+  function showScene(i) {
+    sceneIdx = Math.max(0, Math.min(D.szenen.length - 1, i)); W.set("_szene", sceneIdx);
+    $$("#scenes .scene").forEach(function (d, k) { d.hidden = k !== sceneIdx; });
+    sceneNav(); window.scrollTo(0, $("#scenes").offsetTop - 80);
+  }
+  function sceneNav() {
+    var done = !!W.get(D.szenen[sceneIdx].id, null);
+    $("#sc-prev").hidden = sceneIdx === 0;
+    $("#sc-next").hidden = sceneIdx === D.szenen.length - 1;
+    $("#sc-next").disabled = !done;
+    $("#sc-info").textContent = done ? "" : (sceneIdx < D.szenen.length - 1 ? "Erst festlegen, dann geht es weiter." : "");
+  }
+  $$("#modes button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      $$("#modes button").forEach(function (x) { x.classList.remove("selected"); }); b.classList.add("selected");
+      W.mode(b.getAttribute("data-m")); buildScenes();
+    });
+  });
+  if (W.get("_modus", null)) { var mb = $('#modes button[data-m="' + W.mode() + '"]'); if (mb) mb.classList.add("selected"); buildScenes(); }
+  W.text($("#challenge-text"), "eigeneSzene");
+
+  /* ---------- Prüfen ---------- */
+  W.grid($("#q-schluss"), D.qSchluss);
+
+  /* ---------- Produkt ---------- */
+  W.text($("#rat"), "rat");
+  function ratUpd() {
+    var t = $("#rat").value.trim(), n = (t.match(/[.!?](\s|$)/g) || []).length;
+    $("#rat-count").textContent = t ? n + " Satz/Sätze · " + t.length + " Zeichen" : "";
+    var ok = n >= 3 && t.length >= 120; $("#btn-muster").disabled = !ok; $("#muster-hint").hidden = ok;
+  }
+  $("#rat").addEventListener("input", ratUpd); ratUpd();
+  W.criteria($("#crit"), D.kriterien);
+  $("#btn-muster").addEventListener("click", function () { $("#muster").innerHTML = D.muster; $("#muster").hidden = false; W.set("musterGesehen", true); });
+  if (W.get("musterGesehen", false)) { $("#muster").innerHTML = D.muster; $("#muster").hidden = false; }
+
+  /* ---------- Abschluss ---------- */
+  function renderEnde() {
+    var old = W.get("vorhersage1", null);
+    $("#pred-end-old").innerHTML = '<span class="kicker">Deine Vorhersage am Anfang</span>' + (old ? "<p><strong>" + old.v + " von 10</strong><br><span class=\"small\">Begründung: " + Lab.esc(old.grund || "") + "</span></p>" : "<p class=\"small\">Keine Vorhersage gespeichert.</p>");
+    W.predict($("#pred-end"), { id: "vorhersage2", frage: "Was denkst du <strong>jetzt</strong>, und warum? Wie stark bestimmen Erwartungen, was wir sehen und wie wir andere einschätzen?", regler: D.vorhersage.regler, begruendenText: "Was hat dich überzeugt – oder was zweifelst du an?" });
+    W.selfcheck($("#selfcheck"), D.selbst);
+  }
+
+  /* ---------- PDF für GoodNotes ---------- */
+  $("#btn-pdf").addEventListener("click", function () {
+    var v1 = W.get("vorhersage1", null), v2 = W.get("vorhersage2", null), cs = cardStats();
+    var crit = W.get("kriterien", {}), names = [];
+    D.kriterien.stufen.forEach(function (s, si) { s.kriterien.forEach(function (k, ki) { if (crit[si + "-" + ki]) names.push(s.name + ": " + k); }); });
+    $("#print").innerHTML = "<h1>DS 4 · Sehe ich, was ich erwarte?</h1>" +
+      "<h2>Mein Rat an Josef</h2><p>" + Lab.esc($("#rat").value || "–").replace(/\n/g, "<br>") + "</p>" +
+      "<h2>Selbstkontrolle (Kriterien erfüllt)</h2><ul>" + (names.length ? names.map(function (n) { return "<li>" + Lab.esc(n) + "</li>"; }).join("") : "<li>–</li>") + "</ul>" +
+      "<h2>Meine Ergebnisse im Selbstversuch</h2><ul><li>Spielkarten: " + cs.nk + " von 7 normalen Karten erkannt, " + cs.tk + " von 3 Trickkarten als seltsam bemerkt</li><li>Horoskop „" + (st.H === "V" ? "Vorsicht" : "Wohlwollen") + "“: Situationen im Mittel " + fmt1(meanOf(["m0", "m1", "m2", "m3", "m4", "m5"])) + " von 7</li><li>Wortliste " + st.L + ": Eindruck im Mittel " + fmt1(meanOf(["p0", "p1", "p2"])) + " von 7</li></ul>" +
+      "<h2>Meine Vorhersage</h2><p>Am Anfang: " + (v1 ? v1.v + " von 10 – " + Lab.esc(v1.grund || "") : "–") + "<br>Am Ende: " + (v2 ? v2.v + " von 10 – " + Lab.esc(v2.grund || "") : "noch offen") + "</p>" +
+      "<h2>Merksätze</h2><p>Erwartungen (Hypothesen) lenken, was wir wahrnehmen. Je stärker eine Erwartung, desto weniger Hinweise reichen zur Bestätigung und desto mehr Gegenbeweise braucht es zur Widerlegung (Bruner &amp; Postman). Primacy- und Halo-Effekt verändern unser Urteil, die selbsterfüllende Prophezeiung verändert die Wirklichkeit. Ein Kursergebnis beschreibt uns – ob es allgemein gilt, zeigen erst viele Personen und Wiederholungen.</p>";
+    window.print();
+  });
+
+  $("#btn-reset").addEventListener("click", function () {
+    if (!confirm("Alle Eingaben dieser Stunde auf diesem iPad löschen?")) return;
+    Lab.remove("ds04-versuch"); W.reset(); window.location.hash = ""; window.location.reload();
+  });
+})();
+</script>
+</body>
+</html>

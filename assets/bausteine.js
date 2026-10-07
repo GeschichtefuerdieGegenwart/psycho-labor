@@ -95,9 +95,59 @@
     }
   };
 
+
+  B.ds04 = {
+    ds: 4,
+    titel: "Sehe ich, was ich erwarte?",
+    thema: "Wahrnehmung · Erwartungen und erster Eindruck",
+    datei: "ds04-erwartungen.html",
+    /* Code: ds04.id.normalErkannt(0–7).trickBemerkt(0–3).trickFormGewinnt(0–3).horoskop(V/W).situationen(×10).liste(A/B).eindruck(×10).typ(f/s) */
+    decode: function (parts) {
+      if (parts.length !== 10 || "VW".indexOf(parts[5]) < 0 || "AB".indexOf(parts[7]) < 0) return null;
+      var n = parts.slice(2, 5).map(Number);
+      if (n.some(isNaN)) return null;
+      return { id: parts[1], nk: n[0], tk: n[1], tf: n[2], H: parts[5], h: +parts[6] / 10, L: parts[7], l: +parts[8] / 10, e: parts[9] };
+    },
+    render: function (recs) {
+      var N = recs.length;
+      function pct(a, b) { return b ? Math.round(a / b * 100) : 0; }
+      function bar(label, val, color, txt) { return '<div style="display:grid;grid-template-columns:230px 1fr 90px;gap:10px;align-items:center;margin:8px 0"><span>' + label + '</span><div style="background:#efe9df;border-radius:8px;height:30px"><div style="width:' + val + '%;height:30px;border-radius:8px;background:' + color + '"></div></div><strong>' + txt + "</strong></div>"; }
+      var nk = recs.reduce(function (s, r) { return s + r.nk; }, 0), tk = recs.reduce(function (s, r) { return s + r.tk; }, 0), tf = recs.reduce(function (s, r) { return s + r.tf; }, 0);
+      var main = "<h3>Spielkarten: Was wurde erkannt?</h3>" +
+        bar("normale Karten richtig", pct(nk, 7 * N), "#0e6b68", pct(nk, 7 * N) + " %") +
+        bar("Trickkarten als seltsam bemerkt", pct(tk, 3 * N), "#d9643f", pct(tk, 3 * N) + " %") +
+        '<p class="small">Bei den übrigen Trickkarten gewann ' + tf + "-mal die Form und " + (3 * N - tk - tf) + "-mal die Farbe (oder eine andere Antwort). Gezeigt wurde jede Karte gleich lange.</p>";
+      var fmt = function (x) { return isNaN(x) ? "–" : (Math.round(x * 10) / 10).toString().replace(".", ","); };
+      var V = recs.filter(function (r) { return r.H === "V"; }), Wh = recs.filter(function (r) { return r.H === "W"; });
+      var rest = '<div class="card"><h3>Horoskop: Wie freundlich gemeint? (1–7)</h3>' + Lab.dotPlot([
+        { label: "„Vorsicht“ (" + V.length + ")", color: "#d9643f", values: V.map(function (r) { return r.h; }) },
+        { label: "„Wohlwollen“ (" + Wh.length + ")", color: "#0e6b68", values: Wh.map(function (r) { return r.h; }) }
+      ], { aria: "Horoskop", rowH: 84, max: 7, ticks: 7, unit: "1 = unfreundlich gemeint · 7 = freundlich gemeint", fmt: fmt }) +
+        '<p class="small">Jeder Punkt ist eine Person (Mittel aus sechs Situationen). Die Horoskope wurden zufällig verteilt.</p></div>';
+      var A = recs.filter(function (r) { return r.L === "A"; }), Bl = recs.filter(function (r) { return r.L === "B"; });
+      function cnt(arr, v) { return arr.filter(function (r) { return r.e === v; }).length; }
+      rest += '<div class="card"><h3>Sechs Wörter: Wie wirkt die Person? (1–7)</h3>' + Lab.dotPlot([
+        { label: "Liste A: intelligent … (" + A.length + ")", color: "#0e6b68", values: A.map(function (r) { return r.l; }) },
+        { label: "Liste B: neidisch … (" + Bl.length + ")", color: "#d9643f", values: Bl.map(function (r) { return r.l; }) }
+      ], { aria: "Wortliste", rowH: 84, max: 7, ticks: 7, unit: "Mittel aus sympathisch, Projekt, glücklich", fmt: fmt }) +
+        '<p>„eine fähige Person mit Schwächen“: Liste A <strong>' + cnt(A, "f") + "</strong> von " + A.length + " · Liste B <strong>" + cnt(Bl, "f") + "</strong> von " + Bl.length + "</p></div>";
+      return { main: main, rest: rest };
+    },
+    befund: "Bruner &amp; Postman (1949): Normale Karten wurden nach 28 ms erkannt, Trickkarten erst nach 114 ms. Srull &amp; Wyer (1979) fanden große Effekte vorheriger Hinweise auf die Deutung einer Person – eine Wiederholung in 26 Laboren (McCarthy u. a. 2018) fand fast keinen Effekt. Asch (1946): Die Reihenfolge der Eigenschaften verändert den Eindruck; heute mit Wortlisten klein (Sullivan 2018), bei echten Videos kein Primacy-Effekt (Wiedenroth u. a. 2020).",
+    fragen: [
+      "Karten: Was beobachten wir – nur beschreiben. Wie erklärt die Hypothesentheorie den Unterschied?",
+      "Horoskop: Unterscheiden sich die Gruppen? Könnte das auch Zufall sein – bei 3 gegen 4 Personen?",
+      "Wortliste: Passt unser Ergebnis zu Asch? Was müsste man tun, um sicher zu sein?",
+      "Warum war die zufällige Zuteilung wichtig?"
+    ],
+    beispiel: function () {
+      var rows = [[7, 1, 1, "V", 44, "A", 52, "f"], [6, 0, 2, "W", 41, "B", 38, "s"], [7, 2, 0, "V", 47, "B", 47, "f"], [7, 0, 1, "W", 49, "A", 54, "f"], [5, 1, 1, "V", 38, "A", 49, "f"], [7, 0, 3, "W", 43, "B", 41, "s"], [6, 1, 0, "W", 46, "A", 55, "f"]];
+      return rows.map(function (r, i) { return ["ds04", "bsp" + i].concat(r).join("."); });
+    }
+  };
+
   /* Angekündigte Bausteine (noch nicht gebaut) */
   B.geplant = [
-    { ds: 4, titel: "Sehe ich, was ich erwarte?", thema: "Erwartungen und erster Eindruck" },
     { ds: 5, titel: "Wie sehr beeinflussen mich andere?", thema: "Gruppenmeinung und Schätzen" },
     { ds: 7, titel: "Die Malstift-Studie", thema: "Belohnung und Motivation" },
     { ds: 8, titel: "Wie weit wirfst du?", thema: "Leistungsmotivation" },
