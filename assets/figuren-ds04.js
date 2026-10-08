@@ -1,5 +1,6 @@
 /* Figuren für DS 4 „Sehe ich, was ich erwarte?“
-   Spielkarten (nach Bruner & Postman 1949) und das Modell der Hypothesentheorie. */
+   Spielkarten (nach Bruner & Postman 1949) und Schaubilder für die Lernübersicht.
+   Die Schaubilder sind vereinfachte Modelle; sie stehen immer auf weißem Grund (auch im Dunkelmodus und im Druck). */
 (function () {
   "use strict";
 
@@ -57,30 +58,67 @@
     return s + "</g></svg>";
   }
 
-  /* Modell: Hypothesentheorie (Bruner & Postman) – als Fließbild */
-  function modell(opt) {
-    opt = opt || {};
-    var ink = opt.ink || "#1d2230", soft = opt.soft || "#545b6b", acc = opt.accent || "#0e6b68", warm = opt.warm || "#d9643f", paper = opt.paper || "#fffdf9", line = opt.line || "#e2dbcf";
-    function box(x, y, w, h, fill, stroke, title, sub, tc) {
-      return '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="14" fill="' + fill + '" stroke="' + stroke + '" stroke-width="2"/>' +
-        '<text x="' + (x + w / 2) + '" y="' + (y + 30) + '" text-anchor="middle" font-size="19" font-weight="700" fill="' + (tc || ink) + '">' + title + "</text>" +
-        (sub || []).map(function (t, i) { return '<text x="' + (x + w / 2) + '" y="' + (y + 54 + i * 21) + '" text-anchor="middle" font-size="15" fill="' + (tc || soft) + '">' + t + "</text>"; }).join("");
-    }
-    function arrow(x1, y1, x2, y2, c) { return '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" stroke="' + (c || soft) + '" stroke-width="3" marker-end="url(#ah)"/>'; }
-    var s = '<svg viewBox="0 0 900 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Modell der Hypothesentheorie" font-family="-apple-system, Segoe UI, Calibri, Arial, sans-serif">' +
-      '<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="' + soft + '"/></marker></defs>';
-    s += box(10, 20, 200, 130, paper, line, "Einflussfaktoren", ["individuell: Erfahrung,", "Gefühl, Bedürfnis", "sozial: andere, Gruppe"]);
-    s += box(10, 175, 200, 110, paper, line, "Situation", ["Kontext, Hinweise,", "z. B. ein Horoskop"]);
-    s += arrow(212, 85, 288, 140); s += arrow(212, 230, 288, 175);
-    s += box(292, 95, 220, 130, acc, acc, "Erwartung", ["= Hypothese", "„Gleich sehe ich …“", "stark oder schwach"], "#fff");
-    s += arrow(514, 160, 578, 160);
-    s += box(582, 105, 130, 110, paper, line, "Reize", ["prüfen die", "Erwartung"]);
-    s += arrow(714, 140, 748, 70); s += arrow(714, 160, 748, 160); s += arrow(714, 180, 748, 250);
-    s += box(752, 30, 140, 72, paper, acc, "bestätigt", ["wahrgenommen"]);
-    s += box(752, 125, 140, 72, paper, warm, "umgedeutet", ["oder übersehen"]);
-    s += box(752, 220, 140, 72, paper, line, "verworfen", ["neue Hypothese"]);
+  var INK = "#1d2230", SOFT = "#545b6b", ACC = "#0e6b68", ACCS = "#d8ecea", WARM = "#d9643f", WARMS = "#fbe3d9", LINE = "#cfc7ba", GOLDS = "#f6ead0";
+  var FONT = 'font-family="-apple-system, Segoe UI, Calibri, Arial, sans-serif"';
+
+  function esc(t) { return String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+  function box(x, y, w, h, fill, stroke, lines, o) {
+    o = o || {};
+    var s = '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="12" fill="' + fill + '" stroke="' + stroke + '" stroke-width="2"/>';
+    var lh = o.lh || 21, y0 = y + (o.top || 28);
+    lines.forEach(function (l, i) {
+      var bold = i === 0 && !o.noBoldFirst, size = bold ? (o.size1 || 19) : (o.size || 16);
+      s += '<text x="' + (x + w / 2) + '" y="' + (y0 + i * lh) + '" text-anchor="middle" font-size="' + size + '"' + (bold ? ' font-weight="700"' : "") + ' fill="' + (o.color || (bold ? INK : SOFT)) + '">' + esc(l) + "</text>";
+    });
+    return s;
+  }
+  function arrow(x1, y1, x2, y2, c, id) { return '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" stroke="' + (c || SOFT) + '" stroke-width="3" marker-end="url(#' + (id || "ah") + ')"/>'; }
+  function defs() {
+    return '<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="' + SOFT + '"/></marker>' +
+      '<marker id="aw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="' + WARM + '"/></marker></defs>';
+  }
+
+  /* Schaubild 1: Hypothesentheorie als Ablauf, darunter das Beispiel der Trickkarte */
+  function ablauf() {
+    var s = '<svg viewBox="0 0 900 286" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ablauf der Hypothesentheorie" ' + FONT + '>' + defs();
+    s += box(6, 40, 184, 118, "#fff", LINE, ["Einflussfaktoren", "individuell", "sozial"], { top: 34, lh: 26 });
+    s += arrow(192, 99, 226, 99);
+    s += box(230, 40, 214, 118, ACC, ACC, ["Erwartung", "(Hypothese)", "„Gleich sehe ich …“"], { top: 34, lh: 26, color: "#fff" });
+    s += arrow(446, 99, 480, 99);
+    s += box(484, 40, 172, 118, "#fff", LINE, ["Reiz", "wird mit der", "Erwartung verglichen"], { top: 34, lh: 26 });
+    s += arrow(658, 76, 694, 34); s += arrow(658, 99, 694, 112); s += arrow(658, 122, 694, 196);
+    s += box(698, 4, 196, 60, "#fff", ACC, ["passt:", "Erwartung bestätigt"], { top: 25, lh: 23, size1: 17, size: 15 });
+    s += box(698, 72, 196, 80, WARMS, WARM, ["passt nicht,", "Erwartung stark:", "umgedeutet/übersehen"], { top: 25, lh: 22, size1: 17, size: 15 });
+    s += box(698, 160, 196, 80, "#fff", LINE, ["passt nicht,", "Erwartung schwach:", "wird verworfen"], { top: 25, lh: 22, size1: 17, size: 15 });
+    s += '<text x="98" y="186" text-anchor="middle" font-size="14" fill="' + SOFT + '" font-style="italic">lösen aus</text>';
+    s += '<text x="337" y="186" text-anchor="middle" font-size="14" fill="' + SOFT + '" font-style="italic">entsteht vorher, oft unbemerkt</text>';
+    s += '<text x="570" y="186" text-anchor="middle" font-size="14" fill="' + SOFT + '" font-style="italic">kommt über die Sinne an</text>';
+    s += '<rect x="6" y="250" width="888" height="32" rx="8" fill="' + GOLDS + '"/>';
+    s += '<text x="18" y="272" font-size="15" fill="' + INK + '"><tspan font-weight="700">Beispiel Trickkarte:</tspan> Erwartung „schwarz = Pik oder Kreuz“ → Reiz: schwarzes Herz → umgedeutet: viele melden „4 Pik“</text>';
     return s + "</svg>";
   }
 
-  window.FIGUREN_DS04 = { karte: karte, maske: maske, modell: modell, NAME: NAME, SYM: SYM, NATURAL: NATURAL, RED: RED, BLACK: BLACK };
+  /* Schaubild 2: Kreislauf der selbsterfüllenden Prophezeiung (optional mit Beispieltexten oder Schreiblinien) */
+  function kreislauf(bsp) {
+    var s = '<svg viewBox="0 0 600 352" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Kreislauf der selbsterfüllenden Prophezeiung" ' + FONT + '>' + defs();
+    var w = 232, h = 98;
+    var N = [
+      { x: 184, y: 4, t: "1 Erwartung" },
+      { x: 366, y: 128, t: "2 Verhalten ändert sich" },
+      { x: 184, y: 250, t: "3 Folge / Ergebnis" },
+      { x: 2, y: 128, t: "4 „Ich hatte recht!“" }
+    ];
+    N.forEach(function (n, i) {
+      var fill = i === 0 ? ACC : (i === 3 ? WARMS : "#fff"), stroke = i === 0 ? ACC : (i === 3 ? WARM : LINE);
+      s += '<rect x="' + n.x + '" y="' + n.y + '" width="' + w + '" height="' + h + '" rx="12" fill="' + fill + '" stroke="' + stroke + '" stroke-width="2"/>';
+      s += '<text x="' + (n.x + w / 2) + '" y="' + (n.y + 28) + '" text-anchor="middle" font-size="19" font-weight="700" fill="' + (i === 0 ? "#fff" : INK) + '">' + esc(n.t) + "</text>";
+      var lines = bsp ? bsp[i] : ["_______________________", "_______________________"];
+      lines.forEach(function (l, k) { s += '<text x="' + (n.x + w / 2) + '" y="' + (n.y + 56 + k * 22) + '" text-anchor="middle" font-size="17" fill="' + (i === 0 ? "#fff" : SOFT) + '">' + esc(l) + "</text>"; });
+    });
+    s += arrow(400, 56, 470, 124); s += arrow(470, 230, 404, 284); s += arrow(180, 284, 118, 230); s += arrow(118, 124, 180, 56, WARM, "aw");
+    s += '<text x="40" y="76" font-size="15" fill="' + WARM + '" font-style="italic">wird stärker</text>';
+    return s + "</svg>";
+  }
+
+  window.FIGUREN_DS04 = { karte: karte, maske: maske, ablauf: ablauf, kreislauf: kreislauf, NAME: NAME, SYM: SYM, NATURAL: NATURAL, RED: RED, BLACK: BLACK };
 })();
