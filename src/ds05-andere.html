@@ -1,0 +1,737 @@
+<!doctype html>
+<html lang="de" class="dm">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Wie sehr beeinflussen mich andere? – Psycho-Labor</title>
+<link rel="stylesheet" href="../assets/lab.css">
+<style>
+
+  /* ---------- Bildschirm ---------- */
+  .lab-progress span { width: 18px; }
+  @media (max-width: 760px) { .lab-progress { display: none; } .top-btn .t { display: none; } }
+  .top-btn { -webkit-appearance: none; appearance: none; display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); border-radius: 999px; min-height: 44px; padding: 0 14px; font: 600 16px var(--font); cursor: pointer; }
+  .top-btn:disabled { opacity: .45; cursor: default; }
+  .top-btn.icon { padding: 0; width: 44px; justify-content: center; }
+  .timebox { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 0 0 10px; font-size: 15px; color: var(--ink-soft); }
+  .timebox b { background: var(--accent-soft); color: var(--accent); border-radius: 999px; padding: 2px 10px; }
+  .timebox i { font-style: normal; background: var(--bg); border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; }
+  .plan { margin: 0; padding-left: 22px; }
+  .plan li { margin-bottom: 6px; }
+  .plan li span { color: var(--ink-soft); font-size: 15px; }
+  /* drei klar getrennte Kastenarten: Auftrag · Information · Hilfe */
+  .auftrag { border: 2px solid var(--accent); border-radius: var(--radius); padding: 16px 20px; margin: 0 0 16px; background: var(--paper); }
+  .info { border-radius: var(--radius); padding: 16px 20px; margin: 0 0 16px; background: var(--bg); border: 1px dashed var(--ink-soft); }
+  .label { display: inline-block; font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; border-radius: 999px; padding: 2px 10px; margin-bottom: 8px; }
+  .label.a { background: var(--accent); color: var(--on-accent); }
+  .label.i { background: var(--line); color: var(--ink); }
+  .hilfe { background: var(--gold-soft); border-radius: 12px; padding: 10px 14px; font-size: 16px; margin: 10px 0; }
+  .vignette { border-left: 6px solid var(--gold); background: var(--paper); border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 0 0 16px; font-size: 18px; }
+  .fiction { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--gold-ink); background: var(--gold-soft); border-radius: 999px; padding: 2px 10px; margin-bottom: 6px; }
+  .choice:disabled { cursor: default; color: var(--ink); opacity: 1; }
+  .saved { color: var(--ok); font-weight: 600; font-size: 15px; }
+  .scale7 { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin: 8px 0 2px; }
+  .scale7 button { -webkit-appearance: none; appearance: none; min-height: 48px; border: 2px solid var(--line); border-radius: 12px; background: var(--paper); color: var(--ink); font: 700 18px var(--font); cursor: pointer; }
+  .scale7 button.on { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+  .scale-lbl { display: flex; justify-content: space-between; font-size: 14px; color: var(--ink-soft); }
+  .wordstage { min-height: 170px; display: grid; place-items: center; font: 700 46px var(--font-display); color: var(--ink); background: var(--paper); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--line); margin: 10px 0; }
+  .wordstage.small-txt { font-size: 21px; font-weight: 500; color: var(--ink-soft); }
+  .cardstage { position: relative; width: 240px; height: 336px; margin: 8px auto 14px; border-radius: 18px; background: var(--bg); cursor: pointer; }
+  .cardstage .layer { position: absolute; inset: 0; }
+  .cardstage .layer svg { width: 100%; height: 100%; display: block; }
+  .cardstage .fix { font: 400 56px var(--font); color: var(--ink-soft); }
+  .cardstage .msgc { padding: 18px; text-align: center; font-size: 18px; color: var(--ink-soft); height: 100%; display: grid; place-items: center; }
+  .resp { display: grid; gap: 12px; }
+  .resp .row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .resp .row > span { width: 72px; font-size: 15px; color: var(--ink-soft); }
+  .resp button { -webkit-appearance: none; appearance: none; min-width: 52px; min-height: 52px; border: 2px solid var(--line); border-radius: 12px; background: var(--paper); color: var(--ink); font: 700 20px var(--font); cursor: pointer; }
+  .resp button.on { border-color: var(--accent); background: var(--accent-soft); }
+  .resp button.suit { font-size: 28px; min-width: 64px; background: #fff; }
+  .resp button.suit.on { background: #e3f1ef; border-color: var(--accent); }
+  .resp button.odd { font-size: 16px; font-weight: 600; padding: 0 14px; }
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 17px; margin-top: 6px; }
+  .legend b { font-size: 22px; }
+  .counter { text-align: center; font-size: 15px; color: var(--ink-soft); }
+  .tricks { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin: 8px 0 12px; }
+  .tricks svg { width: 110px; height: auto; }
+  table.mine { width: 100%; border-collapse: collapse; font-size: 17px; margin-top: 6px; }
+  table.mine th, table.mine td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); }
+  .lists { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 720px) { .lists { grid-template-columns: 1fr; } }
+  .lists > div { border-radius: 14px; padding: 12px 14px; border: 2px solid var(--line); background: var(--paper); }
+  .lists > div.me { border-color: var(--accent); }
+  .field-label { display: block; font-weight: 600; margin: 12px 0 6px; }
+  textarea.short { min-height: 90px; }
+  .checklist { list-style: none; padding: 0; margin: 0; }
+  .checklist li { padding: 6px 0; border-bottom: 1px solid var(--line); }
+  .checklist li::before { content: "✓ "; color: var(--ok); font-weight: 700; }
+  .checklist li.miss::before { content: "○ "; color: var(--warm); }
+  .end { text-align: center; }
+  .end .big { font: 700 30px var(--font-display); color: var(--accent); margin: 4px 0 6px; }
+
+  /* ---------- Übersicht als Schublade: Eingaben und Position bleiben erhalten ---------- */
+  .drawer-bg { position: fixed; inset: 0; background: rgba(0,0,0,.35); z-index: 40; }
+  .drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(660px, 100%); background: var(--bg); z-index: 41; display: flex; flex-direction: column; box-shadow: -8px 0 30px rgba(0,0,0,.2); }
+  .drawer-head { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--line); background: var(--paper); }
+  .drawer-head strong { flex: 1; }
+  .drawer-body { overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 16px; font-size: 17px; }
+
+  /* ---------- Lernübersicht (Bildschirm und Druck) ---------- */
+  .ue h1 { font-size: 24px; margin-bottom: 6px; }
+  .ue h2 { font-size: 19px; color: var(--accent); margin: 18px 0 8px; }
+  .ue .kern { background: var(--accent-soft); border-radius: 12px; padding: 10px 14px; font-weight: 600; }
+  .figbox { background: #fff; border-radius: 12px; padding: 6px; border: 1px solid var(--line); }
+  .figbox svg { width: 100%; height: auto; display: block; }
+  .defs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; margin-top: 10px; }
+  .defs > div { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; }
+  .defs b { color: var(--accent); }
+  .cmp { width: 100%; border-collapse: collapse; margin-top: 6px; }
+  .cmp th, .cmp td { border: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: top; background: var(--paper); }
+  .cmp th { background: var(--accent-soft); }
+  .merk { border-left: 5px solid var(--warm); background: var(--paper); padding: 8px 12px; margin: 8px 0; border-radius: 0 10px 10px 0; font-weight: 600; }
+  .two { display: grid; grid-template-columns: 1fr 1.2fr; gap: 12px; }
+  .effect { border: 2px solid var(--line); border-radius: 12px; padding: 10px 12px; background: var(--paper); }
+  .effect h3 { margin: 0 0 4px; font-size: 18px; }
+  .effect p { margin: 0 0 6px; }
+  .effect .gut { font-size: .92em; color: var(--ink-soft); }
+  .pf { counter-reset: pf; list-style: none; padding: 0; margin: 6px 0 0; }
+  .pf li { counter-increment: pf; padding: 6px 8px 6px 38px; position: relative; border-bottom: 1px solid var(--line); }
+  .pf li::before { content: counter(pf); position: absolute; left: 6px; top: 6px; width: 24px; height: 24px; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 700; display: grid; place-items: center; font-size: 14px; }
+  .status { font-size: .85em; color: var(--ink-soft); margin-top: 8px; }
+  @media (max-width: 720px) { .defs, .two { grid-template-columns: 1fr; } }
+
+  /* ---------- Elemente der Arbeitsblätter (nur im Druck sichtbar) ---------- */
+  .print-only { display: none; }
+  .ph { display: flex; justify-content: space-between; font-size: 9pt; color: #545b6b; border-bottom: 1px solid #cfc7ba; padding-bottom: 3pt; margin-bottom: 8pt; }
+  .task { margin: 0 0 10pt; }
+  .task .no { display: inline-block; background: #0e6b68; color: #fff; border-radius: 6px; padding: 0 7px; font-weight: 700; margin-right: 6px; }
+  .need { border: 1.5px solid #b9871c; background: #f6ead0; border-radius: 8px; padding: 6pt 9pt; margin: 0 0 9pt; font-size: 10pt; }
+  .ln { border-bottom: 1px solid #b8b0a3; height: 9mm; }
+  .boxrow { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8pt; margin-top: 4pt; }
+  .boxrow > div { border: 1.5px solid #cfc7ba; border-radius: 8px; min-height: 52mm; padding: 5pt 7pt; font-size: 9.5pt; color: #545b6b; }
+  .tick { width: 100%; border-collapse: collapse; margin-top: 4pt; }
+  .tick td, .tick th { border: 1px solid #cfc7ba; padding: 5pt 7pt; text-align: left; vertical-align: top; }
+  .tick td.c, .tick th.c { width: 20mm; text-align: center; }
+  .scn { border: 1px solid #cfc7ba; border-radius: 8px; padding: 5pt 8pt; margin: 0 0 6pt; }
+  .scn-a { margin-top: 4pt; }
+  .scn-a.bsp { color: #4d5462; font-style: italic; background: #f1f1f1; border-radius: 6px; padding: 3pt 6pt; }
+  .scn .ln { height: 8mm; }
+  .mine-p { width: 100%; border-collapse: collapse; margin: 4pt 0 8pt; }
+  .mine-p td, .mine-p th { border: 1px solid #cfc7ba; padding: 5pt 7pt; text-align: left; vertical-align: top; }
+  .mine-p th { width: 40mm; background: #f5f1ea; font-weight: 600; }
+  .answer { min-height: 12mm; }
+  .demo { display: inline-block; background: #fbe3d9; color: #8a3a1e; border-radius: 999px; padding: 1px 8px; font-size: 9pt; font-weight: 700; }
+
+  /* ---------- Druck: Lernmappe A4 ---------- */
+  @page { size: A4; margin: 13mm 14mm 14mm 14mm; }
+  @media print {
+    /* Druck immer hell – auch wenn das iPad im Dunkelmodus ist */
+    html.dm, html.dm:not([data-theme="light"]), html.dm[data-theme="dark"] { --bg: #f5f1ea !important; --paper: #fff !important; --ink: #1d2230 !important; --ink-soft: #545b6b !important; --line: #cfc7ba !important; --accent: #0e6b68 !important; --accent-soft: #d8ecea !important; --warm: #d9643f !important; --warm-soft: #fbe3d9 !important; --gold: #b9871c !important; --gold-soft: #f6ead0 !important; --gold-ink: #6b4e0b !important; --on-accent: #fff !important; color-scheme: light !important; }
+    html, body { background: #fff !important; color: #1d2230 !important; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body { font-size: 10.5pt; line-height: 1.38; }
+    .lab-top, .lab-main > .step, .drawer, .drawer-bg { display: none !important; }
+    .lab-main { padding: 0 !important; max-width: none !important; margin: 0 !important; }
+    .print-only { display: block !important; }
+    .pg { break-after: page; page-break-after: always; }
+    .pg:last-child { break-after: auto; page-break-after: auto; }
+    .ue h1 { font-size: 16pt; margin: 0 0 4pt; }
+    .ue h2 { font-size: 12.5pt; margin: 9pt 0 4pt; }
+    .ue h3 { font-size: 11.5pt; }
+    .ue p, .ue li, .ue td, .ue th, .ue .defs > div { font-size: 10.5pt; }
+    .pg h2 { font-size: 13pt; } .pg h3 { font-size: 11.5pt; margin: 8pt 0 3pt; }
+    .avoid, .figbox, .effect, .task, .defs > div, table, .merk { break-inside: avoid; page-break-inside: avoid; }
+    .ue p { margin: 0 0 4pt; }
+    .ue .kern { padding: 5pt 9pt; margin-bottom: 4pt; }
+    .ue .defs { gap: 5pt 8pt; margin-top: 6pt; }
+    .ue .defs > div { padding: 4pt 8pt; }
+    .ue .effect { padding: 6pt 8pt; }
+    .ue .effect p { margin: 0 0 3pt; }
+    .ue .merk { margin: 5pt 0; padding: 4pt 9pt; }
+    .ue .cmp th, .ue .cmp td { padding: 3pt 6pt; }
+    .ue .pf li { padding: 3pt 6pt 3pt 30pt; }
+    .ue .pf li::before { top: 3pt; }
+    .ue .status { margin-top: 4pt; font-size: 9pt; }
+    .loes table { break-inside: auto; page-break-inside: auto; }
+    .loes tr { break-inside: avoid; page-break-inside: avoid; }
+    .loes td, .loes th { font-size: 9.6pt; padding: 3pt 6pt !important; line-height: 1.3; }
+  }
+
+  /* ---------- Ergänzungen DS 5 ---------- */
+  .ue .two { align-items: start; }
+  .stage5 { max-width: 520px; margin: 8px auto 14px; border-radius: 16px; background: var(--bg); min-height: 200px; display: grid; place-items: center; cursor: pointer; overflow: hidden; }
+  .stage5 svg { width: 100%; height: auto; display: block; }
+  .stage5 .msgc { padding: 30px 18px; text-align: center; font-size: 18px; color: var(--ink-soft); }
+  .others { border: 2px dashed var(--warm); background: var(--warm-soft); border-radius: 14px; padding: 12px 16px; margin: 10px 0; }
+  .others .nums { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+  .others .nums span { background: var(--paper); border-radius: 10px; padding: 6px 12px; font: 700 20px var(--font); }
+  input.num { min-height: 56px; width: 180px; font: 700 24px var(--font); border: 2px solid var(--line); border-radius: 12px; padding: 0 14px; background: var(--paper); color: var(--ink); }
+  .abc { display: flex; gap: 10px; }
+  .abc button { -webkit-appearance: none; appearance: none; min-width: 80px; min-height: 60px; border: 2px solid var(--line); border-radius: 14px; background: var(--paper); color: var(--ink); font: 700 24px var(--font); cursor: pointer; }
+  .abc button.on { border-color: var(--accent); background: var(--accent-soft); }
+  .seg3 { display: flex; gap: 8px; flex-wrap: wrap; }
+  .seg3 button { -webkit-appearance: none; appearance: none; min-height: 48px; padding: 0 16px; border: 2px solid var(--line); border-radius: 999px; background: var(--paper); color: var(--ink); font: 600 16px var(--font); cursor: pointer; }
+  .seg3 button.on { border-color: var(--accent); background: var(--accent-soft); }
+  .databox { border: 1.5px solid #0e6b68; border-radius: 8px; padding: 5pt 8pt; margin: 0 0 8pt; font-size: 9.6pt; }
+  .databox table { width: 100%; border-collapse: collapse; }
+  .databox td, .databox th { padding: 2pt 5pt; text-align: left; vertical-align: top; border-bottom: 1px solid #e2dbcf; }
+  .databox th { width: 36mm; font-weight: 600; color: #545b6b; }
+  .fot-row { display: grid; grid-template-columns: 130px 1fr; gap: 10px; align-items: center; margin: 6px 0; }
+  .fot-name { font-weight: 600; }
+  .fot-row .seg3 button { min-width: 48px; padding: 0 10px; }
+  .rate { display: flex; gap: 14pt; flex-wrap: wrap; margin: 4pt 0; font-size: 10pt; }
+</style>
+</head>
+<body>
+<header class="lab-top">
+  <a class="lab-logo" href="index.html"><span id="logo"></span>Psycho-Labor</a>
+  <span class="lab-title">DS 5 · Wie sehr beeinflussen mich andere?</span>
+  <div class="lab-progress" aria-hidden="true"></div>
+  <button class="top-btn" id="btn-ue" type="button" disabled title="Wird nach dem Versuch freigeschaltet">
+    <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M4 2h9l3 3v13H4z" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M7 8h6M7 11h6M7 14h4" stroke="currentColor" stroke-width="1.7"/></svg>
+    <span class="t">Übersicht</span>
+  </button>
+  <button class="top-btn icon" id="theme" type="button" aria-label="Hell- oder Dunkelmodus umschalten"><svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 2.5a7.5 7.5 0 0 1 0 15z" fill="currentColor"/></svg></button>
+</header>
+
+<main class="lab-main">
+
+<!-- ===================== Start ===================== -->
+<section class="step" id="s-1">
+  <span class="kicker">DS 5 · Wahrnehmung · Labor</span>
+  <h1>Wie sehr beeinflussen mich andere?</h1>
+  <p class="lead">Ein erster Eindruck und ein kurzer Versuch in zwei Teilen. Du schätzt und vergleichst, danach wird aufgelöst. <strong>Erklärt wird anschließend gemeinsam – ohne Tablet.</strong></p>
+  <div class="grid2">
+    <div class="card">
+      <h3>So läuft das Labor (ca. 22 Min.)</h3>
+      <ol class="plan">
+        <li>Erster Eindruck: Herr Fotiou <span>· allein · 1 Min.</span></li>
+        <li>Vermutung festhalten <span>· allein · 2 Min.</span></li>
+        <li>Teil 1: Punkte schätzen <span>· allein · 4 Min.</span></li>
+        <li>Teil 2: Linien vergleichen <span>· allein · 2 Min.</span></li>
+        <li>Ergebnis an die Lehrkraft (QR-Code)</li>
+        <li>Auflösung: Beobachtung und Vermutung notieren <span>· gemeinsam · 10 Min.</span></li>
+        <li>Lernmappe als PDF sichern – <strong>Ende des Labors</strong></li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Am Ende hast du …</h3>
+      <p>eine <strong>Lernmappe mit vier Seiten</strong>: die Lernübersicht und das Arbeitsblatt, auf dem deine Versuchsdaten schon eingetragen sind. Damit arbeitest du in GoodNotes weiter.</p>
+      <p class="small">Die Lernübersicht (Knopf oben rechts) wird erst <strong>nach</strong> dem Versuch freigeschaltet. Sonst würde sie den Versuch verraten.</p>
+    </div>
+  </div>
+  <div class="actions"><button class="btn big" data-next>Start</button></div>
+  <div class="private"><span class="lock"></span><span>Alles bleibt auf diesem iPad. Es wird nichts ins Internet gesendet. Namen werden nirgends gespeichert.</span></div>
+</section>
+
+<!-- ===================== Erster Eindruck ===================== -->
+<section class="step" id="s-fot">
+  <div class="timebox"><b>⏱ 1 Min.</b><i>allein</i><span>Schritt 1 von 7</span></div>
+  <h2>Erster Eindruck</h2>
+  <div class="vignette">Am Beamer siehst du <strong>Herrn Fotiou</strong> (ausgedachter Fall). Er leitet ab nächster Woche ein Projekt an eurer Schule.</div>
+  <div class="auftrag">
+    <span class="label a">Auftrag</span>
+    <p style="margin:0 0 8px">Wie schätzt du ihn ein? Antworte spontan. 1 = gar nicht · 5 = sehr. Wenn du es nicht sagen kannst, tippe auf „?“.</p>
+    <div id="fot-rows"></div>
+    <div class="actions"><button class="btn" id="fot-save" disabled>Einschätzung speichern</button><span class="saved" id="fot-ok" hidden>Gespeichert. Darauf kommen wir später zurück.</span></div>
+  </div>
+  <div class="actions"><button class="btn secondary" data-prev>Zurück</button><button class="btn" data-next id="to-verm" disabled>Weiter</button></div>
+</section>
+
+<!-- ===================== Vermutung ===================== -->
+<section class="step" id="s-2">
+  <div class="timebox"><b>⏱ 2 Min.</b><i>allein</i><span>Schritt 2 von 7</span></div>
+  <h2>Deine Vermutung</h2>
+  <div class="vignette">Stell dir vor: Du sitzt mit fünf anderen an einem Tisch. Alle sagen nacheinander laut ihre Antwort auf eine Frage. Die fünf vor dir sagen alle dasselbe – aber etwas anderes, als du gedacht hast.</div>
+  <div class="auftrag">
+    <span class="label a">Auftrag</span>
+    <p class="w-q">Würdest du deine Antwort ändern? Wähle und begründe in einem Satz.</p>
+    <div class="choices" id="verm-choices">
+      <button class="choice" data-v="0" type="button">Nein, nie. Ich sage, was ich denke.</button>
+      <button class="choice" data-v="1" type="button">Nur, wenn ich mir unsicher bin.</button>
+      <button class="choice" data-v="2" type="button">Ja, vielleicht sogar, wenn ich mir sicher bin.</button>
+    </div>
+    <label class="field-label" for="verm-grund">Warum glaubst du das?</label>
+    <textarea id="verm-grund" class="short" maxlength="400"></textarea>
+    <div class="actions"><button class="btn" id="verm-save" disabled>Vermutung speichern</button><span class="saved" id="verm-ok" hidden>Gespeichert. Am Ende der Stunde schaust du sie dir noch einmal an.</span></div>
+  </div>
+  <div class="actions"><button class="btn secondary" data-prev>Zurück</button><button class="btn" data-next id="to-t1" disabled>Weiter zu Teil 1</button></div>
+</section>
+
+<!-- ===================== Teil 1: Punkte ===================== -->
+<section class="step" id="s-3">
+  <div class="timebox"><b>⏱ 4 Min.</b><i>allein</i><span>Schritt 3 von 7 · Teil 1</span></div>
+  <h2>Teil 1: Wie viele Punkte sind das?</h2>
+  <div class="auftrag" id="t1-auftrag">
+    <span class="label a">Auftrag</span>
+    <ol style="margin:0;padding-left:22px">
+      <li>Tippe auf das Feld. Du siehst <strong>2 Sekunden</strong> lang viele Punkte. Zum Zählen reicht die Zeit nicht – schätze.</li>
+      <li>Gib deine Schätzung ein und sag, wie sicher du bist.</li>
+    </ol>
+    <p class="small" style="margin:8px 0 0">Drei Runden. Nicht alle bekommen dieselben Informationen. Das gehört zum Versuch und wird gleich aufgeklärt.</p>
+  </div>
+  <div class="counter" id="t1-count">Runde 1 von 3</div>
+  <div class="stage5" id="stage1" role="button" tabindex="0" aria-label="Punkte zeigen"><div class="msgc">Tippe hier, um die Punkte zu zeigen.</div></div>
+  <div class="card" id="t1-resp" hidden>
+    <div class="others" id="t1-others" hidden><strong>Zum Vergleich – so haben fünf andere Personen geschätzt:</strong><div class="nums" id="t1-nums"></div></div>
+    <label class="field-label" for="t1-input">Deine Schätzung: Wie viele Punkte waren es?</label>
+    <input class="num" id="t1-input" type="number" inputmode="numeric" min="1" max="2000" placeholder="Zahl">
+    <p class="field-label">Wie sicher bist du?</p>
+    <div class="seg3" id="t1-sure"><button type="button" data-v="3">sicher</button><button type="button" data-v="2">etwas sicher</button><button type="button" data-v="1">unsicher</button></div>
+    <div class="actions"><button class="btn" id="t1-ok" disabled>Antwort speichern</button></div>
+  </div>
+  <div id="t1-done" hidden>
+    <div class="card accent"><strong>Teil 1 geschafft.</strong> Weiter mit Teil 2.</div>
+    <div class="actions"><button class="btn" data-next>Weiter zu Teil 2</button></div>
+  </div>
+</section>
+
+<!-- ===================== Teil 2: Linien ===================== -->
+<section class="step" id="s-4">
+  <div class="timebox"><b>⏱ 2 Min.</b><i>allein</i><span>Schritt 4 von 7 · Teil 2</span></div>
+  <h2>Teil 2: Welche Linie ist gleich lang?</h2>
+  <div class="auftrag">
+    <span class="label a">Auftrag</span>
+    <p style="margin:0">Welche Linie – A, B oder C – ist <strong>genauso lang</strong> wie die Vergleichslinie links? Drei Runden.</p>
+  </div>
+  <div class="counter" id="t2-count">Runde 1 von 3</div>
+  <div class="stage5" id="stage2"></div>
+  <div class="others" id="t2-others" hidden><strong>So haben fünf andere Personen gewählt:</strong><div class="nums" id="t2-nums"></div></div>
+  <div class="card" id="t2-resp">
+    <p class="field-label" style="margin-top:0">Deine Antwort:</p>
+    <div class="abc" id="t2-abc"><button type="button" data-v="A">A</button><button type="button" data-v="B">B</button><button type="button" data-v="C">C</button></div>
+    <div class="actions"><button class="btn" id="t2-ok" disabled>Antwort speichern</button></div>
+  </div>
+  <div id="t2-done" hidden>
+    <div class="card accent"><strong>Geschafft!</strong> Beide Teile sind erledigt.</div>
+    <div class="actions"><button class="btn" data-next>Weiter</button></div>
+  </div>
+</section>
+
+<!-- ===================== Kursvergleich ===================== -->
+<section class="step" id="s-5">
+  <div class="timebox"><b>Schritt 5 von 7</b><i>Ergebnis an die Lehrkraft</i></div>
+  <h2>Dein Ergebnis für den Kurs</h2>
+  <p>Zeig diesen QR-Code deiner Lehrkraft. Dein Ergebnis erscheint <strong>ohne Namen</strong> im Kursdiagramm.</p>
+  <div class="card"><div class="qr-box"><div id="qr"></div><div style="flex:1;min-width:220px"><p class="small">Im Code stehen nur Zahlen: deine Schätzungen im Verhältnis zur wahren Anzahl, deine Linienantworten, deine Sicherheit, welche Fassung du hattest und wie viele Eigenschaften du bei Herrn Fotiou eingeschätzt hast.</p><p class="small">Falls das Scannen nicht klappt:</p><div class="code" id="code"></div></div></div></div>
+  <div class="card warm"><strong>Warte jetzt, bis alle fertig sind.</strong> Die Auflösung machen wir gemeinsam.</div>
+  <div class="actions"><button class="btn big" data-next>Zur Auflösung (erst auf Ansage)</button></div>
+</section>
+
+<!-- ===================== Auflösung ===================== -->
+<section class="step" id="s-6">
+  <div class="timebox"><b>⏱ 10 Min.</b><i>gemeinsam, dann allein schreiben</i><span>Schritt 6 von 7 · Auflösung</span></div>
+  <h2>Was im Versuch wirklich passiert ist</h2>
+  <div class="info">
+    <span class="label i">Information</span>
+    <p>Es gab <strong>zwei Fassungen</strong>, verteilt über die zwei QR-Codes. Ein Teil des Kurses sah vor jeder Antwort die Antworten von „fünf anderen Personen“. <strong>Diese Antworten waren erfunden</strong>: bei den Punkten absichtlich viel zu hoch, bei den Linien absichtlich falsch.</p>
+    <div id="my-res"></div>
+    <p class="small" style="margin:8px 0 0">Das Ergebnis des ganzen Kurses zeigt deine Lehrkraft am Beamer.</p>
+  </div>
+  <div class="auftrag">
+    <span class="label a">Auftrag 1 · Beobachtung beschreiben</span>
+    <p>Vergleiche im Kursdiagramm die beiden Fassungen – bei den Punkten und bei den Linien. Beschreibe in 1–2 Sätzen, was du siehst.</p>
+    <div class="hilfe"><strong>Beschreiben</strong> heißt: nur sagen, was passiert ist – noch ohne „weil“. Bei so wenigen Personen pro Fassung kann ein Unterschied auch Zufall sein.</div>
+    <textarea id="b1" class="short" aria-label="Beobachtung"></textarea>
+  </div>
+  <div class="auftrag">
+    <span class="label a">Auftrag 2 · Erste Vermutung</span>
+    <p>Haben die Antworten anderer bei den Punkten stärker gewirkt als bei den Linien? Wenn ja: Woran könnte das liegen? Wenn nein: Was könnte der Grund sein?</p>
+    <div class="hilfe">Denk daran, wie sicher du dir bei den Punkten warst – und wie eindeutig die Linien waren.</div>
+    <textarea id="v1" class="short" aria-label="Vermutung"></textarea>
+  </div>
+  <div class="actions"><button class="btn" data-next id="to-mappe" disabled>Weiter: Lernmappe</button><span class="small" id="a-hint">Schreib zuerst etwas in beide Felder.</span></div>
+</section>
+
+<!-- ===================== Lernmappe ===================== -->
+<section class="step" id="s-7">
+  <div class="timebox"><b>Schritt 7 von 7</b><i>allein</i><span>Ende des Labors</span></div>
+  <h2>Sichere deine Lernmappe</h2>
+  <div class="grid2">
+    <div class="card">
+      <h3>Das steht in deiner Lernmappe (4 Seiten)</h3>
+      <ul class="checklist" id="checklist"></ul>
+    </div>
+    <div class="card">
+      <h3>So kommt sie in GoodNotes</h3>
+      <ol style="margin:0;padding-left:22px">
+        <li>Tippe auf <strong>„Lernmappe als PDF“</strong>.</li>
+        <li>Im Druckfenster oben auf das <strong>Teilen-Symbol</strong> tippen.</li>
+        <li><strong>GoodNotes</strong> wählen und als neues Dokument importieren.</li>
+      </ol>
+      <p class="small">Kein Teilen-Symbol? Die Seitenvorschau im Druckfenster mit zwei Fingern auseinanderziehen.</p>
+    </div>
+  </div>
+  <div class="actions"><button class="btn big" id="btn-pdf">Lernmappe als PDF</button></div>
+  <div class="card accent end">
+    <div class="big">Ende des Labors</div>
+    <p>Ab jetzt geht es ohne Tablet weiter – nur fürs Arbeitsblatt öffnest du GoodNotes.</p>
+    <p class="small" style="margin:0"><button class="btn secondary" id="btn-reset" type="button">Alle Eingaben auf diesem iPad löschen</button></p>
+  </div>
+</section>
+
+<section class="print-only" id="print"></section>
+</main>
+
+<div class="drawer-bg" id="drawer-bg" hidden></div>
+<aside class="drawer" id="drawer" hidden aria-label="Lernübersicht" role="dialog" aria-modal="true">
+  <div class="drawer-head"><strong>Lernübersicht DS 5</strong><button class="top-btn" id="drawer-close" type="button">Schließen</button></div>
+  <div class="drawer-body ue" id="drawer-body"></div>
+</aside>
+
+<!-- ===================== Lernübersicht (Schublade und Seite 1–2 der Lernmappe) ===================== -->
+<template id="tpl-ue">
+  <div class="pg ue">
+    <h1>Lernübersicht · Wie sehr beeinflussen mich andere?</h1>
+    <p class="kern">Andere Menschen verändern, was wir sagen – und manchmal, was wir glauben. Und wie wir andere sehen, hängt oft an einem einzigen Merkmal oder an einem Vorurteil.</p>
+
+    <h2 id="ue-1">1 · Konformität: Die Asch-Studie</h2>
+    <p><b>Konformität</b>: Man passt sein Urteil oder Verhalten an eine Gruppe an.</p>
+    <div class="two" style="grid-template-columns:1fr 1.5fr">
+      <div class="figbox" data-fig="linien"></div>
+      <div>
+        <p><b>Aufbau</b> (Asch 1951, 1956): Eine echte Versuchsperson saß mit sechs bis acht Eingeweihten am Tisch. Alle sagten nacheinander laut, welche Linie gleich lang ist wie die Vergleichslinie. In 12 von 18 Durchgängen nannten die Eingeweihten absichtlich eine falsche Linie.</p>
+        <p><b>Ergebnis:</b> Allein machten fast alle alles richtig (unter 1 % Fehler). Mit der falschen Mehrheit folgte etwa <b>jede dritte Antwort</b> der Gruppe. Rund drei Viertel folgten mindestens einmal. Aber: Zwei Drittel aller Antworten blieben richtig.</p>
+      </div>
+    </div>
+
+    <h2 id="ue-2">2 · Warum passen wir uns an? Zwei Gründe <span style="font-weight:400;font-size:.8em">(nach Deutsch &amp; Gerard 1955)</span></h2>
+    <table class="cmp">
+      <tr><th></th><th>informativer Einfluss</th><th>normativer Einfluss</th></tr>
+      <tr><td><b>Grund</b></td><td>„Ich bin unsicher – die anderen wissen es vielleicht besser.“</td><td>„Ich will dazugehören und nicht auffallen.“</td></tr>
+      <tr><td><b>stark, wenn …</b></td><td>die Aufgabe schwierig oder unklar ist</td><td>die Gruppe hört oder sieht, was ich antworte</td></tr>
+      <tr><td><b>Was ändert sich?</b></td><td>oft auch meine Überzeugung: Ich glaube es dann wirklich.</td><td>oft nur meine Antwort nach außen</td></tr>
+      <tr><td><b>Studie</b></td><td>Sherif (1935): Ein Lichtpunkt im dunklen Raum scheint sich zu bewegen – eine Täuschung, er steht still. Wie weit? In der Gruppe glichen sich die Schätzungen an.</td><td>Asch: Im Interview sagten viele, sie hätten gewusst, dass die Gruppe falsch lag.</td></tr>
+      <tr><td><b>Alltag</b></td><td>Viele Likes und gute Bewertungen – also muss das Video gut sein.</td><td>In der Clique finden alle einen Film super – man sagt lieber nichts Kritisches.</td></tr>
+    </table>
+    <p class="merk">Was schützt? Schon <u>eine</u> Person, die widerspricht: Bei Asch sank die Anpassung dann stark – auf etwa 5 %. Auch wer geheim (schriftlich) antwortet, passt sich deutlich seltener an.</p>
+    <p class="status">Hinweis: Alle Personen in Beispielen und Fällen sind ausgedacht. Schaubilder sind vereinfachte Modelle. Studien sind mit Autor und Jahr belegt.</p>
+  </div>
+  <div class="pg ue">
+    <h2 id="ue-3">3 · Halo-Effekt: Ein Merkmal färbt ab</h2>
+    <div class="two" style="grid-template-columns:1.1fr 1fr">
+      <div class="figbox" data-fig="halo"></div>
+      <div>
+        <p><b>Halo-Effekt</b> (Halo = Heiligenschein): Ein auffälliges Merkmal einer Person färbt auf unser Urteil über ganz andere Eigenschaften ab. Beispiele für solche Merkmale: Aussehen, Kleidung, ein sympathisches Lächeln.</p>
+        <p><b>Studie:</b> Thorndike (1920) bat Vorgesetzte, Soldaten in mehreren Eigenschaften zu bewerten. Die Bewertungen hingen viel enger zusammen, als zu erwarten war: Wer in einer Eigenschaft gut abschnitt, wurde meist auch in den anderen gut bewertet.</p>
+        <p><b>Unterschied zum Primacy-Effekt (DS 4):</b> Dort zählt die <i>Reihenfolge</i> der Informationen, hier ein <i>auffälliges Merkmal</i>.</p>
+      </div>
+    </div>
+
+    <h2 id="ue-4">4 · Vorurteile: starke Erwartungen über Gruppen</h2>
+    <p><b>Vorurteil:</b> ein starres, verallgemeinerndes Urteil über Menschen – nur, weil sie zu einer bestimmten Gruppe gehören. Meist ist es negativ.</p>
+    <div class="figbox" data-fig="vorurteil"></div>
+    <p style="margin-top:6px"><b>Verbindung zu DS 4:</b> Eine Erwartung wird stark, wenn andere sie teilen. Dann reichen wenige Hinweise als „Beweis“, und Gegenbeispiele werden umgedeutet oder als Ausnahme abgetan. <b>Was hilft:</b> einzelne Menschen wirklich kennenlernen und bewusst auf Gegenbeispiele achten.</p>
+
+    <h2 id="ue-5">5 · Denkwerkzeug: Anschauliche Demo oder belastbare Studie?</h2>
+    <table class="cmp">
+      <tr><th></th><th>Unser Labor</th><th>Asch-Studie</th></tr>
+      <tr><td><b>Personen</b></td><td>7, aufgeteilt auf zwei Fassungen</td><td>123 Versuchspersonen; heute über 130 Wiederholungen in 17 Ländern (Bond &amp; Smith 1996)</td></tr>
+      <tr><td><b>Gruppe</b></td><td>erfundene Antworten am Bildschirm – niemand sieht dich</td><td>echte Menschen am Tisch, Antworten laut</td></tr>
+      <tr><td><b>Aussage</b></td><td>zeigt anschaulich, wie Einfluss wirken kann</td><td>zeigt, wie stark und unter welchen Bedingungen er wirkt</td></tr>
+    </table>
+    <p style="margin-top:6px"><b>Ethik:</b> Versuche mit Täuschung sind nur vertretbar, wenn sie harmlos sind, angekündigt werden („Nicht alle bekommen dieselben Informationen“) und danach vollständig aufgeklärt wird.</p>
+  </div>
+</template>
+
+<!-- ===================== Arbeitsblatt (Seite 3–4 der Lernmappe) ===================== -->
+<template id="tpl-ab">
+  <div class="pg">
+    <div class="ph"><span>Lernmappe DS 5 · Arbeitsblatt, Teil A: Die Gruppe lenkt mein Urteil</span><span>1–2 zu zweit · A allein · ca. 15 Min.</span></div>
+    <h2 style="margin-top:0">Teil A · Die Gruppe lenkt mein Urteil</h2>
+    <div data-slot="daten"></div>
+    <div class="need"><b>Das brauchst du (Lernübersicht 1–2):</b> <b>Konformität</b>: Man passt sein Urteil oder Verhalten an eine Gruppe an. <b>Informativer Einfluss:</b> „Ich bin unsicher – die anderen wissen es vielleicht besser.“ Stark, wenn die Aufgabe schwierig oder unklar ist. <b>Normativer Einfluss:</b> „Ich will dazugehören und nicht auffallen.“ Stark, wenn die Gruppe hört oder sieht, was ich antworte.</div>
+    <div class="task avoid"><span class="no">1</span><b>Erkläre mit dem informativen Einfluss</b>, warum die Antworten anderer bei den Punkten wirken können. (2–3 Sätze)
+      <div class="lines" data-n="3"></div></div>
+    <div class="task avoid"><span class="no">2</span><b>Vergleiche das Kursergebnis bei den Linien mit der Asch-Studie.</b> Erkläre einen möglichen Unterschied mit dem normativen Einfluss. (2–3 Sätze)
+      <div class="lines" data-n="3"></div></div>
+    <h2>Ergebnissicherung A</h2>
+    <div class="task avoid"><span class="no">A</span><b>Zurück zu deiner Vermutung:</b> <span data-slot="vermutung"></span><br>Was denkst du jetzt – und warum? Nutze mindestens einen Fachbegriff.
+      <div class="lines" data-n="4"></div></div>
+  </div>
+  <div class="pg">
+    <div class="ph"><span>Lernmappe DS 5 · Arbeitsblatt, Teil B: Wie ich andere sehe</span><span>ca. 20 Min.</span></div>
+    <h2 style="margin-top:0">Teil B · Wie ich andere sehe</h2>
+    <div class="need"><b>Das brauchst du (Lernübersicht 3–4):</b> <b>Halo-Effekt:</b> Ein auffälliges Merkmal einer Person färbt auf unser Urteil über ganz andere Eigenschaften ab. <b>Vorurteil:</b> ein starres, verallgemeinerndes Urteil über Menschen – nur, weil sie zu einer bestimmten Gruppe gehören.</div>
+    <div class="task avoid"><span class="no">3</span><b>Herr Fotiou</b> <span class="small">(ausgedachter Fall)</span>. Deine Einschätzung vom Anfang: <span data-slot="fotiou"></span>
+      Welche dieser Eigenschaften kann man auf einem Foto sehen? Woran könntest du dich orientiert haben? Erkläre mit dem Halo-Effekt, wie so ein Urteil entstehen kann.
+      <div class="lines" data-n="3"></div>
+      <span class="small"><b>Profi:</b> Wie könnte man prüfen, ob wirklich das Lächeln die Einschätzung beeinflusst?</span>
+      <div class="lines" data-n="1"></div></div>
+    <div class="task avoid"><span class="no">4</span><b>Was steckt dahinter?</b> Schreibe <b>I</b> (informativer Einfluss), <b>N</b> (normativer Einfluss), <b>H</b> (Halo-Effekt) oder <b>V</b> (Vorurteil) und begründe mit einem Detail.
+      <table class="tick">
+        <tr><th style="width:52%">Situation</th><th class="c">I, N, H, V</th><th>Woran erkennst du es?</th></tr>
+        <tr><td><b>1</b> <span class="small">(Beispiel)</span> Mia weiß bei einer Quizfrage die Antwort nicht und wählt, was die meisten im Kurs gewählt haben.</td><td class="c" style="color:#5a6170;font-style:italic">I</td><td style="color:#5a6170;font-style:italic">Sie ist unsicher und nimmt die anderen als Information.</td></tr>
+        <tr class="hi"><td><b>2</b> Tom findet den Witz im Klassenchat nicht lustig. Weil alle „😂“ schicken, schickt er es auch.</td><td></td><td></td></tr>
+        <tr class="hi"><td><b>3</b> Lina findet die neue Mitschülerin sehr selbstbewusst. Deshalb hält sie sie auch für besonders klug.</td><td></td><td></td></tr>
+        <tr class="hi"><td><b>4</b> <span class="small">(Profi)</span> Leon sagt: „Gamer sind unsportlich.“ Als Jana, die viel zockt, beim Lauftest gewinnt, meint er: „Die hatte halt Glück.“</td><td></td><td></td></tr>
+      </table></div>
+    <h2>Ergebnissicherung B</h2>
+    <div class="task avoid"><span class="no">B</span><b>Dein Tipp für einen Gruppenchat, in dem alle über eine Person lästern</b> – begründet mit der Asch-Studie (2–3 Sätze, mindestens ein Fachbegriff):
+      <div class="lines" data-n="3"></div></div>
+  </div>
+</template>
+
+<!-- ===================== Lösungskarte (?druck=loesung) ===================== -->
+<template id="tpl-loesung">
+  <div class="pg loes">
+    <div class="ph"><span>DS 5 · Lösungskarte zur Selbstkontrolle</span><span>erst nach dem eigenen Lösen ansehen</span></div>
+    <h2 style="margin-top:0">Lösungen zum Arbeitsblatt</h2>
+    <table class="tick">
+      <tr><th style="width:20%">Aufgabe</th><th>Lösung</th></tr>
+      <tr><td>1</td><td>Bei den Punkten ist man <b>unsicher</b>: 2 Sekunden reichen nicht zum Zählen. Dann nimmt man die Antworten anderer als <b>Information</b> („Die haben vielleicht besser geschätzt“). Die eigene Schätzung rückt in Richtung der Gruppe – man glaubt dann oft selbst, dass es so viele waren.</td></tr>
+      <tr><td>2</td><td>Meist folgt im Labor kaum jemand der falschen Gruppe – bei Asch etwa jede dritte Antwort. Bei den Linien ist die Antwort <b>eindeutig</b>, informativer Einfluss spielt kaum eine Rolle. Bei Asch saßen die anderen am Tisch und hörten die Antwort: Wer widerspricht, fällt auf → <b>normativer Einfluss</b> (dazugehören wollen). Im Labor sah niemand die Antwort, und die Gruppe war nicht echt – der normative Druck fehlte. Auch bei Asch sank die Anpassung, wenn schriftlich geantwortet wurde. (Falls bei euch einige gefolgt sind: Vielleicht war man doch unsicher – dann wirkt auch der informative Einfluss.)</td></tr>
+      
+      <tr><td>3</td><td>Keine der fünf Eigenschaften kann man auf einem Foto sehen. Orientiert hat man sich wohl an Sichtbarem (Lächeln, Brille, Kleidung, Alter). Halo-Effekt: Ein auffälliges Merkmal färbt auf das Urteil über unsichtbare Eigenschaften ab. Eine einzelne Einschätzung beweist den Effekt aber nicht. <b>Profi:</b> zwei Gruppen zufällig bilden; eine sieht dieselbe Person lächelnd, die andere ernst; dann die Einschätzungen vergleichen.</td></tr>
+      <tr><td>4</td><td><b>2 N</b> – Er findet den Witz nicht lustig, macht aber mit, um dazuzugehören. · <b>3 H</b> – Das selbstbewusste Auftreten färbt auf „klug“ ab. · <b>4 V</b> – Urteil über alle Gamer; das Gegenbeispiel Jana wird umgedeutet („Glück“) – genau wie bei einer starken Erwartung in der Hypothesentheorie (DS 4).</td></tr>
+      <tr><td>A</td><td>Individuelle Antwort. Gut ist: Vermutung aufgreifen und mit dem Ergebnis verbinden, z. B. „Ich dachte, nur bei Unsicherheit. Das stimmt für den informativen Einfluss. Bei Asch haben sich aber viele auch bei eindeutigen Linien angepasst – wegen des normativen Einflusses, wenn die Gruppe zuhört.“</td></tr><tr><td>B</td><td>Beispiel: „Wenn alle lästern, wirkt normativer Einfluss – keiner will auffallen. Bei Asch sank die Anpassung auf etwa 5 %, sobald <b>eine</b> Person widersprach. Sei du diese Person.“ Weitere gute Idee: der betroffenen Person zeigen, dass sie nicht allein ist.</td></tr>
+    </table>
+  </div>
+</template>
+
+<script src="../assets/qrcode.js"></script>
+<script src="../assets/lab.js"></script>
+<script src="../assets/figuren-ds05.js"></script>
+<script>
+/* =====================================================================
+   INHALTE (Datenblock)
+   ===================================================================== */
+var DATA = {
+  vermutungFrage: "Würdest du deine Antwort ändern, wenn die fünf vor dir alle etwas anderes sagen?",
+  vermutungOptionen: ["Nein, nie. Ich sage, was ich denke.", "Nur, wenn ich mir unsicher bin.", "Ja, vielleicht sogar, wenn ich mir sicher bin."],
+  /* Teil 1: wahre Anzahl und erfundene, absichtlich zu hohe Schätzungen „anderer“ (etwa das 1,7-Fache) */
+  punkte: [{ n: 74, andere: [118, 130, 125, 140, 122] }, { n: 132, andere: [210, 240, 225, 250, 220] }, { n: 203, andere: [340, 360, 330, 380, 350] }],
+  /* Teil 2: Vergleichslinie, A, B, C; richtige Antwort; erfundene falsche Antwort der „anderen“ */
+  linien: [{ l: [160, 120, 200, 160], ok: "C", gruppe: "A" }, { l: [110, 110, 150, 80], ok: "A", gruppe: "B" }, { l: [190, 150, 190, 230], ok: "B", gruppe: "C" }],
+  sicher: { 3: "sicher", 2: "etwas sicher", 1: "unsicher" },
+  /* Erster Eindruck: Herr Fotiou (Foto am Beamer); 0 = „kann ich nicht sagen“ */
+  fotiou: ["intelligent", "geduldig", "streng", "humorvoll", "hilfsbereit"],
+  beispiel: { G: "G", fot: [4, 4, 2, 4, 5], vermutung: { v: 1, grund: "Wenn ich mir sicher bin, sage ich meine Meinung. Nur wenn ich unsicher bin, höre ich auf die anderen." },
+    schaetz: [{ e: 110, s: 1 }, { e: 190, s: 1 }, { e: 300, s: 2 }], wahl: ["C", "A", "B"],
+    b1: "Die Fassung mit den Antworten anderer hat bei den Punkten viel höher geschätzt. Bei den Linien haben fast alle richtig gewählt.",
+    v1: "Bei den Punkten war ich unsicher, da habe ich mich an den anderen orientiert. Bei den Linien war es eindeutig." }
+};
+
+/* =====================================================================
+   ABLAUF
+   ===================================================================== */
+(function () {
+  "use strict";
+  var $ = Lab.$, $$ = Lab.$$, F = window.FIGUREN_DS05, D = DATA;
+  var st = Lab.load("ds05", {});
+  function save() { Lab.save("ds05", st); }
+  /* Fassung: über die beiden QR-Codes (?f=1 mit erfundenen Antworten, ?f=2 ohne), sonst Zufall */
+  var fm = /[?&]f=([12])/.exec(window.location.search);
+  if (!st.id) { st.id = Lab.uid(); st.G = Math.random() < 0.5 ? "G" : "O"; st.schaetz = []; st.wahl = []; save(); }
+  st.schaetz = st.schaetz || []; st.wahl = st.wahl || [];
+  if (fm && !st.schaetz.length && !st.seen) { st.G = fm[1] === "1" ? "G" : "O"; save(); }
+  var withGroup = st.G === "G";
+
+  $("#logo").innerHTML = Lab.logo;
+  $$(".lock").forEach(function (el) { el.innerHTML = Lab.lockIcon; });
+
+  var themes = ["auto", "dark", "light"], theme = Lab.load("theme", "auto");
+  function applyTheme() { if (theme === "auto") document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme", theme); }
+  $("#theme").addEventListener("click", function () { theme = themes[(themes.indexOf(theme) + 1) % 3]; Lab.save("theme", theme); applyTheme(); });
+  applyTheme();
+
+  /* ---------- Lernübersicht als Schublade ---------- */
+  function fillFigs(root) {
+    $$("[data-fig]", root).forEach(function (el) {
+      var f = el.getAttribute("data-fig");
+      el.innerHTML = f === "linien" ? F.linien(160, 120, 200, 160) : f === "halo" ? F.halo() : F.vorurteil();
+    });
+  }
+  function uebersichtHTML() { return $("#tpl-ue").innerHTML; }
+  $("#drawer-body").innerHTML = uebersichtHTML().replace(/class="pg ue"/g, 'class="ue"');
+  fillFigs($("#drawer-body"));
+  var lastFocus = null;
+  function openDrawer() { lastFocus = document.activeElement; $("#drawer").hidden = false; $("#drawer-bg").hidden = false; $("#drawer-close").focus(); }
+  function closeDrawer() { $("#drawer").hidden = true; $("#drawer-bg").hidden = true; if (lastFocus) lastFocus.focus(); }
+  $("#btn-ue").addEventListener("click", openDrawer);
+  $("#drawer-close").addEventListener("click", closeDrawer);
+  $("#drawer-bg").addEventListener("click", closeDrawer);
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !$("#drawer").hidden) closeDrawer(); });
+  function unlock() { if (!st.frei) { st.frei = true; save(); } $("#btn-ue").disabled = false; $("#btn-ue").title = "Lernübersicht öffnen"; }
+  if (st.frei) unlock();
+
+  Lab.Steps({ hash: true, onShow: function (id) {
+    if (id === "s-4") showLine();
+    if (id === "s-5") renderQR();
+    if (id === "s-7") unlock();
+    if (id === "s-6") renderAufl();
+    if (id === "s-7") renderChecklist();
+  } });
+
+  /* ---------- Erster Eindruck: Herr Fotiou ---------- */
+  var fot = st.fot ? st.fot.slice() : D.fotiou.map(function () { return null; });
+  $("#fot-rows").innerHTML = D.fotiou.map(function (name, i) {
+    return '<div class="fot-row"><span class="fot-name">' + name + '</span><div class="seg3" data-i="' + i + '">' + [1, 2, 3, 4, 5, 0].map(function (v) { return '<button type="button" data-v="' + v + '" aria-label="' + name + " " + (v || "kann ich nicht sagen") + '">' + (v || "?") + "</button>"; }).join("") + "</div></div>";
+  }).join("");
+  function fotPaint() { $$("#fot-rows .seg3").forEach(function (g) { var i = +g.getAttribute("data-i"); $$("button", g).forEach(function (b) { b.classList.toggle("on", fot[i] !== null && +b.getAttribute("data-v") === fot[i]); }); }); $("#fot-save").disabled = fot.some(function (x) { return x === null; }); }
+  $$("#fot-rows .seg3 button").forEach(function (b) { b.addEventListener("click", function () { if (st.fot) return; fot[+b.parentNode.getAttribute("data-i")] = +b.getAttribute("data-v"); fotPaint(); }); });
+  function lockFot() { $$("#fot-rows button").forEach(function (b) { b.disabled = true; }); $("#fot-save").hidden = true; $("#fot-ok").hidden = false; $("#to-verm").disabled = false; }
+  $("#fot-save").addEventListener("click", function () { st.fot = fot.slice(); save(); lockFot(); });
+  fotPaint(); if (st.fot) lockFot();
+
+  /* ---------- Vermutung ---------- */
+  var vSel = st.vermutung ? st.vermutung.v : null;
+  function vermUpd() { $("#verm-save").disabled = vSel === null || $("#verm-grund").value.trim().length < 8; }
+  $$("#verm-choices .choice").forEach(function (b) {
+    b.addEventListener("click", function () {
+      if (st.vermutung) return;
+      $$("#verm-choices .choice").forEach(function (x) { x.classList.remove("selected"); }); b.classList.add("selected");
+      vSel = +b.getAttribute("data-v"); vermUpd();
+    });
+  });
+  $("#verm-grund").addEventListener("input", vermUpd);
+  function lockVerm() {
+    $$("#verm-choices .choice").forEach(function (x, i) { x.disabled = true; x.classList.toggle("selected", i === st.vermutung.v); });
+    $("#verm-grund").value = st.vermutung.grund; $("#verm-grund").readOnly = true;
+    $("#verm-save").hidden = true; $("#verm-ok").hidden = false; $("#to-t1").disabled = false;
+  }
+  $("#verm-save").addEventListener("click", function () { st.vermutung = { v: vSel, grund: $("#verm-grund").value.trim() }; save(); lockVerm(); });
+  if (st.vermutung) lockVerm();
+
+  /* ---------- Teil 1: Punkte schätzen ---------- */
+  var r1 = st.schaetz.length, busy1 = false, sure = 0;
+  function t1Count() { $("#t1-count").textContent = "Runde " + Math.min(r1 + 1, 3) + " von 3"; }
+  function t1Upd() { var v = +$("#t1-input").value; $("#t1-ok").disabled = !(v >= 1 && v <= 2000 && sure); }
+  function t1Finish() { $("#stage1").hidden = true; $("#t1-count").hidden = true; $("#t1-auftrag").hidden = true; $("#t1-resp").hidden = true; $("#t1-done").hidden = false; }
+  function runDots() {
+    if (busy1 || r1 >= 3 || !$("#t1-resp").hidden) return;
+    busy1 = true;
+    var p = D.punkte[r1];
+    st.seen = r1 + 1; save();
+    $("#stage1").innerHTML = F.punkte(p.n, p.n);
+    setTimeout(showResp1, 2000);
+  }
+  function showResp1() {
+    var p = D.punkte[r1];
+    (function () {
+      $("#stage1").innerHTML = '<div class="msgc">Wie viele Punkte waren es?</div>';
+      $("#t1-others").hidden = !withGroup;
+      if (withGroup) $("#t1-nums").innerHTML = p.andere.map(function (x) { return "<span>" + x + "</span>"; }).join("");
+      $("#t1-input").value = ""; sure = 0; $$("#t1-sure button").forEach(function (b) { b.classList.remove("on"); }); t1Upd();
+      $("#t1-resp").hidden = false; busy1 = false;
+    })();
+  }
+  $("#stage1").addEventListener("click", runDots);
+  $("#stage1").addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); runDots(); } });
+  $("#t1-input").addEventListener("input", t1Upd);
+  $$("#t1-sure button").forEach(function (b) { b.addEventListener("click", function () { $$("#t1-sure button").forEach(function (x) { x.classList.remove("on"); }); b.classList.add("on"); sure = +b.getAttribute("data-v"); t1Upd(); }); });
+  $("#t1-ok").addEventListener("click", function () {
+    st.schaetz.push({ e: +$("#t1-input").value, s: sure }); r1++; save();
+    $("#t1-resp").hidden = true;
+    if (r1 >= 3) { t1Finish(); return; }
+    $("#stage1").innerHTML = '<div class="msgc">Tippe hier für die nächste Runde.</div>'; t1Count();
+  });
+  t1Count(); if (r1 >= 3) t1Finish();
+  /* Nach Neuladen: Punkte dieser Runde nicht noch einmal zeigen, sondern direkt antworten lassen */
+  else if (st.seen === r1 + 1) showResp1();
+
+  /* ---------- Teil 2: Linien (nach Asch) ---------- */
+  var r2 = st.wahl.length, pick = null;
+  function showLine() {
+    if (r2 >= 3) { $("#stage2").hidden = true; $("#t2-count").hidden = true; $("#t2-resp").hidden = true; $("#t2-others").hidden = true; $("#t2-done").hidden = false; return; }
+    var t = D.linien[r2];
+    $("#stage2").innerHTML = F.linien(t.l[0], t.l[1], t.l[2], t.l[3]);
+    $("#t2-count").textContent = "Runde " + (r2 + 1) + " von 3";
+    $("#t2-others").hidden = !withGroup;
+    if (withGroup) $("#t2-nums").innerHTML = [1, 2, 3, 4, 5].map(function () { return "<span>" + t.gruppe + "</span>"; }).join("");
+    pick = null; $$("#t2-abc button").forEach(function (b) { b.classList.remove("on"); }); $("#t2-ok").disabled = true;
+  }
+  $$("#t2-abc button").forEach(function (b) { b.addEventListener("click", function () { $$("#t2-abc button").forEach(function (x) { x.classList.remove("on"); }); b.classList.add("on"); pick = b.getAttribute("data-v"); $("#t2-ok").disabled = false; }); });
+  $("#t2-ok").addEventListener("click", function () { if (!pick) return; st.wahl.push(pick); r2++; save(); showLine(); });
+
+  /* ---------- Auswertung der eigenen Daten ---------- */
+  function stats(s) {
+    var ratios = (s.schaetz || []).map(function (x, i) { return x.e / D.punkte[i].n; });
+    var ratio = ratios.length ? ratios.reduce(function (a, b) { return a + b; }, 0) / ratios.length : NaN;
+    var sureM = (s.schaetz || []).length ? s.schaetz.reduce(function (a, b) { return a + b.s; }, 0) / s.schaetz.length : NaN;
+    var right = 0, follow = 0;
+    (s.wahl || []).forEach(function (w, i) { if (w === D.linien[i].ok) right++; if (w === D.linien[i].gruppe) follow++; });
+    return { ratio: ratio, sure: sureM, right: right, follow: follow };
+  }
+  function fmt(x, d) { return isNaN(x) ? "–" : (Math.round(x * Math.pow(10, d || 1)) / Math.pow(10, d || 1)).toString().replace(".", ","); }
+  function complete() { return st.schaetz.length >= 3 && st.wahl.length >= 3 && !!st.fot; }
+  function fotCount(s) { return (s.fot || []).filter(function (x) { return x > 0; }).length; }
+  function payload() { var k = stats(st); return ["ds05", st.id, st.G, Math.round(k.ratio * 100), k.follow, k.right, Math.round(k.sure * 10), fotCount(st)].join("."); }
+  function renderQR() {
+    if (!complete()) { $("#qr").innerHTML = '<p class="small">Es fehlen noch Antworten. Geh zurück und beende alle Schritte.</p>'; $("#code").textContent = "–"; return; }
+    var p = payload(); $("#qr").innerHTML = Lab.qrSVG(Lab.resultURL(p), 230); $("#code").textContent = p;
+  }
+  function resTable(s) {
+    var h = "<table class=\"mine\"><tr><th>Punkte</th><th>wahre Anzahl</th><th>deine Schätzung</th>" + (s.G === "G" ? "<th>„andere“ (Ø)</th>" : "") + "</tr>";
+    D.punkte.forEach(function (p, i) {
+      var e = s.schaetz[i];
+      h += "<tr><td>Runde " + (i + 1) + "</td><td>" + p.n + "</td><td>" + (e ? e.e + " (" + D.sicher[e.s] + ")" : "–") + "</td>" + (s.G === "G" ? "<td>" + Math.round(p.andere.reduce(function (a, b) { return a + b; }, 0) / 5) + "</td>" : "") + "</tr>";
+    });
+    h += "</table><table class=\"mine\" style=\"margin-top:8px\"><tr><th>Linien</th><th>richtig</th><th>deine Wahl</th>" + (s.G === "G" ? "<th>„andere“</th>" : "") + "</tr>";
+    D.linien.forEach(function (t, i) { h += "<tr><td>Runde " + (i + 1) + "</td><td>" + t.ok + "</td><td>" + (s.wahl[i] || "–") + "</td>" + (s.G === "G" ? "<td>" + t.gruppe + "</td>" : "") + "</tr>"; });
+    return h + "</table>";
+  }
+  function renderAufl() {
+    $("#my-res").innerHTML = "<p><strong>Du hattest die Fassung " + (withGroup ? "<u>mit</u> den Antworten anderer" : "<u>ohne</u> Antworten anderer") + ".</strong></p>" + resTable(st);
+  }
+  (function () {
+    function upd() { var ok = ["b1", "v1"].every(function (id) { return $("#" + id).value.trim().length >= 8; }); $("#to-mappe").disabled = !ok; $("#a-hint").hidden = ok; }
+    ["b1", "v1"].forEach(function (id) { var t = $("#" + id); t.value = st[id] || ""; t.addEventListener("input", function () { st[id] = t.value; save(); upd(); }); });
+    upd();
+  })();
+
+  /* ---------- Lernmappe ---------- */
+  function renderChecklist() {
+    var items = [["Lernübersicht (Seite 1–2)", true], ["deine Einschätzung von Herrn Fotiou", !!st.fot], ["deine Vermutung", !!st.vermutung], ["deine Schätzungen und Linienantworten", complete()], ["deine Beobachtung und Vermutung", !!(st.b1 && st.v1)], ["Arbeitsblatt mit Ergebnissicherung (Seite 3–4, zum Ausfüllen in GoodNotes)", true]];
+    $("#checklist").innerHTML = items.map(function (i) { return '<li class="' + (i[1] ? "" : "miss") + '">' + i[0] + (i[1] ? "" : " – fehlt noch") + "</li>"; }).join("");
+  }
+  function lines(n) { var s = ""; for (var i = 0; i < n; i++) s += '<div class="ln"></div>'; return s; }
+  function datenBox(s, mode) {
+    var leer = mode === "leer", k = leer ? null : stats(s), h = '<div class="databox avoid"><b style="color:#0e6b68">Meine Daten aus dem Labor</b>' + (mode === "beispiel" ? ' <span class="demo">Beispiel mit ausgedachten Antworten</span>' : "") + ' <span style="color:#545b6b;font-size:8.5pt">· Deine Daten zeigst du nur, wenn du willst. Sich an anderen zu orientieren ist normal – bei Unsicherheit oft sogar vernünftig.</span><table>';
+    if (leer) {
+      h += "<tr><th>Meine Fassung</th><td>○ mit Antworten anderer ○ ohne</td></tr>";
+      h += "<tr><th>Punkte</th><td>wahre Anzahl → meine Schätzung: 74 → ______ · 132 → ______ · 203 → ______ · so sicher war ich: ____________</td></tr>";
+      h += "<tr><th>Linien</th><td>richtig: ____ von 3 · der falschen Gruppe gefolgt (nur Fassung „mit“): ____-mal</td></tr>";
+      h += "<tr><th>Beobachtung</th><td>" + lines(1) + "</td></tr><tr><th>Erste Vermutung</th><td>" + lines(1) + "</td></tr>";
+    } else {
+      h += "<tr><th>Meine Fassung</th><td>" + (s.G === "G" ? "mit Antworten anderer (erfunden, absichtlich falsch)" : "ohne Antworten anderer") + "</td></tr>";
+      h += "<tr><th>Punkte</th><td>wahre Anzahl → meine Schätzung: " + D.punkte.map(function (p, i) { var e = s.schaetz[i]; return p.n + " → <b>" + (e ? e.e : "–") + "</b>" + (e ? " (" + D.sicher[e.s] + ")" : ""); }).join(" · ") + "</td></tr>";
+      h += "<tr><th>Linien</th><td>richtig: <b>" + k.right + " von 3</b>" + (s.G === "G" ? " · der falschen Gruppe gefolgt: <b>" + k.follow + "-mal</b>" : "") + "</td></tr>";
+      h += "<tr><th>Beobachtung</th><td>" + Lab.esc(s.b1 || "–") + "</td></tr><tr><th>Erste Vermutung</th><td>" + Lab.esc(s.v1 || "–") + "</td></tr>";
+    }
+    h += "<tr><th>Kursergebnis (Beamer)</th><td>Punkte, Schätzung ÷ wahre Anzahl (1,0 = genau richtig; 1,5 = um die Hälfte zu hoch): mit Antworten anderer Ø ______ · ohne Ø ______<br>Linien, Fassung „mit“: der falschen Gruppe gefolgt ______ von ______ Antworten</td></tr>";
+    return h + "</table></div>";
+  }
+  function fotiouHTML(s, mode) {
+    return '<span class="rate">' + D.fotiou.map(function (n, i) {
+      var v = (mode === "leer" || !s.fot) ? "___" : "<b>" + (s.fot[i] || "?") + "</b>";
+      return "<span>" + n + " " + v + "</span>";
+    }).join("") + '<span style="font-size:8.5pt;color:#545b6b">? = kann ich nicht sagen</span></span>';
+  }
+  function buildPrint(mode) {
+    var s = mode === "beispiel" ? D.beispiel : st, h;
+    if (mode === "loesung") h = $("#tpl-loesung").innerHTML;
+    else {
+      h = uebersichtHTML() + $("#tpl-ab").innerHTML;
+      h = h.replace('<div data-slot="daten"></div>', datenBox(s, mode));
+      h = h.replace('<span data-slot="fotiou"></span>', fotiouHTML(s, mode));
+      var verm = (mode === "leer" || !s.vermutung) ? "____________________________________" : "„" + D.vermutungOptionen[s.vermutung.v] + "“ – " + Lab.esc(s.vermutung.grund);
+      h = h.replace('<span data-slot="vermutung"></span>', "<i>" + verm + "</i>");
+    }
+    var p = $("#print"); p.innerHTML = h; fillFigs(p);
+    $$(".lines", p).forEach(function (el) { el.innerHTML = lines(+el.getAttribute("data-n")); });
+  }
+  $("#btn-pdf").addEventListener("click", function () { buildPrint("person"); window.print(); });
+  var dm = /[?&]druck=(leer|beispiel|loesung)/.exec(window.location.search);
+  window.addEventListener("beforeprint", function () { if (!dm) buildPrint("person"); });
+  if (dm) buildPrint(dm[1]);
+
+  $("#btn-reset").addEventListener("click", function () {
+    if (!confirm("Alle Eingaben dieser Stunde auf diesem iPad löschen?")) return;
+    Lab.remove("ds05"); window.location.hash = ""; window.location.reload();
+  });
+})();
+</script>
+</body>
+</html>
