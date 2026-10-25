@@ -16,6 +16,8 @@
   .big-n { font: 700 56px var(--font-display); color: var(--accent); line-height: 1; }
   .questions li { margin-bottom: 8px; font-size: 20px; }
   .demo-flag { display: inline-block; background: var(--warm-soft); color: #8a3a1e; border-radius: 999px; padding: 4px 12px; font-size: 14px; font-weight: 600; margin-left: 8px; }
+  .count-row { grid-template-columns: 200px minmax(0, 1fr); }
+  @media (max-width: 560px) { .count-row { grid-template-columns: minmax(0, 1fr); } }
 </style>
 </head>
 <body>
@@ -78,7 +80,7 @@
     var cfg = B[active], codes = list(active), recs = codes.map(function (c) { return cfg.decode(c.split(".")); }).filter(Boolean);
     var demo = codes.some(function (c) { return c.split(".")[1].indexOf("bsp") === 0; });
     var html = '<span class="kicker">' + Lab.esc(cfg.thema) + "</span><h1>" + Lab.esc(cfg.titel) + (demo ? '<span class="demo-flag">enthält Beispieldaten</span>' : "") + "</h1>";
-    html += '<div class="grid2" style="grid-template-columns:200px 1fr"><div class="card center" style="text-align:center"><div class="big-n">' + recs.length + '</div><div class="small">Ergebnisse</div></div>';
+    html += '<div class="grid2 count-row"><div class="card center" style="text-align:center"><div class="big-n">' + recs.length + '</div><div class="small">Ergebnisse</div></div>';
     if (!recs.length) {
       html += '<div class="card"><p>Noch keine Ergebnisse. Scannen Sie die QR-Codes der Schülerinnen.</p></div></div>';
     } else {

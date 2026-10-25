@@ -182,6 +182,49 @@
     }
   };
 
+  B.ds06 = {
+    ds: 6,
+    titel: "Was treibt mich an?",
+    thema: "Motivation · Anspruchsniveau (Ziele setzen)",
+    datei: "ds06-antrieb.html",
+    /* Code: ds06.id.nachErfolg(höher.gleich.niedriger).nachMisserfolg(höher.gleich.niedriger).vermutungErfolg.vermutungMisserfolg (2 = höher, 1 = gleich, 0 = niedriger) – keine Punktzahlen */
+    decode: function (parts) {
+      if (parts.length !== 10) return null;
+      var n = parts.slice(2).map(Number);
+      if (n.some(isNaN)) return null;
+      return { id: parts[1], erf: n.slice(0, 3), mis: n.slice(3, 6), vE: n[6], vM: n[7] };
+    },
+    render: function (recs) {
+      function sum(key) { return [0, 1, 2].map(function (i) { return recs.reduce(function (a, r) { return a + r[key][i]; }, 0); }); }
+      var e = sum("erf"), m = sum("mis"), nE = e[0] + e[1] + e[2], nM = m[0] + m[1] + m[2];
+      var cols = [["höher", "#0e6b68"], ["gleich", "#a7adb8"], ["niedriger", "#d9643f"]];
+      function row(label, arr, total) {
+        var h = '<div style="margin:10px 0"><p style="margin:0 0 6px"><strong>' + label + "</strong> · " + total + " Übergänge</p>";
+        arr.forEach(function (v, i) {
+          var w = total ? Math.round(v / total * 100) : 0;
+          h += '<div style="display:grid;grid-template-columns:200px 1fr 48px;gap:10px;align-items:center;margin:4px 0"><span>nächstes Ziel ' + cols[i][0] + '</span><div style="background:#efe9df;border-radius:6px;height:26px"><div style="width:' + w + '%;height:26px;border-radius:6px;background:' + cols[i][1] + '"></div></div><strong>' + v + "</strong></div>";
+        });
+        return h + "</div>";
+      }
+      var main = "<h3>Wie wurde das nächste Ziel gesetzt?</h3>" + row("Nach „Ziel erreicht“", e, nE) + row("Nach „Ziel nicht erreicht“", m, nM) +
+        '<p class="small">Gezählt sind die Übergänge von Runde 1 zu 2, 2 zu 3 und 3 zu 4 aller Personen (3 je Person). Keine Punktzahlen, keine Namen.</p>';
+      var R = { 2: "höher", 1: "gleich", 0: "niedriger" };
+      function cnt(key, v) { return recs.filter(function (r) { return r[key] === v; }).length; }
+      var rest = '<div class="card"><h3>Vermutungen vom Anfang</h3><p>Nach Erfolg: ' + [2, 1, 0].map(function (v) { return R[v] + " " + cnt("vE", v); }).join(" · ") + "</p><p>Nach Misserfolg: " + [2, 1, 0].map(function (v) { return R[v] + " " + cnt("vM", v); }).join(" · ") + "</p></div>";
+      return { main: main, rest: rest };
+    },
+    befund: "Hoppe (1930): Ob eine Leistung als Erfolg oder Misserfolg erlebt wird, hängt am eigenen Anspruchsniveau. Nach Erfolg steigt das Anspruchsniveau in der Regel, nach Misserfolg sinkt es in der Regel.",
+    fragen: [
+      "Was beobachten wir? Erst nur beschreiben: nach Erfolg – nach Misserfolg.",
+      "Passt das zu euren Vermutungen vom Anfang?",
+      "Welche andere Erklärung gibt es dafür, dass die Ziele steigen? (Tipp: Übung)"
+    ],
+    beispiel: function () {
+      var rows = [[2, 0, 0, 0, 1, 0, 2, 1], [1, 1, 0, 0, 0, 1, 2, 0], [2, 0, 0, 1, 0, 0, 2, 1], [1, 0, 0, 0, 1, 1, 1, 1], [3, 0, 0, 0, 0, 0, 2, 0], [1, 0, 0, 0, 0, 2, 2, 0], [2, 0, 0, 0, 1, 0, 2, 2]];
+      return rows.map(function (r, i) { return ["ds06", "bsp" + i].concat(r).join("."); });
+    }
+  };
+
   /* Angekündigte Bausteine (noch nicht gebaut) */
   B.geplant = [
     { ds: 7, titel: "Die Malstift-Studie", thema: "Belohnung und Motivation" },
