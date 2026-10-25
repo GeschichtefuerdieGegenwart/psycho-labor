@@ -1,0 +1,719 @@
+<!doctype html>
+<html lang="de" class="dm">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Was treibt mich an? – Psycho-Labor</title>
+<link rel="stylesheet" href="../assets/lab.css">
+<style>
+
+  /* ---------- Bildschirm ---------- */
+  .lab-progress span { width: 18px; }
+  @media (max-width: 760px) { .lab-progress { display: none; } .top-btn .t { display: none; } }
+  .top-btn { -webkit-appearance: none; appearance: none; display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); border-radius: 999px; min-height: 44px; padding: 0 14px; font: 600 16px var(--font); cursor: pointer; }
+  .top-btn:disabled { opacity: .45; cursor: default; }
+  .top-btn.icon { padding: 0; width: 44px; justify-content: center; }
+  .timebox { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 0 0 10px; font-size: 15px; color: var(--ink-soft); }
+  .timebox b { background: var(--accent-soft); color: var(--accent); border-radius: 999px; padding: 2px 10px; }
+  .timebox i { font-style: normal; background: var(--bg); border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; }
+  .plan { margin: 0; padding-left: 22px; }
+  .plan li { margin-bottom: 6px; }
+  .plan li span { color: var(--ink-soft); font-size: 15px; }
+  /* drei klar getrennte Kastenarten: Auftrag · Information · Hilfe */
+  .auftrag { border: 2px solid var(--accent); border-radius: var(--radius); padding: 16px 20px; margin: 0 0 16px; background: var(--paper); }
+  .info { border-radius: var(--radius); padding: 16px 20px; margin: 0 0 16px; background: var(--bg); border: 1px dashed var(--ink-soft); }
+  .label { display: inline-block; font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; border-radius: 999px; padding: 2px 10px; margin-bottom: 8px; }
+  .label.a { background: var(--accent); color: var(--on-accent); }
+  .label.i { background: var(--line); color: var(--ink); }
+  .hilfe { background: var(--gold-soft); border-radius: 12px; padding: 10px 14px; font-size: 16px; margin: 10px 0; }
+  .vignette { border-left: 6px solid var(--gold); background: var(--paper); border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 0 0 16px; font-size: 18px; }
+  .fiction { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--gold-ink); background: var(--gold-soft); border-radius: 999px; padding: 2px 10px; margin-bottom: 6px; }
+  .choice:disabled { cursor: default; color: var(--ink); opacity: 1; }
+  .saved { color: var(--ok); font-weight: 600; font-size: 15px; }
+  .scale7 { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin: 8px 0 2px; }
+  .scale7 button { -webkit-appearance: none; appearance: none; min-height: 48px; border: 2px solid var(--line); border-radius: 12px; background: var(--paper); color: var(--ink); font: 700 18px var(--font); cursor: pointer; }
+  .scale7 button.on { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+  .scale-lbl { display: flex; justify-content: space-between; font-size: 14px; color: var(--ink-soft); }
+  .wordstage { min-height: 170px; display: grid; place-items: center; font: 700 46px var(--font-display); color: var(--ink); background: var(--paper); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--line); margin: 10px 0; }
+  .wordstage.small-txt { font-size: 21px; font-weight: 500; color: var(--ink-soft); }
+  .cardstage { position: relative; width: 240px; height: 336px; margin: 8px auto 14px; border-radius: 18px; background: var(--bg); cursor: pointer; }
+  .cardstage .layer { position: absolute; inset: 0; }
+  .cardstage .layer svg { width: 100%; height: 100%; display: block; }
+  .cardstage .fix { font: 400 56px var(--font); color: var(--ink-soft); }
+  .cardstage .msgc { padding: 18px; text-align: center; font-size: 18px; color: var(--ink-soft); height: 100%; display: grid; place-items: center; }
+  .resp { display: grid; gap: 12px; }
+  .resp .row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .resp .row > span { width: 72px; font-size: 15px; color: var(--ink-soft); }
+  .resp button { -webkit-appearance: none; appearance: none; min-width: 52px; min-height: 52px; border: 2px solid var(--line); border-radius: 12px; background: var(--paper); color: var(--ink); font: 700 20px var(--font); cursor: pointer; }
+  .resp button.on { border-color: var(--accent); background: var(--accent-soft); }
+  .resp button.suit { font-size: 28px; min-width: 64px; background: #fff; }
+  .resp button.suit.on { background: #e3f1ef; border-color: var(--accent); }
+  .resp button.odd { font-size: 16px; font-weight: 600; padding: 0 14px; }
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 17px; margin-top: 6px; }
+  .legend b { font-size: 22px; }
+  .counter { text-align: center; font-size: 15px; color: var(--ink-soft); }
+  .tricks { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin: 8px 0 12px; }
+  .tricks svg { width: 110px; height: auto; }
+  table.mine { width: 100%; border-collapse: collapse; font-size: 17px; margin-top: 6px; }
+  table.mine th, table.mine td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); }
+  .lists { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 720px) { .lists { grid-template-columns: 1fr; } }
+  .lists > div { border-radius: 14px; padding: 12px 14px; border: 2px solid var(--line); background: var(--paper); }
+  .lists > div.me { border-color: var(--accent); }
+  .field-label { display: block; font-weight: 600; margin: 12px 0 6px; }
+  textarea.short { min-height: 90px; }
+  .checklist { list-style: none; padding: 0; margin: 0; }
+  .checklist li { padding: 6px 0; border-bottom: 1px solid var(--line); }
+  .checklist li::before { content: "✓ "; color: var(--ok); font-weight: 700; }
+  .checklist li.miss::before { content: "○ "; color: var(--warm); }
+  .end { text-align: center; }
+  .end .big { font: 700 30px var(--font-display); color: var(--accent); margin: 4px 0 6px; }
+
+  /* ---------- Übersicht als Schublade: Eingaben und Position bleiben erhalten ---------- */
+  .drawer-bg { position: fixed; inset: 0; background: rgba(0,0,0,.35); z-index: 40; }
+  .drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(660px, 100%); background: var(--bg); z-index: 41; display: flex; flex-direction: column; box-shadow: -8px 0 30px rgba(0,0,0,.2); }
+  .drawer-head { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--line); background: var(--paper); }
+  .drawer-head strong { flex: 1; }
+  .drawer-body { overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 16px; font-size: 17px; }
+
+  /* ---------- Lernübersicht (Bildschirm und Druck) ---------- */
+  .ue h1 { font-size: 24px; margin-bottom: 6px; }
+  .ue h2 { font-size: 19px; color: var(--accent); margin: 18px 0 8px; }
+  .ue .kern { background: var(--accent-soft); border-radius: 12px; padding: 10px 14px; font-weight: 600; }
+  .figbox { background: #fff; border-radius: 12px; padding: 6px; border: 1px solid var(--line); }
+  .figbox svg { width: 100%; height: auto; display: block; }
+  .defs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; margin-top: 10px; }
+  .defs > div { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; }
+  .defs b { color: var(--accent); }
+  .cmp { width: 100%; border-collapse: collapse; margin-top: 6px; }
+  .cmp th, .cmp td { border: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: top; background: var(--paper); }
+  .cmp th { background: var(--accent-soft); }
+  .merk { border-left: 5px solid var(--warm); background: var(--paper); padding: 8px 12px; margin: 8px 0; border-radius: 0 10px 10px 0; font-weight: 600; }
+  .two { display: grid; grid-template-columns: 1fr 1.2fr; gap: 12px; }
+  .effect { border: 2px solid var(--line); border-radius: 12px; padding: 10px 12px; background: var(--paper); }
+  .effect h3 { margin: 0 0 4px; font-size: 18px; }
+  .effect p { margin: 0 0 6px; }
+  .effect .gut { font-size: .92em; color: var(--ink-soft); }
+  .pf { counter-reset: pf; list-style: none; padding: 0; margin: 6px 0 0; }
+  .pf li { counter-increment: pf; padding: 6px 8px 6px 38px; position: relative; border-bottom: 1px solid var(--line); }
+  .pf li::before { content: counter(pf); position: absolute; left: 6px; top: 6px; width: 24px; height: 24px; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 700; display: grid; place-items: center; font-size: 14px; }
+  .status { font-size: .85em; color: var(--ink-soft); margin-top: 8px; }
+  @media (max-width: 720px) { .defs, .two { grid-template-columns: 1fr; } }
+
+  /* ---------- Elemente der Arbeitsblätter (nur im Druck sichtbar) ---------- */
+  .print-only { display: none; }
+  .ph { display: flex; justify-content: space-between; font-size: 9pt; color: #545b6b; border-bottom: 1px solid #cfc7ba; padding-bottom: 3pt; margin-bottom: 8pt; }
+  .task { margin: 0 0 10pt; }
+  .task .no { display: inline-block; background: #0e6b68; color: #fff; border-radius: 6px; padding: 0 7px; font-weight: 700; margin-right: 6px; }
+  .need { border: 1.5px solid #b9871c; background: #f6ead0; border-radius: 8px; padding: 6pt 9pt; margin: 0 0 9pt; font-size: 10pt; }
+  .ln { border-bottom: 1px solid #b8b0a3; height: 9mm; }
+  .boxrow { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8pt; margin-top: 4pt; }
+  .boxrow > div { border: 1.5px solid #cfc7ba; border-radius: 8px; min-height: 52mm; padding: 5pt 7pt; font-size: 9.5pt; color: #545b6b; }
+  .tick { width: 100%; border-collapse: collapse; margin-top: 4pt; }
+  .tick td, .tick th { border: 1px solid #cfc7ba; padding: 5pt 7pt; text-align: left; vertical-align: top; }
+  .tick td.c, .tick th.c { width: 20mm; text-align: center; }
+  .scn { border: 1px solid #cfc7ba; border-radius: 8px; padding: 5pt 8pt; margin: 0 0 6pt; }
+  .scn-a { margin-top: 4pt; }
+  .scn-a.bsp { color: #4d5462; font-style: italic; background: #f1f1f1; border-radius: 6px; padding: 3pt 6pt; }
+  .scn .ln { height: 8mm; }
+  .mine-p { width: 100%; border-collapse: collapse; margin: 4pt 0 8pt; }
+  .mine-p td, .mine-p th { border: 1px solid #cfc7ba; padding: 5pt 7pt; text-align: left; vertical-align: top; }
+  .mine-p th { width: 40mm; background: #f5f1ea; font-weight: 600; }
+  .answer { min-height: 12mm; }
+  .demo { display: inline-block; background: #fbe3d9; color: #8a3a1e; border-radius: 999px; padding: 1px 8px; font-size: 9pt; font-weight: 700; }
+
+  /* ---------- Druck: Lernmappe A4 ---------- */
+  @page { size: A4; margin: 13mm 14mm 14mm 14mm; }
+  @media print {
+    /* Druck immer hell – auch wenn das iPad im Dunkelmodus ist */
+    html.dm, html.dm:not([data-theme="light"]), html.dm[data-theme="dark"] { --bg: #f5f1ea !important; --paper: #fff !important; --ink: #1d2230 !important; --ink-soft: #545b6b !important; --line: #cfc7ba !important; --accent: #0e6b68 !important; --accent-soft: #d8ecea !important; --warm: #d9643f !important; --warm-soft: #fbe3d9 !important; --gold: #b9871c !important; --gold-soft: #f6ead0 !important; --gold-ink: #6b4e0b !important; --on-accent: #fff !important; color-scheme: light !important; }
+    html, body { background: #fff !important; color: #1d2230 !important; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body { font-size: 10.5pt; line-height: 1.38; }
+    .lab-top, .lab-main > .step, .drawer, .drawer-bg { display: none !important; }
+    .lab-main { padding: 0 !important; max-width: none !important; margin: 0 !important; }
+    .print-only { display: block !important; }
+    .pg { break-after: page; page-break-after: always; }
+    .pg:last-child { break-after: auto; page-break-after: auto; }
+    .ue h1 { font-size: 16pt; margin: 0 0 4pt; }
+    .ue h2 { font-size: 12.5pt; margin: 9pt 0 4pt; }
+    .ue h3 { font-size: 11.5pt; }
+    .ue p, .ue li, .ue td, .ue th, .ue .defs > div { font-size: 10.5pt; }
+    .pg h2 { font-size: 13pt; } .pg h3 { font-size: 11.5pt; margin: 8pt 0 3pt; }
+    .avoid, .figbox, .effect, .task, .defs > div, table, .merk { break-inside: avoid; page-break-inside: avoid; }
+    .ue p { margin: 0 0 4pt; }
+    .ue .kern { padding: 5pt 9pt; margin-bottom: 4pt; }
+    .ue .defs { gap: 5pt 8pt; margin-top: 6pt; }
+    .ue .defs > div { padding: 4pt 8pt; }
+    .ue .effect { padding: 6pt 8pt; }
+    .ue .effect p { margin: 0 0 3pt; }
+    .ue .merk { margin: 5pt 0; padding: 4pt 9pt; }
+    .ue .cmp th, .ue .cmp td { padding: 3pt 6pt; }
+    .ue .pf li { padding: 3pt 6pt 3pt 30pt; }
+    .ue .pf li::before { top: 3pt; }
+    .ue .status { margin-top: 4pt; font-size: 9pt; }
+    .loes table { break-inside: auto; page-break-inside: auto; }
+    .loes tr { break-inside: avoid; page-break-inside: avoid; }
+    .loes td, .loes th { font-size: 9.6pt; padding: 3pt 6pt !important; line-height: 1.3; }
+  }
+
+  /* ---------- Ergänzungen DS 5 ---------- */
+  .ue .two { align-items: start; }
+  .stage5 { max-width: 520px; margin: 8px auto 14px; border-radius: 16px; background: var(--bg); min-height: 200px; display: grid; place-items: center; cursor: pointer; overflow: hidden; }
+  .stage5 svg { width: 100%; height: auto; display: block; }
+  .stage5 .msgc { padding: 30px 18px; text-align: center; font-size: 18px; color: var(--ink-soft); }
+  .others { border: 2px dashed var(--warm); background: var(--warm-soft); border-radius: 14px; padding: 12px 16px; margin: 10px 0; }
+  .others .nums { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+  .others .nums span { background: var(--paper); border-radius: 10px; padding: 6px 12px; font: 700 20px var(--font); }
+  input.num { min-height: 56px; width: 180px; font: 700 24px var(--font); border: 2px solid var(--line); border-radius: 12px; padding: 0 14px; background: var(--paper); color: var(--ink); }
+  .abc { display: flex; gap: 10px; }
+  .abc button { -webkit-appearance: none; appearance: none; min-width: 80px; min-height: 60px; border: 2px solid var(--line); border-radius: 14px; background: var(--paper); color: var(--ink); font: 700 24px var(--font); cursor: pointer; }
+  .abc button.on { border-color: var(--accent); background: var(--accent-soft); }
+  .seg3 { display: flex; gap: 8px; flex-wrap: wrap; }
+  .seg3 button { -webkit-appearance: none; appearance: none; min-height: 48px; padding: 0 16px; border: 2px solid var(--line); border-radius: 999px; background: var(--paper); color: var(--ink); font: 600 16px var(--font); cursor: pointer; }
+  .seg3 button.on { border-color: var(--accent); background: var(--accent-soft); }
+  .databox { border: 1.5px solid #0e6b68; border-radius: 8px; padding: 5pt 8pt; margin: 0 0 8pt; font-size: 9.6pt; }
+  .databox table { width: 100%; border-collapse: collapse; }
+  .databox td, .databox th { padding: 2pt 5pt; text-align: left; vertical-align: top; border-bottom: 1px solid #e2dbcf; }
+  .databox th { width: 36mm; font-weight: 600; color: #545b6b; }
+  .fot-row { display: grid; grid-template-columns: 130px 1fr; gap: 10px; align-items: center; margin: 6px 0; }
+  .fot-name { font-weight: 600; }
+  .fot-row .seg3 button { min-width: 48px; padding: 0 10px; }
+  .rate { display: flex; gap: 14pt; flex-wrap: wrap; margin: 4pt 0; font-size: 10pt; }
+
+  /* ---------- Ergänzungen DS 6 ---------- */
+  .feld { display: grid; grid-template-columns: repeat(6, minmax(48px, 1fr)); gap: 8px; max-width: 520px; margin: 10px auto; }
+  .feld button { -webkit-appearance: none; appearance: none; min-height: 56px; border: 2px solid var(--line); border-radius: 12px; background: var(--paper); color: var(--ink); font: 700 22px var(--font); cursor: pointer; touch-action: manipulation; }
+  .feld button.ok { background: var(--accent-soft); border-color: var(--accent); color: var(--ink-soft); }
+  .feld button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .uhr { display: flex; justify-content: space-between; align-items: baseline; max-width: 520px; margin: 8px auto 0; font-size: 18px; }
+  .uhr b { font-size: 26px; font-variant-numeric: tabular-nums; }
+  .naechste { font-size: 18px; color: var(--ink-soft); }
+  .verlauf { width: 100%; border-collapse: collapse; margin: 6px 0 10px; font-size: 17px; }
+  .verlauf th, .verlauf td { border-bottom: 1px solid var(--line); padding: 6px 8px; text-align: left; }
+  .goalrow { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .chart6 { background: #fff; border-radius: 14px; border: 1px solid var(--line); max-width: 620px; }
+  .chart6 svg { width: 100%; height: auto; display: block; }
+  .databox th { width: 27mm; }
+  /* „weniger Bewegung“: Schrittwechsel ohne Einblenden (nur auf dieser Seite; Vorschlag für lab.css im Pull Request) */
+  @media (prefers-reduced-motion: reduce) { .step { animation: none; } }
+  .vq { margin: 10px 0 4px; font-weight: 600; font-size: 18px; }
+</style>
+</head>
+<body>
+<header class="lab-top">
+  <a class="lab-logo" href="index.html"><span id="logo"></span>Psycho-Labor</a>
+  <span class="lab-title">DS 6 · Was treibt mich an?</span>
+  <div class="lab-progress" aria-hidden="true"></div>
+  <button class="top-btn" id="btn-ue" type="button" disabled title="Wird am Ende des Labors freigeschaltet">
+    <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M4 2h9l3 3v13H4z" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M7 8h6M7 11h6M7 14h4" stroke="currentColor" stroke-width="1.7"/></svg>
+    <span class="t">Übersicht</span>
+  </button>
+  <button class="top-btn icon" id="theme" type="button" aria-label="Hell- oder Dunkelmodus umschalten"><svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 2.5a7.5 7.5 0 0 1 0 15z" fill="currentColor"/></svg></button>
+</header>
+
+<main class="lab-main">
+
+<!-- ===================== Start ===================== -->
+<section class="step" id="s-1">
+  <span class="kicker">DS 6 · Motivation · Labor</span>
+  <h1>Was treibt mich an?</h1>
+  <p class="lead">Ein kurzes Spiel in fünf Runden. Vor jeder Runde setzt du dir ein Ziel. <strong>Es geht nicht darum, wie schnell du bist – sondern darum, wie du deine Ziele setzt.</strong></p>
+  <div class="grid2">
+    <div class="card">
+      <h3>So läuft das Labor (ca. 17 Min.)</h3>
+      <ol class="plan">
+        <li>Vermutung festhalten <span>· allein · 2 Min.</span></li>
+        <li>Proberunde <span>· allein · 1 Min.</span></li>
+        <li>Vier Runden mit Ziel <span>· allein · 5 Min.</span></li>
+        <li>Ergebnis an die Lehrkraft (QR-Code)</li>
+        <li>Auflösung: Beobachtung und Vermutung notieren <span>· gemeinsam · 7 Min.</span></li>
+        <li>Lernmappe als PDF sichern – <strong>Ende des Labors</strong></li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Am Ende hast du …</h3>
+      <p>eine <strong>Lernmappe mit vier Seiten</strong>: die Lernübersicht und das Arbeitsblatt, auf dem deine Ziele und Ergebnisse schon eingetragen sind. Damit arbeitest du in GoodNotes weiter.</p>
+      <p class="small">Deine Ergebnisse sieht niemand. An die Lehrkraft geht nur, ob du deine Ziele erhöht, gleich gelassen oder gesenkt hast – keine Punktzahl.</p>
+    </div>
+  </div>
+  <div class="actions"><button class="btn big" data-next>Start</button></div>
+  <div class="private"><span class="lock"></span><span>Alles bleibt auf diesem iPad. Es wird nichts ins Internet gesendet. Namen werden nirgends gespeichert.</span></div>
+</section>
+
+<!-- ===================== Vermutung ===================== -->
+<section class="step" id="s-2">
+  <div class="timebox"><b>⏱ 2 Min.</b><i>allein</i><span>Schritt 1 von 6</span></div>
+  <h2>Deine Vermutung</h2>
+  <div class="vignette">Du übst etwas, zum Beispiel Freiwürfe beim Basketball. Vor jeder Runde nimmst du dir vor, wie viele Treffer du schaffen willst.</div>
+  <div class="auftrag">
+    <span class="label a">Auftrag</span>
+    <p class="vq" style="margin-top:0">Du hast dein Ziel <strong>erreicht</strong>. Was machst du mit dem nächsten Ziel?</p>
+    <div class="seg3" id="v-erf"><button type="button" data-v="2">höher</button><button type="button" data-v="1">gleich</button><button type="button" data-v="0">niedriger</button></div>
+    <p class="vq">Du hast dein Ziel <strong>nicht erreicht</strong>. Was machst du mit dem nächsten Ziel?</p>
+    <div class="seg3" id="v-mis"><button type="button" data-v="2">höher</button><button type="button" data-v="1">gleich</button><button type="button" data-v="0">niedriger</button></div>
+    <label class="field-label" for="verm-grund">Warum? Ein Satz.</label>
+    <textarea id="verm-grund" class="short" maxlength="200"></textarea>
+    <div class="actions"><button class="btn" id="verm-save" disabled>Vermutung speichern</button><span class="saved" id="verm-ok" hidden>Gespeichert. Am Ende schaust du sie dir noch einmal an.</span></div>
+  </div>
+  <div class="actions"><button class="btn secondary" data-prev>Zurück</button><button class="btn" data-next id="to-probe" disabled>Weiter zur Proberunde</button></div>
+</section>
+
+<!-- ===================== Proberunde ===================== -->
+<section class="step" id="s-3">
+  <div class="timebox"><b>⏱ 1 Min.</b><i>allein</i><span>Schritt 2 von 6 · Proberunde</span></div>
+  <h2>Proberunde: Zahlen der Reihe nach</h2>
+  <div class="auftrag">
+    <span class="label a">Auftrag</span>
+    <p style="margin:0">Tippe die Zahlen <strong>der Reihe nach</strong> an: 1, 2, 3 … Du hast <strong>30 Sekunden</strong>. Gezählt wird, wie weit du kommst. Ein falscher Tipp zählt nicht und kostet nichts.</p>
+  </div>
+  <div class="spiel" data-runde="0"></div>
+  <div id="probe-done" hidden>
+    <div class="card accent" id="probe-res"></div>
+    <div class="actions"><button class="btn" data-next>Weiter zu den vier Runden</button></div>
+  </div>
+</section>
+
+<!-- ===================== Runden mit Ziel ===================== -->
+<section class="step" id="s-4">
+  <div class="timebox"><b>⏱ 5 Min.</b><i>allein</i><span>Schritt 3 von 6 · Runden mit Ziel</span></div>
+  <h2 id="r-title">Runde 1 von 4</h2>
+  <div class="card">
+    <h3 style="margin-top:0">Bisher</h3>
+    <table class="verlauf" id="r-verlauf"></table>
+  </div>
+  <div class="auftrag" id="r-ziel">
+    <span class="label a">Auftrag</span>
+    <label class="field-label" for="r-input" style="margin-top:0">Dein Ziel für diese Runde: Bis zu welcher Zahl willst du kommen?</label>
+    <div class="goalrow"><input class="num" id="r-input" type="number" inputmode="numeric" min="1" max="36" placeholder="1–36"><button class="btn" id="r-go" disabled>Ziel speichern und starten</button></div>
+    <p class="small" style="margin:8px 0 0">Das Spielfeld ist jede Runde neu gemischt.</p>
+  </div>
+  <div class="spiel" data-runde="r" hidden></div>
+  <div class="card accent" id="r-res" hidden></div>
+  <div class="actions" id="r-next-wrap" hidden><button class="btn" id="r-next">Nächste Runde</button></div>
+  <div id="r-done" hidden>
+    <div class="card accent"><strong>Geschafft!</strong> Alle vier Runden sind erledigt.</div>
+    <div class="actions"><button class="btn" data-next>Weiter</button></div>
+  </div>
+</section>
+
+<!-- ===================== Kursvergleich ===================== -->
+<section class="step" id="s-5">
+  <div class="timebox"><b>Schritt 4 von 6</b><i>Ergebnis an die Lehrkraft</i></div>
+  <h2>Dein Ergebnis für den Kurs</h2>
+  <p>Zeig diesen QR-Code deiner Lehrkraft. Dein Ergebnis erscheint <strong>ohne Namen</strong> im Kursdiagramm.</p>
+  <div class="card"><div class="qr-box"><div id="qr"></div><div style="flex:1;min-width:220px"><p class="small">Im Code steht keine Punktzahl. Er enthält nur, wie oft du dein Ziel nach einem Erfolg oder Misserfolg erhöht, gleich gelassen oder gesenkt hast, und deine Vermutung.</p><p class="small">Falls das Scannen nicht klappt:</p><div class="code" id="code"></div></div></div></div>
+  <div class="card warm"><strong>Warte jetzt, bis alle fertig sind.</strong> Die Auflösung machen wir gemeinsam.</div>
+  <div class="actions"><button class="btn big" data-next>Zur Auflösung (erst auf Ansage)</button></div>
+</section>
+
+<!-- ===================== Auflösung ===================== -->
+<section class="step" id="s-6">
+  <div class="timebox"><b>⏱ 7 Min.</b><i>gemeinsam, dann allein schreiben</i><span>Schritt 5 von 6 · Auflösung</span></div>
+  <h2>Was ist mit deinen Zielen passiert?</h2>
+  <div class="info">
+    <span class="label i">Information</span>
+    <p>Hier siehst du deine Ziele und Ergebnisse. Wichtig ist, was <strong>nach</strong> einer Runde passiert ist: Wie hast du dein nächstes Ziel gesetzt?</p>
+    <div class="chart6" id="my-chart"></div>
+    <div id="my-res"></div>
+    <p class="small" style="margin:8px 0 0">Das Ergebnis des ganzen Kurses zeigt deine Lehrkraft am Beamer.</p>
+  </div>
+  <div class="auftrag">
+    <span class="label a">Auftrag 1 · Beobachtung beschreiben</span>
+    <p>Was haben die meisten im Kurs nach einem <strong>Erfolg</strong> mit dem Ziel gemacht – und was nach einem <strong>Misserfolg</strong>? 1–2 Sätze.</p>
+    <div class="hilfe"><strong>Beschreiben</strong> heißt: nur sagen, was passiert ist – noch ohne „weil“. Bei 7 Personen kann ein Muster auch Zufall sein.</div>
+    <textarea id="b1" class="short" maxlength="220" aria-label="Beobachtung"></textarea>
+  </div>
+  <div class="auftrag">
+    <span class="label a">Auftrag 2 · Erste Vermutung</span>
+    <p>Warum setzen Menschen ihr Ziel nach einem Erfolg oder Misserfolg neu? Was könnte dahinterstecken?</p>
+    <div class="hilfe">Denk daran, wie es sich angefühlt hat, als du dein Ziel erreicht oder knapp verfehlt hast.</div>
+    <textarea id="v1" class="short" maxlength="220" aria-label="Vermutung"></textarea>
+  </div>
+  <div class="actions"><button class="btn" data-next id="to-mappe" disabled>Weiter: Lernmappe</button><span class="small" id="a-hint">Schreib zuerst etwas in beide Felder.</span></div>
+</section>
+
+<!-- ===================== Lernmappe ===================== -->
+<section class="step" id="s-7">
+  <div class="timebox"><b>Schritt 6 von 6</b><i>allein</i><span>Ende des Labors</span></div>
+  <h2>Sichere deine Lernmappe</h2>
+  <div class="grid2">
+    <div class="card">
+      <h3>Das steht in deiner Lernmappe (4 Seiten)</h3>
+      <ul class="checklist" id="checklist"></ul>
+    </div>
+    <div class="card">
+      <h3>So kommt sie in GoodNotes</h3>
+      <ol style="margin:0;padding-left:22px">
+        <li>Tippe auf <strong>„Lernmappe als PDF“</strong>.</li>
+        <li>Im Druckfenster oben auf das <strong>Teilen-Symbol</strong> tippen.</li>
+        <li><strong>GoodNotes</strong> wählen und als neues Dokument importieren.</li>
+      </ol>
+      <p class="small">Kein Teilen-Symbol? Die Seitenvorschau im Druckfenster mit zwei Fingern auseinanderziehen.</p>
+    </div>
+  </div>
+  <div class="actions"><button class="btn big" id="btn-pdf">Lernmappe als PDF</button></div>
+  <div class="card accent end">
+    <div class="big">Ende des Labors</div>
+    <p>Ab jetzt geht es ohne Tablet weiter – nur fürs Arbeitsblatt öffnest du GoodNotes.</p>
+  </div>
+  <div class="card" style="margin-top:28px">
+    <p class="small" style="margin-top:0">Nur nach der Stunde oder zum Ausprobieren:</p>
+    <button class="btn secondary" id="btn-reset" type="button">Alle Eingaben auf diesem iPad löschen</button>
+  </div>
+</section>
+
+<section class="print-only" id="print"></section>
+</main>
+
+<div class="drawer-bg" id="drawer-bg" hidden></div>
+<aside class="drawer" id="drawer" hidden aria-label="Lernübersicht" role="dialog" aria-modal="true">
+  <div class="drawer-head"><strong>Lernübersicht DS 6</strong><button class="top-btn" id="drawer-close" type="button">Schließen</button></div>
+  <div class="drawer-body ue" id="drawer-body"></div>
+</aside>
+
+<!-- ===================== Lernübersicht (Schublade und Seite 1–2 der Lernmappe) ===================== -->
+<template id="tpl-ue">
+  <div class="pg ue">
+    <h1>Lernübersicht · Was treibt mich an?</h1>
+    <p class="kern">Was uns antreibt, kann man nicht sehen – nur vermuten. Sichtbar ist das Verhalten. Und ob wir etwas als Erfolg erleben, hängt an dem Ziel, das wir uns selbst gesetzt haben.</p>
+
+    <h2 id="ue-1">1 · Motiv und Motivation</h2>
+    <p><b>Motiv:</b> ein von außen nicht erkennbarer Beweggrund, der menschliches Verhalten aktiviert (in Gang setzt).</p>
+    <p><b>Motivation:</b> die „aktivierende Ausrichtung des momentanen Lebensvollzugs auf einen positiv bewerteten Zielzustand“ (Rheinberg 2002). Einfacher: Ich richte mein Tun gerade auf ein Ziel aus, das mir wichtig ist.</p>
+    <p><b>Woran man Motivation am Verhalten erkennt:</b></p>
+    <table class="cmp">
+      <tr><th style="width:24%">Merkmal</th><th>Frage</th><th>Beispiel: Gitarre lernen</th></tr>
+      <tr><td><b>Richtung</b></td><td>Worauf richtet sich das Verhalten?</td><td>Sie übt Gitarre statt zu zocken.</td></tr>
+      <tr><td><b>Intensität</b></td><td>Wie stark strengt sich die Person an?</td><td>Sie übt einen schweren Griff hoch konzentriert.</td></tr>
+      <tr><td><b>Ausdauer</b></td><td>Wie lange bleibt sie dran – auch bei Hindernissen?</td><td>Sie übt weiter, obwohl die Finger wehtun.</td></tr>
+    </table>
+
+    <h2 id="ue-2">2 · Denkwerkzeug: beschreiben – erklären – bewerten</h2>
+    <table class="cmp">
+      <tr><th style="width:24%"></th><th>Was tue ich?</th><th>Beispiel: Jemand läuft jeden Tag 10 km.</th></tr>
+      <tr><td><b>beschreiben</b></td><td>sagen, was man beobachten kann</td><td>„Sie läuft jeden Morgen um 6 Uhr, auch bei Regen.“</td></tr>
+      <tr><td><b>erklären</b></td><td>einen Grund (ein Motiv) vermuten</td><td>„Vielleicht will sie für einen Marathon fit werden.“</td></tr>
+      <tr><td><b>bewerten</b></td><td>urteilen: gut, schlecht, sinnvoll, verrückt</td><td>„Das ist übertrieben.“</td></tr>
+    </table>
+    <p class="merk">Ein Motiv kann man nicht sehen. Dasselbe Verhalten kann ganz verschiedene Motive haben. Deshalb: erst beschreiben, dann erklären – und eine Bewertung als Bewertung kennzeichnen.</p>
+
+    <h2 id="ue-3">3 · Intrinsisch oder extrinsisch?</h2>
+    <table class="cmp">
+      <tr><th style="width:24%"></th><th>intrinsische Motivation</th><th>extrinsische Motivation</th></tr>
+      <tr><td><b>Der Anreiz liegt …</b></td><td>in der Tätigkeit selbst (Freude, Interesse, Neugier)</td><td>in einer Folge außerhalb der Tätigkeit (Note, Geld, Lob, Ärger vermeiden)</td></tr>
+      <tr><td><b>typischer Satz</b></td><td>„Das macht mir einfach Spaß.“</td><td>„Ich mache das, damit …“</td></tr>
+      <tr><td><b>Beispiel</b></td><td>Er programmiert nachts ein Spiel, weil ihn das Tüfteln reizt.</td><td>Er lernt Vokabeln, weil morgen ein Test ist.</td></tr>
+    </table>
+    <p style="margin-top:6px">Oft wirkt <b>beides gleichzeitig</b>. Und extrinsisch heißt nicht automatisch schlecht: Wer für ein selbst gewähltes Ziel lernt, ist extrinsisch motiviert – aber aus eigenem Antrieb. Mehr dazu in DS 7.</p>
+    <p class="status">Hinweis: Alle Personen in Beispielen und Fällen sind ausgedacht. Schaubilder sind vereinfachte Modelle. Studien sind mit Autor und Jahr belegt.</p>
+  </div>
+  <div class="pg ue">
+    <h2 id="ue-4">4 · Das Anspruchsniveau</h2>
+    <p><b>Anspruchsniveau</b> (Hoppe 1930): das Ziel, das sich eine Person bei einer Aufgabe selbst setzt – wie gut sie sein will.</p>
+    <div class="figbox" data-fig="anspruch"></div>
+    <ul style="margin:6px 0 0;padding-left:20px">
+      <li><b>Erfolg und Misserfolg sind relativ:</b> Ob ich eine Leistung als Erfolg erlebe, hängt nicht an der Leistung allein, sondern daran, ob ich mein eigenes Anspruchsniveau erreiche. Dieselbe Leistung kann für die eine ein Erfolg, für den anderen ein Misserfolg sein.</li>
+      <li><b>Typische Verschiebung:</b> Nach einem Erfolg steigt das Anspruchsniveau meist, nach einem Misserfolg sinkt es meist (Hoppe 1930).</li>
+      <li><b>Realistisch oder nicht?</b> Ein Ziel knapp über der letzten Leistung hält dranbleiben möglich. Ein viel zu hohes Ziel bringt immer wieder Misserfolg, ein viel zu niedriges kaum ein Erfolgserlebnis. Mehr dazu in DS 8.</li>
+    </ul>
+
+    <h2 id="ue-5">5 · Wann ist genug genug?</h2>
+    <p>Wenn das Anspruchsniveau mit jedem Erfolg steigt, bleibt das Ziel immer ein Stück voraus. Das kann antreiben – oder unzufrieden machen.</p>
+    <p><b>Befund:</b> Dittmar, Bond, Hurst &amp; Kasser (2014) werteten 259 Stichproben aus: Menschen, denen Geld, Besitz und Status sehr wichtig sind, berichten im Durchschnitt etwas weniger Wohlbefinden. Der Zusammenhang ist schwach bis mittel.</p>
+    <p class="merk">Das ist eine <u>Korrelation</u>: Sie zeigt, dass zwei Dinge zusammen auftreten – nicht, was die Ursache ist. Vielleicht machen materielle Ziele unzufrieden. Vielleicht suchen unzufriedene Menschen eher Trost in Besitz. Oder etwas Drittes steckt hinter beidem.</p>
+  </div>
+</template>
+
+<!-- ===================== Arbeitsblatt (Seite 3–4 der Lernmappe) ===================== -->
+<template id="tpl-ab">
+  <div class="pg">
+    <div class="ph"><span>Lernmappe DS 6 · Arbeitsblatt, Teil A: Ziele setzen</span><span>1–2 zu zweit · A allein · ca. 15 Min.</span></div>
+    <h2 style="margin-top:0">Teil A · Ziele setzen</h2>
+    <div data-slot="daten"></div>
+    <div class="need"><b>Das brauchst du (Lernübersicht 4):</b> <b>Anspruchsniveau:</b> das Ziel, das sich eine Person bei einer Aufgabe selbst setzt – wie gut sie sein will. Ob ich eine Leistung als Erfolg erlebe, hängt daran, ob ich mein eigenes Anspruchsniveau erreiche. Nach einem Erfolg steigt das Anspruchsniveau meist, nach einem Misserfolg sinkt es meist.</div>
+    <div class="task avoid"><span class="no">1</span><b>Vergleiche deine Ziele mit dem Kursergebnis.</b> Passt dein Verhalten zur typischen Verschiebung des Anspruchsniveaus? Begründe mit einer Runde aus deinen Daten. (2–3 Sätze)
+      <div class="lines" data-n="3"></div></div>
+    <div class="task avoid"><span class="no">2</span><b>Prüfen:</b> Viele haben im Spiel von Runde zu Runde besser abgeschnitten, weil sie geübt haben. Warum ist das eine andere mögliche Erklärung dafür, dass die Ziele gestiegen sind? <span class="small"><b>Profi:</b> Wie könnte man den Versuch ändern, um beides zu trennen?</span>
+      <div class="lines" data-n="2"></div></div>
+    <h2>Ergebnissicherung A</h2>
+    <div class="task avoid"><span class="no">A</span><b>Zurück zu deiner Vermutung:</b> <span data-slot="vermutung"></span><br>Was denkst du jetzt – und warum? Nutze den Begriff Anspruchsniveau.
+      <div class="lines" data-n="3"></div></div>
+  </div>
+  <div class="pg">
+    <div class="ph"><span>Lernmappe DS 6 · Arbeitsblatt, Teil B: Was treibt sie an?</span><span>3 zu zweit · 4 und B allein · ca. 20 Min.</span></div>
+    <h2 style="margin-top:0">Teil B · Was treibt sie an?</h2>
+    <div class="need"><b>Das brauchst du (Lernübersicht 1–3):</b> <b>Motiv:</b> ein von außen nicht erkennbarer Beweggrund, der menschliches Verhalten aktiviert. Motivation erkennt man am Verhalten: <b>Richtung</b> (worauf?), <b>Intensität</b> (wie stark?), <b>Ausdauer</b> (wie lange?). <b>Intrinsisch:</b> Der Anreiz liegt in der Tätigkeit selbst. <b>Extrinsisch:</b> Der Anreiz liegt in einer Folge außerhalb der Tätigkeit.</div>
+    <div class="task avoid"><span class="no">3</span><b>Josef &amp; Co.</b> <span class="small">(Fallbeispiel aus dem Unterricht, ausgedacht)</span> Fülle die Tabelle aus. Begründe mit einem Detail aus dem Fall oder aus der Geschichte.
+      <table class="tick">
+        <tr><th style="width:27%">Person</th><th style="width:25%">Woran sieht man die Motivation? (Richtung, Intensität, Ausdauer)</th><th class="c">intrinsisch, extrinsisch oder beides?</th><th>Begründung</th></tr>
+        <tr><td><b>Melissa</b> <span class="small">(Beispiel)</span> vergisst beim Lernen die Zeit und fühlt sich „beflügelt“.</td><td style="color:#5a6170;font-style:italic">Ausdauer: Sie bleibt lange dran.</td><td class="c" style="color:#5a6170;font-style:italic">intrinsisch</td><td style="color:#5a6170;font-style:italic">Der Anreiz liegt im Lernen selbst.</td></tr>
+        <tr class="hi"><td><b>Josef</b> – seit die Eltern eine Belohnung für bessere Noten versprochen haben.</td><td></td><td></td><td></td></tr>
+        <tr class="hi"><td><b>Ali</b> möchte unbedingt Psychologie studieren.</td><td></td><td></td><td></td></tr>
+        <tr class="hi"><td><b>Der Diener</b> aus „Der Kreis der 99“ – vorher und nachher <span class="small">(Profi)</span></td><td></td><td></td><td></td></tr>
+      </table></div>
+    <div class="task avoid"><span class="no">4</span><b>Beschreiben, erklären oder bewerten?</b> Schreibe <b>B</b>, <b>E</b> oder <b>W</b> dahinter.
+      <table class="tick">
+        <tr><td>a) Auf dem Foto ist das Gesicht eines Mannes mit Bienen bedeckt.</td><td class="c"></td><td>c) Er will bestimmt einfach berühmt werden.</td><td class="c"></td></tr>
+        <tr><td>b) Das ist unverantwortlich.</td><td class="c"></td><td>d) Vielleicht fasziniert ihn der Umgang mit Bienen.</td><td class="c"></td></tr>
+      </table>
+      Warum ist bei c) Vorsicht angebracht? (1 Satz)
+      <div class="lines" data-n="1"></div></div>
+    <h2>Ergebnissicherung B</h2>
+    <div class="task avoid"><span class="no">B</span><b>Wann ist genug genug?</b> Jemand ist mit keiner Note und keiner Zahl an Likes zufrieden. Gib einen Tipp – mit dem Begriff Anspruchsniveau oder intrinsisch/extrinsisch. (2–3 Sätze)
+      <div class="lines" data-n="3"></div></div>
+  </div>
+</template>
+
+<!-- ===================== Lösungskarte (?druck=loesung) ===================== -->
+<template id="tpl-loesung">
+  <div class="pg loes">
+    <div class="ph"><span>DS 6 · Lösungskarte zur Selbstkontrolle</span><span>erst nach dem eigenen Lösen ansehen</span></div>
+    <h2 style="margin-top:0">Lösungen zum Arbeitsblatt</h2>
+    <table class="tick">
+      <tr><th style="width:14%">Aufgabe</th><th>Lösung</th></tr>
+      <tr><td>1</td><td>Individuell. Typisch: Nach einer Runde mit erreichtem Ziel wurde das nächste Ziel erhöht, nach einer verfehlten gesenkt oder gleich gelassen. Gute Antworten nennen eine konkrete Runde („In Runde 2 wollte ich 15, kam bis 17, dann habe ich 18 gewählt“) und sagen, ob das zur typischen Verschiebung passt. Auch Abweichungen sind in Ordnung, wenn sie beschrieben werden.</td></tr>
+      
+      <tr><td>2</td><td>Durch Übung wird man besser. Wer besser wird, erreicht seine Ziele öfter – und setzt dann höhere. Die Ziele könnten also auch steigen, weil die Leistung steigt, nicht nur wegen Erfolg und Misserfolg. <b>Profi:</b> Erfolg und Misserfolg unabhängig von der Übung herstellen, z. B. per Zufall unterschiedlich schwere Felder zuteilen, oder vorher so lange üben, bis die Leistung kaum noch steigt.</td></tr>
+      <tr><td>A</td><td>Individuell. Gut: Vermutung aufgreifen, mit dem Kursergebnis verbinden und den Begriff Anspruchsniveau richtig verwenden.</td></tr>
+      <tr><td>3</td><td><b>Josef:</b> eher extrinsisch – der Anreiz ist die Belohnung, eine Folge außerhalb des Lernens; man sieht kaum Ausdauer (er macht seltener Hausaufgaben). · <b>Ali:</b> extrinsisch – das Ziel (Studium) liegt außerhalb der Tätigkeit; Richtung: Er richtet sich auf ein langfristiges Ziel aus. Das Ziel hat er aber selbst gewählt (mehr in DS 7). · <b>Diener (Profi):</b> vorher eher intrinsisch – er arbeitet gern; nachher extrinsisch – er arbeitet für die fehlende Münze; Intensität und Ausdauer steigen, die Freude sinkt.</td></tr>
+      <tr><td>4</td><td>a B · b W · c E · d E. Bei c) wird ein Motiv als sicher behauptet („bestimmt“), obwohl man Motive nicht sehen kann – es ist nur eine Vermutung.</td></tr>
+      <tr><td>B</td><td>Beispiel: „Dein Anspruchsniveau steigt mit jedem Erfolg mit. Deshalb fühlt sich nichts wie genug an. Setz dir ein Ziel, das knapp über deinem letzten Ergebnis liegt – und freu dich, wenn du es erreichst. Und frag dich, ob dir die Sache selbst Spaß macht (intrinsisch) oder nur die Zahl (extrinsisch).“</td></tr>
+    </table>
+  </div>
+</template>
+
+<script src="../assets/qrcode.js"></script>
+<script src="../assets/lab.js"></script>
+<script src="../assets/figuren-ds06.js"></script>
+<script>
+/* =====================================================================
+   INHALTE (Datenblock)
+   ===================================================================== */
+var DATA = {
+  zahlen: 36, dauer: 30, runden: 4,
+  richtung: { 2: "höher", 1: "gleich", 0: "niedriger" },
+  beispiel: { verm: { erf: 2, mis: 1, grund: "Wenn ich es geschafft habe, will ich mich steigern. Wenn nicht, versuche ich es noch einmal." },
+    probe: 13, runden: [{ z: 14, e: 15 }, { z: 17, e: 16 }, { z: 16, e: 18 }, { z: 20, e: 19 }],
+    b1: "Nach einem Erfolg haben fast alle das Ziel erhöht. Nach einem Misserfolg haben viele es gesenkt oder gleich gelassen.",
+    v1: "Wenn man es geschafft hat, traut man sich mehr zu. Wenn nicht, will man nicht noch einmal scheitern." }
+};
+
+/* =====================================================================
+   ABLAUF
+   ===================================================================== */
+(function () {
+  "use strict";
+  var $ = Lab.$, $$ = Lab.$$, F = window.FIGUREN_DS06, D = DATA;
+  var st = Lab.load("ds06", {});
+  function save() { Lab.save("ds06", st); }
+  if (!st.id) { st.id = Lab.uid(); st.runden = []; save(); }
+  st.runden = st.runden || [];
+
+  $("#logo").innerHTML = Lab.logo;
+  $$(".lock").forEach(function (el) { el.innerHTML = Lab.lockIcon; });
+
+  var themes = ["auto", "dark", "light"], theme = Lab.load("theme", "auto");
+  function applyTheme() { if (theme === "auto") document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme", theme); }
+  $("#theme").addEventListener("click", function () { theme = themes[(themes.indexOf(theme) + 1) % 3]; Lab.save("theme", theme); applyTheme(); });
+  applyTheme();
+
+  /* ---------- Lernübersicht als Schublade (erst im letzten Schritt) ---------- */
+  function fillFigs(root) { $$("[data-fig]", root).forEach(function (el) { el.innerHTML = F.anspruch(); }); }
+  function uebersichtHTML() { return $("#tpl-ue").innerHTML; }
+  $("#drawer-body").innerHTML = uebersichtHTML().replace(/class="pg ue"/g, 'class="ue"');
+  fillFigs($("#drawer-body"));
+  var lastFocus = null;
+  function openDrawer() { lastFocus = document.activeElement; $("#drawer").hidden = false; $("#drawer-bg").hidden = false; $("#drawer-close").focus(); }
+  function closeDrawer() { $("#drawer").hidden = true; $("#drawer-bg").hidden = true; if (lastFocus) lastFocus.focus(); }
+  $("#btn-ue").addEventListener("click", openDrawer);
+  $("#drawer-close").addEventListener("click", closeDrawer);
+  $("#drawer-bg").addEventListener("click", closeDrawer);
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !$("#drawer").hidden) closeDrawer(); });
+  function unlock() { if (!st.frei) { st.frei = true; save(); } $("#btn-ue").disabled = false; $("#btn-ue").title = "Lernübersicht öffnen"; }
+  if (st.frei) unlock();
+
+  /* ---------- Spiel: Zahlen der Reihe nach antippen ---------- */
+  var spielLaeuft = false;
+  function spiel(container, seed, onEnd) {
+    var zahlen = F.mischung(D.zahlen, seed), next = 1, rest = D.dauer, timer = null;
+    container.hidden = false;
+    container.innerHTML = '<div class="uhr"><span class="naechste">Nächste Zahl: <b id="nx">1</b></span><span>noch <b id="sek">' + rest + '</b> s</span></div><div class="feld" role="group" aria-label="Zahlenfeld">' +
+      zahlen.map(function (z) { return '<button type="button" data-z="' + z + '">' + z + "</button>"; }).join("") + "</div>";
+    spielLaeuft = true;
+    function ende() { clearInterval(timer); spielLaeuft = false; container.innerHTML = ""; container.hidden = true; onEnd(next - 1); }
+    $$(".feld button", container).forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (!spielLaeuft || +b.getAttribute("data-z") !== next) return;
+        b.classList.add("ok"); b.setAttribute("aria-label", next + " erledigt");
+        next++;
+        var nx = $("#nx", container); if (nx) nx.textContent = next <= D.zahlen ? next : "–";
+        if (next > D.zahlen) ende();
+      });
+    });
+    timer = setInterval(function () { rest--; var s = $("#sek", container); if (s) s.textContent = rest; if (rest <= 0) ende(); }, 1000);
+  }
+  function startKnopf(container, text, onStart) {
+    container.hidden = false;
+    container.innerHTML = '<div class="actions" style="justify-content:center"><button class="btn big" type="button">' + text + "</button></div>";
+    $("button", container).addEventListener("click", onStart);
+  }
+
+  /* Proberunde */
+  var probeBox = $('.spiel[data-runde="0"]');
+  function probeFertig() { $("#probe-res").innerHTML = "<strong>Proberunde: Du bist bis " + st.probe + " gekommen.</strong> Jetzt kommen vier Runden. Vor jeder Runde setzt du dir ein Ziel."; $("#probe-done").hidden = false; probeBox.hidden = true; }
+  if (st.probe != null) probeFertig();
+  else startKnopf(probeBox, "Proberunde starten (30 s)", function () { spiel(probeBox, 1, function (n) { st.probe = n; save(); probeFertig(); }); });
+
+  /* Runden mit Ziel */
+  var rBox = $('.spiel[data-runde="r"]');
+  function verlaufHTML() {
+    var h = "<tr><th>Runde</th><th>Ziel</th><th>Ergebnis</th><th></th></tr><tr><td>Probe</td><td>–</td><td>" + (st.probe != null ? st.probe : "–") + "</td><td></td></tr>";
+    st.runden.forEach(function (r, i) { h += "<tr><td>" + (i + 1) + "</td><td>" + r.z + "</td><td>" + (r.e != null ? r.e : "läuft …") + "</td><td>" + (r.e != null ? (r.e >= r.z ? "Ziel erreicht" : "Ziel nicht erreicht") : "") + "</td></tr>"; });
+    return h;
+  }
+  function zeigeRunde() {
+    if (spielLaeuft) return;
+    var fertig = st.runden.filter(function (r) { return r.e != null; }).length;
+    /* eine angefangene Runde ohne Ergebnis (z. B. nach Neuladen) wird mit demselben Ziel neu gespielt */
+    var offen = st.runden.length > fertig ? st.runden[st.runden.length - 1] : null;
+    $("#r-verlauf").innerHTML = verlaufHTML();
+    $("#r-res").hidden = true; $("#r-next-wrap").hidden = true;
+    if (fertig >= D.runden) { $("#r-title").textContent = "Alle Runden erledigt"; $("#r-ziel").hidden = true; rBox.hidden = true; $("#r-done").hidden = false; return; }
+    $("#r-title").textContent = "Runde " + (fertig + 1) + " von " + D.runden;
+    if (offen) {
+      $("#r-ziel").hidden = true;
+      startKnopf(rBox, "Runde " + (fertig + 1) + " starten (Ziel: " + offen.z + ")", function () { spieleRunde(offen, fertig); });
+      return;
+    }
+    $("#r-ziel").hidden = false; rBox.hidden = true; $("#r-input").value = ""; $("#r-go").disabled = true;
+  }
+  function spieleRunde(r, idx) {
+    $("#r-ziel").hidden = true;
+    spiel(rBox, idx + 2, function (n) {
+      r.e = n; save();
+      $("#r-verlauf").innerHTML = verlaufHTML();
+      $("#r-res").innerHTML = "<strong>Runde " + (idx + 1) + ": Du bist bis " + n + " gekommen. Dein Ziel war " + r.z + " – " + (n >= r.z ? "Ziel erreicht." : "Ziel nicht erreicht.") + "</strong>";
+      $("#r-res").hidden = false;
+      if (idx + 1 >= D.runden) { $("#r-done").hidden = false; $("#r-title").textContent = "Alle Runden erledigt"; }
+      else { $("#r-next-wrap").hidden = false; $("#r-next").focus(); }
+    });
+  }
+  $("#r-input").addEventListener("input", function () { var v = +$("#r-input").value; $("#r-go").disabled = !(v >= 1 && v <= D.zahlen); });
+  $("#r-go").addEventListener("click", function () {
+    var v = +$("#r-input").value; if (!(v >= 1 && v <= D.zahlen)) return;
+    var r = { z: v }; st.runden.push(r); save();
+    $("#r-verlauf").innerHTML = verlaufHTML();
+    spieleRunde(r, st.runden.length - 1);
+  });
+  $("#r-next").addEventListener("click", zeigeRunde);
+
+  /* ---------- Vermutung ---------- */
+  var vErf = st.verm ? st.verm.erf : null, vMis = st.verm ? st.verm.mis : null;
+  function vPaint() {
+    $$("#v-erf button").forEach(function (b) { b.classList.toggle("on", +b.getAttribute("data-v") === vErf); });
+    $$("#v-mis button").forEach(function (b) { b.classList.toggle("on", +b.getAttribute("data-v") === vMis); });
+    $("#verm-save").disabled = vErf === null || vMis === null || $("#verm-grund").value.trim().length < 8;
+  }
+  $$("#v-erf button").forEach(function (b) { b.addEventListener("click", function () { if (st.verm) return; vErf = +b.getAttribute("data-v"); vPaint(); }); });
+  $$("#v-mis button").forEach(function (b) { b.addEventListener("click", function () { if (st.verm) return; vMis = +b.getAttribute("data-v"); vPaint(); }); });
+  $("#verm-grund").addEventListener("input", vPaint);
+  function lockVerm() {
+    $$("#v-erf button, #v-mis button").forEach(function (b) { b.disabled = true; });
+    $("#verm-grund").value = st.verm.grund; $("#verm-grund").readOnly = true;
+    $("#verm-save").hidden = true; $("#verm-ok").hidden = false; $("#to-probe").disabled = false;
+  }
+  $("#verm-save").addEventListener("click", function () { st.verm = { erf: vErf, mis: vMis, grund: $("#verm-grund").value.trim() }; save(); lockVerm(); vPaint(); });
+  vPaint(); if (st.verm) lockVerm();
+
+  /* ---------- Auswertung der eigenen Daten ---------- */
+  /* Für jeden Übergang Runde n → n+1: War Runde n ein Erfolg? Wurde das Ziel erhöht, gleich gelassen oder gesenkt? */
+  function shifts(s) {
+    var c = { erf: [0, 0, 0], mis: [0, 0, 0] }, rr = (s.runden || []).filter(function (r) { return r.e != null; });
+    for (var i = 0; i + 1 < rr.length; i++) {
+      var k = rr[i].e >= rr[i].z ? "erf" : "mis", d = rr[i + 1].z - rr[i].z;
+      c[k][d > 0 ? 0 : d === 0 ? 1 : 2]++;
+    }
+    return c;
+  }
+  function complete() { return st.probe != null && st.runden.filter(function (r) { return r.e != null; }).length >= D.runden && !!st.verm; }
+  function payload() { var c = shifts(st); return ["ds06", st.id].concat(c.erf, c.mis, [st.verm.erf, st.verm.mis]).join("."); }
+  function renderQR() {
+    if (!complete()) { $("#qr").innerHTML = '<p class="small">Es fehlen noch Antworten. Geh zurück und beende alle Schritte.</p>'; $("#code").textContent = "–"; return; }
+    var p = payload(); $("#qr").innerHTML = Lab.qrSVG(Lab.resultURL(p), 230); $("#code").textContent = p;
+  }
+  function chartRows(s) {
+    var rows = [{ label: "Probe", e: s.probe }];
+    (s.runden || []).forEach(function (r, i) { rows.push({ label: "Runde " + (i + 1), z: r.z, e: r.e }); });
+    return rows;
+  }
+  function shiftTable(s) {
+    var c = shifts(s);
+    return '<table class="mine" style="margin-top:8px"><tr><th>Danach war dein nächstes Ziel …</th><th>höher</th><th>gleich</th><th>niedriger</th></tr>' +
+      "<tr><td>nach „Ziel erreicht“</td><td>" + c.erf.join("</td><td>") + "</td></tr><tr><td>nach „Ziel nicht erreicht“</td><td>" + c.mis.join("</td><td>") + "</td></tr></table>";
+  }
+  function renderAufl() {
+    $("#my-chart").innerHTML = F.kurve(chartRows(st), { aria: "Deine Ziele und Ergebnisse je Runde" });
+    $("#my-res").innerHTML = shiftTable(st);
+  }
+  (function () {
+    function upd() { var ok = ["b1", "v1"].every(function (id) { return $("#" + id).value.trim().length >= 8; }); $("#to-mappe").disabled = !ok; $("#a-hint").hidden = ok; }
+    ["b1", "v1"].forEach(function (id) { var t = $("#" + id); t.value = st[id] || ""; t.addEventListener("input", function () { st[id] = t.value; save(); upd(); }); });
+    upd();
+  })();
+
+  Lab.Steps({ hash: true, onShow: function (id) {
+    if (id === "s-4") zeigeRunde();
+    if (id === "s-5") renderQR();
+    if (id === "s-6") renderAufl();
+    if (id === "s-7") { unlock(); renderChecklist(); }
+  } });
+
+  /* ---------- Lernmappe ---------- */
+  function renderChecklist() {
+    var items = [["Lernübersicht (Seite 1–2)", true], ["deine Vermutung", !!st.verm], ["deine Ziele und Ergebnisse", complete()], ["deine Beobachtung und Vermutung", !!(st.b1 && st.v1)], ["Arbeitsblatt mit Ergebnissicherung (Seite 3–4, zum Ausfüllen in GoodNotes)", true]];
+    $("#checklist").innerHTML = items.map(function (i) { return '<li class="' + (i[1] ? "" : "miss") + '">' + i[0] + (i[1] ? "" : " – fehlt noch") + "</li>"; }).join("");
+  }
+  function lines(n) { var s = ""; for (var i = 0; i < n; i++) s += '<div class="ln"></div>'; return s; }
+  function datenBox(s, mode) {
+    var leer = mode === "leer", h = '<div class="databox avoid"><b style="color:#0e6b68">Meine Daten aus dem Labor</b>' + (mode === "beispiel" ? ' <span class="demo">Beispiel mit ausgedachten Antworten</span>' : "") + ' <span style="color:#545b6b;font-size:8.5pt">· Deine Daten zeigst du nur, wenn du willst. Es geht nicht um die Punktzahl.</span>';
+    if (leer) {
+      h += '<table><tr><th>Ziel / Ergebnis</th><td>Probe: ___ · R1: ___ / ___ · R2: ___ / ___ · R3: ___ / ___ · R4: ___ / ___</td></tr>';
+      h += "<tr><th>Mein nächstes Ziel</th><td>nach „erreicht“: höher ___ gleich ___ niedriger ___<br>nach „nicht erreicht“: höher ___ gleich ___ niedriger ___</td></tr>";
+      h += "<tr><th>Beobachtung</th><td>" + lines(1) + "</td></tr><tr><th>Erste Vermutung</th><td>" + lines(1) + "</td></tr>";
+    } else {
+      var c = shifts(s);
+      h += '<div style="display:grid;grid-template-columns:48mm 1fr;gap:6pt;align-items:center;margin-top:3pt"><div class="figbox" style="padding:2pt">' + F.kurve(chartRows(s), { aria: "Ziele und Ergebnisse" }) + "</div><table>";
+      h += "<tr><th>Ziel / Ergebnis</th><td>Probe: " + (s.probe != null ? s.probe : "–") + " · " + (s.runden || []).map(function (r, i) { return "R" + (i + 1) + ": " + r.z + " / " + (r.e != null ? r.e : "–"); }).join(" · ") + "</td></tr>";
+      h += "<tr><th>Mein nächstes Ziel</th><td>nach „erreicht“: höher " + c.erf[0] + ", gleich " + c.erf[1] + ", niedriger " + c.erf[2] + "<br>nach „nicht erreicht“: höher " + c.mis[0] + ", gleich " + c.mis[1] + ", niedriger " + c.mis[2] + "</td></tr>";
+      h += "<tr><th>Beobachtung</th><td>" + Lab.esc(s.b1 || "–") + "</td></tr><tr><th>Erste Vermutung</th><td>" + Lab.esc(s.v1 || "–") + "</td></tr>";
+    }
+    h += "<tr><th>Kurs (Beamer)</th><td>nach „erreicht“: höher ___ gleich ___ niedriger ___<br>nach „nicht erreicht“: höher ___ gleich ___ niedriger ___</td></tr>";
+    return h + "</table>" + (leer ? "" : "</div>") + "</div>";
+  }
+  function buildPrint(mode) {
+    var s = mode === "beispiel" ? D.beispiel : st, h;
+    if (mode === "loesung") h = $("#tpl-loesung").innerHTML;
+    else {
+      h = uebersichtHTML() + $("#tpl-ab").innerHTML;
+      h = h.replace('<div data-slot="daten"></div>', datenBox(s, mode));
+      var v = s.verm, verm = (mode === "leer" || !v) ? "Nach Erfolg: ________ · nach Misserfolg: ________" : "nach Erfolg „" + D.richtung[v.erf] + "“, nach Misserfolg „" + D.richtung[v.mis] + "“ – " + Lab.esc(v.grund);
+      h = h.replace('<span data-slot="vermutung"></span>', "<i>" + verm + "</i>");
+    }
+    var p = $("#print"); p.innerHTML = h; fillFigs(p);
+    $$(".lines", p).forEach(function (el) { el.innerHTML = lines(+el.getAttribute("data-n")); });
+  }
+  $("#btn-pdf").addEventListener("click", function () { buildPrint("person"); window.print(); });
+  var dm = /[?&]druck=(leer|beispiel|loesung)/.exec(window.location.search);
+  window.addEventListener("beforeprint", function () { if (!dm) buildPrint("person"); });
+  if (dm) buildPrint(dm[1]);
+
+  $("#btn-reset").addEventListener("click", function () {
+    if (!confirm("Alle Eingaben dieser Stunde auf diesem iPad löschen?")) return;
+    Lab.remove("ds06"); window.location.hash = ""; window.location.reload();
+  });
+})();
+</script>
+</body>
+</html>
