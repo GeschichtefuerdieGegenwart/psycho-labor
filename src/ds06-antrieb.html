@@ -219,7 +219,7 @@
 <section class="step" id="s-1">
   <span class="kicker">DS 6 · Motivation · Labor</span>
   <h1>Was treibt mich an?</h1>
-  <p class="lead">Ein kurzes Spiel in fünf Runden. Vor jeder Runde setzt du dir ein Ziel. <strong>Es geht nicht darum, wie schnell du bist – sondern darum, wie du deine Ziele setzt.</strong></p>
+  <p class="lead">Ein kurzes Spiel in fünf Runden. Vor jeder Runde setzt du dir ein Ziel. <strong>Es geht nicht darum, wie schnell du bist.</strong></p>
   <div class="grid2">
     <div class="card">
       <h3>So läuft das Labor (ca. 17 Min.)</h3>
@@ -235,7 +235,7 @@
     <div class="card">
       <h3>Am Ende hast du …</h3>
       <p>eine <strong>Lernmappe mit vier Seiten</strong>: die Lernübersicht und das Arbeitsblatt, auf dem deine Ziele und Ergebnisse schon eingetragen sind. Damit arbeitest du in GoodNotes weiter.</p>
-      <p class="small">Deine Ergebnisse sieht niemand. An die Lehrkraft geht nur, ob du deine Ziele erhöht, gleich gelassen oder gesenkt hast – keine Punktzahl.</p>
+      <p class="small">Deine Ergebnisse sieht niemand. An die Lehrkraft gehen nur deine Vermutung und ob du deine Ziele erhöht, gleich gelassen oder gesenkt hast – keine Punktzahl.</p>
     </div>
   </div>
   <div class="actions"><button class="btn big" data-next>Start</button></div>
@@ -253,7 +253,7 @@
     <div class="seg3" id="v-erf"><button type="button" data-v="2">höher</button><button type="button" data-v="1">gleich</button><button type="button" data-v="0">niedriger</button></div>
     <p class="vq">Du hast dein Ziel <strong>nicht erreicht</strong>. Was machst du mit dem nächsten Ziel?</p>
     <div class="seg3" id="v-mis"><button type="button" data-v="2">höher</button><button type="button" data-v="1">gleich</button><button type="button" data-v="0">niedriger</button></div>
-    <label class="field-label" for="verm-grund">Warum? Ein Satz.</label>
+    <label class="field-label" for="verm-grund">Warum? Ein kurzer Satz.</label>
     <textarea id="verm-grund" class="short" maxlength="200"></textarea>
     <div class="actions"><button class="btn" id="verm-save" disabled>Vermutung speichern</button><span class="saved" id="verm-ok" hidden>Gespeichert. Am Ende schaust du sie dir noch einmal an.</span></div>
   </div>
@@ -266,7 +266,7 @@
   <h2>Proberunde: Zahlen der Reihe nach</h2>
   <div class="auftrag">
     <span class="label a">Auftrag</span>
-    <p style="margin:0">Tippe die Zahlen <strong>der Reihe nach</strong> an: 1, 2, 3 … Du hast <strong>30 Sekunden</strong>. Gezählt wird, wie weit du kommst. Ein falscher Tipp zählt nicht und kostet nichts.</p>
+    <p style="margin:0">Tippe die Zahlen <strong>der Reihe nach</strong> an: 1, 2, 3 … Du hast <strong><span class="dauer">30</span> Sekunden</strong>. Gezählt wird, wie weit du kommst. Ein falscher Tipp zählt nicht und kostet nichts.</p>
   </div>
   <div class="spiel" data-runde="0"></div>
   <div id="probe-done" hidden>
@@ -286,8 +286,9 @@
   <div class="auftrag" id="r-ziel">
     <span class="label a">Auftrag</span>
     <label class="field-label" for="r-input" style="margin-top:0">Dein Ziel für diese Runde: Bis zu welcher Zahl willst du kommen?</label>
-    <div class="goalrow"><input class="num" id="r-input" type="number" inputmode="numeric" min="1" max="36" placeholder="1–36"><button class="btn" id="r-go" disabled>Ziel speichern und starten</button></div>
-    <p class="small" style="margin:8px 0 0">Das Spielfeld ist jede Runde neu gemischt.</p>
+    <form class="goalrow" id="r-form" novalidate><input class="num" id="r-input" type="number" inputmode="numeric" min="1" max="36" step="1" placeholder="1–36"><button class="btn" id="r-go" type="submit" disabled>Ziel speichern und starten</button></form>
+    <p class="small" id="r-hint" style="margin:6px 0 0">Eine ganze Zahl von 1 bis 36.</p>
+    <p class="small" style="margin:4px 0 0">Das Spielfeld ist jede Runde neu gemischt.</p>
   </div>
   <div class="spiel" data-runde="r" hidden></div>
   <div class="card accent" id="r-res" hidden></div>
@@ -322,16 +323,17 @@
   <div class="auftrag">
     <span class="label a">Auftrag 1 · Beobachtung beschreiben</span>
     <p>Was haben die meisten im Kurs nach einem <strong>Erfolg</strong> mit dem Ziel gemacht – und was nach einem <strong>Misserfolg</strong>? 1–2 Sätze.</p>
-    <div class="hilfe"><strong>Beschreiben</strong> heißt: nur sagen, was passiert ist – noch ohne „weil“. Bei 7 Personen kann ein Muster auch Zufall sein.</div>
+    <div class="hilfe"><strong>Beschreiben</strong> heißt: nur sagen, was passiert ist – noch ohne „weil“. Bei so wenigen Personen kann ein Muster auch Zufall sein.</div>
+    <p class="small" style="margin:0 0 6px">Die Zahlen vom Beamer trägst du später in den Datenkasten deiner Lernmappe ein.</p>
     <textarea id="b1" class="short" maxlength="220" aria-label="Beobachtung"></textarea>
   </div>
   <div class="auftrag">
-    <span class="label a">Auftrag 2 · Erste Vermutung</span>
+    <span class="label a">Auftrag 2 · Erklärungsidee</span>
     <p>Warum setzen Menschen ihr Ziel nach einem Erfolg oder Misserfolg neu? Was könnte dahinterstecken?</p>
     <div class="hilfe">Denk daran, wie es sich angefühlt hat, als du dein Ziel erreicht oder knapp verfehlt hast.</div>
-    <textarea id="v1" class="short" maxlength="220" aria-label="Vermutung"></textarea>
+    <textarea id="v1" class="short" maxlength="220" aria-label="Erklärungsidee"></textarea>
   </div>
-  <div class="actions"><button class="btn" data-next id="to-mappe" disabled>Weiter: Lernmappe</button><span class="small" id="a-hint">Schreib zuerst etwas in beide Felder.</span></div>
+  <div class="actions"><button class="btn" data-next id="to-mappe" disabled>Weiter: Lernmappe</button><span class="small" id="a-hint">Schreib zuerst in beide Felder mindestens einen kurzen Satz.</span></div>
 </section>
 
 <!-- ===================== Lernmappe ===================== -->
@@ -380,8 +382,8 @@
     <p class="kern">Was uns antreibt, kann man nicht sehen – nur vermuten. Sichtbar ist das Verhalten. Und ob wir etwas als Erfolg erleben, hängt an dem Ziel, das wir uns selbst gesetzt haben.</p>
 
     <h2 id="ue-1">1 · Motiv und Motivation</h2>
-    <p><b>Motiv:</b> ein von außen nicht erkennbarer Beweggrund, der menschliches Verhalten aktiviert (in Gang setzt).</p>
-    <p><b>Motivation:</b> die „aktivierende Ausrichtung des momentanen Lebensvollzugs auf einen positiv bewerteten Zielzustand“ (Rheinberg 2002). Einfacher: Ich richte mein Tun gerade auf ein Ziel aus, das mir wichtig ist.</p>
+    <p><b>Motiv:</b> ein von außen nicht erkennbarer Beweggrund, der menschliches Verhalten aktiviert (in Gang setzt). Ein Motiv ist eher <b>dauerhaft</b> – z. B. das Bedürfnis, etwas gut zu können.</p>
+    <p><b>Motivation:</b> die „aktivierende Ausrichtung des momentanen Lebensvollzugs auf einen positiv bewerteten Zielzustand“ (Rheinberg 2002). Einfacher: Ich richte mein Tun <b>gerade jetzt</b> auf ein Ziel aus, das mir wichtig ist. Motivation entsteht, wenn ein Motiv in einer Situation auf einen passenden Anreiz trifft (Person × Situation, Heckhausen).</p>
     <p><b>Woran man Motivation am Verhalten erkennt:</b></p>
     <table class="cmp">
       <tr><th style="width:24%">Merkmal</th><th>Frage</th><th>Beispiel: Gitarre lernen</th></tr>
@@ -407,7 +409,7 @@
       <tr><td><b>Beispiel</b></td><td>Er programmiert nachts ein Spiel, weil ihn das Tüfteln reizt.</td><td>Er lernt Vokabeln, weil morgen ein Test ist.</td></tr>
     </table>
     <p style="margin-top:6px">Oft wirkt <b>beides gleichzeitig</b>. Und extrinsisch heißt nicht automatisch schlecht: Wer für ein selbst gewähltes Ziel lernt, ist extrinsisch motiviert – aber aus eigenem Antrieb. Mehr dazu in DS 7.</p>
-    <p class="status">Hinweis: Alle Personen in Beispielen und Fällen sind ausgedacht. Schaubilder sind vereinfachte Modelle. Studien sind mit Autor und Jahr belegt.</p>
+    <p class="status">Hinweis: Personen in Beispielen und Fällen sind ausgedacht; die Rekordfotos aus dem Unterrichtsmaterial zeigen echte Menschen. Schaubilder sind vereinfachte Modelle. Studien sind mit Autor und Jahr belegt.</p>
   </div>
   <div class="pg ue">
     <h2 id="ue-4">4 · Das Anspruchsniveau</h2>
@@ -416,11 +418,11 @@
     <ul style="margin:6px 0 0;padding-left:20px">
       <li><b>Erfolg und Misserfolg sind relativ:</b> Ob ich eine Leistung als Erfolg erlebe, hängt nicht an der Leistung allein, sondern daran, ob ich mein eigenes Anspruchsniveau erreiche. Dieselbe Leistung kann für die eine ein Erfolg, für den anderen ein Misserfolg sein.</li>
       <li><b>Typische Verschiebung:</b> Nach einem Erfolg steigt das Anspruchsniveau meist, nach einem Misserfolg sinkt es meist (Hoppe 1930).</li>
-      <li><b>Realistisch oder nicht?</b> Ein Ziel knapp über der letzten Leistung hält dranbleiben möglich. Ein viel zu hohes Ziel bringt immer wieder Misserfolg, ein viel zu niedriges kaum ein Erfolgserlebnis. Mehr dazu in DS 8.</li>
+      <li><b>Realistisch oder nicht?</b> Ein Ziel knapp über der letzten Leistung macht Dranbleiben leichter. Ein viel zu hohes Ziel bringt immer wieder Misserfolg, ein viel zu niedriges kaum ein Erfolgserlebnis. Mehr dazu in DS 8.</li>
     </ul>
 
     <h2 id="ue-5">5 · Wann ist genug genug?</h2>
-    <p>Wenn das Anspruchsniveau mit jedem Erfolg steigt, bleibt das Ziel immer ein Stück voraus. Das kann antreiben – oder unzufrieden machen.</p>
+    <p><b>Überlegung:</b> Wenn das Anspruchsniveau mit jedem Erfolg steigt, bleibt das Ziel immer ein Stück voraus. Das kann antreiben – oder unzufrieden machen.</p>
     <p><b>Befund:</b> Dittmar, Bond, Hurst &amp; Kasser (2014) werteten 259 Stichproben aus: Menschen, denen Geld, Besitz und Status sehr wichtig sind, berichten im Durchschnitt etwas weniger Wohlbefinden. Der Zusammenhang ist schwach bis mittel.</p>
     <p class="merk">Das ist eine <u>Korrelation</u>: Sie zeigt, dass zwei Dinge zusammen auftreten – nicht, was die Ursache ist. Vielleicht machen materielle Ziele unzufrieden. Vielleicht suchen unzufriedene Menschen eher Trost in Besitz. Oder etwas Drittes steckt hinter beidem.</p>
   </div>
@@ -429,39 +431,38 @@
 <!-- ===================== Arbeitsblatt (Seite 3–4 der Lernmappe) ===================== -->
 <template id="tpl-ab">
   <div class="pg">
-    <div class="ph"><span>Lernmappe DS 6 · Arbeitsblatt, Teil A: Ziele setzen</span><span>1–2 zu zweit · A allein · ca. 15 Min.</span></div>
+    <div class="ph"><span>Lernmappe DS 6 · Arbeitsblatt, Teil A: Ziele setzen</span><span>1 allein · 2 zu zweit · A allein · ca. 12 Min.</span></div>
     <h2 style="margin-top:0">Teil A · Ziele setzen</h2>
     <div data-slot="daten"></div>
-    <div class="need"><b>Das brauchst du (Lernübersicht 4):</b> <b>Anspruchsniveau:</b> das Ziel, das sich eine Person bei einer Aufgabe selbst setzt – wie gut sie sein will. Ob ich eine Leistung als Erfolg erlebe, hängt daran, ob ich mein eigenes Anspruchsniveau erreiche. Nach einem Erfolg steigt das Anspruchsniveau meist, nach einem Misserfolg sinkt es meist.</div>
-    <div class="task avoid"><span class="no">1</span><b>Vergleiche deine Ziele mit dem Kursergebnis.</b> Passt dein Verhalten zur typischen Verschiebung des Anspruchsniveaus? Begründe mit einer Runde aus deinen Daten. (2–3 Sätze)
+    <div class="need"><b>Das brauchst du (Lernübersicht 4):</b> <b>Anspruchsniveau:</b> das Ziel, das sich eine Person bei einer Aufgabe selbst setzt – wie gut sie sein will. Ob ich eine Leistung als Erfolg erlebe, hängt nicht an der Leistung allein, sondern daran, ob ich mein eigenes Anspruchsniveau erreiche. Nach einem Erfolg steigt das Anspruchsniveau meist, nach einem Misserfolg sinkt es meist.</div>
+    <div class="task avoid"><span class="no">1</span><b>Allein:</b> <b>Vergleiche deine Ziele mit dem Kursergebnis.</b> Passt dein Verhalten zur typischen Verschiebung des Anspruchsniveaus? Begründe mit einer Runde aus deinen Daten. (2–3 Sätze)
       <div class="lines" data-n="3"></div></div>
-    <div class="task avoid"><span class="no">2</span><b>Prüfen:</b> Viele haben im Spiel von Runde zu Runde besser abgeschnitten, weil sie geübt haben. Warum ist das eine andere mögliche Erklärung dafür, dass die Ziele gestiegen sind? <span class="small"><b>Profi:</b> Wie könnte man den Versuch ändern, um beides zu trennen?</span>
-      <div class="lines" data-n="2"></div></div>
+    <div class="task avoid"><span class="no">2</span><b>Zu zweit · Prüfen:</b> Schau in deine eigenen Daten: Sind deine Ergebnisse von Runde zu Runde gestiegen? Welche <b>andere Erklärung</b> gibt es dafür, dass die Ziele gestiegen sind – außer Erfolg und Misserfolg? <span class="small"><b>Profi:</b> Wie könnte man den Versuch ändern, um beides zu trennen?</span>
+      <div class="lines" data-n="3"></div></div>
     <h2>Ergebnissicherung A</h2>
     <div class="task avoid"><span class="no">A</span><b>Zurück zu deiner Vermutung:</b> <span data-slot="vermutung"></span><br>Was denkst du jetzt – und warum? Nutze den Begriff Anspruchsniveau.
       <div class="lines" data-n="3"></div></div>
   </div>
   <div class="pg">
-    <div class="ph"><span>Lernmappe DS 6 · Arbeitsblatt, Teil B: Was treibt sie an?</span><span>3 zu zweit · 4 und B allein · ca. 20 Min.</span></div>
+    <div class="ph"><span>Lernmappe DS 6 · Arbeitsblatt, Teil B: Was treibt sie an?</span><span>3 zu zweit · 4 und B allein · ca. 18 Min.</span></div>
     <h2 style="margin-top:0">Teil B · Was treibt sie an?</h2>
-    <div class="need"><b>Das brauchst du (Lernübersicht 1–3):</b> <b>Motiv:</b> ein von außen nicht erkennbarer Beweggrund, der menschliches Verhalten aktiviert. Motivation erkennt man am Verhalten: <b>Richtung</b> (worauf?), <b>Intensität</b> (wie stark?), <b>Ausdauer</b> (wie lange?). <b>Intrinsisch:</b> Der Anreiz liegt in der Tätigkeit selbst. <b>Extrinsisch:</b> Der Anreiz liegt in einer Folge außerhalb der Tätigkeit.</div>
-    <div class="task avoid"><span class="no">3</span><b>Josef &amp; Co.</b> <span class="small">(Fallbeispiel aus dem Unterricht, ausgedacht)</span> Fülle die Tabelle aus. Begründe mit einem Detail aus dem Fall oder aus der Geschichte.
-      <table class="tick">
-        <tr><th style="width:27%">Person</th><th style="width:25%">Woran sieht man die Motivation? (Richtung, Intensität, Ausdauer)</th><th class="c">intrinsisch, extrinsisch oder beides?</th><th>Begründung</th></tr>
-        <tr><td><b>Melissa</b> <span class="small">(Beispiel)</span> vergisst beim Lernen die Zeit und fühlt sich „beflügelt“.</td><td style="color:#5a6170;font-style:italic">Ausdauer: Sie bleibt lange dran.</td><td class="c" style="color:#5a6170;font-style:italic">intrinsisch</td><td style="color:#5a6170;font-style:italic">Der Anreiz liegt im Lernen selbst.</td></tr>
-        <tr class="hi"><td><b>Josef</b> – seit die Eltern eine Belohnung für bessere Noten versprochen haben.</td><td></td><td></td><td></td></tr>
-        <tr class="hi"><td><b>Ali</b> möchte unbedingt Psychologie studieren.</td><td></td><td></td><td></td></tr>
-        <tr class="hi"><td><b>Der Diener</b> aus „Der Kreis der 99“ – vorher und nachher <span class="small">(Profi)</span></td><td></td><td></td><td></td></tr>
+    <div class="need"><b>Das brauchst du (Lernübersicht 1–3):</b> <b>Motiv:</b> ein von außen nicht erkennbarer Beweggrund, der menschliches Verhalten aktiviert. Motivation erkennt man am Verhalten: <b>Richtung</b>, <b>Intensität</b>, <b>Ausdauer</b>. <b>Intrinsisch:</b> Der Anreiz liegt in der Tätigkeit selbst. <b>Extrinsisch:</b> Der Anreiz liegt in einer Folge außerhalb der Tätigkeit. Oft wirkt beides. <b>Beschreiben</b> = sagen, was man beobachten kann · <b>erklären</b> = einen Grund (ein Motiv) vermuten · <b>bewerten</b> = urteilen: gut, schlecht, sinnvoll, verrückt.</div>
+    <div class="task avoid"><span class="no">3</span><b>Was treibt sie an?</b> <span class="small">(ausgedachte Fälle)</span> Fülle die Tabelle aus: <b>i</b> = intrinsisch, <b>e</b> = extrinsisch, <b>b</b> = beides. Begründe mit einem Detail aus dem Fall oder aus der Geschichte.
+      <table class="tick" style="table-layout:fixed">
+        <tr><th style="width:40%">Person</th><th style="width:24%">Woran sieht man die Motivation?</th><th class="c" style="width:12%">i, e oder b?</th><th>Begründung</th></tr>
+        <tr><td><b>Melissa</b> <span class="small">(Beispiel)</span> vergisst beim Lernen die Zeit und fühlt sich „beflügelt“.</td><td style="color:#5a6170;font-style:italic">Ausdauer: lange dran</td><td class="c" style="color:#5a6170;font-style:italic">i</td><td style="color:#5a6170;font-style:italic">Anreiz im Lernen selbst</td></tr>
+        <tr class="hi"><td><b>Jonas</b> trägt samstags Prospekte aus, auch bei Regen – bis das Geld für den Führerschein reicht.</td><td></td><td></td><td></td></tr>
+        <tr class="hi"><td><b>Ali</b> will Psychologie studieren. Er liest abends freiwillig Fachartikel und fragt im Unterricht oft nach.</td><td></td><td></td><td></td></tr>
+        <tr class="hi"><td><b>Der Diener</b> aus „Der Kreis der 99“ <span class="small">(Profi)</span>: erst zufrieden – nach dem Fund von 99 Münzen verbissen für die hundertste.</td><td></td><td></td><td></td></tr>
       </table></div>
-    <div class="task avoid"><span class="no">4</span><b>Beschreiben, erklären oder bewerten?</b> Schreibe <b>B</b>, <b>E</b> oder <b>W</b> dahinter.
+    <div class="task avoid"><span class="no">4</span><b>Beschreiben, erklären oder bewerten?</b> Schreibe <b>B</b>, <b>E</b> oder <b>W</b> dahinter. Warum ist bei c) Vorsicht angebracht? (1 Satz unter der Tabelle)
       <table class="tick">
-        <tr><td>a) Auf dem Foto ist das Gesicht eines Mannes mit Bienen bedeckt.</td><td class="c"></td><td>c) Er will bestimmt einfach berühmt werden.</td><td class="c"></td></tr>
+        <tr><td>a) Auf dem Foto ist das Gesicht eines Mannes mit Bienen bedeckt.</td><td class="c"></td><td>c) Er will bestimmt berühmt werden.</td><td class="c"></td></tr>
         <tr><td>b) Das ist unverantwortlich.</td><td class="c"></td><td>d) Vielleicht fasziniert ihn der Umgang mit Bienen.</td><td class="c"></td></tr>
       </table>
-      Warum ist bei c) Vorsicht angebracht? (1 Satz)
       <div class="lines" data-n="1"></div></div>
     <h2>Ergebnissicherung B</h2>
-    <div class="task avoid"><span class="no">B</span><b>Wann ist genug genug?</b> Jemand ist mit keiner Note und keiner Zahl an Likes zufrieden. Gib einen Tipp – mit dem Begriff Anspruchsniveau oder intrinsisch/extrinsisch. (2–3 Sätze)
+    <div class="task avoid"><span class="no">B</span><b>Wann ist genug genug?</b> Jemand ist mit keiner Note und keiner Zahl an Likes zufrieden. Gib einen Tipp – mit dem Begriff Anspruchsniveau oder intrinsisch/extrinsisch (2 Sätze). Warum zeigt der Befund von Dittmar u. a. (2014) nicht, dass Besitz unglücklich macht? (1 Satz)
       <div class="lines" data-n="3"></div></div>
   </div>
 </template>
@@ -475,11 +476,11 @@
       <tr><th style="width:14%">Aufgabe</th><th>Lösung</th></tr>
       <tr><td>1</td><td>Individuell. Typisch: Nach einer Runde mit erreichtem Ziel wurde das nächste Ziel erhöht, nach einer verfehlten gesenkt oder gleich gelassen. Gute Antworten nennen eine konkrete Runde („In Runde 2 wollte ich 15, kam bis 17, dann habe ich 18 gewählt“) und sagen, ob das zur typischen Verschiebung passt. Auch Abweichungen sind in Ordnung, wenn sie beschrieben werden.</td></tr>
       
-      <tr><td>2</td><td>Durch Übung wird man besser. Wer besser wird, erreicht seine Ziele öfter – und setzt dann höhere. Die Ziele könnten also auch steigen, weil die Leistung steigt, nicht nur wegen Erfolg und Misserfolg. <b>Profi:</b> Erfolg und Misserfolg unabhängig von der Übung herstellen, z. B. per Zufall unterschiedlich schwere Felder zuteilen, oder vorher so lange üben, bis die Leistung kaum noch steigt.</td></tr>
+      <tr><td>2</td><td>Andere Erklärung: Übung. Durch Übung wird man besser. Wer besser wird, erreicht seine Ziele öfter – und setzt dann höhere. Die Ziele könnten also auch steigen, weil die Leistung steigt, nicht nur wegen Erfolg und Misserfolg. <b>Profi:</b> Erfolg und Misserfolg unabhängig von der Übung herstellen, z. B. per Zufall unterschiedlich schwere Felder zuteilen, oder vorher so lange üben, bis die Leistung kaum noch steigt.</td></tr>
       <tr><td>A</td><td>Individuell. Gut: Vermutung aufgreifen, mit dem Kursergebnis verbinden und den Begriff Anspruchsniveau richtig verwenden.</td></tr>
-      <tr><td>3</td><td><b>Josef:</b> eher extrinsisch – der Anreiz ist die Belohnung, eine Folge außerhalb des Lernens; man sieht kaum Ausdauer (er macht seltener Hausaufgaben). · <b>Ali:</b> extrinsisch – das Ziel (Studium) liegt außerhalb der Tätigkeit; Richtung: Er richtet sich auf ein langfristiges Ziel aus. Das Ziel hat er aber selbst gewählt (mehr in DS 7). · <b>Diener (Profi):</b> vorher eher intrinsisch – er arbeitet gern; nachher extrinsisch – er arbeitet für die fehlende Münze; Intensität und Ausdauer steigen, die Freude sinkt.</td></tr>
-      <tr><td>4</td><td>a B · b W · c E · d E. Bei c) wird ein Motiv als sicher behauptet („bestimmt“), obwohl man Motive nicht sehen kann – es ist nur eine Vermutung.</td></tr>
-      <tr><td>B</td><td>Beispiel: „Dein Anspruchsniveau steigt mit jedem Erfolg mit. Deshalb fühlt sich nichts wie genug an. Setz dir ein Ziel, das knapp über deinem letzten Ergebnis liegt – und freu dich, wenn du es erreichst. Und frag dich, ob dir die Sache selbst Spaß macht (intrinsisch) oder nur die Zahl (extrinsisch).“</td></tr>
+      <tr><td>3</td><td><b>Jonas:</b> extrinsisch – der Anreiz ist das Geld für den Führerschein, eine Folge außerhalb der Tätigkeit; Ausdauer: auch bei Regen, aber nur, bis das Ziel erreicht ist. · <b>Ali:</b> beides – das Studium ist ein Ziel außerhalb der Tätigkeit (extrinsisch), das freiwillige Lesen und Nachfragen zeigt Interesse an der Sache (intrinsisch); Richtung und Ausdauer: Er beschäftigt sich auch in der Freizeit damit. ·  · <b>Diener (Profi):</b> vorher eher intrinsisch – er arbeitet gern; nachher extrinsisch – er arbeitet für die fehlende Münze; Intensität und Ausdauer steigen, die Freude sinkt.</td></tr>
+      <tr><td>4</td><td>a B · b W · c E · d E. Bei c) wird ein Motiv als sicher behauptet („bestimmt“), obwohl man Motive nicht sehen kann – es ist nur eine Vermutung. (Wer in c) eine Abwertung mitliest, darf „E und W“ begründen.)</td></tr>
+      <tr><td>B</td><td>Beispiel: „Dein Anspruchsniveau steigt mit jedem Erfolg mit – deshalb fühlt sich nichts wie genug an. Frag dich, ob dir die Sache selbst Spaß macht (intrinsisch) oder nur die Zahl (extrinsisch); Likes hast du ohnehin kaum selbst in der Hand.“ · Dittmar: Der Befund ist eine Korrelation. Er zeigt nur, dass beides zusammen auftritt; die Ursache kann auch umgekehrt sein oder ein Drittes steckt dahinter.</td></tr>
     </table>
   </div>
 </template>
@@ -492,7 +493,7 @@
    INHALTE (Datenblock)
    ===================================================================== */
 var DATA = {
-  zahlen: 36, dauer: 30, runden: 4,
+  zahlen: 36, dauer: 30, runden: 4, /* Spielzeit: ?zeit=20 bis 60 (gilt für alle Runden gleich) */
   richtung: { 2: "höher", 1: "gleich", 0: "niedriger" },
   beispiel: { verm: { erf: 2, mis: 1, grund: "Wenn ich es geschafft habe, will ich mich steigern. Wenn nicht, versuche ich es noch einmal." },
     probe: 13, runden: [{ z: 14, e: 15 }, { z: 17, e: 16 }, { z: 16, e: 18 }, { z: 20, e: 19 }],
@@ -506,6 +507,9 @@ var DATA = {
 (function () {
   "use strict";
   var $ = Lab.$, $$ = Lab.$$, F = window.FIGUREN_DS06, D = DATA;
+  var zm = /[?&]zeit=(\d+)/.exec(window.location.search);
+  if (zm) D.dauer = Math.max(20, Math.min(60, +zm[1]));
+  $$(".dauer").forEach(function (el) { el.textContent = D.dauer; });
   var st = Lab.load("ds06", {});
   function save() { Lab.save("ds06", st); }
   if (!st.id) { st.id = Lab.uid(); st.runden = []; save(); }
@@ -539,20 +543,22 @@ var DATA = {
   function spiel(container, seed, onEnd) {
     var zahlen = F.mischung(D.zahlen, seed), next = 1, rest = D.dauer, timer = null;
     container.hidden = false;
-    container.innerHTML = '<div class="uhr"><span class="naechste">Nächste Zahl: <b id="nx">1</b></span><span>noch <b id="sek">' + rest + '</b> s</span></div><div class="feld" role="group" aria-label="Zahlenfeld">' +
+    var endAt = Date.now() + D.dauer * 1000;
+    container.innerHTML = '<div class="uhr"><span class="naechste" aria-live="polite">Nächste Zahl: <b id="nx">1</b></span><span>noch <b id="sek">' + rest + '</b> s</span></div><div class="feld" role="group" aria-label="Zahlenfeld">' +
       zahlen.map(function (z) { return '<button type="button" data-z="' + z + '">' + z + "</button>"; }).join("") + "</div>";
     spielLaeuft = true;
     function ende() { clearInterval(timer); spielLaeuft = false; container.innerHTML = ""; container.hidden = true; onEnd(next - 1); }
     $$(".feld button", container).forEach(function (b) {
       b.addEventListener("click", function () {
         if (!spielLaeuft || +b.getAttribute("data-z") !== next) return;
-        b.classList.add("ok"); b.setAttribute("aria-label", next + " erledigt");
+        b.classList.add("ok"); b.setAttribute("aria-label", next + " erledigt"); b.textContent = "✓" + next;
         next++;
         var nx = $("#nx", container); if (nx) nx.textContent = next <= D.zahlen ? next : "–";
         if (next > D.zahlen) ende();
       });
     });
-    timer = setInterval(function () { rest--; var s = $("#sek", container); if (s) s.textContent = rest; if (rest <= 0) ende(); }, 1000);
+    /* Restzeit aus der Uhrzeit: bleibt auch richtig, wenn das iPad kurz ruht */
+    timer = setInterval(function () { rest = Math.max(0, Math.ceil((endAt - Date.now()) / 1000)); var s = $("#sek", container); if (s) s.textContent = rest; if (rest <= 0) ende(); }, 250);
   }
   function startKnopf(container, text, onStart) {
     container.hidden = false;
@@ -564,7 +570,7 @@ var DATA = {
   var probeBox = $('.spiel[data-runde="0"]');
   function probeFertig() { $("#probe-res").innerHTML = "<strong>Proberunde: Du bist bis " + st.probe + " gekommen.</strong> Jetzt kommen vier Runden. Vor jeder Runde setzt du dir ein Ziel."; $("#probe-done").hidden = false; probeBox.hidden = true; }
   if (st.probe != null) probeFertig();
-  else startKnopf(probeBox, "Proberunde starten (30 s)", function () { spiel(probeBox, 1, function (n) { st.probe = n; save(); probeFertig(); }); });
+  else startKnopf(probeBox, "Proberunde starten (" + D.dauer + " s)", function () { spiel(probeBox, 1, function (n) { st.probe = n; save(); probeFertig(); }); });
 
   /* Runden mit Ziel */
   var rBox = $('.spiel[data-runde="r"]');
@@ -584,14 +590,14 @@ var DATA = {
     $("#r-title").textContent = "Runde " + (fertig + 1) + " von " + D.runden;
     if (offen) {
       $("#r-ziel").hidden = true;
-      startKnopf(rBox, "Runde " + (fertig + 1) + " starten (Ziel: " + offen.z + ")", function () { spieleRunde(offen, fertig); });
+      startKnopf(rBox, "Runde " + (fertig + 1) + " starten (Ziel: " + offen.z + ")", function () { offen.neu = (offen.neu || 0) + 1; save(); spieleRunde(offen, fertig); });
       return;
     }
     $("#r-ziel").hidden = false; rBox.hidden = true; $("#r-input").value = ""; $("#r-go").disabled = true;
   }
   function spieleRunde(r, idx) {
     $("#r-ziel").hidden = true;
-    spiel(rBox, idx + 2, function (n) {
+    spiel(rBox, idx + 2 + 10 * (r.neu || 0), function (n) {
       r.e = n; save();
       $("#r-verlauf").innerHTML = verlaufHTML();
       $("#r-res").innerHTML = "<strong>Runde " + (idx + 1) + ": Du bist bis " + n + " gekommen. Dein Ziel war " + r.z + " – " + (n >= r.z ? "Ziel erreicht." : "Ziel nicht erreicht.") + "</strong>";
@@ -600,9 +606,12 @@ var DATA = {
       else { $("#r-next-wrap").hidden = false; $("#r-next").focus(); }
     });
   }
-  $("#r-input").addEventListener("input", function () { var v = +$("#r-input").value; $("#r-go").disabled = !(v >= 1 && v <= D.zahlen); });
-  $("#r-go").addEventListener("click", function () {
-    var v = +$("#r-input").value; if (!(v >= 1 && v <= D.zahlen)) return;
+  function zielOk(v) { return /^\d{1,2}$/.test(v) && +v >= 1 && +v <= D.zahlen; }
+  $("#r-input").addEventListener("input", function () { $("#r-go").disabled = !zielOk($("#r-input").value.trim()); });
+  $("#r-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var raw = $("#r-input").value.trim(); if (!zielOk(raw)) return;
+    var v = +raw;
     var r = { z: v }; st.runden.push(r); save();
     $("#r-verlauf").innerHTML = verlaufHTML();
     spieleRunde(r, st.runden.length - 1);
@@ -672,7 +681,7 @@ var DATA = {
 
   /* ---------- Lernmappe ---------- */
   function renderChecklist() {
-    var items = [["Lernübersicht (Seite 1–2)", true], ["deine Vermutung", !!st.verm], ["deine Ziele und Ergebnisse", complete()], ["deine Beobachtung und Vermutung", !!(st.b1 && st.v1)], ["Arbeitsblatt mit Ergebnissicherung (Seite 3–4, zum Ausfüllen in GoodNotes)", true]];
+    var items = [["Lernübersicht (Seite 1–2)", true], ["deine Vermutung", !!st.verm], ["deine Ziele und Ergebnisse", complete()], ["deine Beobachtung und Erklärungsidee", !!(st.b1 && st.v1)], ["Arbeitsblatt mit Ergebnissicherung (Seite 3–4, zum Ausfüllen in GoodNotes)", true]];
     $("#checklist").innerHTML = items.map(function (i) { return '<li class="' + (i[1] ? "" : "miss") + '">' + i[0] + (i[1] ? "" : " – fehlt noch") + "</li>"; }).join("");
   }
   function lines(n) { var s = ""; for (var i = 0; i < n; i++) s += '<div class="ln"></div>'; return s; }
@@ -681,13 +690,13 @@ var DATA = {
     if (leer) {
       h += '<table><tr><th>Ziel / Ergebnis</th><td>Probe: ___ · R1: ___ / ___ · R2: ___ / ___ · R3: ___ / ___ · R4: ___ / ___</td></tr>';
       h += "<tr><th>Mein nächstes Ziel</th><td>nach „erreicht“: höher ___ gleich ___ niedriger ___<br>nach „nicht erreicht“: höher ___ gleich ___ niedriger ___</td></tr>";
-      h += "<tr><th>Beobachtung</th><td>" + lines(1) + "</td></tr><tr><th>Erste Vermutung</th><td>" + lines(1) + "</td></tr>";
+      h += "<tr><th>Beobachtung</th><td>" + lines(1) + "</td></tr><tr><th>Erklärungsidee</th><td>" + lines(1) + "</td></tr>";
     } else {
       var c = shifts(s);
-      h += '<div style="display:grid;grid-template-columns:48mm 1fr;gap:6pt;align-items:center;margin-top:3pt"><div class="figbox" style="padding:2pt">' + F.kurve(chartRows(s), { aria: "Ziele und Ergebnisse" }) + "</div><table>";
+      h += '<div style="display:grid;grid-template-columns:52mm 1fr;gap:6pt;align-items:center;margin-top:3pt"><div class="figbox" style="padding:2pt">' + F.kurve(chartRows(s), { aria: "Ziele und Ergebnisse" }) + "</div><table>";
       h += "<tr><th>Ziel / Ergebnis</th><td>Probe: " + (s.probe != null ? s.probe : "–") + " · " + (s.runden || []).map(function (r, i) { return "R" + (i + 1) + ": " + r.z + " / " + (r.e != null ? r.e : "–"); }).join(" · ") + "</td></tr>";
       h += "<tr><th>Mein nächstes Ziel</th><td>nach „erreicht“: höher " + c.erf[0] + ", gleich " + c.erf[1] + ", niedriger " + c.erf[2] + "<br>nach „nicht erreicht“: höher " + c.mis[0] + ", gleich " + c.mis[1] + ", niedriger " + c.mis[2] + "</td></tr>";
-      h += "<tr><th>Beobachtung</th><td>" + Lab.esc(s.b1 || "–") + "</td></tr><tr><th>Erste Vermutung</th><td>" + Lab.esc(s.v1 || "–") + "</td></tr>";
+      h += "<tr><th>Beobachtung</th><td>" + Lab.esc(s.b1 || "–") + "</td></tr><tr><th>Erklärungsidee</th><td>" + Lab.esc(s.v1 || "–") + "</td></tr>";
     }
     h += "<tr><th>Kurs (Beamer)</th><td>nach „erreicht“: höher ___ gleich ___ niedriger ___<br>nach „nicht erreicht“: höher ___ gleich ___ niedriger ___</td></tr>";
     return h + "</table>" + (leer ? "" : "</div>") + "</div>";
