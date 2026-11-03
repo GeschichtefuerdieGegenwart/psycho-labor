@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "Wenn du dieses Material verwendest oder darüber schreibst, zitiere es bitte so."
+title: "Psycho-Labor · Warum ich so ticke"
+abstract: "Interaktive Selbstversuche und Modelle für das Wahlfach Psychologie (J2) am Beruflichen Gymnasium."
+authors:
+  - family-names: Walter
+    given-names: Mario
+type: software
+version: "Stand 2026-11-03"
+date-released: "2026-11-03"
+repository-code: "https://github.com/GeschichtefuerdieGegenwart/psycho-labor"
+license: MIT
+keywords:
+  - Unterricht
+  - Lernumgebung
+  - Berufliches Gymnasium
+  - Baden-Württemberg
+notes: "Code: MIT. Texte, Aufgaben, Daten und Grafiken: CC BY-NC-SA 4.0 (siehe LICENSE-INHALTE.md). Entwickelt mit KI-Unterstützung; Konzept, Auswahl und Überarbeitung durch den Urheber."
