@@ -35,3 +35,15 @@ Alle Bilder sind selbst gezeichnet (SVG). Fotos aus dem Unterrichtsmaterial (z. 
 ## Arbeitsweise
 
 Änderungen kommen über einen Branch und einen Pull Request. Zusammengeführt wird erst nach Freigabe durch die Lehrkraft.
+
+## Urheber und Lizenz
+
+- Konzept, Didaktik, Aufgaben und Texte: Mario Walter (2026).
+- Umgesetzt mit KI-Unterstützung (Claude); Auswahl, Prüfung und Überarbeitung durch den Urheber.
+- Programmcode: MIT-Lizenz, siehe `LICENSE`.
+- Texte, Aufgaben, Daten und selbst gezeichnete Grafiken: CC BY-NC-SA 4.0, siehe `LICENSE-INHALTE.md`.
+- Fremdmaterial (Bilder, Karten, Datensätze, Zitate Dritter) behält seine eigene Lizenz; Nachweise stehen am Ort der Verwendung. Siehe die Liste in `LICENSE-INHALTE.md`.
+- Zitiervorschlag: Walter, Mario (2026): Psycho-Labor · Warum ich so ticke. https://github.com/GeschichtefuerdieGegenwart/psycho-labor – maschinenlesbar in `CITATION.cff`.
+- Stand vor dem Fortbildungsauftrag der Schule (3. November 2026): Commit `4d715e19d939`, siehe `docs/stand-2026-11-03.md`.
+
+Für eine kommerzielle Nutzung ist eine eigene Vereinbarung mit dem Urheber nötig.
