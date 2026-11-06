@@ -288,6 +288,251 @@ html.dm[data-theme="dark"] {
 
 </style>
 <style>
+/* eingebettet: bundle.css */
+/* Gegenwart – Komponenten. Werte kommen aus tokens.css (var(--…)); Klassen-Präfix g-.
+   Ruhezustand = Endzustand: ohne JavaScript, im Druck und bei weniger Bewegung ist alles lesbar. */
+
+.g{background:var(--grund);color:var(--text);font:400 1.125rem/1.55 var(--font-text);-webkit-tap-highlight-color:transparent}
+.g *,.g *::before,.g *::after{box-sizing:border-box}
+.g [hidden]{display:none!important}
+.g :where(h1,h2,h3){font-family:var(--font-display);margin:0;text-wrap:balance}
+.g :where(p){margin:0;text-wrap:pretty}
+.g-reihe{display:flex;flex-wrap:wrap;gap:var(--space-4);align-items:center}
+.g-stapel{display:grid;gap:var(--space-4)}
+.g-meta{font-size:1rem;color:var(--leise);font-variant-numeric:tabular-nums}
+.g-frage{font:italic 600 1.875rem/1.25 var(--font-stimme);color:var(--text)}
+.g-zitat{font:italic 600 1.375rem/1.4 var(--font-stimme)}
+.g-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.g :focus-visible{outline:3px solid var(--text);outline-offset:2px;box-shadow:var(--fokus-innen)}
+
+/* ---------- Bewegung: nur wenn erlaubt ---------- */
+@media (prefers-reduced-motion:no-preference){
+  :root:not([data-bewegung=weniger]) .g-knopf{transition:transform var(--dauer-druck) var(--kurve-aus),box-shadow var(--dauer-schnell) var(--kurve-aus)}
+  :root:not([data-bewegung=weniger]) .g-karte{transition:transform var(--dauer-schnell) var(--kurve-aus),box-shadow var(--dauer-schnell) var(--kurve-aus)}
+  :root:not([data-bewegung=weniger]) .g-option span,:root:not([data-bewegung=weniger]) .g-punkt{transition:background-color var(--dauer-schnell) var(--kurve-aus),border-color var(--dauer-schnell) var(--kurve-aus),transform var(--dauer-langsam) var(--kurve-feder,var(--kurve-aus))}
+  :root:not([data-bewegung=weniger]) .g-wende__innen{transition:transform var(--dauer-wende) var(--kurve-beidseits)}
+  :root:not([data-bewegung=weniger]) .g-mark{transition:background-size 260ms var(--kurve-aus)}
+  :root:not([data-bewegung=weniger]) .g-balken__wert{transition:transform var(--dauer-reihe) var(--kurve-aus)}
+  :root:not([data-bewegung=weniger]) .g-hilfe__stufe{transition:opacity var(--dauer-mittel) var(--kurve-aus),transform var(--dauer-mittel) var(--kurve-aus)}
+}
+
+/* ---------- Knopf ---------- */
+.g-knopf{display:inline-flex;align-items:center;gap:10px;min-height:var(--knopf-hoehe);padding:12px 20px;border-radius:var(--radius-sm);border:2px solid var(--text);font:700 1.0625rem/1.2 var(--font-text);cursor:pointer;text-decoration:none;touch-action:manipulation}
+.g-knopf--primaer{background:var(--text);color:var(--grund)}
+.g-knopf--sekundaer{background:var(--flaeche);color:var(--text);border-color:var(--stahl)}
+.g-knopf--hell{background:var(--flaeche);color:var(--text);border-color:var(--flaeche)}
+.g-knopf--still{background:transparent;color:var(--text);border-color:transparent;min-height:44px;padding:8px 14px;font-size:1rem;text-decoration:underline;text-underline-offset:.2em;text-decoration-thickness:2px}
+.g-knopf:active{transform:translate(2px,2px)}
+.g-knopf[disabled]{opacity:.55;cursor:not-allowed}
+@media (hover:hover) and (pointer:fine){.g-knopf:not([disabled]):hover{box-shadow:var(--platte-knopf)}}
+
+/* ---------- Etikett ---------- */
+.g-etikett{justify-self:start;width:fit-content;display:inline-flex;align-items:center;gap:6px;font:700 1rem/1.3 var(--font-text);padding:2px 8px;border-radius:var(--radius-sm)}
+.g-etikett--ki{background:var(--honigplatte);color:var(--auf-honig);box-shadow:inset 0 0 0 2px var(--honig)}
+.g-etikett--lernen{background:var(--petrol);color:var(--auf-petrol)}
+.g-etikett--beide{background:var(--ueberdruck);color:var(--auf-ueberdruck)}
+.g-etikett--these{background:var(--oxid-hi);color:var(--text);box-shadow:inset 0 0 0 2px var(--oxid)}
+.g-etikett--erprobt{background:var(--erfolg-hi);color:var(--text)}
+.g-etikett--offen{background:transparent;color:var(--text);box-shadow:inset 0 0 0 2px var(--stahl)}
+
+/* ---------- Karte + Wende ---------- */
+.g-karte{position:relative;background:var(--flaeche);color:var(--text);border-radius:var(--radius-sm);padding:var(--space-5);box-shadow:6px 6px 0 0 var(--platte-farbe,var(--karton));display:grid;gap:var(--space-2);align-content:start}
+.g-karte--ki{--platte-farbe:var(--honigplatte)}.g-karte--lernen{--platte-farbe:var(--petrol)}.g-karte--beide{--platte-farbe:var(--ueberdruck)}
+.g-karte__titel{font:600 1.375rem/1.2 var(--font-display)}
+.g-karte__titel a{color:inherit;text-decoration:none}
+.g-karte__titel a::after{content:"";position:absolute;inset:0}
+@media (hover:hover) and (pointer:fine){.g-karte:has(a):hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 0 var(--platte-farbe,var(--karton))}}
+.g-karte:has(a):active{transform:translate(4px,4px);box-shadow:2px 2px 0 0 var(--platte-farbe,var(--karton))}
+.g-karte:focus-within{outline:3px solid var(--text);outline-offset:2px}
+
+.g-wende{perspective:1200px}
+.g-wende__innen{display:grid;gap:var(--space-4)}
+.g-wende__seite{background:var(--flaeche);border-radius:var(--radius-sm);padding:var(--space-5);box-shadow:var(--platte);display:grid;gap:var(--space-3);align-content:start}
+.g-wende__seite--hinten{background:var(--petrol-hi)}
+.g-ist-js .g-wende__innen{display:grid;grid-template-areas:"s";transform-style:preserve-3d}
+.g-ist-js .g-wende__seite{grid-area:s;backface-visibility:hidden}
+.g-ist-js .g-wende__seite--hinten{transform:rotateY(180deg)}
+.g-ist-js .g-wende[data-gewendet] .g-wende__innen{transform:rotateY(180deg)}
+.g-wende__knopf{justify-self:start}
+
+/* ---------- Kasten (Auftrag, Info, Hilfe) ---------- */
+.g-kasten{border-radius:var(--radius-md);padding:var(--space-5);display:grid;gap:var(--space-3)}
+.g-kasten__kopf{font:700 1rem/1.3 var(--font-text);display:flex;gap:8px;align-items:center}
+.g-kasten--auftrag{background:var(--text);color:var(--grund)}
+.g-kasten--info{background:var(--flaeche);border:2px dashed var(--stahl)}
+.g-kasten--hilfe{background:var(--honig-hi)}
+.g-hilfe__stufe{background:var(--flaeche);border-radius:var(--radius-sm);padding:var(--space-3) var(--space-4)}
+.g-hilfe__stufe[hidden]{display:none}
+.g-hilfe__stufe.g-neu{opacity:0;transform:translateY(6px)}
+
+/* ---------- Wahl: Denken vor Klicken ---------- */
+.g-wahl{display:grid;gap:var(--space-4)}
+.g-wahl fieldset{border:0;margin:0;padding:0;display:grid;gap:var(--space-2)}
+.g-wahl legend{padding:0;margin-bottom:var(--space-3)}
+.g-option{position:relative;display:block}
+.g-option input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.g-option span{display:grid;gap:4px;min-height:var(--tablet-ziel);padding:12px 16px 12px 52px;border:2px solid var(--stahl);border-radius:var(--radius-md);background:var(--flaeche);position:relative}
+.g-option span::before{content:"";position:absolute;left:16px;top:16px;width:22px;height:22px;border:2px solid var(--stahl);border-radius:999px;background:var(--flaeche)}
+.g-option input:checked+span{border-color:var(--kuli);box-shadow:inset 0 0 0 1px var(--kuli)}
+.g-option input:checked+span::before{border-color:var(--kuli);background:radial-gradient(circle,var(--kuli) 0 5px,transparent 6px)}
+.g-option input:focus-visible+span{outline:3px solid var(--text);outline-offset:2px}
+.g-option__urteil{display:none;font-weight:700}
+.g-wahl[data-zu] .g-option span{padding-left:58px}
+.g-wahl[data-zu] .g-option span::after{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;border-radius:var(--radius-md) 0 0 var(--radius-md);background:var(--stahl)}
+.g-wahl[data-zu] .g-option[data-urteil=zentral] span::after{background:var(--erfolg)}
+.g-wahl[data-zu] .g-option[data-urteil=begruendbar] span::after{background:var(--warnung)}
+.g-wahl[data-zu] .g-option[data-urteil=kaum] span::after{background:var(--fehler)}
+.g-wahl[data-zu] .g-option__urteil{display:block}
+.g-wahl[data-zu] .g-option[data-urteil=zentral] .g-option__urteil{color:var(--erfolg)}
+.g-wahl[data-zu] .g-option[data-urteil=begruendbar] .g-option__urteil{color:var(--warnung)}
+.g-wahl[data-zu] .g-option[data-urteil=kaum] .g-option__urteil{color:var(--fehler)}
+.g-wahl textarea{font:400 1.0625rem/1.4 var(--font-text);min-height:72px;padding:10px 14px;border:2px solid var(--stahl);border-radius:var(--radius-sm);background:var(--flaeche);color:var(--kuli);width:100%;resize:vertical}
+.g-wahl__fuss{display:flex;flex-wrap:wrap;gap:var(--space-3);align-items:center}
+
+/* ---------- Stempel / Siegel ---------- */
+.g-stempel{display:inline-grid;place-items:center;width:112px;height:112px;border-radius:999px;border:3px solid var(--oxid);color:var(--oxid);font:700 .95rem/1.1 var(--font-text);text-align:center;transform:rotate(-8deg);padding:10px;background:var(--grund)}
+.g-stempel[hidden]{display:none}
+
+/* ---------- Skala ---------- */
+.g-skala{display:grid;gap:var(--space-3)}
+.g-skala__spur{position:relative;padding-block:10px}
+.g-skala input[type=range]{width:100%;accent-color:var(--kuli);height:32px;margin:0}
+.g-skala__enden{display:flex;justify-content:space-between;font-size:1rem;color:var(--leise)}
+.g-skala__wert{font:700 1.0625rem/1.2 var(--font-text);color:var(--kuli);font-variant-numeric:tabular-nums}
+.g-skala__ref{position:absolute;top:0;bottom:0;width:4px;margin-left:-2px;background:var(--oxid);border-radius:2px}
+.g-skala__ref[hidden]{display:none}
+.g-skala__ref-text{color:var(--oxid);font-weight:700}
+
+/* ---------- Schwärzung / Aufdecken ---------- */
+.g-schwarz{position:relative}
+.g-ist-js .g-aufdecken:not([data-offen]) .g-schwarz{color:transparent;user-select:none}
+.g-ist-js .g-schwarz::after{content:"";position:absolute;left:-2px;right:-2px;top:.12em;bottom:.06em;background:var(--text);transform-origin:right center;pointer-events:none}
+.g-ist-js .g-aufdecken[data-offen] .g-schwarz::after{transform:scaleX(0)}
+@media (prefers-reduced-motion:no-preference){
+  :root:not([data-bewegung=weniger]) .g-ist-js .g-schwarz::after{transition:transform var(--dauer-aufdecken) var(--kurve-aus);transition-delay:calc(var(--i,0) * 70ms)}
+  :root:not([data-bewegung=weniger]) .g-ist-js .g-schwarz{transition:color 1ms linear;transition-delay:calc(var(--i,0) * 70ms + 200ms)}
+}
+
+/* ---------- Markieren ---------- */
+.g-stifte{display:flex;gap:var(--space-2);flex-wrap:wrap}
+.g-stift{min-height:44px;padding:8px 14px;border-radius:999px;border:2px solid var(--stahl);background:var(--flaeche);color:var(--text);font:700 1rem/1.2 var(--font-text);cursor:pointer}
+.g-stift[aria-pressed=true]{background:var(--text);color:var(--grund);border-color:var(--text)}
+.g-wort{cursor:pointer;border-radius:2px}
+.g-mark{background-repeat:no-repeat;background-size:0 100%;background-position:0 0}
+.g-mark--beleg{background-image:linear-gradient(var(--marker),var(--marker));background-size:100% 100%;text-decoration:underline 3px var(--honig);text-underline-offset:.18em}
+.g-mark--gedanke{color:var(--kuli);text-decoration:underline 3px dotted var(--kuli);text-underline-offset:.22em}
+.g-mark--beleg::before{content:"▲ ";font-size:.7em;vertical-align:.15em}
+.g-mark--gedanke::before{content:"● ";font-size:.7em;vertical-align:.15em}
+
+/* ---------- Fortschritt (Stanzloch) ---------- */
+.g-fortschritt{display:flex;align-items:center;gap:var(--space-4);flex-wrap:wrap}
+.g-punkte{display:flex;gap:8px;list-style:none;margin:0;padding:0}
+.g-punkt{width:18px;height:18px;border-radius:999px;border:2px solid var(--stahl);background:var(--flaeche)}
+.g-punkt[data-stand=fertig]{background:var(--petrol);border-color:var(--petrol)}
+.g-punkt[data-stand=jetzt]{background:var(--oxid);border-color:var(--oxid);transform:scale(1.25)}
+
+/* ---------- Zeitleiste ---------- */
+.g-zeit{position:relative;display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:var(--space-2);list-style:none;margin:0;padding:28px 0 0}
+.g-zeit::before{content:"";position:absolute;left:0;right:0;top:36px;height:3px;background:var(--text)}
+.g-zeit li{position:relative;display:grid;gap:6px;justify-items:start}
+.g-zeit button{all:unset;cursor:pointer;display:grid;gap:4px;padding-top:24px;position:relative}
+.g-zeit button::before{content:"";position:absolute;top:0;left:0;width:18px;height:18px;border-radius:999px;background:var(--flaeche);border:3px solid var(--text)}
+.g-zeit li[data-offen] button::before{border-style:dashed;border-color:var(--stahl)}
+.g-zeit li[data-offen] .g-zeit__jahr{color:var(--leise)}
+.g-zeit__jahr{font:700 1.0625rem/1.2 var(--font-display);font-variant-numeric:tabular-nums}
+.g-zeit__text{font-size:1rem}
+.g-zeit button:focus-visible{outline:3px solid var(--text);outline-offset:4px}
+.g-zeit__hier{position:absolute;top:0;left:0;font:700 .95rem/1 var(--font-text);background:var(--oxid);color:var(--grund);padding:4px 8px;border-radius:var(--radius-sm);white-space:nowrap}
+
+/* ---------- Balken ---------- */
+.g-balken{display:grid;gap:var(--space-3)}
+.g-balken__zeile{display:grid;grid-template-columns:minmax(6rem,9rem) 1fr 4.75rem;gap:var(--space-3);align-items:center}
+.g-balken__spur{height:22px;background:var(--karton);border-radius:var(--radius-sm);overflow:hidden}
+.g-balken__wert{display:block;height:100%;width:calc(var(--w) * 1%);background:var(--farbe,var(--petrol));transform-origin:left center}
+.g-balken__zahl{white-space:nowrap;font:700 1.0625rem/1 var(--font-text);font-variant-numeric:tabular-nums;text-align:right}
+
+/* ---------- Platten (Registrieren) ---------- */
+.g-platten{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-template-rows:16px auto 16px}
+.g-platte{padding:var(--space-5);display:grid;gap:var(--space-2);align-content:start}
+.g-platte h3{font-size:1.5rem}
+.g-platte--ki{grid-column:1/8;grid-row:1/3;background:var(--honigplatte);color:var(--auf-honig);box-shadow:inset 0 0 0 2px var(--honig);padding-right:calc(2/7*100% + 16px)}
+.g-platte--lernen{grid-column:6/13;grid-row:2/4;background:var(--petrol);color:var(--auf-petrol);padding-left:calc(2/7*100% + 16px)}
+.g-schnitt{grid-column:6/8;grid-row:2/3;z-index:1;background:var(--ueberdruck);color:var(--auf-ueberdruck);padding:var(--space-4);display:flex;align-items:flex-end;font-weight:700;line-height:1.25}
+@media (max-width:600px){.g-platten{grid-template-columns:1fr;grid-template-rows:auto}.g-platte--ki,.g-platte--lernen,.g-schnitt{grid-column:1;grid-row:auto;padding:var(--space-5)}}
+
+/* ---------- Bewegungsschalter ---------- */
+.g-schalter{display:inline-flex;align-items:center;gap:12px;min-height:44px;cursor:pointer;font-weight:700}
+.g-schalter input{appearance:none;width:52px;height:30px;border-radius:999px;border:2px solid var(--stahl);background:var(--flaeche);position:relative;margin:0;cursor:pointer}
+.g-schalter input::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:999px;background:var(--stahl)}
+.g-schalter input:checked{background:var(--text);border-color:var(--text)}
+.g-schalter input:checked::after{left:25px;background:var(--grund)}
+
+/* ---------- Musterbuch ---------- */
+.g-muster{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:var(--space-4)}
+.g-muster__feld{background:var(--flaeche);border-radius:var(--radius-sm);padding:var(--space-4);display:grid;gap:var(--space-3);align-content:start}
+.g-muster__buehne{height:96px;display:grid;place-items:center;background:var(--grund);border-radius:var(--radius-sm);overflow:hidden;position:relative}
+.g-muster__name{font:700 1rem/1.2 var(--font-text)}
+.g-muster__werte{font-size:1rem;color:var(--leise);font-variant-numeric:tabular-nums}
+.g-klotz{width:56px;height:40px;background:var(--petrol);border-radius:var(--radius-sm)}
+.g-klotz--honig{background:var(--honigplatte);box-shadow:inset 0 0 0 2px var(--honig)}
+.g-klotz--klein{width:22px;height:22px;border-radius:999px;background:var(--text)}
+
+@media print{.g-knopf,.g-stifte,.g-schalter{display:none}}
+
+/* ---------- Leinwand (Canvas) ---------- */
+.g-leinwand{display:block;width:100%;background:var(--flaeche);border-radius:var(--radius-sm);touch-action:none}
+.g-leinwand:focus-visible{outline:3px solid var(--text);outline-offset:2px}
+.g-zeichnen{position:relative;max-width:640px}
+.g-zeichnen__text{padding:var(--space-5);font:400 1.125rem/1.6 var(--font-text);background:var(--flaeche);border-radius:var(--radius-sm);user-select:none}
+.g-zeichnen .g-leinwand{position:absolute;inset:0;background:transparent;cursor:crosshair}
+.g-achsen{display:grid;grid-template-columns:auto 1fr auto;grid-template-rows:auto 1fr auto;gap:var(--space-2);align-items:center;max-width:520px;font-size:1rem;color:var(--leise)}
+.g-achsen .g-leinwand{grid-column:2;grid-row:2;aspect-ratio:1;cursor:crosshair}
+.g-achsen .oben{grid-column:2;grid-row:1;text-align:center}.g-achsen .unten{grid-column:2;grid-row:3;text-align:center}
+.g-achsen .links{grid-column:1;grid-row:2;writing-mode:vertical-rl;transform:rotate(180deg)}.g-achsen .rechts{grid-column:3;grid-row:2;writing-mode:vertical-rl}
+.g-sitze__stand,.g-verlauf__stand{font-weight:700;font-variant-numeric:tabular-nums}
+.g-sitze .g-leinwand{aspect-ratio:2/1.05;max-width:560px}
+.g-verlauf .g-leinwand{aspect-ratio:4/1;cursor:ew-resize}
+.g-schicksal .g-leinwand{aspect-ratio:16/9;max-width:560px}
+
+/* ---------- Scrub, Aufbauen, Schieber, Zeitstrahl ---------- */
+.g-wortauf{opacity:0;transform:translateY(.25em);display:inline-block}
+.g-wortauf.ist-da{opacity:1;transform:none}
+@media (prefers-reduced-motion:no-preference){:root:not([data-bewegung=weniger]) .g-wortauf{transition:opacity var(--dauer-mittel) var(--kurve-aus),transform var(--dauer-mittel) var(--kurve-aus)}}
+.g-schieber{display:grid;gap:var(--space-3);max-width:640px}
+.g-schieber__buehne{position:relative;aspect-ratio:16/7;overflow:hidden;border-radius:var(--radius-sm);cursor:ew-resize;touch-action:none;user-select:none}
+.g-schieber__vor,.g-schieber__nach{position:absolute;inset:0;display:grid;align-content:center;padding:var(--space-5);gap:var(--space-2)}
+.g-schieber__vor{background:var(--honig-hi);color:var(--text)}
+.g-schieber__nach{background:var(--petrol-hi);color:var(--text)}
+.g-schieber__griff{position:absolute;top:0;bottom:0;width:4px;margin-left:-2px;background:var(--text);pointer-events:none}
+.g-schieber__griff::after{content:"⇆";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;border-radius:999px;background:var(--text);color:var(--grund);display:grid;place-items:center;font-size:1.25rem}
+.g-schieber__marke{position:absolute;top:var(--space-3);font:700 1rem/1.2 var(--font-text);padding:2px 8px;border-radius:var(--radius-sm);background:var(--text);color:var(--grund)}
+.g-schieber__vor .g-schieber__marke{left:var(--space-3)}.g-schieber__nach .g-schieber__marke{right:var(--space-3)}
+.g-schieber__stand{font-weight:700;font-variant-numeric:tabular-nums}
+.g-zeitstrahl{display:grid;gap:var(--space-3);max-width:640px}
+.g-zeitstrahl .g-leinwand{aspect-ratio:16/8}
+.g-zeitstrahl__jahr{font:700 2rem/1 var(--font-display);font-variant-numeric:tabular-nums}
+.g-zeitstrahl__text{min-height:3.2em}
+.g-zustaende{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:var(--space-3)}
+.g-zustand{display:grid;gap:var(--space-2);padding:var(--space-3);background:var(--flaeche);border-radius:var(--radius-sm);align-content:start;outline:2px solid transparent;outline-offset:2px}
+.g-zustand.ist-aktiv{outline-color:var(--oxid)}
+.g-zustand__name{font:700 1rem/1.2 var(--font-text)}
+.g-zustand__was{font-size:1rem;color:var(--leise)}
+.g-sim-ueberfahren{box-shadow:var(--platte-knopf)}
+.g-sim-gedrueckt{transform:translate(2px,2px)}
+.g-sim-fokus{outline:3px solid var(--text);outline-offset:2px;box-shadow:var(--fokus-innen)}
+.g-ansicht{max-width:640px}
+.g-ansicht__liste{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-5)}
+.g-ansicht__bild{aspect-ratio:16/10;border-radius:var(--radius-sm);background:var(--karton)}
+.g-ansicht__bild--ki{background:var(--honigplatte);box-shadow:inset 0 0 0 2px var(--honig)}
+.g-ansicht__bild--lernen{background:var(--petrol)}
+.g-ansicht__detail{display:grid;gap:var(--space-4)}
+.g-ansicht__detail .g-ansicht__bild{aspect-ratio:16/7}
+.g-ansicht__titel{font:600 1.75rem/1.15 var(--font-display)}
+::view-transition-old(root),::view-transition-new(root){animation-duration:var(--dauer-mittel,200ms)}
+::view-transition-group(bild),::view-transition-group(titel){animation-duration:var(--dauer-reihe,440ms);animation-timing-function:var(--kurve-beidseits)}
+
+</style>
+<style>
 
   /* ---------- Bildschirm ---------- */
   .lab-progress span { width: 18px; }
@@ -462,6 +707,126 @@ html.dm[data-theme="dark"] {
   .fot-name { font-weight: 600; }
   .fot-row .seg3 button { min-width: 48px; padding: 0 10px; }
   .rate { display: flex; gap: 14pt; flex-wrap: wrap; margin: 4pt 0; font-size: 10pt; }
+
+
+  /* ---------- Fassung 2: Gegenwart-Bausteine in Psycho-Labor-Farben ---------- */
+  :root {
+    --grund: var(--bg); --flaeche: var(--paper); --karton: #e9e2d7; --text: var(--ink); --leise: var(--ink-soft);
+    --stahl: #7d7364; --linie: var(--line); --petrol: var(--accent); --auf-petrol: #fff; --petrol-hi: var(--accent-soft);
+    --oxid: #a8452a; --oxid-hi: var(--warm-soft); --kuli: #1e4fb5; --erfolg: #2e6b34; --erfolg-hi: #dcebdc;
+    --warnung: #8a5300; --warnung-hi: #f5e8cf; --fehler: #b0281c; --fehler-hi: #f6dcd8; --honig: #a26a1c; --honig-hi: var(--gold-soft);
+    --font-text: var(--font); --font-display: ui-rounded, "SF Pro Rounded", -apple-system, "Segoe UI", Roboto, sans-serif;
+    --dauer-druck: 100ms; --dauer-schnell: 160ms; --dauer-mittel: 220ms; --dauer-langsam: 300ms; --dauer-aus: 150ms; --dauer-reihe: 440ms; --dauer-staffel: 30ms;
+    --kurve-aus: cubic-bezier(0.23, 1, 0.32, 1); --kurve-beidseits: cubic-bezier(0.77, 0, 0.175, 1);
+    --radius-sm: 4px; --radius-md: 18px; --knopf-hoehe: 48px; --tablet-ziel: 56px;
+    --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 24px;
+  }
+  @media (prefers-color-scheme: dark) {
+    html.dm:not([data-theme="light"]) { --karton: #2d2a26; --stahl: #8f8576; --kuli: #8fb0f0; --oxid: #db826c; --erfolg: #7cc488; --erfolg-hi: #1d3320; --warnung: #e0a34a; --warnung-hi: #3a2a10; --fehler: #f08a7e; --fehler-hi: #3d1c18; }
+  }
+  html.dm[data-theme="dark"] { --karton: #2d2a26; --stahl: #8f8576; --kuli: #8fb0f0; --oxid: #db826c; --erfolg: #7cc488; --erfolg-hi: #1d3320; --warnung: #e0a34a; --warnung-hi: #3a2a10; --fehler: #f08a7e; --fehler-hi: #3d1c18; }
+  .g-option span { font-size: 18px; }
+  .g .g-option span { font-weight: 700; }
+  .g .g-option__urteil { font-weight: 400; font-size: 17px; padding: 0; border: 0; min-height: 0; background: transparent; box-shadow: none; }
+  .g .g-option span span::before, .g .g-option span span::after { display: none !important; }
+  .g { background: transparent; }
+  .g-wahl:not([data-zu]) .g-option__urteil { display: none !important; }
+  .g-wahl legend { font-weight: 700; font-size: 19px; }
+  .g-wahl { margin: 0 0 18px; }
+
+  /* Kein Text unter 16 px (Gegenwart); Etiketten ohne Versalien */
+  .kicker, .private, .private span, .g-stempel { font-size: 16px; }
+  .kicker { letter-spacing: 0; text-transform: none; }
+  @media screen and (max-width: 600px) { .cmp { table-layout: fixed; width: 100%; } .cmp th, .cmp td { padding: 6px; hyphens: auto; overflow-wrap: anywhere; } }
+  .label { font-size: 16px; letter-spacing: 0; text-transform: none; }
+  .timebox, .small, .plan li span, .counter, .saved { font-size: 16px; }
+  .fiction, .status-chip { display: inline-block; font-size: 16px; font-weight: 600; color: var(--gold-ink); background: var(--gold-soft); border-radius: 999px; padding: 2px 10px; }
+
+  /* Lernweg: wo bin ich? */
+  .weg { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 14px; padding: 0; list-style: none; }
+  .weg li { font-size: 16px; padding: 4px 12px; border-radius: 999px; background: var(--paper); border: 1px solid var(--line); color: var(--ink-soft); }
+  .weg li.akt { border-color: var(--accent); background: var(--accent-soft); color: var(--ink); font-weight: 700; }
+  .weg li.da::before { content: "✓ "; color: var(--ok); }
+
+  /* Gruppenchat (Linien nach Asch) */
+  .chat { max-width: 560px; margin: 0 auto 14px; background: var(--paper); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
+  .chat-kopf { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--accent); color: var(--on-accent); }
+  .chat-kopf b { font-size: 17px; }
+  .chat-kopf span { font-size: 16px; opacity: .9; }
+  .chat-verlauf { padding: 10px 12px; display: grid; gap: 6px; min-height: 120px; background: var(--bg); }
+  .bubble { justify-self: start; max-width: 80%; padding: 6px 12px; border-radius: 16px 16px 16px 4px; background: var(--paper); border: 1px solid var(--line); font-size: 18px; }
+  .bubble small { font-size: 16px; color: var(--ink-soft); margin-right: 8px; }
+  .bubble.ich { justify-self: end; border-radius: 16px 16px 4px 16px; background: var(--accent-soft); border-color: var(--accent); }
+  .bubble.sys { justify-self: center; background: transparent; border: 0; color: var(--ink-soft); font-size: 16px; text-align: center; }
+  .linien-chat { display: grid; gap: 12px; align-items: start; }
+  @media (min-width: 900px) { .linien-chat { grid-template-columns: 1.1fr 1fr; } .linien-chat .chat { margin: 0; } }
+  .tippt { justify-self: start; font-size: 16px; color: var(--ink-soft); }
+  html:not([data-bewegung=weniger]) .bubble.neu { animation: ein .22s cubic-bezier(.23,1,.32,1) both; }
+  @keyframes ein { from { opacity: 0; transform: translateY(6px); } }
+  @media (prefers-reduced-motion: reduce) { .bubble.neu { animation: none !important; } }
+
+  /* Bilder */
+  .fotiou { max-width: 300px; margin: 0 auto; }
+  .fotiou svg, .figure svg { width: 100%; height: auto; display: block; border-radius: 16px; }
+  .figure { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 6px; margin: 8px 0 14px; }
+  .figure figcaption, .bildzeile { font-size: 16px; color: var(--ink-soft); margin-top: 6px; }
+  .paar { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-width: 620px; margin: 8px auto; }
+  .paar figure { margin: 0; text-align: center; }
+  .paar .mein { outline: 3px solid var(--kuli); outline-offset: 3px; border-radius: 18px; }
+
+  /* Video mit Zwei-Klick-Lösung */
+  .video { border: 2px dashed var(--stahl); border-radius: 16px; padding: 14px 16px; background: var(--paper); margin: 10px 0 16px; }
+  .video iframe { width: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: 12px; display: block; margin-top: 10px; }
+
+  /* Vorhersage → Auflösung (Muster 1) */
+  .vh { border: 2px solid var(--accent); border-radius: 18px; padding: 14px 18px; background: var(--paper); margin: 0 0 16px; }
+  .vh legend { font-weight: 700; }
+  .vh fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 8px; }
+  .wahlknopf { display: block; position: relative; }
+  .wahlknopf input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+  .wahlknopf span { display: block; min-height: 56px; padding: 14px 16px 14px 48px; border: 2px solid var(--stahl); border-radius: 14px; background: var(--paper); position: relative; font-size: 18px; }
+  .wahlknopf span::before { content: ""; position: absolute; left: 14px; top: 17px; width: 20px; height: 20px; border-radius: 999px; border: 2px solid var(--stahl); }
+  .wahlknopf input:checked + span { border-color: var(--kuli); box-shadow: inset 0 0 0 1px var(--kuli); }
+  .wahlknopf input:checked + span::before { border-color: var(--kuli); background: radial-gradient(circle, var(--kuli) 0 5px, transparent 6px); }
+  .wahlknopf input:focus-visible + span { outline: 3px solid var(--warm); outline-offset: 2px; }
+  .wahlknopf input:disabled + span { cursor: default; }
+  .bed { display: grid; gap: 10px; margin: 8px 0 12px; }
+  .bed .zeile { border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; background: var(--paper); }
+  .bed .zeile p { margin: 0 0 8px; }
+  .aufl { border-left: 6px solid var(--accent); background: var(--accent-soft); border-radius: 0 16px 16px 0; padding: 12px 16px; margin: 10px 0 16px; }
+  .aufl .meine { color: var(--kuli); font-weight: 700; }
+  .zahlen { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 10px 0; }
+  .zahlen div { background: var(--paper); border-radius: 14px; padding: 10px 12px; border: 1px solid var(--line); }
+  .zahlen b { display: block; font: 700 28px var(--font-display); color: var(--accent); }
+  .g-balken__zeile { grid-template-columns: minmax(8rem, 13rem) 1fr 4.75rem; }
+  .g-balken__name { font-size: 16px; }
+  .meinvh { font-size: 16px; color: var(--kuli); font-weight: 600; }
+
+  /* Satzanfänge → Kriterienraster (Muster 10) */
+  .raster { width: 100%; border-collapse: collapse; margin: 10px 0; }
+  .raster th, .raster td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; background: var(--paper); font-size: 17px; }
+  .raster th { background: var(--accent-soft); }
+  @media screen and (max-width: 600px) { .raster, .raster tbody, .raster tr, .raster td, .raster th { display: block; width: 100%; } .raster tr:first-child { display: none; } .raster td { border-top: 0; } .raster tr { margin-bottom: 8px; } }
+  .wortzahl { font-size: 16px; color: var(--ink-soft); }
+  .selbst { display: flex; gap: 6px; flex-wrap: wrap; }
+  .selbst button { -webkit-appearance: none; appearance: none; min-height: 44px; padding: 0 12px; border: 2px solid var(--line); border-radius: 999px; background: var(--paper); color: var(--ink); font: 600 16px var(--font); cursor: pointer; }
+  .selbst button.on { border-color: var(--kuli); background: #e3ebfb; color: var(--ink); }
+  html.dm:not([data-theme="light"]) .selbst button.on { color: var(--ink); }
+
+  /* Löschen ohne Browserdialog */
+  .loeschen-frage { border: 2px solid var(--warm); border-radius: 14px; padding: 12px 14px; margin-top: 10px; background: var(--paper); }
+  .schalter { display: inline-flex; align-items: center; gap: 8px; font-size: 16px; min-height: 44px; cursor: pointer; }
+  .schalter input { width: 22px; height: 22px; }
+
+  /* Druck: Zusammenfassung */
+  .erg td, .erg th { font-size: 9.2pt; padding-top: 2pt; padding-bottom: 2pt; }
+  .linien-chat .stage5 svg { width: 100%; height: auto; }
+  .erg .ich { color: #1e4fb5; }
+  @media print {
+    .print-only .figbox svg { max-height: 62mm; }
+    .paar-druck { display: grid; grid-template-columns: 1fr 1fr; gap: 6pt; width: 64mm; float: right; margin: 0 0 4pt 8pt; }
+    .paar-druck svg { width: 100%; height: auto; }
+  }
 </style>
 </head>
 <body>
@@ -469,7 +834,7 @@ html.dm[data-theme="dark"] {
   <a class="lab-logo" href="index.html"><span id="logo"></span>Psycho-Labor</a>
   <span class="lab-title">DS 5 · Wie sehr beeinflussen mich andere?</span>
   <div class="lab-progress" aria-hidden="true"></div>
-  <button class="top-btn" id="btn-ue" type="button" disabled title="Wird nach dem Versuch freigeschaltet">
+  <button class="top-btn" id="btn-ue" type="button" disabled title="Wird nach den Stationen freigeschaltet">
     <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M4 2h9l3 3v13H4z" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M7 8h6M7 11h6M7 14h4" stroke="currentColor" stroke-width="1.7"/></svg>
     <span class="t">Übersicht</span>
   </button>
@@ -480,49 +845,60 @@ html.dm[data-theme="dark"] {
 
 <!-- ===================== Start ===================== -->
 <section class="step" id="s-1">
-  <span class="kicker">DS 5 · Wahrnehmung · Labor</span>
+  <span class="kicker">DS 5 · Wahrnehmung · Labor und Lernweg</span>
   <h1>Wie sehr beeinflussen mich andere?</h1>
-  <p class="lead">Ein erster Eindruck und ein kurzer Versuch in zwei Teilen. Du schätzt und vergleichst, danach wird aufgelöst. <strong>Erklärt wird anschließend gemeinsam – ohne Tablet.</strong></p>
+  <p class="lead">Erst machst du zwei kurze Versuche. Dann arbeitest du hier weiter: mit der Asch-Studie, einem Video, Herrn Fotiou und einem Gruppenchat. Am Ende entsteht deine Zusammenfassung.</p>
   <div class="grid2">
     <div class="card">
-      <h3>So läuft das Labor (ca. 22 Min.)</h3>
+      <h3>Dein Weg (ca. 75 Min.)</h3>
       <ol class="plan">
-        <li>Erster Eindruck: Herr Fotiou <span>· allein · 1 Min.</span></li>
-        <li>Vermutung festhalten <span>· allein · 2 Min.</span></li>
-        <li>Teil 1: Punkte schätzen <span>· allein · 4 Min.</span></li>
-        <li>Teil 2: Linien vergleichen <span>· allein · 2 Min.</span></li>
-        <li>Ergebnis an die Lehrkraft (QR-Code)</li>
-        <li>Auflösung: Beobachtung und Vermutung notieren <span>· gemeinsam · 10 Min.</span></li>
-        <li>Lernmappe als PDF sichern – <strong>Ende des Labors</strong></li>
+        <li>Erleben: erster Eindruck, Vermutung, zwei Versuche <span>· allein · 12 Min.</span></li>
+        <li>Auflösung mit dem Kurs <span>· gemeinsam · 8 Min.</span></li>
+        <li>Station 1: Die Asch-Studie mit Video <span>· 12 Min.</span></li>
+        <li>Station 2: Wann passen wir uns an – und warum? <span>· 15 Min.</span></li>
+        <li>Station 3: Wie ich andere sehe <span>· 10 Min.</span></li>
+        <li>Station 4: Demo oder Studie? <span>· 5 Min.</span></li>
+        <li>Dein Tipp und deine Zusammenfassung <span>· 13 Min.</span></li>
       </ol>
     </div>
     <div class="card">
-      <h3>Am Ende hast du …</h3>
-      <p>eine <strong>Lernmappe mit vier Seiten</strong>: die Lernübersicht und das Arbeitsblatt, auf dem deine Versuchsdaten schon eingetragen sind. Damit arbeitest du in GoodNotes weiter.</p>
-      <p class="small">Die Lernübersicht (Knopf oben rechts) wird erst <strong>nach</strong> dem Versuch freigeschaltet. Sonst würde sie den Versuch verraten.</p>
+      <h3>Am Ende kannst du …</h3>
+      <ul style="margin:0;padding-left:22px">
+        <li>die Asch-Studie richtig wiedergeben – mit beiden Seiten des Ergebnisses,</li>
+        <li>mit zwei Gründen erklären, warum und wann sich Menschen anpassen,</li>
+        <li>Halo-Effekt und Vorurteil an Beispielen erkennen,</li>
+        <li>beurteilen, was unser Versuch zeigen kann – und was nicht.</li>
+      </ul>
+      <p class="small" style="margin-bottom:0">Nicht alle bekommen dieselben Informationen. Das gehört zum Versuch und wird vollständig aufgeklärt.</p>
     </div>
   </div>
-  <div class="actions"><button class="btn big" data-next>Start</button></div>
-  <div class="private"><span class="lock"></span><span>Alles bleibt auf diesem iPad. Es wird nichts ins Internet gesendet. Namen werden nirgends gespeichert.</span></div>
+  <div class="actions"><button class="btn big" data-next>Start</button>
+    <label class="schalter"><input type="checkbox" id="ruhig"> Weniger Bewegung</label></div>
+  <div class="private"><span class="lock"></span><span>Alles bleibt auf diesem iPad. Es wird nichts ins Internet gesendet. Namen werden nirgends gespeichert. Das Video lädt erst, wenn du es selbst antippst.</span></div>
 </section>
 
 <!-- ===================== Erster Eindruck ===================== -->
 <section class="step" id="s-fot">
-  <div class="timebox"><b>⏱ 1 Min.</b><i>allein</i><span>Schritt 1 von 7</span></div>
+  <div class="timebox"><b>⏱ 2 Min.</b><i>allein</i><span>Erleben · Schritt 1 von 6</span></div>
   <h2>Erster Eindruck</h2>
-  <div class="vignette">Am Beamer siehst du <strong>Herrn Fotiou</strong> (ausgedachter Fall). Er leitet ab nächster Woche ein Projekt an eurer Schule.</div>
-  <div class="auftrag">
-    <span class="label a">Auftrag</span>
-    <p style="margin:0 0 8px">Wie schätzt du ihn ein? Antworte spontan. 1 = gar nicht · 5 = sehr. Wenn du es nicht sagen kannst, tippe auf „?“.</p>
-    <div id="fot-rows"></div>
-    <div class="actions"><button class="btn" id="fot-save" disabled>Einschätzung speichern</button><span class="saved" id="fot-ok" hidden>Gespeichert. Darauf kommen wir später zurück.</span></div>
+  <div class="grid2" style="align-items:start">
+    <div><div class="fotiou" id="fot-bild"></div><p class="bildzeile" style="text-align:center"><span class="status-chip">Zeichnung · ausgedachte Person</span></p></div>
+    <div>
+      <div class="vignette" style="margin-top:0">Das ist <strong>Herr Fotiou</strong>. Er leitet ab nächster Woche ein Projekt an eurer Schule.</div>
+      <div class="auftrag">
+        <span class="label a">Auftrag</span>
+        <p style="margin:0 0 8px">Wie schätzt du ihn ein? Antworte spontan. 1 = gar nicht · 5 = sehr. Wenn du es nicht sagen kannst, tippe auf „?“.</p>
+        <div id="fot-rows"></div>
+        <div class="actions"><button class="btn" id="fot-save" disabled>Einschätzung speichern</button><span class="saved" id="fot-ok" hidden>Gespeichert. Darauf kommen wir in Station 3 zurück.</span></div>
+      </div>
+    </div>
   </div>
   <div class="actions"><button class="btn secondary" data-prev>Zurück</button><button class="btn" data-next id="to-verm" disabled>Weiter</button></div>
 </section>
 
 <!-- ===================== Vermutung ===================== -->
 <section class="step" id="s-2">
-  <div class="timebox"><b>⏱ 2 Min.</b><i>allein</i><span>Schritt 2 von 7</span></div>
+  <div class="timebox"><b>⏱ 2 Min.</b><i>allein</i><span>Erleben · Schritt 2 von 6</span></div>
   <h2>Deine Vermutung</h2>
   <div class="vignette">Stell dir vor: Du sitzt mit fünf anderen an einem Tisch. Alle sagen nacheinander laut ihre Antwort auf eine Frage. Die fünf vor dir sagen alle dasselbe – aber etwas anderes, als du gedacht hast.</div>
   <div class="auftrag">
@@ -533,16 +909,16 @@ html.dm[data-theme="dark"] {
       <button class="choice" data-v="1" type="button">Nur, wenn ich mir unsicher bin.</button>
       <button class="choice" data-v="2" type="button">Ja, vielleicht sogar, wenn ich mir sicher bin.</button>
     </div>
-    <label class="field-label" for="verm-grund">Warum glaubst du das?</label>
-    <textarea id="verm-grund" class="short" maxlength="400"></textarea>
-    <div class="actions"><button class="btn" id="verm-save" disabled>Vermutung speichern</button><span class="saved" id="verm-ok" hidden>Gespeichert. Am Ende der Stunde schaust du sie dir noch einmal an.</span></div>
+    <label class="field-label" for="verm-grund">Warum glaubst du das? (ein kurzer Satz)</label>
+    <textarea id="verm-grund" class="short" maxlength="200"></textarea>
+    <div class="actions"><button class="btn" id="verm-save" disabled>Vermutung speichern</button><span class="saved" id="verm-ok" hidden>Gespeichert. Am Ende schaust du sie dir noch einmal an.</span></div>
   </div>
   <div class="actions"><button class="btn secondary" data-prev>Zurück</button><button class="btn" data-next id="to-t1" disabled>Weiter zu Teil 1</button></div>
 </section>
 
 <!-- ===================== Teil 1: Punkte ===================== -->
 <section class="step" id="s-3">
-  <div class="timebox"><b>⏱ 4 Min.</b><i>allein</i><span>Schritt 3 von 7 · Teil 1</span></div>
+  <div class="timebox"><b>⏱ 4 Min.</b><i>allein</i><span>Erleben · Schritt 3 von 6 · Teil 1</span></div>
   <h2>Teil 1: Wie viele Punkte sind das?</h2>
   <div class="auftrag" id="t1-auftrag">
     <span class="label a">Auftrag</span>
@@ -550,7 +926,7 @@ html.dm[data-theme="dark"] {
       <li>Tippe auf das Feld. Du siehst <strong>2 Sekunden</strong> lang viele Punkte. Zum Zählen reicht die Zeit nicht – schätze.</li>
       <li>Gib deine Schätzung ein und sag, wie sicher du bist.</li>
     </ol>
-    <p class="small" style="margin:8px 0 0">Drei Runden. Nicht alle bekommen dieselben Informationen. Das gehört zum Versuch und wird gleich aufgeklärt.</p>
+    <p class="small" style="margin:8px 0 0">Drei Runden.</p>
   </div>
   <div class="counter" id="t1-count">Runde 1 von 3</div>
   <div class="stage5" id="stage1" role="button" tabindex="0" aria-label="Punkte zeigen"><div class="msgc">Tippe hier, um die Punkte zu zeigen.</div></div>
@@ -568,21 +944,24 @@ html.dm[data-theme="dark"] {
   </div>
 </section>
 
-<!-- ===================== Teil 2: Linien ===================== -->
+<!-- ===================== Teil 2: Linien im Gruppenchat ===================== -->
 <section class="step" id="s-4">
-  <div class="timebox"><b>⏱ 2 Min.</b><i>allein</i><span>Schritt 4 von 7 · Teil 2</span></div>
+  <div class="timebox"><b>⏱ 3 Min.</b><i>allein</i><span>Erleben · Schritt 4 von 6 · Teil 2</span></div>
   <h2>Teil 2: Welche Linie ist gleich lang?</h2>
   <div class="auftrag">
     <span class="label a">Auftrag</span>
-    <p style="margin:0">Welche Linie – A, B oder C – ist <strong>genauso lang</strong> wie die Vergleichslinie links? Drei Runden.</p>
+    <p style="margin:0">Welche Linie – A, B oder C – ist <strong>genauso lang</strong> wie die Vergleichslinie links? Antworte im Gruppenchat. Drei Runden.</p>
   </div>
   <div class="counter" id="t2-count">Runde 1 von 3</div>
-  <div class="stage5" id="stage2"></div>
-  <div class="others" id="t2-others" hidden><strong>So haben fünf andere Personen gewählt:</strong><div class="nums" id="t2-nums"></div></div>
+  <div class="linien-chat"><div class="stage5" id="stage2"></div>
+  <div class="chat" id="chat">
+    <div class="chat-kopf"><b>Gruppe „Linien“</b><span id="chat-wer"></span></div>
+    <div class="chat-verlauf" id="chat-verlauf" aria-live="polite"></div>
+  </div></div>
   <div class="card" id="t2-resp">
-    <p class="field-label" style="margin-top:0">Deine Antwort:</p>
+    <p class="field-label" style="margin-top:0">Deine Antwort im Chat:</p>
     <div class="abc" id="t2-abc"><button type="button" data-v="A">A</button><button type="button" data-v="B">B</button><button type="button" data-v="C">C</button></div>
-    <div class="actions"><button class="btn" id="t2-ok" disabled>Antwort speichern</button></div>
+    <div class="actions"><button class="btn" id="t2-ok" disabled>Senden</button></div>
   </div>
   <div id="t2-done" hidden>
     <div class="card accent"><strong>Geschafft!</strong> Beide Teile sind erledigt.</div>
@@ -592,21 +971,21 @@ html.dm[data-theme="dark"] {
 
 <!-- ===================== Kursvergleich ===================== -->
 <section class="step" id="s-5">
-  <div class="timebox"><b>Schritt 5 von 7</b><i>Ergebnis an die Lehrkraft</i></div>
+  <div class="timebox"><b>Erleben · Schritt 5 von 6</b><i>Ergebnis an die Lehrkraft</i></div>
   <h2>Dein Ergebnis für den Kurs</h2>
   <p>Zeig diesen QR-Code deiner Lehrkraft. Dein Ergebnis erscheint <strong>ohne Namen</strong> im Kursdiagramm.</p>
-  <div class="card"><div class="qr-box"><div id="qr"></div><div style="flex:1;min-width:220px"><p class="small">Im Code stehen nur Zahlen: deine Schätzungen im Verhältnis zur wahren Anzahl, deine Linienantworten, deine Sicherheit, welche Fassung du hattest und wie viele Eigenschaften du bei Herrn Fotiou eingeschätzt hast.</p><p class="small">Falls das Scannen nicht klappt:</p><div class="code" id="code"></div></div></div></div>
+  <div class="card"><div class="qr-box"><div id="qr"></div><div style="flex:1;min-width:220px"><p class="small">Im Code stehen nur eine zufällige Kennung, deine Fassung und Zahlen: deine Schätzungen im Verhältnis zur wahren Anzahl, deine Linienantworten, deine Sicherheit, welche Fassung du hattest und deine Einschätzung von Herrn Fotiou.</p><p class="small">Falls das Scannen nicht klappt:</p><div class="code" id="code"></div></div></div></div>
   <div class="card warm"><strong>Warte jetzt, bis alle fertig sind.</strong> Die Auflösung machen wir gemeinsam.</div>
   <div class="actions"><button class="btn big" data-next>Zur Auflösung (erst auf Ansage)</button></div>
 </section>
 
 <!-- ===================== Auflösung ===================== -->
 <section class="step" id="s-6">
-  <div class="timebox"><b>⏱ 10 Min.</b><i>gemeinsam, dann allein schreiben</i><span>Schritt 6 von 7 · Auflösung</span></div>
+  <div class="timebox"><b>⏱ 8 Min.</b><i>gemeinsam, dann allein schreiben</i><span>Erleben · Schritt 6 von 6 · Auflösung</span></div>
   <h2>Was im Versuch wirklich passiert ist</h2>
   <div class="info">
     <span class="label i">Information</span>
-    <p>Es gab <strong>zwei Fassungen</strong>, verteilt über die zwei QR-Codes. Ein Teil des Kurses sah vor jeder Antwort die Antworten von „fünf anderen Personen“. <strong>Diese Antworten waren erfunden</strong>: bei den Punkten absichtlich viel zu hoch, bei den Linien absichtlich falsch.</p>
+    <p>Es gab <strong>zwei Fassungen</strong>, verteilt über die zwei QR-Codes. Ein Teil des Kurses sah vor jeder Antwort die Antworten von „fünf anderen Personen“. <strong>Diese Antworten waren erfunden</strong>: bei den Punkten absichtlich viel zu hoch, im Chat absichtlich falsch. Und noch etwas war verschieden – das klären wir in Station 3.</p>
     <div id="my-res"></div>
     <p class="small" style="margin:8px 0 0">Das Ergebnis des ganzen Kurses zeigt deine Lehrkraft am Beamer.</p>
   </div>
@@ -614,41 +993,155 @@ html.dm[data-theme="dark"] {
     <span class="label a">Auftrag 1 · Beobachtung beschreiben</span>
     <p>Vergleiche im Kursdiagramm die beiden Fassungen – bei den Punkten und bei den Linien. Beschreibe in 1–2 Sätzen, was du siehst.</p>
     <div class="hilfe"><strong>Beschreiben</strong> heißt: nur sagen, was passiert ist – noch ohne „weil“. Bei so wenigen Personen pro Fassung kann ein Unterschied auch Zufall sein.</div>
-    <textarea id="b1" class="short" aria-label="Beobachtung"></textarea>
+    <textarea id="b1" class="short" maxlength="200" aria-label="Beobachtung"></textarea>
   </div>
   <div class="auftrag">
-    <span class="label a">Auftrag 2 · Erste Vermutung</span>
-    <p>Haben die Antworten anderer bei den Punkten stärker gewirkt als bei den Linien? Wenn ja: Woran könnte das liegen? Wenn nein: Was könnte der Grund sein?</p>
+    <span class="label a">Auftrag 2 · Erklärungsidee</span>
+    <p>Haben die Antworten anderer bei den Punkten stärker gewirkt als bei den Linien? Woran könnte das liegen?</p>
     <div class="hilfe">Denk daran, wie sicher du dir bei den Punkten warst – und wie eindeutig die Linien waren.</div>
-    <textarea id="v1" class="short" aria-label="Vermutung"></textarea>
+    <textarea id="v1" class="short" maxlength="200" aria-label="Erklärungsidee"></textarea>
   </div>
-  <div class="actions"><button class="btn" data-next id="to-mappe" disabled>Weiter: Lernmappe</button><span class="small" id="a-hint">Schreib zuerst etwas in beide Felder.</span></div>
+  <div class="actions"><button class="btn" data-next id="to-st1" disabled>Weiter zu Station 1</button><span class="small" id="a-hint">Schreib zuerst in beide Felder mindestens einen kurzen Satz.</span></div>
 </section>
 
-<!-- ===================== Lernmappe ===================== -->
-<section class="step" id="s-7">
-  <div class="timebox"><b>Schritt 7 von 7</b><i>allein</i><span>Ende des Labors</span></div>
-  <h2>Sichere deine Lernmappe</h2>
+<!-- ===================== Station 1: Asch ===================== -->
+<section class="step" id="s-asch">
+  <div class="timebox"><b>⏱ 12 Min.</b><i>Video gemeinsam, dann allein</i><span>Station 1 von 4</span></div>
+  <h2>Station 1: Die Asch-Studie</h2>
+  <div class="info">
+    <span class="label i">Information</span>
+    <p>Solomon Asch wollte 1951 wissen: Sagen Menschen etwas Falsches, nur weil alle anderen es sagen – auch wenn die Antwort eindeutig ist?</p>
+    <figure class="figure" id="fig-asch"></figure>
+    <p style="margin:0">Eine echte Versuchsperson saß mit sechs bis acht Eingeweihten am Tisch. Alle sagten nacheinander <strong>laut</strong>, welche Linie gleich lang ist. In 12 von 18 Durchgängen nannten die Eingeweihten absichtlich eine falsche Linie.</p>
+  </div>
+  <div class="auftrag">
+    <span class="label a">Auftrag 1 · Video (am Beamer)</span>
+    <p style="margin:0 0 6px">Schau dir das Video an. Achte nur auf die eine echte Versuchsperson. Notiere danach:</p>
+    <label class="field-label" for="vid1">Was macht sie, wenn sie an der Reihe ist? (Körper, Gesicht, Antwort)</label>
+    <textarea id="vid1" class="short" maxlength="150"></textarea>
+    <label class="field-label" for="vid2">Woran merkst du, dass die Situation für sie unangenehm ist?</label>
+    <textarea id="vid2" class="short" maxlength="150"></textarea>
+    <label class="schalter"><input type="checkbox" id="vid-ohne"> Wir konnten das Video nicht ansehen.</label>
+    <div class="video" id="video"></div>
+  </div>
+  <div class="vh" id="vh-asch"></div>
+  <div class="aufl" id="aufl-asch" hidden aria-live="polite"></div>
+  <div class="info" id="info-konf" hidden>
+    <span class="label i">Information</span>
+    <p style="margin:0"><strong>Konformität</strong>: Man passt sein Urteil oder Verhalten an eine Gruppe an.</p>
+  </div>
+  <div class="actions"><button class="btn secondary" data-prev>Zurück</button><button class="btn" data-next id="to-st2" disabled>Weiter zu Station 2</button></div>
+</section>
+
+<!-- ===================== Station 2: Wann und warum ===================== -->
+<section class="step" id="s-bed">
+  <div class="timebox"><b>⏱ 15 Min.</b><i>allein, dann zu zweit vergleichen</i><span>Station 2 von 4</span></div>
+  <h2>Station 2: Wann passen wir uns an – und warum?</h2>
+  <div class="vh" id="vh-bed"></div>
+  <div class="aufl" id="aufl-bed" hidden aria-live="polite"></div>
+  <div id="teil-gruende" hidden>
+    <div class="info">
+      <span class="label i">Information · Zwei Gründe (nach Deutsch &amp; Gerard 1955)</span>
+      <figure class="figure" id="fig-gruende"></figure>
+      <p style="margin:0 0 6px"><strong>Informativer Einfluss:</strong> „Ich bin unsicher – die anderen wissen es vielleicht besser.“ Stark, wenn die Aufgabe schwierig oder unklar ist. Beispiel: Sherif (1935) – im dunklen Raum scheint ein Lichtpunkt zu wandern (eine Täuschung, er steht still). In der Gruppe glichen sich die Schätzungen an.</p>
+      <p style="margin:0"><strong>Normativer Einfluss:</strong> „Ich will dazugehören und nicht auffallen.“ Stark, wenn die Gruppe hört oder sieht, was ich antworte. Deshalb hilft die geheime Antwort – und schon ein einziger Verbündeter.</p>
+    </div>
+    <div class="auftrag">
+      <span class="label a">Auftrag · Zuordnen mit Begründung</span>
+      <p style="margin:0">Was steckt dahinter? Wähle, begründe in einem Satz und lege dich fest. Danach siehst du zu jeder Antwort eine Rückmeldung.</p>
+    </div>
+    <div id="zu-gruende"></div>
+  </div>
+  <div class="actions"><button class="btn secondary" data-prev>Zurück</button><button class="btn" data-next id="to-st3" disabled>Weiter zu Station 3</button></div>
+</section>
+
+<!-- ===================== Station 3: Halo und Vorurteil ===================== -->
+<section class="step" id="s-halo">
+  <div class="timebox"><b>⏱ 10 Min.</b><i>allein</i><span>Station 3 von 4</span></div>
+  <h2>Station 3: Wie ich andere sehe</h2>
+  <div class="info">
+    <span class="label i">Information</span>
+    <p style="margin:0">Auch Herr Fotiou gehörte zum Versuch: Es gab ihn in <strong>zwei Zeichnungen</strong>. Sie sind gleich – bis auf den Gesichtsausdruck. Wer welche gesehen hat, hing am QR-Code.</p>
+    <div class="paar" id="paar"></div>
+  </div>
+  <div class="vh" id="vh-halo"></div>
+  <div class="aufl" id="aufl-halo" hidden aria-live="polite"></div>
+  <div id="teil-halo" hidden>
+    <div class="info">
+      <span class="label i">Information · Halo-Effekt und Vorurteil</span>
+      <p><strong>Halo-Effekt</strong> (Halo = Heiligenschein): Ein auffälliges Merkmal einer Person färbt auf unser Urteil über ganz andere Eigenschaften ab. Thorndike (1920) fand: Wer in einer Eigenschaft gut bewertet wurde, bekam meist auch in den anderen gute Bewertungen.</p>
+      <p style="margin:0"><strong>Vorurteil</strong>: ein starres, verallgemeinerndes Urteil über Menschen – nur, weil sie zu einer bestimmten Gruppe gehören. Es ist eine besonders starke Erwartung (DS 4), die andere teilen: Gegenbeispiele werden umgedeutet oder als Ausnahme abgetan.</p>
+    </div>
+    <div class="auftrag"><span class="label a">Auftrag · Zuordnen mit Begründung</span><p style="margin:0">Halo-Effekt oder Vorurteil? Wähle, begründe, lege dich fest.</p></div>
+    <div id="zu-halo"></div>
+  </div>
+  <div class="actions"><button class="btn secondary" data-prev>Zurück</button><button class="btn" data-next id="to-st4" disabled>Weiter zu Station 4</button></div>
+</section>
+
+<!-- ===================== Station 4: Demo oder Studie ===================== -->
+<section class="step" id="s-pruef">
+  <div class="timebox"><b>⏱ 5 Min.</b><i>allein</i><span>Station 4 von 4</span></div>
+  <h2>Station 4: Anschauliche Demo oder belastbare Studie?</h2>
+  <div class="info">
+    <span class="label i">Information</span>
+    <table class="cmp">
+      <tr><th></th><th>Unser Labor</th><th>Asch-Studie</th></tr>
+      <tr><td><b>Personen</b></td><td>so viele wie im Kurs, auf zwei Fassungen verteilt</td><td>123 Versuchspersonen; später über 130 Wiederholungen in 17 Ländern (Bond &amp; Smith 1996)</td></tr>
+      <tr><td><b>Gruppe</b></td><td>erfundene Antworten am Bildschirm – niemand sieht dich</td><td>echte Menschen am Tisch, Antworten laut</td></tr>
+    </table>
+  </div>
+  <div id="zu-pruef"></div>
+  <div class="actions"><button class="btn secondary" data-prev>Zurück</button><button class="btn" data-next id="to-prod" disabled>Weiter zu deinem Tipp</button></div>
+</section>
+
+<!-- ===================== Produkt ===================== -->
+<section class="step" id="s-prod">
+  <div class="timebox"><b>⏱ 8 Min.</b><i>allein</i><span>Sichern</span></div>
+  <h2>Dein Tipp für einen Gruppenchat</h2>
+  <div class="vignette">In einem Gruppenchat lästern alle über eine Person aus der Parallelklasse. Niemand widerspricht. <span class="fiction">ausgedachter Fall</span></div>
+  <div class="auftrag">
+    <span class="label a">Auftrag</span>
+    <p style="margin:0 0 6px">Schreib einen Tipp für jemanden in diesem Chat (mindestens 40 Wörter). Nutze mindestens einen Fachbegriff und einen Befund der Asch-Studie.</p>
+    <div class="hilfe">Satzanfänge: „Wenn alle … , wirkt …“ · „Bei Asch …“ · „Deshalb kannst du …“</div>
+    <textarea id="tipp" rows="6" maxlength="700" placeholder="Wenn alle lästern, wirkt …"></textarea>
+    <p class="wortzahl" id="wz">0 Wörter</p>
+    <div class="actions"><button class="btn" id="raster-zeigen" disabled>Mit den Kriterien vergleichen</button></div>
+  </div>
+  <div id="raster" hidden></div>
+  <div class="auftrag" id="rueck" hidden>
+    <span class="label a">Zurück zu deiner Vermutung</span>
+    <p style="margin:0 0 6px" id="rueck-verm"></p>
+    <label class="field-label" for="jetzt">Was denkst du jetzt – und warum? (1–2 Sätze, mit einem Fachbegriff)</label>
+    <textarea id="jetzt" class="short" maxlength="220"></textarea>
+  </div>
+  <div class="actions"><button class="btn secondary" data-prev>Zurück</button><button class="btn" data-next id="to-ende" disabled>Weiter: Zusammenfassung</button></div>
+</section>
+
+<!-- ===================== Zusammenfassung ===================== -->
+<section class="step" id="s-ende">
+  <div class="timebox"><b>⏱ 5 Min.</b><i>allein</i><span>Ende des Lernwegs</span></div>
+  <h2>Deine Zusammenfassung</h2>
   <div class="grid2">
     <div class="card">
-      <h3>Das steht in deiner Lernmappe (4 Seiten)</h3>
+      <h3>Das steht darin (4 Seiten)</h3>
       <ul class="checklist" id="checklist"></ul>
     </div>
     <div class="card">
       <h3>So kommt sie in GoodNotes</h3>
       <ol style="margin:0;padding-left:22px">
-        <li>Tippe auf <strong>„Lernmappe als PDF“</strong>.</li>
+        <li>Tippe auf <strong>„Zusammenfassung als PDF“</strong>.</li>
         <li>Im Druckfenster oben auf das <strong>Teilen-Symbol</strong> tippen.</li>
         <li><strong>GoodNotes</strong> wählen und als neues Dokument importieren.</li>
       </ol>
       <p class="small">Kein Teilen-Symbol? Die Seitenvorschau im Druckfenster mit zwei Fingern auseinanderziehen.</p>
     </div>
   </div>
-  <div class="actions"><button class="btn big" id="btn-pdf">Lernmappe als PDF</button></div>
+  <div class="actions"><button class="btn big" id="btn-pdf">Zusammenfassung als PDF</button></div>
   <div class="card accent end">
-    <div class="big">Ende des Labors</div>
-    <p>Ab jetzt geht es ohne Tablet weiter – nur fürs Arbeitsblatt öffnest du GoodNotes.</p>
+    <div class="big">Ende des Lernwegs</div>
+    <p>Tablet umdrehen. Zwei Tipps werden gleich freiwillig vorgelesen.</p>
     <p class="small" style="margin:0"><button class="btn secondary" id="btn-reset" type="button">Alle Eingaben auf diesem iPad löschen</button></p>
+    <div class="loeschen-frage" id="loeschen-frage" hidden><p style="margin:0 0 8px"><strong>Wirklich alles löschen?</strong> Danach ist auf diesem iPad nichts mehr von dieser Stunde gespeichert.</p><div class="actions" style="margin:0"><button class="btn" id="loeschen-ja" type="button">Ja, löschen</button><button class="btn secondary" id="loeschen-nein" type="button">Abbrechen</button></div></div>
   </div>
 </section>
 
@@ -661,42 +1154,42 @@ html.dm[data-theme="dark"] {
   <div class="drawer-body ue" id="drawer-body"></div>
 </aside>
 
-<!-- ===================== Lernübersicht (Schublade und Seite 1–2 der Lernmappe) ===================== -->
+<!-- ===================== Lernübersicht (Schublade und Seite 1–2 der Zusammenfassung) ===================== -->
 <template id="tpl-ue">
   <div class="pg ue">
     <h1>Lernübersicht · Wie sehr beeinflussen mich andere?</h1>
-    <p class="kern">Andere Menschen verändern, was wir sagen – und manchmal, was wir glauben. Und wie wir andere sehen, hängt oft an einem einzigen Merkmal oder an einem Vorurteil.</p>
+    <p class="kern">Andere Menschen verändern, was wir sagen – und manchmal, was wir glauben. Wie wir andere sehen, hängt oft an einem einzigen Merkmal oder an einem Vorurteil.</p>
 
     <h2 id="ue-1">1 · Konformität: Die Asch-Studie</h2>
     <p><b>Konformität</b>: Man passt sein Urteil oder Verhalten an eine Gruppe an.</p>
-    <div class="two" style="grid-template-columns:1fr 1.5fr">
-      <div class="figbox" data-fig="linien"></div>
+    <div class="two" style="grid-template-columns:1fr 1.4fr">
+      <div class="figbox" data-fig="asch"></div>
       <div>
-        <p><b>Aufbau</b> (Asch 1951, 1956): Eine echte Versuchsperson saß mit sechs bis acht Eingeweihten am Tisch. Alle sagten nacheinander laut, welche Linie gleich lang ist wie die Vergleichslinie. In 12 von 18 Durchgängen nannten die Eingeweihten absichtlich eine falsche Linie.</p>
-        <p><b>Ergebnis:</b> Allein machten fast alle alles richtig (unter 1 % Fehler). Mit der falschen Mehrheit folgte etwa <b>jede dritte Antwort</b> der Gruppe. Rund drei Viertel folgten mindestens einmal. Aber: Zwei Drittel aller Antworten blieben richtig.</p>
+        <p><b>Aufbau</b> (Asch 1951, 1956): Eine echte Versuchsperson saß mit sechs bis acht Eingeweihten am Tisch. Alle sagten nacheinander laut, welche Linie gleich lang ist. In 12 von 18 Durchgängen nannten die Eingeweihten absichtlich eine falsche Linie.</p>
+        <p><b>Ergebnis:</b> Allein machten fast alle alles richtig (unter 1 % Fehler). Mit der falschen Mehrheit folgte etwa <b>jede dritte Antwort</b> der Gruppe. Drei von vier Personen folgten mindestens einmal, jede vierte nie. Zwei Drittel aller Antworten blieben richtig.</p>
+        <p><b>Warum?</b> Im Interview sagten nur wenige, sie hätten die Linien wirklich anders gesehen. Viele zweifelten an ihrem eigenen Urteil. Andere wussten, dass die Gruppe falsch lag, und wollten nicht auffallen.</p>
       </div>
     </div>
 
-    <h2 id="ue-2">2 · Warum passen wir uns an? Zwei Gründe <span style="font-weight:400;font-size:.8em">(nach Deutsch &amp; Gerard 1955)</span></h2>
+    <h2 id="ue-2">2 · Wann und warum passen wir uns an?</h2>
     <table class="cmp">
       <tr><th></th><th>informativer Einfluss</th><th>normativer Einfluss</th></tr>
       <tr><td><b>Grund</b></td><td>„Ich bin unsicher – die anderen wissen es vielleicht besser.“</td><td>„Ich will dazugehören und nicht auffallen.“</td></tr>
       <tr><td><b>stark, wenn …</b></td><td>die Aufgabe schwierig oder unklar ist</td><td>die Gruppe hört oder sieht, was ich antworte</td></tr>
-      <tr><td><b>Was ändert sich?</b></td><td>oft auch meine Überzeugung: Ich glaube es dann wirklich.</td><td>oft nur meine Antwort nach außen</td></tr>
-      <tr><td><b>Studie</b></td><td>Sherif (1935): Ein Lichtpunkt im dunklen Raum scheint sich zu bewegen – eine Täuschung, er steht still. Wie weit? In der Gruppe glichen sich die Schätzungen an.</td><td>Asch: Im Interview sagten viele, sie hätten gewusst, dass die Gruppe falsch lag.</td></tr>
-      <tr><td><b>Alltag</b></td><td>Viele Likes und gute Bewertungen – also muss das Video gut sein.</td><td>In der Clique finden alle einen Film super – man sagt lieber nichts Kritisches.</td></tr>
+      <tr><td><b>Was ändert sich?</b></td><td>oft auch meine Überzeugung</td><td>oft nur meine Antwort nach außen</td></tr>
+      <tr><td><b>Studie</b></td><td>Sherif (1935): Lichtpunkt im Dunkeln (er steht still) – in der Gruppe glichen sich die Schätzungen an.</td><td>Asch: Mitgehen, obwohl man die Linien richtig sah.</td></tr>
     </table>
-    <p class="merk">Was schützt? Schon <u>eine</u> Person, die widerspricht: Bei Asch sank die Anpassung dann stark – auf etwa 5 %. Auch wer geheim (schriftlich) antwortet, passt sich deutlich seltener an.</p>
-    <p class="status">Hinweis: Alle Personen in Beispielen und Fällen sind ausgedacht. Schaubilder sind vereinfachte Modelle. Studien sind mit Autor und Jahr belegt.</p>
+    <p class="merk">Bedingungen bei Asch (gerundet): Gegenüber nur <u>einer</u> Person kaum Anpassung (≈ 3 %), bei zwei ≈ 13 %, ab drei ≈ 32 % – mehr Personen änderten kaum noch etwas. Schon <u>ein</u> Verbündeter senkte die Anpassung auf etwa ein Viertel des Werts (≈ 8 statt 32 %); geheim (schriftlich) ≈ 12,5 %.</p>
+    <p class="status">Personen in Beispielen und Fällen sind ausgedacht. Schaubilder und Zeichnungen sind vereinfachte Modelle. Zahlen zu Asch nach Asch (1951, 1955, 1956), wiedergegeben in Lehrbuch-Sekundärquellen.</p>
   </div>
   <div class="pg ue">
     <h2 id="ue-3">3 · Halo-Effekt: Ein Merkmal färbt ab</h2>
     <div class="two" style="grid-template-columns:1.1fr 1fr">
       <div class="figbox" data-fig="halo"></div>
       <div>
-        <p><b>Halo-Effekt</b> (Halo = Heiligenschein): Ein auffälliges Merkmal einer Person färbt auf unser Urteil über ganz andere Eigenschaften ab. Beispiele für solche Merkmale: Aussehen, Kleidung, ein sympathisches Lächeln.</p>
-        <p><b>Studie:</b> Thorndike (1920) bat Vorgesetzte, Soldaten in mehreren Eigenschaften zu bewerten. Die Bewertungen hingen viel enger zusammen, als zu erwarten war: Wer in einer Eigenschaft gut abschnitt, wurde meist auch in den anderen gut bewertet.</p>
-        <p><b>Unterschied zum Primacy-Effekt (DS 4):</b> Dort zählt die <i>Reihenfolge</i> der Informationen, hier ein <i>auffälliges Merkmal</i>.</p>
+        <p><b>Halo-Effekt</b> (Halo = Heiligenschein): Ein auffälliges Merkmal einer Person färbt auf unser Urteil über ganz andere Eigenschaften ab. Beispiele für solche Merkmale: Aussehen, Kleidung, ein Lächeln.</p>
+        <p><b>Studie:</b> Thorndike (1920) bat Vorgesetzte, Soldaten in mehreren Eigenschaften zu bewerten. Die Bewertungen hingen viel enger zusammen, als zu erwarten war.</p>
+        <p><b>Unser Versuch:</b> zwei Zeichnungen von Herrn Fotiou – lächelnd und ernst. Unterscheiden sich die Einschätzungen, ist das ein Hinweis, kein Beweis.</p>
       </div>
     </div>
 
@@ -708,65 +1201,49 @@ html.dm[data-theme="dark"] {
     <h2 id="ue-5">5 · Denkwerkzeug: Anschauliche Demo oder belastbare Studie?</h2>
     <table class="cmp">
       <tr><th></th><th>Unser Labor</th><th>Asch-Studie</th></tr>
-      <tr><td><b>Personen</b></td><td>7, aufgeteilt auf zwei Fassungen</td><td>123 Versuchspersonen; heute über 130 Wiederholungen in 17 Ländern (Bond &amp; Smith 1996)</td></tr>
-      <tr><td><b>Gruppe</b></td><td>erfundene Antworten am Bildschirm – niemand sieht dich</td><td>echte Menschen am Tisch, Antworten laut</td></tr>
+      <tr><td><b>Personen</b></td><td>unser Kurs, auf zwei Fassungen verteilt</td><td>123 Versuchspersonen; später über 130 Wiederholungen in 17 Ländern (Bond &amp; Smith 1996)</td></tr>
       <tr><td><b>Aussage</b></td><td>zeigt anschaulich, wie Einfluss wirken kann</td><td>zeigt, wie stark und unter welchen Bedingungen er wirkt</td></tr>
     </table>
-    <p style="margin-top:6px"><b>Ethik:</b> Versuche mit Täuschung sind nur vertretbar, wenn sie harmlos sind, angekündigt werden („Nicht alle bekommen dieselben Informationen“) und danach vollständig aufgeklärt wird.</p>
+    <p style="margin-top:6px"><b>Ethik:</b> In der Forschung ist Täuschung nur vertretbar, wenn sie harmlos ist, der Versuch sie braucht und danach vollständig aufgeklärt wird. Im Unterricht kündigen wir sie zusätzlich vorher an („Nicht alle bekommen dieselben Informationen“).</p>
   </div>
 </template>
 
-<!-- ===================== Arbeitsblatt (Seite 3–4 der Lernmappe) ===================== -->
-<template id="tpl-ab">
+<!-- ===================== Meine Ergebnisse (Seite 3–4) ===================== -->
+<template id="tpl-erg">
   <div class="pg">
-    <div class="ph"><span>Lernmappe DS 5 · Arbeitsblatt, Teil A: Die Gruppe lenkt mein Urteil</span><span>1–2 zu zweit · A allein · ca. 15 Min.</span></div>
-    <h2 style="margin-top:0">Teil A · Die Gruppe lenkt mein Urteil</h2>
+    <div class="ph"><span>DS 5 · Zusammenfassung · Meine Ergebnisse</span><span>Seite 3 von 4</span></div>
+    <h2 style="margin-top:0">1 · Was ich erlebt habe</h2>
     <div data-slot="daten"></div>
-    <div class="need"><b>Das brauchst du (Lernübersicht 1–2):</b> <b>Konformität</b>: Man passt sein Urteil oder Verhalten an eine Gruppe an. <b>Informativer Einfluss:</b> „Ich bin unsicher – die anderen wissen es vielleicht besser.“ Stark, wenn die Aufgabe schwierig oder unklar ist. <b>Normativer Einfluss:</b> „Ich will dazugehören und nicht auffallen.“ Stark, wenn die Gruppe hört oder sieht, was ich antworte.</div>
-    <div class="task avoid"><span class="no">1</span><b>Erkläre mit dem informativen Einfluss</b>, warum die Antworten anderer bei den Punkten wirken können. (2–3 Sätze)
-      <div class="lines" data-n="3"></div></div>
-    <div class="task avoid"><span class="no">2</span><b>Vergleiche das Kursergebnis bei den Linien mit der Asch-Studie.</b> Erkläre einen möglichen Unterschied mit dem normativen Einfluss. (2–3 Sätze)
-      <div class="lines" data-n="3"></div></div>
-    <h2>Ergebnissicherung A</h2>
-    <div class="task avoid"><span class="no">A</span><b>Zurück zu deiner Vermutung:</b> <span data-slot="vermutung"></span><br>Was denkst du jetzt – und warum? Nutze mindestens einen Fachbegriff.
-      <div class="lines" data-n="4"></div></div>
+    <h2>2 · Was Asch gefunden hat – und was ich vorhergesagt habe</h2>
+    <div data-slot="asch"></div>
+    <h2>3 · Mein Tipp für den Gruppenchat</h2>
+    <div data-slot="tipp"></div>
   </div>
   <div class="pg">
-    <div class="ph"><span>Lernmappe DS 5 · Arbeitsblatt, Teil B: Wie ich andere sehe</span><span>ca. 20 Min.</span></div>
-    <h2 style="margin-top:0">Teil B · Wie ich andere sehe</h2>
-    <div class="need"><b>Das brauchst du (Lernübersicht 3–4):</b> <b>Halo-Effekt:</b> Ein auffälliges Merkmal einer Person färbt auf unser Urteil über ganz andere Eigenschaften ab. <b>Vorurteil:</b> ein starres, verallgemeinerndes Urteil über Menschen – nur, weil sie zu einer bestimmten Gruppe gehören.</div>
-    <div class="task avoid"><span class="no">3</span><b>Herr Fotiou</b> <span class="small">(ausgedachter Fall)</span>. Deine Einschätzung vom Anfang: <span data-slot="fotiou"></span>
-      Welche dieser Eigenschaften kann man auf einem Foto sehen? Woran könntest du dich orientiert haben? Erkläre mit dem Halo-Effekt, wie so ein Urteil entstehen kann.
-      <div class="lines" data-n="3"></div>
-      <span class="small"><b>Profi:</b> Wie könnte man prüfen, ob wirklich das Lächeln die Einschätzung beeinflusst?</span>
-      <div class="lines" data-n="1"></div></div>
-    <div class="task avoid"><span class="no">4</span><b>Was steckt dahinter?</b> Schreibe <b>I</b> (informativer Einfluss), <b>N</b> (normativer Einfluss), <b>H</b> (Halo-Effekt) oder <b>V</b> (Vorurteil) und begründe mit einem Detail.
-      <table class="tick">
-        <tr><th style="width:52%">Situation</th><th class="c">I, N, H, V</th><th>Woran erkennst du es?</th></tr>
-        <tr><td><b>1</b> <span class="small">(Beispiel)</span> Mia weiß bei einer Quizfrage die Antwort nicht und wählt, was die meisten im Kurs gewählt haben.</td><td class="c" style="color:#5a6170;font-style:italic">I</td><td style="color:#5a6170;font-style:italic">Sie ist unsicher und nimmt die anderen als Information.</td></tr>
-        <tr class="hi"><td><b>2</b> Tom findet den Witz im Klassenchat nicht lustig. Weil alle „😂“ schicken, schickt er es auch.</td><td></td><td></td></tr>
-        <tr class="hi"><td><b>3</b> Lina findet die neue Mitschülerin sehr selbstbewusst. Deshalb hält sie sie auch für besonders klug.</td><td></td><td></td></tr>
-        <tr class="hi"><td><b>4</b> <span class="small">(Profi)</span> Leon sagt: „Gamer sind unsportlich.“ Als Jana, die viel zockt, beim Lauftest gewinnt, meint er: „Die hatte halt Glück.“</td><td></td><td></td></tr>
-      </table></div>
-    <h2>Ergebnissicherung B</h2>
-    <div class="task avoid"><span class="no">B</span><b>Dein Tipp für einen Gruppenchat, in dem alle über eine Person lästern</b> – begründet mit der Asch-Studie (2–3 Sätze, mindestens ein Fachbegriff):
-      <div class="lines" data-n="3"></div></div>
+    <div class="ph"><span>DS 5 · Zusammenfassung · Meine Ergebnisse</span><span>Seite 4 von 4</span></div>
+    <h2 style="margin-top:0">4 · Was dahintersteckt – meine Zuordnungen</h2>
+    <div data-slot="zuordnungen"></div>
+    <h2>5 · Meine Vermutung – damals und jetzt</h2>
+    <div data-slot="rueck"></div>
   </div>
 </template>
 
 <!-- ===================== Lösungskarte (?druck=loesung) ===================== -->
 <template id="tpl-loesung">
   <div class="pg loes">
-    <div class="ph"><span>DS 5 · Lösungskarte zur Selbstkontrolle</span><span>erst nach dem eigenen Lösen ansehen</span></div>
-    <h2 style="margin-top:0">Lösungen zum Arbeitsblatt</h2>
+    <div class="ph"><span>DS 5 · Lösungskarte für die Lehrkraft</span><span>Erwartungen zu den offenen Aufgaben</span></div>
+    <h2 style="margin-top:0">Erwartungen</h2>
     <table class="tick">
-      <tr><th style="width:20%">Aufgabe</th><th>Lösung</th></tr>
-      <tr><td>1</td><td>Bei den Punkten ist man <b>unsicher</b>: 2 Sekunden reichen nicht zum Zählen. Dann nimmt man die Antworten anderer als <b>Information</b> („Die haben vielleicht besser geschätzt“). Die eigene Schätzung rückt in Richtung der Gruppe – man glaubt dann oft selbst, dass es so viele waren.</td></tr>
-      <tr><td>2</td><td>Meist folgt im Labor kaum jemand der falschen Gruppe – bei Asch etwa jede dritte Antwort. Bei den Linien ist die Antwort <b>eindeutig</b>, informativer Einfluss spielt kaum eine Rolle. Bei Asch saßen die anderen am Tisch und hörten die Antwort: Wer widerspricht, fällt auf → <b>normativer Einfluss</b> (dazugehören wollen). Im Labor sah niemand die Antwort, und die Gruppe war nicht echt – der normative Druck fehlte. Auch bei Asch sank die Anpassung, wenn schriftlich geantwortet wurde. (Falls bei euch einige gefolgt sind: Vielleicht war man doch unsicher – dann wirkt auch der informative Einfluss.)</td></tr>
-      
-      <tr><td>3</td><td>Keine der fünf Eigenschaften kann man auf einem Foto sehen. Orientiert hat man sich wohl an Sichtbarem (Lächeln, Brille, Kleidung, Alter). Halo-Effekt: Ein auffälliges Merkmal färbt auf das Urteil über unsichtbare Eigenschaften ab. Eine einzelne Einschätzung beweist den Effekt aber nicht. <b>Profi:</b> zwei Gruppen zufällig bilden; eine sieht dieselbe Person lächelnd, die andere ernst; dann die Einschätzungen vergleichen.</td></tr>
-      <tr><td>4</td><td><b>2 N</b> – Er findet den Witz nicht lustig, macht aber mit, um dazuzugehören. · <b>3 H</b> – Das selbstbewusste Auftreten färbt auf „klug“ ab. · <b>4 V</b> – Urteil über alle Gamer; das Gegenbeispiel Jana wird umgedeutet („Glück“) – genau wie bei einer starken Erwartung in der Hypothesentheorie (DS 4).</td></tr>
-      <tr><td>A</td><td>Individuelle Antwort. Gut ist: Vermutung aufgreifen und mit dem Ergebnis verbinden, z. B. „Ich dachte, nur bei Unsicherheit. Das stimmt für den informativen Einfluss. Bei Asch haben sich aber viele auch bei eindeutigen Linien angepasst – wegen des normativen Einflusses, wenn die Gruppe zuhört.“</td></tr><tr><td>B</td><td>Beispiel: „Wenn alle lästern, wirkt normativer Einfluss – keiner will auffallen. Bei Asch sank die Anpassung auf etwa 5 %, sobald <b>eine</b> Person widersprach. Sei du diese Person.“ Weitere gute Idee: der betroffenen Person zeigen, dass sie nicht allein ist.</td></tr>
+      <tr><th style="width:24%">Aufgabe</th><th>Erwartung</th></tr>
+      <tr><td>Auflösung: Beobachtung</td><td>Die Fassung „mit“ schätzt bei den Punkten höher (Richtung der erfundenen Werte); bei den Linien wählen fast alle richtig. Gut: Bei so wenigen Personen ist Zufall möglich.</td></tr>
+      <tr><td>Auflösung: Erklärungsidee</td><td>Bei den Punkten ist man unsicher (2 Sekunden), bei den Linien ist die Antwort eindeutig, und niemand sieht die eigene Antwort.</td></tr>
+      <tr><td>Video</td><td>Zögern, Blick zu den anderen, Lächeln oder Schulterzucken, leise Antwort; Unbehagen beim Widersprechen.</td></tr>
+      <tr><td>Station 1</td><td>Befund: etwa jede dritte Antwort; drei von vier mindestens einmal, jede vierte nie; zwei Drittel richtig. Gründe laut Interviews: wenige sahen es anders, viele zweifelten an sich, andere wollten nicht auffallen.</td></tr>
+      <tr><td>Station 2</td><td>Bedingung 1–3 senken die Anpassung (Mehrheit aus 1 Person ≈ 3 %, Verbündeter auf etwa ein Viertel des Werts, geheim ≈ 12,5 %); Bedingung 4 (15 statt 7) ändert kaum etwas. Zuordnungen: Mia informativ · Tom normativ · Asch-Zweifel informativ (normativ auch begründbar, weil laut vor der Gruppe).</td></tr>
+      <tr><td>Station 3</td><td>Lächelnd gesehen → oft positivere Einschätzung (Halo); bei wenigen Personen nur ein Hinweis. Lina: Halo · Leon: Vorurteil.</td></tr>
+      <tr><td>Station 4</td><td>Demo zeigt, wie Einfluss wirken kann, beweist aber nichts für alle; Täuschung vertretbar, weil harmlos, für den Versuch nötig und danach aufgeklärt (im Unterricht zusätzlich angekündigt).</td></tr>
+      <tr><td>Tipp (Raster)</td><td>Grundlegend: ein Fachbegriff richtig, Tipp passt · Sicher: normativer Einfluss erklärt (niemand will auffallen) · Souverän: zusätzlich Asch-Befund (ein Verbündeter senkt die Anpassung stark) und ein konkreter Vorschlag (widersprechen, der Person zeigen, dass sie nicht allein ist).</td></tr>
+      <tr><td>Vermutung jetzt</td><td>Vermutung aufgreifen, mit Ergebnis und Fachbegriff verbinden; jede begründete Richtung ist in Ordnung.</td></tr>
     </table>
   </div>
 </template>
@@ -2287,28 +2764,716 @@ var Q=R("index");var L=R("QRErrorCorrectLevel");window.PsyQR=function(text){var 
     return s + "</svg>";
   }
 
-  window.FIGUREN_DS05 = { punkte: punkte, linien: linien, halo: halo, vorurteil: vorurteil };
+  /* Herr Fotiou – selbst gezeichnete, ausgedachte Person (rechtefrei).
+     Zwei Fassungen, die sich NUR im Gesichtsausdruck unterscheiden: "laecheln" | "ernst".
+     So lässt sich der Halo-Effekt im Kurs prüfen (Fassung über Code 1 / Code 2). */
+  function fotiou(fassung) {
+    var smile = fassung !== "ernst";
+    var SKIN = "#c98f6b", SKIND = "#b07a58", HAIR = "#3a2f2a", GREY = "#8c847c", SHIRT = "#f4efe6", JACKET = "#33506b", JACKETD = "#284257";
+    var s = '<svg viewBox="0 0 320 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Zeichnung: Herr Fotiou, ein Mann um die 45 mit kurzen dunklen Haaren, grauen Schläfen, Brille und Sakko, ' + (smile ? "er lächelt freundlich" : "er schaut ernst, ohne zu lächeln") + '">';
+    s += '<rect width="320" height="360" rx="18" fill="#e7eeea"/>';
+    s += '<circle cx="160" cy="150" r="118" fill="#d4e3dd"/>';
+    // Oberkörper
+    s += '<path d="M40 360 C 48 290, 96 262, 160 258 C 224 262, 272 290, 280 360 Z" fill="' + JACKET + '"/>';
+    s += '<path d="M128 258 L160 330 L192 258 C 182 252, 138 252, 128 258 Z" fill="' + SHIRT + '"/>';
+    s += '<path d="M128 258 L112 300 L150 312 L160 330 Z M192 258 L208 300 L170 312 L160 330 Z" fill="' + JACKETD + '"/>';
+    // Hals
+    s += '<path d="M138 222 L138 262 C 150 272, 170 272, 182 262 L182 222 Z" fill="' + SKIND + '"/>';
+    // Ohren
+    s += '<ellipse cx="96" cy="160" rx="13" ry="20" fill="' + SKIND + '"/><ellipse cx="224" cy="160" rx="13" ry="20" fill="' + SKIND + '"/>';
+    // Kopf
+    s += '<path d="M100 140 C 100 92, 128 70, 160 70 C 192 70, 220 92, 220 140 C 220 196, 196 236, 160 236 C 124 236, 100 196, 100 140 Z" fill="' + SKIN + '"/>';
+    // Haare mit grauen Schläfen
+    s += '<path d="M98 138 C 94 96, 118 62, 160 60 C 204 60, 228 92, 222 138 C 216 120, 212 104, 200 96 C 176 104, 140 104, 116 96 C 106 106, 102 120, 98 138 Z" fill="' + HAIR + '"/>';
+    s += '<path d="M99 136 C 98 124, 101 112, 107 104 L 110 132 Z M221 136 C 222 124, 219 112, 213 104 L 210 132 Z" fill="' + GREY + '"/>';
+    // Augenbrauen: beim Lächeln etwas angehoben, ernst gerade und tiefer
+    s += smile ? '<path d="M122 128 Q136 120 150 126" stroke="' + HAIR + '" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M170 126 Q184 120 198 128" stroke="' + HAIR + '" stroke-width="6" fill="none" stroke-linecap="round"/>'
+               : '<path d="M122 131 L150 130" stroke="' + HAIR + '" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M170 130 L198 131" stroke="' + HAIR + '" stroke-width="6" fill="none" stroke-linecap="round"/>';
+    // Augen
+    s += smile ? '<path d="M128 150 Q136 143 144 150" stroke="' + INK + '" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M176 150 Q184 143 192 150" stroke="' + INK + '" stroke-width="4" fill="none" stroke-linecap="round"/>'
+               : '<circle cx="136" cy="149" r="4.5" fill="' + INK + '"/><circle cx="184" cy="149" r="4.5" fill="' + INK + '"/>';
+    // Brille
+    s += '<rect x="116" y="134" width="40" height="30" rx="9" fill="none" stroke="' + INK + '" stroke-width="3.5"/><rect x="164" y="134" width="40" height="30" rx="9" fill="none" stroke="' + INK + '" stroke-width="3.5"/><path d="M156 147 L164 147 M116 145 L104 140 M204 145 L216 140" stroke="' + INK + '" stroke-width="3.5" stroke-linecap="round"/>';
+    // Nase
+    s += '<path d="M160 156 C 156 172, 154 180, 162 184" stroke="' + SKIND + '" stroke-width="4" fill="none" stroke-linecap="round"/>';
+    // Mund: einziger Unterschied neben Augen und Brauen
+    s += smile ? '<path d="M136 200 Q160 222 184 200 Q160 210 136 200 Z" fill="#fffaf4" stroke="#7a3b2c" stroke-width="3.5" stroke-linejoin="round"/><path d="M128 196 Q132 202 136 200 M184 200 Q188 202 192 196" stroke="' + SKIND + '" stroke-width="3" fill="none" stroke-linecap="round"/>'
+               : '<path d="M140 206 L180 206" stroke="#7a3b2c" stroke-width="4" fill="none" stroke-linecap="round"/>';
+    // Bartschatten
+    s += '<path d="M118 196 C 124 226, 144 236, 160 236 C 176 236, 196 226, 202 196 C 196 218, 178 228, 160 228 C 142 228, 124 218, 118 196 Z" fill="' + SKIND + '" opacity=".55"/>';
+    return s + "</svg>";
+  }
+
+  /* Aufbau der Asch-Studie von oben: Tisch, sieben Plätze, Tafel mit Linien */
+  function aschTisch() {
+    var s = '<svg viewBox="0 0 560 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Schaubild Asch-Studie: sieben Personen sitzen in einer Reihe vor einer Tafel mit Linien. Sechs sind eingeweiht, die echte Versuchsperson sitzt auf dem vorletzten Platz und antwortet als Sechste." ' + FONT + '>' + defs();
+    s += '<rect width="560" height="300" rx="14" fill="#fff"/>';
+    s += '<rect x="170" y="16" width="220" height="70" rx="8" fill="' + GOLDS + '" stroke="' + LINE + '" stroke-width="2"/>';
+    s += '<text x="280" y="36" text-anchor="middle" font-size="14" fill="' + SOFT + '">Tafel</text>';
+    s += '<line x1="200" y1="76" x2="200" y2="46" stroke="' + INK + '" stroke-width="5" stroke-linecap="round"/>';
+    s += '<line x1="290" y1="76" x2="290" y2="56" stroke="' + INK + '" stroke-width="5" stroke-linecap="round"/><line x1="320" y1="76" x2="320" y2="46" stroke="' + INK + '" stroke-width="5" stroke-linecap="round"/><line x1="350" y1="76" x2="350" y2="40" stroke="' + INK + '" stroke-width="5" stroke-linecap="round"/>';
+    s += '<path d="M60 190 Q280 120 500 190" fill="none" stroke="' + LINE + '" stroke-width="26" stroke-linecap="round"/>';
+    var pos = [[78, 214], [148, 186], [214, 170], [280, 164], [346, 170], [412, 186], [482, 214]];
+    pos.forEach(function (p, i) {
+      var echt = i === 5;
+      s += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="22" fill="' + (echt ? WARM : ACCS) + '" stroke="' + (echt ? WARM : ACC) + '" stroke-width="2.5"/>';
+      s += '<text x="' + p[0] + '" y="' + (p[1] + 6) + '" text-anchor="middle" font-size="17" font-weight="700" fill="' + (echt ? "#fff" : ACC) + '">' + (i + 1) + "</text>";
+    });
+    s += '<text x="412" y="246" text-anchor="middle" font-size="15" font-weight="700" fill="' + WARM + '">echte Versuchsperson</text>';
+    s += '<text x="412" y="264" text-anchor="middle" font-size="14" fill="' + SOFT + '">antwortet als Sechste</text>';
+    s += '<text x="150" y="262" text-anchor="middle" font-size="15" font-weight="700" fill="' + ACC + '">eingeweiht</text>';
+    s += '<text x="150" y="280" text-anchor="middle" font-size="14" fill="' + SOFT + '">sagen absichtlich Falsches</text>';
+    s += '<text x="548" y="292" text-anchor="end" font-size="12" fill="' + SOFT + '">Schaubild · vereinfacht</text>';
+    return s + "</svg>";
+  }
+
+  /* Zwei Gründe, sich anzupassen (nach Deutsch & Gerard 1955) – Modell */
+  function gruende() {
+    var s = '<svg viewBox="0 0 900 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Schaubild: Zwei Wege zur Anpassung. Oben informativ: Ich bin unsicher, die anderen sind meine Information, meine Überzeugung ändert sich. Unten normativ: Die Gruppe hört zu, ich will nicht auffallen, meine Antwort ändert sich – die Überzeugung oft nicht." ' + FONT + '>' + defs();
+    function reihe(y, farbe, hell, titel, a, b, c) {
+      var r = box(6, y, 180, 96, farbe, farbe, [titel[0], titel[1]], { color: "#fff", top: 40, lh: 24, size1: 18, size: 16 });
+      r += arrow(188, y + 48, 222, y + 48);
+      r += box(226, y, 200, 96, hell, farbe, a, { top: 38, lh: 22, size1: 16, size: 15 });
+      r += arrow(428, y + 48, 462, y + 48);
+      r += box(466, y, 200, 96, hell, farbe, b, { top: 38, lh: 22, size1: 16, size: 15 });
+      r += arrow(668, y + 48, 702, y + 48);
+      r += box(706, y, 188, 96, "#fff", farbe, c, { top: 38, lh: 22, size1: 16, size: 15 });
+      return r;
+    }
+    s += reihe(8, ACC, ACCS, ["informativ", ""], ["Aufgabe unklar", "„Ich bin unsicher.“"], ["Die anderen sind", "meine Information"], ["Ich glaube es", "dann oft wirklich"]);
+    s += reihe(128, WARM, WARMS, ["normativ", ""], ["Gruppe hört zu", "„Alle sehen mich.“"], ["Ich will nicht", "auffallen"], ["Ich sage es –", "glaube es oft nicht"]);
+    s += '<text x="894" y="246" text-anchor="end" font-size="12" fill="' + SOFT + '">Schaubild · Modell nach Deutsch &amp; Gerard (1955)</text>';
+    return s + "</svg>";
+  }
+
+  window.FIGUREN_DS05 = { punkte: punkte, linien: linien, halo: halo, vorurteil: vorurteil, fotiou: fotiou, aschTisch: aschTisch, gruende: gruende };
+})();
+
+</script>
+<script>
+/* eingebettet: bundle.js */
+/* Gegenwart – interaktive Bausteine. Ein klassisches Skript, keine Bibliothek, kein Netzwerk.
+   Gegenwart.init(wurzel) belebt alle Elemente mit data-g="…". Ohne Aufruf bleibt alles lesbar (Ruhezustand = Endzustand). */
+(function () {
+  "use strict";
+  var doc = document;
+  function $(s, r) { return (r || doc).querySelector(s); }
+  function $$(s, r) { return Array.prototype.slice.call((r || doc).querySelectorAll(s)); }
+  function css(name, fallback) {
+    var v = getComputedStyle(doc.documentElement).getPropertyValue(name).trim();
+    return v || fallback;
+  }
+  function ms(name, fallback) { var v = parseFloat(css(name, "")); return isNaN(v) ? fallback : v; }
+
+  /* ---------- Bewegung ---------- */
+  var mq = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : { matches: false };
+  function ruhig() { return mq.matches || doc.documentElement.getAttribute("data-bewegung") === "weniger"; }
+  function bewegen(el, frames, opt) {
+    if (!el || !el.animate) return null;
+    opt = opt || {};
+    if (ruhig()) {
+      if (!opt.fade) return null;
+      return el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: Math.min(150, ms("--dauer-aus", 150)), easing: "linear" });
+    }
+    return el.animate(frames, {
+      duration: opt.dauer || ms("--dauer-mittel", 220),
+      easing: opt.kurve || css("--kurve-aus", "cubic-bezier(0.23, 1, 0.32, 1)"),
+      delay: opt.verzug || 0,
+      fill: "backwards"
+    });
+  }
+  function staffel(liste, frames, opt) {
+    var schritt = ms("--dauer-staffel", 30);
+    liste.slice(0, 8).forEach(function (el, i) {
+      var o = Object.assign({}, opt || {}); o.verzug = (o.verzug || 0) + i * schritt; bewegen(el, frames, o);
+    });
+  }
+  function feder() {
+    var f = css("--kurve-feder", "");
+    return (f && window.CSS && CSS.supports && CSS.supports("transition-timing-function", f)) ? f : css("--kurve-aus", "ease-out");
+  }
+  function ansagen(el, text) { if (el) { el.textContent = ""; setTimeout(function () { el.textContent = text; }, 30); } }
+
+  /* ---------- Bausteine ---------- */
+  var B = {};
+
+  // Bewegungsschalter: html[data-bewegung=weniger], gemerkt im Browser
+  B.bewegung = function (el) {
+    var box = $("input", el);
+    try { if (localStorage.getItem("g-bewegung") === "weniger") doc.documentElement.setAttribute("data-bewegung", "weniger"); } catch (e) {}
+    box.checked = doc.documentElement.getAttribute("data-bewegung") === "weniger";
+    box.addEventListener("change", function () {
+      if (box.checked) doc.documentElement.setAttribute("data-bewegung", "weniger");
+      else doc.documentElement.removeAttribute("data-bewegung");
+      try { localStorage.setItem("g-bewegung", box.checked ? "weniger" : "voll"); } catch (e) {}
+    });
+  };
+
+  // Karte umdrehen
+  B.wende = function (el) {
+    var k = $(".g-wende__knopf", el);
+    if (!k) return;
+    k.hidden = false;
+    $$(".g-wende__knopf", el).forEach(function (b) {
+      b.hidden = false;
+      b.addEventListener("click", function () {
+        var auf = !el.hasAttribute("data-gewendet");
+        el.toggleAttribute("data-gewendet", auf);
+        $$(".g-wende__seite", el).forEach(function (s, i) { s.setAttribute("aria-hidden", String(auf ? i === 0 : i === 1)); });
+        var ziel = auf ? $(".g-wende__seite--hinten .g-wende__knopf", el) : $(".g-wende__seite--vorne .g-wende__knopf", el);
+        if (ziel) setTimeout(function () { ziel.focus({ preventScroll: true }); }, 0);
+      });
+    });
+    $(".g-wende__seite--hinten", el).setAttribute("aria-hidden", "true");
+  };
+
+  // Denken vor Klicken: wählen, begründen, festlegen → gestufte Rückmeldung, Antwort versiegelt
+  B.wahl = function (el) {
+    var los = $("[data-g-festlegen]", el), feld = $("textarea", el), live = $("[aria-live]", el), stempel = $(".g-stempel", el);
+    var mind = parseInt(el.getAttribute("data-mind") || "0", 10);
+    function pruefen() {
+      var gew = $("input:checked", el);
+      var lang = !feld || !mind || feld.value.trim().length >= mind || feld.value.trim().length === 0;
+      los.disabled = !gew || !lang || el.hasAttribute("data-zu");
+    }
+    el.addEventListener("change", pruefen); if (feld) feld.addEventListener("input", pruefen); pruefen();
+    los.addEventListener("click", function () {
+      var gew = $("input:checked", el); if (!gew) return;
+      el.setAttribute("data-zu", "");
+      $$("input", el).forEach(function (i) { i.disabled = true; }); if (feld) feld.readOnly = true;
+      var opt = gew.closest(".g-option"), urteil = opt.getAttribute("data-urteil");
+      var wort = { zentral: "zentral", begruendbar: "auch begründbar", kaum: "passt kaum" }[urteil] || "";
+      staffel($$(".g-option__urteil", el), [{ opacity: 0, transform: "translateY(4px)" }, { opacity: 1, transform: "none" }], { dauer: ms("--dauer-mittel", 220) });
+      if (stempel) { stempel.hidden = false; bewegen(stempel, [{ transform: "rotate(-8deg) scale(1.35)", opacity: 0 }, { transform: "rotate(-8deg) scale(1)", opacity: 1 }], { dauer: 320, kurve: feder(), fade: true }); }
+      ansagen(live, "Festgelegt. Deine Wahl: " + wort + ". " + (opt.getAttribute("data-grund") || ""));
+      los.disabled = true;
+    });
+  };
+
+  // Skala mit Bezugsmarke
+  B.skala = function (el) {
+    var r = $("input[type=range]", el), w = $(".g-skala__wert", el), ref = $(".g-skala__ref", el), k = $("[data-g-vergleichen]", el), t = $(".g-skala__ref-text", el);
+    var namen = (el.getAttribute("data-stufen") || "").split("|");
+    function zeigen() { var v = +r.value; w.textContent = namen[v - +r.min] ? v + " – " + namen[v - +r.min] : String(v); }
+    r.addEventListener("input", zeigen); zeigen();
+    if (k && ref) k.addEventListener("click", function () {
+      var v = +el.getAttribute("data-referenz"), p = (v - r.min) / (r.max - r.min) * 100;
+      ref.style.left = p + "%"; ref.hidden = false; if (t) t.hidden = false;
+      bewegen(ref, [{ transform: "scaleY(0)" }, { transform: "scaleY(1)" }], { dauer: ms("--dauer-langsam", 300), fade: true });
+      k.disabled = true;
+    });
+  };
+
+  // Schwärzung aufdecken (gestaffelt)
+  B.aufdecken = function (el) {
+    $$(".g-schwarz", el).forEach(function (s, i) { s.style.setProperty("--i", Math.min(i, 7)); });
+    var k = $("[data-g-aufdecken]", el), live = $("[aria-live]", el);
+    if (!k) return;
+    k.hidden = false;
+    k.addEventListener("click", function () {
+      var offen = !el.hasAttribute("data-offen");
+      el.toggleAttribute("data-offen", offen);
+      k.textContent = offen ? "Wieder schwärzen" : "Aufdecken";
+      ansagen(live, offen ? "Geschwärzte Stellen aufgedeckt." : "Stellen wieder geschwärzt.");
+    });
+  };
+
+  // Markieren mit zwei Stiften
+  B.markieren = function (el) {
+    var stift = "beleg";
+    $$(".g-stift", el).forEach(function (b) {
+      b.addEventListener("click", function () {
+        stift = b.getAttribute("data-stift");
+        $$(".g-stift", el).forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      });
+    });
+    $$(".g-wort", el).forEach(function (w) {
+      w.setAttribute("role", "button"); w.setAttribute("tabindex", "0");
+      function setzen() {
+        var hat = w.classList.contains("g-mark--" + stift);
+        w.classList.remove("g-mark--beleg", "g-mark--gedanke");
+        if (!hat) { w.classList.add("g-mark", "g-mark--" + stift); bewegen(w, [{ backgroundSize: "0% 100%" }, { backgroundSize: "100% 100%" }], { dauer: 260 }); }
+        w.setAttribute("aria-pressed", String(!hat));
+        var n = $(".g-zaehler", el);
+        if (n) n.textContent = $$(".g-mark--beleg", el).length + " Belege · " + $$(".g-mark--gedanke", el).length + " Gedanken";
+      }
+      w.addEventListener("click", setzen);
+      w.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setzen(); } });
+    });
+  };
+
+  // Schritte mit Stanzloch-Punkten
+  B.schritte = function (el) {
+    var punkte = $$(".g-punkt", el), text = $(".g-schritt-text", el), jetzt = +(el.getAttribute("data-jetzt") || 1);
+    function malen(alt) {
+      punkte.forEach(function (p, i) { p.setAttribute("data-stand", i + 1 < jetzt ? "fertig" : i + 1 === jetzt ? "jetzt" : "offen"); });
+      text.textContent = "Schritt " + jetzt + " von " + punkte.length;
+      if (alt !== undefined && punkte[jetzt - 1]) bewegen(punkte[jetzt - 1], [{ transform: "scale(.6)" }, { transform: "scale(1.25)" }], { dauer: ms("--dauer-langsam", 300), kurve: feder() });
+    }
+    $$("[data-g-schritt]", el).forEach(function (b) {
+      b.addEventListener("click", function () {
+        var alt = jetzt; jetzt = Math.max(1, Math.min(punkte.length, jetzt + +b.getAttribute("data-g-schritt"))); if (alt !== jetzt) malen(alt);
+      });
+    });
+    malen();
+  };
+
+  // Zeitleiste: »Du bist hier« wandert per FLIP
+  B.zeit = function (el) {
+    var hier = $(".g-zeit__hier", el), info = $("[aria-live]", el);
+    function setzen(li, animiert) {
+      var btn = $("button", li), alt = hier.getBoundingClientRect();
+      $$("button", el).forEach(function (b) { b.removeAttribute("aria-current"); });
+      btn.setAttribute("aria-current", "step");
+      li.appendChild(hier);
+      var neu = hier.getBoundingClientRect();
+      if (animiert) bewegen(hier, [{ transform: "translateX(" + (alt.left - neu.left) + "px)" }, { transform: "none" }], { dauer: ms("--dauer-reihe", 440), kurve: css("--kurve-beidseits", "ease-in-out") });
+      if (info) info.textContent = $(".g-zeit__jahr", li).textContent + ": " + (li.getAttribute("data-mehr") || $(".g-zeit__text", li).textContent);
+    }
+    $$("li", el).forEach(function (li) { $("button", li).addEventListener("click", function () { setzen(li, true); }); });
+    var start = $("li[data-hier]", el) || $("li", el); setzen(start, false);
+  };
+
+  // Balken wachsen auf Knopfdruck (ohne JS: volle Balken)
+  B.balken = function (el) {
+    var k = $("[data-g-zeigen]", el); if (!k) return;
+    k.hidden = false;
+    k.addEventListener("click", function () {
+      staffel($$(".g-balken__wert", el), [{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }], { dauer: ms("--dauer-reihe", 440) });
+      staffel($$(".g-balken__zahl", el), [{ opacity: 0 }, { opacity: 1 }], { dauer: ms("--dauer-reihe", 440), verzug: 120 });
+    });
+  };
+
+  // Gestufte Hilfen: eine nach der anderen
+  B.hilfen = function (el) {
+    var stufen = $$(".g-hilfe__stufe", el), k = $("[data-g-hilfe]", el), n = 0;
+    stufen.forEach(function (s) { s.hidden = true; });
+    k.hidden = false;
+    k.addEventListener("click", function () {
+      if (n >= stufen.length) return;
+      var s = stufen[n++]; s.hidden = false;
+      bewegen(s, [{ opacity: 0, transform: "translateY(6px)" }, { opacity: 1, transform: "none" }], { dauer: ms("--dauer-mittel", 220), fade: true });
+      k.textContent = n < stufen.length ? "Nächste Hilfe (" + (n + 1) + " von " + stufen.length + ")" : "Alle Hilfen offen";
+      k.disabled = n >= stufen.length;
+    });
+  };
+
+  // Platten registrieren (einmal je Sitzung, oder auf Knopfdruck)
+  B.platten = function (el) {
+    function los() {
+      var d = ms("--dauer-registrieren", 720), k = css("--kurve-register", "ease-out");
+      bewegen($(".g-platte--ki", el), [{ transform: "translate(-14px,-10px)" }, { transform: "none" }], { dauer: d, kurve: k });
+      bewegen($(".g-platte--lernen", el), [{ transform: "translate(14px,10px)" }, { transform: "none" }], { dauer: d, kurve: k });
+      bewegen($(".g-schnitt", el), [{ opacity: 0, offset: 0 }, { opacity: 0, offset: .55 }, { opacity: 1 }], { dauer: d, kurve: "linear", fade: true });
+    }
+    var k = $("[data-g-registrieren]", el); if (k) { k.hidden = false; k.addEventListener("click", los); }
+    var erst = true; try { erst = !sessionStorage.getItem("g-registriert"); sessionStorage.setItem("g-registriert", "1"); } catch (e) {}
+    if (erst && el.hasAttribute("data-beim-start")) los();
+  };
+
+  // Musterbuch: jedes Muster auf Knopfdruck abspielen
+  var MUSTER = {
+    druck: function (b) { bewegen(b, [{ transform: "none" }, { transform: "translate(2px,2px)" }, { transform: "none" }], { dauer: ms("--dauer-druck", 100) * 2 }); },
+    abheben: function (b) { bewegen(b, [{ transform: "none", boxShadow: "6px 6px 0 0 var(--petrol)" }, { transform: "translate(-2px,-2px)", boxShadow: "8px 8px 0 0 var(--petrol)" }, { transform: "none", boxShadow: "6px 6px 0 0 var(--petrol)" }], { dauer: ms("--dauer-schnell", 160) * 3 }); },
+    erscheinen: function (b) { bewegen(b, [{ opacity: 0, transform: "translateY(6px)" }, { opacity: 1, transform: "none" }], { dauer: ms("--dauer-langsam", 300), fade: true }); },
+    stempel: function (b) { bewegen(b, [{ transform: "rotate(-8deg) scale(1.35)", opacity: 0 }, { transform: "rotate(-8deg) scale(1)", opacity: 1 }], { dauer: 320, kurve: feder(), fade: true }); },
+    wende: function (b) { bewegen(b, [{ transform: "perspective(600px) rotateY(0)" }, { transform: "perspective(600px) rotateY(180deg)" }, { transform: "perspective(600px) rotateY(360deg)" }], { dauer: ms("--dauer-wende", 460) * 2, kurve: css("--kurve-beidseits", "ease-in-out") }); },
+    staffel: function (b) { staffel($$(".g-klotz", b), [{ opacity: 0, transform: "translateY(8px)" }, { opacity: 1, transform: "none" }], { dauer: ms("--dauer-langsam", 300) }); },
+    balken: function (b) { bewegen($(".g-klotz", b), [{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }], { dauer: ms("--dauer-reihe", 440) }); },
+    register: function (b) { var k = $$(".g-klotz", b); bewegen(k[0], [{ transform: "translate(-14px,-10px)" }, { transform: "none" }], { dauer: ms("--dauer-registrieren", 720), kurve: css("--kurve-register", "ease-out") }); bewegen(k[1], [{ transform: "translate(14px,10px)" }, { transform: "none" }], { dauer: ms("--dauer-registrieren", 720), kurve: css("--kurve-register", "ease-out") }); },
+    feder: function (b) { bewegen(b, [{ transform: "scale(.6)" }, { transform: "scale(1)" }], { dauer: ms("--dauer-langsam", 300), kurve: feder() }); }
+  };
+  B.musterbuch = function (el) {
+    $$("[data-muster]", el).forEach(function (f) {
+      var k = $(".g-knopf", f), buehne = $(".g-muster__buehne > *", f), name = f.getAttribute("data-muster");
+      k.hidden = false;
+      k.addEventListener("click", function () { if (MUSTER[name]) MUSTER[name](name === "staffel" || name === "register" || name === "balken" ? $(".g-muster__buehne", f) : buehne); });
+    });
+  };
+
+
+  /* ---------- Leinwand (HTML5 Canvas) ---------- */
+  function farbe(name, fallback) { return css("--" + name, fallback || "#000"); }
+  function mischen(a, b, t) {
+    function h(x) { x = x.replace("#", ""); if (x.length === 3) x = x.replace(/./g, function (c) { return c + c; }); return [parseInt(x.slice(0, 2), 16), parseInt(x.slice(2, 4), 16), parseInt(x.slice(4, 6), 16)]; }
+    var A = h(a), B = h(b); return "rgb(" + A.map(function (v, i) { return Math.round(v + (B[i] - v) * t); }).join(",") + ")";
+  }
+  // leinwand(canvas, zeichnen(ctx, w, h, t)) – skaliert für devicePixelRatio, zeichnet neu bei Größenänderung,
+  // start()/stop() für Schleifen (requestAnimationFrame), hält außer Sicht an und zeichnet bei weniger Bewegung nur den Endzustand.
+  function leinwand(cv, zeichnen, opt) {
+    opt = opt || {};
+    var ctx = cv.getContext("2d"), st = { w: 0, h: 0, laeuft: false, raf: 0, t0: 0, pausiert: false };
+    function messen() {
+      var r = cv.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio || 1, 2);
+      st.w = r.width || cv.width; st.h = r.height || cv.height;
+      cv.width = Math.round(st.w * dpr); cv.height = Math.round(st.h * dpr); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    function bild(t) { zeichnen(ctx, st.w, st.h, t || 0); }
+    function schleife(ts) { if (!st.laeuft) return; if (!st.t0) st.t0 = ts; bild((ts - st.t0) / 1000); st.raf = requestAnimationFrame(schleife); }
+    var api = {
+      ctx: ctx, zeichnen: function (t) { bild(t); },
+      start: function () { if (ruhig()) { bild(opt.ruhigT != null ? opt.ruhigT : 0); return false; } if (st.laeuft) return true; st.laeuft = true; st.t0 = 0; st.raf = requestAnimationFrame(schleife); return true; },
+      stop: function () { st.laeuft = false; cancelAnimationFrame(st.raf); },
+      laeuft: function () { return st.laeuft; },
+      // einmalige Bewegung über d Sekunden, danach steht das Bild
+      einmal: function (d, fertig) { if (ruhig()) { bild(d); if (fertig) fertig(); return; } var t0 = 0; api.stop(); (function s(ts) { if (!t0) t0 = ts; var t = (ts - t0) / 1000; if (t >= d) { bild(d); if (fertig) fertig(); return; } bild(t); requestAnimationFrame(s); })(performance.now()); }
+    };
+    messen(); bild(0);
+    if (opt.autoplay && !ruhig() && window.IntersectionObserver) { var io = new IntersectionObserver(function (e) { if (e[0].isIntersecting) { io.disconnect(); api.start(); } }); io.observe(cv); }
+    if (window.ResizeObserver) new ResizeObserver(function () { messen(); bild(0); }).observe(cv);
+    if (window.IntersectionObserver) new IntersectionObserver(function (e) {
+      if (!e[0].isIntersecting && st.laeuft) { api.stop(); st.pausiert = true; }
+      else if (e[0].isIntersecting && st.pausiert) { st.pausiert = false; api.start(); }
+    }).observe(cv);
+    return api;
+  }
+  function zufall(seed) { var s = seed || 1; return function () { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; }; }
+  function pos(cv, e) { var r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; }
+
+  // Zeichenfläche: zwei Stifte (Beleg = Marker, Gedanke = Kuli) über einem Text; Rückgängig, Leeren
+  B.zeichnen = function (el) {
+    var cv = $("canvas", el), striche = [], akt = null, stift = "beleg", z = $(".g-zaehler", el);
+    var L = leinwand(cv, function (ctx, w, h) {
+      ctx.clearRect(0, 0, w, h);
+      striche.concat(akt ? [akt] : []).forEach(function (s) {
+        ctx.strokeStyle = farbe(s.stift === "beleg" ? "marker" : "kuli"); ctx.globalAlpha = s.stift === "beleg" ? .55 : 1;
+        ctx.lineWidth = s.stift === "beleg" ? 16 : 3; ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.beginPath();
+        s.p.forEach(function (q, i) { i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1]); }); ctx.stroke(); ctx.globalAlpha = 1;
+      });
+    });
+    function zaehlen() { if (z) z.textContent = striche.length + (striche.length === 1 ? " Strich" : " Striche"); }
+    $$(".g-stift", el).forEach(function (b) { b.addEventListener("click", function () { stift = b.getAttribute("data-stift"); $$(".g-stift", el).forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); }); }); });
+    cv.addEventListener("pointerdown", function (e) { cv.setPointerCapture(e.pointerId); akt = { stift: stift, p: [pos(cv, e)] }; L.zeichnen(); });
+    cv.addEventListener("pointermove", function (e) { if (!akt) return; akt.p.push(pos(cv, e)); L.zeichnen(); });
+    function ende() { if (!akt) return; if (akt.p.length === 1) akt.p.push([akt.p[0][0] + .1, akt.p[0][1]]); striche.push(akt); akt = null; L.zeichnen(); zaehlen(); }
+    cv.addEventListener("pointerup", ende); cv.addEventListener("pointercancel", ende);
+    var r = $("[data-g-rueck]", el), l = $("[data-g-leeren]", el);
+    if (r) r.addEventListener("click", function () { striche.pop(); L.zeichnen(); zaehlen(); });
+    if (l) l.addEventListener("click", function () { striche = []; L.zeichnen(); zaehlen(); });
+  };
+
+  // Verortung: sich auf zwei Achsen einordnen, dann die Bezugspunkte (Klasse, Studie) einblenden
+  B.verortung = function (el) {
+    var cv = $("canvas", el), ich = null, zeige = 0, live = $("[aria-live]", el), k = $("[data-g-vergleichen]", el);
+    var refs = (el.getAttribute("data-punkte") || "").split(";").filter(Boolean).map(function (p) { return p.split(",").map(Number); });
+    var L = leinwand(cv, function (ctx, w, h, t) {
+      ctx.clearRect(0, 0, w, h); ctx.fillStyle = farbe("flaeche"); ctx.fillRect(0, 0, w, h);
+      ctx.strokeStyle = farbe("linie"); ctx.lineWidth = 1;
+      for (var i = 1; i < 4; i++) { ctx.beginPath(); ctx.moveTo(w * i / 4, 0); ctx.lineTo(w * i / 4, h); ctx.moveTo(0, h * i / 4); ctx.lineTo(w, h * i / 4); ctx.stroke(); }
+      ctx.strokeStyle = farbe("stahl"); ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(w / 2, 0); ctx.lineTo(w / 2, h); ctx.moveTo(0, h / 2); ctx.lineTo(w, h / 2); ctx.stroke();
+      if (zeige) refs.forEach(function (p, i) {
+        var a = Math.max(0, Math.min(1, (t - i * .03) / .3)), e = 1 - Math.pow(1 - a, 3);
+        ctx.fillStyle = farbe("petrol"); ctx.beginPath(); ctx.arc(p[0] * w, p[1] * h, 7 * e, 0, Math.PI * 2); ctx.fill();
+      });
+      if (ich) { ctx.fillStyle = farbe("kuli"); ctx.strokeStyle = farbe("flaeche"); ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(ich[0] * w, ich[1] * h, 10, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); }
+    });
+    function setzen(x, y) {
+      ich = [Math.max(0, Math.min(1, x)), Math.max(0, Math.min(1, y))]; L.zeichnen(zeige ? 9 : 0);
+      if (k) k.disabled = false;
+      ansagen(live, "Deine Position: " + Math.round(ich[0] * 100) + " % von links, " + Math.round((1 - ich[1]) * 100) + " % von unten.");
+    }
+    cv.addEventListener("pointerdown", function (e) { var p = pos(cv, e); setzen(p[0] / cv.clientWidth, p[1] / cv.clientHeight); });
+    cv.addEventListener("keydown", function (e) {
+      var d = { ArrowLeft: [-.05, 0], ArrowRight: [.05, 0], ArrowUp: [0, -.05], ArrowDown: [0, .05] }[e.key]; if (!d) return; e.preventDefault();
+      var p = ich || [.5, .5]; setzen(p[0] + d[0], p[1] + d[1]);
+    });
+    if (k) { k.disabled = true; k.addEventListener("click", function () { zeige = 1; k.disabled = true; L.einmal(.3 + refs.length * .03, function () { ansagen(live, refs.length + " Bezugspunkte eingeblendet."); }); }); }
+  };
+
+  // Gemeinsames Schicksal: Punkte, von denen ein Teil sich gemeinsam bewegt – man sieht die Gruppe nur in Bewegung
+  B.schicksal = function (el) {
+    var cv = $("canvas", el), z = zufall(7), N = 90, P = [], anteil = .3, zeigen = false, sl = $("input[type=range]", el), live = $("[aria-live]", el);
+    for (var i = 0; i < N; i++) P.push({ x: z(), y: z(), vx: (z() - .5) * .14, vy: (z() - .5) * .14, ph: z() * 6.28 });
+    var L = leinwand(cv, function (ctx, w, h, t) {
+      ctx.clearRect(0, 0, w, h); ctx.fillStyle = farbe("flaeche"); ctx.fillRect(0, 0, w, h);
+      P.forEach(function (p, i) {
+        var g = i < N * anteil, x, y;
+        if (g) { x = p.x + Math.sin(t * 1.2) * .06; y = p.y + Math.cos(t * 1.2) * .04; }
+        else { x = p.x + Math.sin(t * .9 + p.ph) * p.vx; y = p.y + Math.cos(t * 1.1 + p.ph) * p.vy; }
+        x = ((x % 1) + 1) % 1; y = ((y % 1) + 1) % 1;
+        ctx.fillStyle = (zeigen || (ruhig() && zeigen)) && g ? farbe("petrol") : farbe("text");
+        ctx.beginPath(); ctx.arc(x * w, y * h, 5, 0, Math.PI * 2); ctx.fill();
+      });
+    }, { ruhigT: 1.3, autoplay: el.hasAttribute("data-autoplay") });
+    var s = $("[data-g-start]", el), v = $("[data-g-gruppe]", el);
+    if (s) { if (el.hasAttribute("data-autoplay") && !ruhig()) s.textContent = "Anhalten"; s.addEventListener("click", function () {
+      if (L.laeuft()) { L.stop(); s.textContent = "Bewegung starten"; return; }
+      if (L.start()) s.textContent = "Anhalten"; else ansagen(live, "Weniger Bewegung ist eingeschaltet: Die Punkte stehen still. Nutze »Gruppe zeigen«.");
+    }); }
+    if (v) v.addEventListener("click", function () { zeigen = !zeigen; v.textContent = zeigen ? "Gruppe verbergen" : "Gruppe zeigen"; if (!L.laeuft()) L.zeichnen(1.3); ansagen(live, zeigen ? Math.round(N * anteil) + " von " + N + " Punkten bewegen sich gemeinsam." : "Gruppe verborgen."); });
+    if (sl) sl.addEventListener("input", function () { anteil = sl.value / 100; var o = $(".g-skala__wert", el); if (o) o.textContent = sl.value + " %"; if (!L.laeuft()) L.zeichnen(1.3); });
+  };
+
+  // Sitze: Halbrund aus Sitzen; gewählte Fraktionen füllen sich, die Mehrheitsschwelle steht als Zahl
+  B.sitze = function (el) {
+    var cv = $("canvas", el), F = JSON.parse(el.getAttribute("data-fraktionen") || "[]"), gew = {}, live = $("[aria-live]", el), aus = $(".g-sitze__stand", el);
+    var ges = F.reduce(function (a, f) { return a + f.sitze; }, 0), mehr = Math.floor(ges / 2) + 1, S = [], anim = {};
+    function bauen(w, h) {
+      S = []; var R = 10, cx = w / 2, cy = h - 8, rmax = Math.min(w / 2 - 8, h - 16), rmin = rmax * .42, roh = [];
+      for (var r = 0; r < R; r++) roh.push(rmin + (rmax - rmin) * r / (R - 1));
+      var sum = roh.reduce(function (a, b) { return a + b; }, 0), rest = ges, cnt = roh.map(function (x, i) { var n = Math.round(ges * x / sum); return n; });
+      var diff = ges - cnt.reduce(function (a, b) { return a + b; }, 0); cnt[R - 1] += diff;
+      roh.forEach(function (rad, r) { for (var i = 0; i < cnt[r]; i++) { var a = Math.PI - Math.PI * (i + .5) / cnt[r]; S.push({ x: cx + Math.cos(a) * rad, y: cy - Math.sin(a) * rad, a: a, rad: rad }); } });
+      S.sort(function (p, q) { return q.a - p.a || p.rad - q.rad; });
+      var k = 0; F.forEach(function (f, fi) { for (var i = 0; i < f.sitze; i++) S[k++].f = fi; });
+      S.forEach(function (s) { s.r = Math.max(2.2, (rmax - rmin) / (R - 1) * .36); });
+    }
+    var L = leinwand(cv, function (ctx, w, h, t) {
+      if (!S.length || S.w !== w) { bauen(w, h); S.w = w; }
+      ctx.clearRect(0, 0, w, h);
+      S.forEach(function (s, i) {
+        var an = gew[s.f], a0 = anim[s.f], k = an ? 1 : 0;
+        if (a0 != null) { var tt = (t - a0 - (i % 40) * .004) / .3; k = Math.max(0, Math.min(1, tt)); if (!an) k = 1 - k; }
+        ctx.fillStyle = farbe("karton"); ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 6.29); ctx.fill();
+        if (k > 0) { ctx.fillStyle = farbe("petrol"); ctx.beginPath(); ctx.arc(s.x, s.y, s.r * k, 0, 6.29); ctx.fill(); }
+      });
+      ctx.strokeStyle = farbe("oxid"); ctx.lineWidth = 2; ctx.setLineDash([4, 4]); ctx.beginPath(); ctx.moveTo(w / 2, h - 8); ctx.lineTo(w / 2, 4); ctx.stroke(); ctx.setLineDash([]);
+    });
+    function stand() {
+      var n = F.reduce(function (a, f, i) { return a + (gew[i] ? f.sitze : 0); }, 0), txt = n + " von " + ges + " Sitzen" + (n >= mehr ? " – Mehrheit (ab " + mehr + ")" : " – keine Mehrheit (nötig: " + mehr + ")");
+      if (aus) aus.textContent = txt; ansagen(live, txt);
+    }
+    $$("[data-fraktion]", el).forEach(function (b) {
+      b.addEventListener("click", function () {
+        var i = +b.getAttribute("data-fraktion"); gew[i] = !gew[i]; b.setAttribute("aria-pressed", String(!!gew[i]));
+        anim = {}; anim[i] = 0; L.einmal(.3 + .2, function () { anim = {}; L.zeichnen(0); }); stand();
+      });
+    });
+    stand();
+  };
+
+  // Verlauf: ein Merkmal ändert sich stetig von West nach Ost; eine verschiebbare Grenze zeigt, wie willkürlich sie schneidet
+  B.verlauf = function (el) {
+    var cv = $("canvas", el), sl = $("input[type=range]", el), live = $("[aria-live]", el), aus = $(".g-verlauf__stand", el), z = zufall(11), C = 36, R = 9, D = [];
+    for (var r = 0; r < R; r++) for (var c = 0; c < C; c++) D.push({ c: c, r: r, v: Math.max(0, Math.min(1, c / (C - 1) + (z() - .5) * .18)) });
+    var grenze = sl ? sl.value / 100 : .5;
+    var L = leinwand(cv, function (ctx, w, h) {
+      ctx.clearRect(0, 0, w, h); ctx.fillStyle = farbe("flaeche"); ctx.fillRect(0, 0, w, h);
+      var dx = w / C, dy = h / R, rad = Math.min(dx, dy) * .36, A = farbe("honigplatte"), Bc = farbe("petrol");
+      D.forEach(function (d) { ctx.fillStyle = mischen(A, Bc, d.v); ctx.beginPath(); ctx.arc((d.c + .5) * dx, (d.r + .5) * dy, rad, 0, 6.29); ctx.fill(); });
+      var gx = grenze * w; ctx.strokeStyle = farbe("text"); ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, h); ctx.stroke();
+      ctx.fillStyle = farbe("text"); ctx.fillRect(gx - 14, 0, 28, 6);
+    });
+    function stand() {
+      var gc = grenze * C, li = D.filter(function (d) { return d.c + .5 < gc; }), re = D.filter(function (d) { return d.c + .5 >= gc; });
+      var m = function (a) { return a.length ? Math.round(a.reduce(function (s, d) { return s + d.v; }, 0) / a.length * 100) : 0; };
+      var n1 = D.filter(function (d) { return d.c === Math.max(0, Math.ceil(gc - 1) - 0); }), n2 = D.filter(function (d) { return d.c === Math.min(C - 1, Math.ceil(gc)); });
+      var txt = "Links der Grenze im Mittel " + m(li) + " %, rechts " + m(re) + " %. Die Nachbarn direkt an der Grenze: " + m(n1) + " % und " + m(n2) + " %.";
+      if (aus) aus.textContent = txt; ansagen(live, txt);
+    }
+    if (sl) sl.addEventListener("input", function () { grenze = sl.value / 100; L.zeichnen(); stand(); });
+    var zieh = false;
+    cv.addEventListener("pointerdown", function (e) { zieh = true; cv.setPointerCapture(e.pointerId); });
+    cv.addEventListener("pointermove", function (e) { if (!zieh) return; grenze = Math.max(.03, Math.min(.97, pos(cv, e)[0] / cv.clientWidth)); if (sl) sl.value = Math.round(grenze * 100); L.zeichnen(); });
+    cv.addEventListener("pointerup", function () { if (zieh) { zieh = false; stand(); } });
+    stand();
+  };
+
+  /* ---------- Scrub: jede Bewegung mit Regler oder Finger vor- und zurückziehen ---------- */
+  // scrub(regler, bild(t 0..1), opt{dauer (s), autoplay, knopf, pendeln}) – bild wird mit dem Reglerwert aufgerufen;
+  // »Abspielen« fährt den Regler automatisch (auch bei weniger Bewegung erlaubt, weil die Person jederzeit eingreifen kann).
+  function scrub(regler, bild, opt) {
+    opt = opt || {}; var raf = 0, laeuft = false, richtung = 1, k = opt.knopf, max = +regler.max || 100, min = +regler.min || 0;
+    function wert() { return (regler.value - min) / (max - min); }
+    function setzen(v) { regler.value = min + Math.max(0, Math.min(1, v)) * (max - min); bild(wert()); regler.dispatchEvent(new Event("scrub")); }
+    function schritt(ts, letzte) {
+      if (!laeuft) return; var dt = letzte ? (ts - letzte) / 1000 : 0, v = wert() + richtung * dt / (opt.dauer || 4);
+      if (v >= 1 || v <= 0) { if (opt.pendeln) { richtung = -richtung; v = Math.max(0, Math.min(1, v)); } else { setzen(v >= 1 ? 1 : 0); api.stop(); return; } }
+      setzen(v); raf = requestAnimationFrame(function (t2) { schritt(t2, ts); });
+    }
+    var api = {
+      start: function () { if (laeuft) return; if (wert() >= 1 && !opt.pendeln) setzen(0); laeuft = true; if (k) { k.textContent = "Anhalten"; k.setAttribute("aria-pressed", "true"); } raf = requestAnimationFrame(function (t) { schritt(t, 0); }); },
+      stop: function () { laeuft = false; cancelAnimationFrame(raf); if (k) { k.textContent = opt.text || "Abspielen"; k.setAttribute("aria-pressed", "false"); } },
+      laeuft: function () { return laeuft; }, setzen: setzen, wert: wert
+    };
+    regler.addEventListener("input", function () { if (laeuft) api.stop(); bild(wert()); });
+    if (k) k.addEventListener("click", function () { laeuft ? api.stop() : api.start(); });
+    if (window.IntersectionObserver) new IntersectionObserver(function (e) { if (!e[0].isIntersecting && laeuft) { api.stop(); api._p = true; } else if (e[0].isIntersecting && api._p) { api._p = false; api.start(); } }).observe(regler);
+    bild(wert());
+    if (opt.autoplay && !ruhig()) { if (window.IntersectionObserver) { var io = new IntersectionObserver(function (e) { if (e[0].isIntersecting) { io.disconnect(); api.start(); } }); io.observe(opt.sicht || regler); } else api.start(); }
+    return api;
+  }
+
+  // Text aufbauen: Wörter erscheinen nacheinander; der volle Text bleibt für Hilfstechnik sofort da.
+  function setzenText(el, opt) {
+    opt = opt || {}; var text = el.getAttribute("data-text") || el.textContent.trim(), woerter = text.split(/\s+/);
+    el.setAttribute("data-text", text); el.innerHTML = "";
+    var sr = doc.createElement("span"); sr.className = "g-sr"; sr.textContent = text; el.appendChild(sr);
+    var sicht = doc.createElement("span"); sicht.setAttribute("aria-hidden", "true"); el.appendChild(sicht);
+    woerter.forEach(function (w, i) { var s = doc.createElement("span"); s.className = "g-wortauf"; s.textContent = w; sicht.appendChild(s); if (i < woerter.length - 1) sicht.appendChild(doc.createTextNode(" ")); });
+    var spans = $$(".g-wortauf", sicht);
+    function zeigen(v) { var n = Math.round(v * spans.length); spans.forEach(function (s, i) { s.classList.toggle("ist-da", i < n); }); }
+    if (ruhig()) { zeigen(1); return { zeigen: zeigen, spielen: function () { zeigen(1); } }; }
+    function spielen() { zeigen(0); var d = opt.dauer || Math.min(2.4, .12 * spans.length), t0 = 0; (function s(ts) { if (!t0) t0 = ts; var v = Math.min(1, (ts - t0) / 1000 / d); zeigen(v); if (v < 1) requestAnimationFrame(s); })(performance.now()); }
+    if (opt.sofort) spielen(); else zeigen(1);
+    return { zeigen: zeigen, spielen: spielen };
+  }
+  B.aufbauen = function (el) { var k = $("[data-g-aufbauen]", el), ziel = $("[data-text], .g-aufbau", el) || el; var S = setzenText(ziel, { sofort: el.hasAttribute("data-autoplay") }); if (k) k.addEventListener("click", S.spielen); };
+
+  // Vorher–nachher: zwei Zustände, ein Griff. Ziehen, Regler (Tastatur) oder Abspielen (pendelt einmal).
+  B.schieber = function (el) {
+    var r = $("input[type=range]", el), nach = $(".g-schieber__nach", el), griff = $(".g-schieber__griff", el), live = $("[aria-live]", el), aus = $(".g-schieber__stand", el), buehne = $(".g-schieber__buehne", el);
+    var a = el.getAttribute("data-vorher") || "Vorher", b = el.getAttribute("data-nachher") || "Nachher", zieh = false;
+    function bild(v) { var p = v * 100; nach.style.clipPath = "inset(0 0 0 " + p + "%)"; griff.style.left = p + "%"; if (aus) aus.textContent = Math.round(p) + " % " + b + " · " + Math.round(100 - p) + " % " + a; }
+    var S = scrub(r, bild, { dauer: +(el.getAttribute("data-dauer") || 3), pendeln: true, autoplay: el.hasAttribute("data-autoplay"), sicht: buehne, knopf: $("[data-g-abspielen]", el), text: "Hin und her" });
+    buehne.addEventListener("pointerdown", function (e) { zieh = true; buehne.setPointerCapture(e.pointerId); S.stop(); S.setzen(pos(buehne, e)[0] / buehne.clientWidth); });
+    buehne.addEventListener("pointermove", function (e) { if (zieh) S.setzen(pos(buehne, e)[0] / buehne.clientWidth); });
+    buehne.addEventListener("pointerup", function () { zieh = false; ansagen(live, aus ? aus.textContent : ""); });
+    r.addEventListener("change", function () { ansagen(live, aus ? aus.textContent : ""); });
+  };
+
+  // Zeitstrahl: Werte über die Zeit; der Regler zieht die Zeit, Zwischenstände werden interpoliert, Bildtexte bauen sich auf.
+  B.zeitstrahl = function (el) {
+    var cv = $("canvas", el), r = $("input[type=range]", el), live = $("[aria-live]", el), jahr = $(".g-zeitstrahl__jahr", el), txt = $(".g-zeitstrahl__text", el);
+    var D = JSON.parse(el.getAttribute("data-daten") || "[]"), max = Math.max.apply(null, D.map(function (d) { return d.wert; })) * 1.15, letzt = -1, T;
+    var L = leinwand(cv, function (ctx, w, h) {
+      ctx.clearRect(0, 0, w, h); ctx.fillStyle = farbe("flaeche"); ctx.fillRect(0, 0, w, h);
+      var v = r ? (r.value - r.min) / (r.max - r.min) : 1, n = D.length, pad = 28, bw = (w - pad * 2) / n, t = v * (n - 1);
+      ctx.strokeStyle = farbe("linie"); ctx.lineWidth = 1; [0.25, 0.5, 0.75].forEach(function (g) { ctx.beginPath(); ctx.moveTo(pad, h - 30 - (h - 60) * g); ctx.lineTo(w - pad, h - 30 - (h - 60) * g); ctx.stroke(); });
+      D.forEach(function (d, i) {
+        var k = Math.max(0, Math.min(1, t - i + 1)), hh = (h - 60) * (d.wert / max) * k, x = pad + i * bw + bw * .2, bwi = bw * .6;
+        ctx.fillStyle = i <= t ? farbe("petrol") : farbe("karton"); ctx.fillRect(x, h - 30 - hh, bwi, hh);
+        ctx.fillStyle = farbe("text"); ctx.font = "700 14px " + farbe("font-text", "sans-serif"); ctx.textAlign = "center"; ctx.fillText(d.zeit, x + bwi / 2, h - 10);
+        if (k > 0) { ctx.font = "700 15px " + farbe("font-text", "sans-serif"); ctx.fillText(String(Math.round(d.wert * k * 10) / 10).replace(".", ",") + (d.einheit || ""), x + bwi / 2, h - 36 - hh); }
+      });
+      var idx = Math.round(t);
+      if (idx !== letzt) { letzt = idx; if (jahr) jahr.textContent = D[idx].zeit; if (txt) { txt.setAttribute("data-text", D[idx].text || ""); T = setzenText(txt, { sofort: true, dauer: 1 }); } if (live) live.textContent = D[idx].zeit + ": " + D[idx].wert + (D[idx].einheit || "") + ". " + (D[idx].text || ""); }
+    });
+    if (r) scrub(r, function () { L.zeichnen(); }, { dauer: +(el.getAttribute("data-dauer") || 6), autoplay: el.hasAttribute("data-autoplay"), sicht: cv, knopf: $("[data-g-abspielen]", el) });
+  };
+
+  // Zustandskarte: alle Zustände eines Bausteins nebeneinander; »Übergang abspielen« geht sie der Reihe nach durch
+  B.zustaende = function (el) {
+    var k = $("[data-g-durchlauf]", el), karten = $$("[data-zustand]", el), live = $("[aria-live]", el), i = -1, timer = 0;
+    function anwenden(karte, an) {
+      var z = karte.getAttribute("data-zustand"), ziel = $("[data-ziel]", karte); if (!ziel) return;
+      ziel.classList.toggle("g-sim-" + z, an); karte.classList.toggle("ist-aktiv", an);
+      if (z === "gesperrt") ziel.toggleAttribute("disabled", an);
+      if (z === "fokus") { if (an) ziel.classList.add("g-sim-fokus"); else ziel.classList.remove("g-sim-fokus"); }
+      if (z === "gewaehlt" || z === "festgelegt") { var inp = $("input", ziel); if (inp) inp.checked = an; }
+    }
+    karten.forEach(function (c) { anwenden(c, true); });
+    function schritt() {
+      karten.forEach(function (c, j) { c.classList.toggle("ist-aktiv", j === i); });
+      if (i >= 0) { var c = karten[i], z = c.getAttribute("data-zustand"), ziel = $("[data-ziel]", c); bewegen(ziel, [{ transform: "scale(.96)", opacity: .6 }, { transform: "none", opacity: 1 }], { dauer: ms("--dauer-mittel", 220), fade: true }); ansagen(live, "Zustand: " + ($(".g-zustand__name", c) || c).textContent); }
+      i++; if (i < karten.length) timer = setTimeout(schritt, ruhig() ? 600 : 900); else { i = -1; k.textContent = "Übergänge abspielen"; }
+    }
+    if (k) k.addEventListener("click", function () { clearTimeout(timer); i = 0; k.textContent = "Läuft …"; schritt(); });
+  };
+
+  // Ansichtswechsel: Karte wird zur Detailansicht (View Transitions, mit Rückfall ohne Bewegung)
+  B.ansicht = function (el) {
+    var liste = $(".g-ansicht__liste", el), detail = $(".g-ansicht__detail", el), live = $("[aria-live]", el);
+    function wechseln(fn, fokus) { var go = function () { fn(); if (fokus) setTimeout(function () { fokus.focus({ preventScroll: true }); }, 0); }; if (doc.startViewTransition && !ruhig()) doc.startViewTransition(go); else go(); }
+    $$("[data-g-oeffnen]", liste).forEach(function (b) {
+      b.addEventListener("click", function () {
+        var karte = b.closest(".g-karte"), bild = $(".g-ansicht__bild", karte), titel = $(".g-karte__titel", karte);
+        $$(".g-karte", liste).forEach(function (c) { $(".g-ansicht__bild", c).style.viewTransitionName = ""; $(".g-karte__titel", c).style.viewTransitionName = ""; });
+        bild.style.viewTransitionName = "bild"; titel.style.viewTransitionName = "titel";
+        $(".g-ansicht__bild", detail).style.viewTransitionName = "bild"; $(".g-ansicht__titel", detail).style.viewTransitionName = "titel";
+        $(".g-ansicht__titel", detail).textContent = titel.textContent; $(".g-ansicht__text", detail).textContent = karte.getAttribute("data-text") || "";
+        $(".g-ansicht__bild", detail).className = bild.className.replace("g-ansicht__bild", "g-ansicht__bild");
+        $(".g-ansicht__bild", detail).style.background = getComputedStyle(bild).background;
+        wechseln(function () { liste.hidden = true; detail.hidden = false; }, $("[data-g-zurueck]", detail));
+        ansagen(live, "Geöffnet: " + titel.textContent);
+      });
+    });
+    var z = $("[data-g-zurueck]", detail);
+    if (z) z.addEventListener("click", function () { wechseln(function () { detail.hidden = true; liste.hidden = false; }, $("[data-g-oeffnen]", liste)); ansagen(live, "Zurück zur Übersicht."); });
+  };
+
+  function init(wurzel) {
+    wurzel = wurzel || doc;
+    (wurzel.documentElement || wurzel).classList.add("g-ist-js");
+    $$("[data-g]", wurzel).forEach(function (el) {
+      if (el.__g) return; el.__g = true;
+      el.getAttribute("data-g").split(" ").forEach(function (n) { if (B[n]) B[n](el); });
+    });
+  }
+
+  window.Gegenwart = { init: init, bewegen: bewegen, staffel: staffel, ruhig: ruhig, muster: MUSTER, bausteine: B, leinwand: leinwand, farbe: farbe, mischen: mischen, zufall: zufall, scrub: scrub, setzenText: setzenText };
+  if (doc.readyState !== "loading") init(doc); else doc.addEventListener("DOMContentLoaded", function () { init(doc); });
 })();
 
 </script>
 <script>
 /* =====================================================================
-   INHALTE (Datenblock)
+   INHALTE (Datenblock) – Belege und Status in der README
    ===================================================================== */
 var DATA = {
-  vermutungFrage: "Würdest du deine Antwort ändern, wenn die fünf vor dir alle etwas anderes sagen?",
   vermutungOptionen: ["Nein, nie. Ich sage, was ich denke.", "Nur, wenn ich mir unsicher bin.", "Ja, vielleicht sogar, wenn ich mir sicher bin."],
   /* Teil 1: wahre Anzahl und erfundene, absichtlich zu hohe Schätzungen „anderer“ (etwa das 1,7-Fache) */
   punkte: [{ n: 74, andere: [118, 130, 125, 140, 122] }, { n: 132, andere: [210, 240, 225, 250, 220] }, { n: 203, andere: [340, 360, 330, 380, 350] }],
   /* Teil 2: Vergleichslinie, A, B, C; richtige Antwort; erfundene falsche Antwort der „anderen“ */
   linien: [{ l: [160, 120, 200, 160], ok: "C", gruppe: "A" }, { l: [110, 110, 150, 80], ok: "A", gruppe: "B" }, { l: [190, 150, 190, 230], ok: "B", gruppe: "C" }],
+  chatNamen: ["Sam", "Noa", "Kim", "Alex", "Jo"],
   sicher: { 3: "sicher", 2: "etwas sicher", 1: "unsicher" },
-  /* Erster Eindruck: Herr Fotiou (Foto am Beamer); 0 = „kann ich nicht sagen“ */
+  /* Erster Eindruck: 0 = „kann ich nicht sagen“; „streng“ zählt nicht zum Mittel der positiven Eigenschaften */
   fotiou: ["intelligent", "geduldig", "streng", "humorvoll", "hilfsbereit"],
-  beispiel: { G: "G", fot: [4, 4, 2, 4, 5], vermutung: { v: 1, grund: "Wenn ich mir sicher bin, sage ich meine Meinung. Nur wenn ich unsicher bin, höre ich auf die anderen." },
+  fotiouPositiv: [0, 1, 3, 4],
+  /* Video zur Asch-Studie: Nachstellung, nicht das Original von 1951 – vor dem Einsatz von der Lehrkraft prüfen. Andere ID über ?video=… */
+  video: { id: "TYIh4MkcfJA", titel: "Nachstellung des Asch-Versuchs (YouTube)", hinweis: "Nachgestellte Szene, nicht der Originalversuch von 1951. Prüfbedürftig: Deine Lehrkraft hat das Video vor dem Einsatz angesehen." },
+  vhAsch: { frage: "Wie oft gingen die echten Versuchspersonen mit der falschen Mehrheit mit?", opt: ["fast nie (unter 5 %)", "etwa jedes dritte Mal", "meistens (mehr als die Hälfte)"], richtig: 1 },
+  bed: [
+    { id: "b1", text: "Statt sechs Eingeweihten nennt nur eine einzige Person die falsche Linie.", richtig: 0, erkl: "weniger (≈ 3 %): Eine einzelne Gegenstimme hält man leicht für einen Irrtum – der Druck ist klein." },
+    { id: "b2", text: "Eine der eingeweihten Personen nennt die richtige Linie – du hast einen Verbündeten.", richtig: 0, erkl: "weniger (auf etwa ein Viertel des Werts): Mit Verbündetem fällt man nicht allein auf – der normative Druck sinkt." },
+    { id: "b3", text: "Du schreibst deine Antwort geheim auf, statt sie laut zu sagen.", richtig: 0, erkl: "weniger (≈ 12,5 %): Niemand hört deine Antwort – der normative Druck fällt fast weg." },
+    { id: "b4", text: "Statt sechs bis acht sind es fünfzehn Eingeweihte, die alle dieselbe falsche Linie nennen.", richtig: 1, erkl: "etwa gleich: Ab drei Personen stieg die Anpassung kaum noch weiter." }
+  ],
+  bedOpt: ["weniger Anpassung", "etwa gleich", "mehr Anpassung"],
+  /* gerundete Befunde (Sekundärquellen, siehe README) */
+  balken: [["falsche Mehrheit (6–8 Personen)", 33, "≈ 1/3"], ["falsche Mehrheit aus nur 1 Person", 3, "≈ 3 %"], ["falsche Mehrheit aus 2 Personen", 13, "≈ 13 %"], ["falsche Mehrheit aus 3 Personen", 32, "≈ 32 %"], ["mit einem Verbündeten", 8, "≈ 8 % *"], ["Antwort geheim (schriftlich)", 12.5, "≈ 12,5 %"]],
+  vhHalo: { frage: "Ein Teil des Kurses sah Herrn Fotiou lächelnd, der andere ernst. Was vermutest du über die Einschätzungen?", opt: ["Wer ihn lächelnd sah, schätzte ihn positiver ein.", "Beide Gruppen schätzten ihn ungefähr gleich ein.", "Wer ihn ernst sah, schätzte ihn positiver ein."] },
+  zuordnen: {
+    gruende: [
+      { id: "z1", text: "Mia weiß bei einer Quizfrage die Antwort nicht. Sie wählt, was die meisten im Kurs gewählt haben.", opt: [
+        ["normativer Einfluss", "kaum", "Niemand sieht, was Mia wählt. Es geht ihr nicht ums Dazugehören, sondern um die richtige Antwort."],
+        ["informativer Einfluss", "zentral", "Sie ist unsicher und nimmt die anderen als Information – genau das ist informativer Einfluss."],
+        ["kein Einfluss anderer", "kaum", "Sie richtet sich ja gerade nach den anderen."]] },
+      { id: "z2", text: "Tom findet den Witz im Klassenchat nicht lustig. Weil alle „😂“ schicken, schickt er es auch.", opt: [
+        ["normativer Einfluss", "zentral", "Tom weiß, was er denkt, macht aber mit, um nicht aufzufallen – normativer Einfluss."],
+        ["informativer Einfluss", "kaum", "Tom fehlt keine Information: Er findet den Witz ja nicht lustig."],
+        ["kein Einfluss anderer", "kaum", "Ohne die anderen hätte er nichts geschickt."]] },
+      { id: "z3", text: "Bei Asch sagten manche Versuchspersonen hinterher: „Ich dachte, mit meinen Augen stimmt etwas nicht.“", opt: [
+        ["kein Einfluss anderer", "kaum", "Der Zweifel entstand erst durch die Antworten der Gruppe."],
+        ["normativer Einfluss", "begruendbar", "Die Antwort fiel laut vor der Gruppe – Druck war also da. Der genannte Grund ist aber der Zweifel am eigenen Urteil."],
+        ["informativer Einfluss", "zentral", "Wer an den eigenen Augen zweifelt, nimmt die Gruppe als Information – informativer Einfluss, sogar bei einer eindeutigen Aufgabe."]] }
+    ],
+    halo: [
+      { id: "z4", text: "Lina findet die neue Mitschülerin sehr selbstbewusst. Deshalb hält sie sie auch für besonders klug.", opt: [
+        ["Vorurteil", "kaum", "Es geht um eine einzelne Person, nicht um eine ganze Gruppe."],
+        ["Halo-Effekt", "zentral", "Ein auffälliges Merkmal (selbstbewusst) färbt auf eine ganz andere Eigenschaft (klug) ab."],
+        ["normativer Einfluss", "kaum", "Lina passt sich keiner Gruppe an – sie schließt von einem Merkmal auf ein anderes."]] },
+      { id: "z5", text: "Leon sagt: „Gamer sind unsportlich.“ Als Jana, die viel zockt, beim Lauftest gewinnt, meint er: „Die hatte halt Glück.“", opt: [
+        ["Vorurteil", "zentral", "Ein starres Urteil über alle Gamer; das Gegenbeispiel wird umgedeutet („Glück“) – wie bei einer starken Erwartung (DS 4)."],
+        ["Halo-Effekt", "kaum", "Hier wird nicht von einem Merkmal einer Person auf andere geschlossen, sondern über eine ganze Gruppe geurteilt."],
+        ["informativer Einfluss", "kaum", "Leon ist nicht unsicher, er hält an seinem Urteil fest."]] }
+    ],
+    pruef: [
+      { id: "z6", text: "Angenommen, in unserem Kurs schätzten die mit den Antworten anderer bei den Punkten höher. Was folgt daraus?", opt: [
+        ["Das Ergebnis ist Zufall, also wertlos.", "kaum", "Zufall ist bei so wenigen Personen möglich, aber nicht bewiesen – und eine Demo ist nicht wertlos: Sie zeigt anschaulich, was belastbare Studien gefunden haben."],
+        ["Menschen passen sich immer an.", "kaum", "Wenige Personen und eine erfundene Gruppe zeigen nicht, was für alle gilt – und bei Asch blieben zwei Drittel der Antworten richtig."],
+        ["Bei uns hat die Information der anderen offenbar gewirkt – das passt zu Sherif und Asch, beweist aber nichts für alle.", "zentral", "Genau: eine anschauliche Demo, die zu belastbaren Studien passt."]] },
+      { id: "z7", text: "War die Täuschung in unserem Versuch in Ordnung?", opt: [
+        ["Nein, Täuschung ist in der Forschung immer verboten.", "kaum", "Die Forschung erlaubt harmlose Täuschung, wenn der Versuch sie braucht und danach vollständig aufgeklärt wird."],
+        ["Ja, weil es nur ein Spiel war.", "begruendbar", "Harmlos ist wichtig – entscheidend ist aber auch: Der Versuch braucht die Täuschung, und danach wird vollständig aufgeklärt."],
+        ["Ja: Sie war harmlos, für den Versuch nötig und wurde danach aufgeklärt – im Unterricht sogar vorher angekündigt.", "zentral", "Genau: Das sind die Bedingungen der Forschung. Die Ankündigung ist eine zusätzliche Regel für den Unterricht."]] }
+    ]
+  },
+  raster: [
+    ["Grundlegend", "Ein Fachbegriff ist richtig verwendet, und der Tipp passt zur Situation."],
+    ["Sicher", "Du erklärst, warum niemand widerspricht (normativer Einfluss: nicht auffallen wollen)."],
+    ["Souverän", "Du nutzt zusätzlich einen Asch-Befund (ein Verbündeter senkt die Anpassung stark) und machst einen konkreten Vorschlag."]
+  ],
+  beispiel: { G: "G", fot: [4, 4, 2, 4, 5], vermutung: { v: 1, grund: "Wenn ich mir sicher bin, sage ich meine Meinung." },
     schaetz: [{ e: 110, s: 1 }, { e: 190, s: 1 }, { e: 300, s: 2 }], wahl: ["C", "A", "B"],
     b1: "Die Fassung mit den Antworten anderer hat bei den Punkten viel höher geschätzt. Bei den Linien haben fast alle richtig gewählt.",
-    v1: "Bei den Punkten war ich unsicher, da habe ich mich an den anderen orientiert. Bei den Linien war es eindeutig." }
+    v1: "Bei den Punkten war ich unsicher. Bei den Linien war es eindeutig.",
+    vid1: "Sie zögert, schaut zu den anderen und sagt dann leise dieselbe Linie.", vid2: "Sie lächelt verlegen und rutscht auf dem Stuhl.",
+    vh: { asch: { o: 0, s: "Bei so eindeutigen Linien macht doch niemand mit." }, bed: { b1: 0, b2: 0, b3: 1, b4: 2, s: "Je weniger Druck, desto weniger Anpassung." }, halo: { o: 0, s: "Ein Lächeln wirkt sympathisch." } },
+    zu: { z1: { o: 1, g: "Sie ist unsicher." }, z2: { o: 0, g: "Er will nicht auffallen." }, z3: { o: 1, g: "Die Antwort war laut vor allen." }, z4: { o: 1, g: "Selbstbewusst färbt auf klug ab." }, z5: { o: 0, g: "Urteil über alle Gamer." }, z6: { o: 2, g: "Wenige Personen, aber passt zu Asch." }, z7: { o: 2, g: "Harmlos und aufgeklärt." } },
+    tipp: "Wenn alle lästern, wirkt normativer Einfluss: Keiner will auffallen, deshalb sagt niemand etwas. Bei Asch sank die Anpassung stark, sobald eine andere Person die richtige Linie nannte. Deshalb kannst du die erste Person sein, die schreibt: Das finde ich nicht fair. Dann trauen sich vielleicht auch andere, und die Person merkt, dass sie nicht allein ist.",
+    selbst: [2, 2, 1], jetzt: "Ich dachte, nur bei Unsicherheit. Bei Asch wirkte aber auch normativer Einfluss, obwohl die Linien eindeutig waren." }
 };
 
 /* =====================================================================
@@ -2316,15 +3481,19 @@ var DATA = {
    ===================================================================== */
 (function () {
   "use strict";
-  var $ = Lab.$, $$ = Lab.$$, F = window.FIGUREN_DS05, D = DATA;
-  var st = Lab.load("ds05", {});
-  function save() { Lab.save("ds05", st); }
-  /* Fassung: über die beiden QR-Codes (?f=1 mit erfundenen Antworten, ?f=2 ohne), sonst Zufall */
+  var $ = Lab.$, $$ = Lab.$$, F = window.FIGUREN_DS05, D = DATA, G = window.Gegenwart;
+  var KEY = "ds05b";
+  var st = Lab.load(KEY, {});
+  function save() { Lab.save(KEY, st); }
   var fm = /[?&]f=([12])/.exec(window.location.search);
   if (!st.id) { st.id = Lab.uid(); st.G = Math.random() < 0.5 ? "G" : "O"; st.schaetz = []; st.wahl = []; save(); }
-  st.schaetz = st.schaetz || []; st.wahl = st.wahl || [];
-  if (fm && !st.schaetz.length && !st.seen) { st.G = fm[1] === "1" ? "G" : "O"; save(); }
+  st.schaetz = st.schaetz || []; st.wahl = st.wahl || []; st.vh = st.vh || {}; st.zu = st.zu || {};
+  if (fm && !st.schaetz.length && !st.seen && !st.fot) { st.G = fm[1] === "1" ? "G" : "O"; save(); }
   var withGroup = st.G === "G";
+  /* Herr Fotiou: Code 1 lächelnd, Code 2 ernst – die Einschätzung kommt VOR jeder Täuschung, deshalb kein Störeinfluss */
+  function fassungFot(s) { return s.G === "G" ? "laecheln" : "ernst"; }
+  var vm = /[?&]video=([A-Za-z0-9_-]{6,20})/.exec(window.location.search);
+  if (vm) D.video.id = vm[1];
 
   $("#logo").innerHTML = Lab.logo;
   $$(".lock").forEach(function (el) { el.innerHTML = Lab.lockIcon; });
@@ -2333,12 +3502,20 @@ var DATA = {
   function applyTheme() { if (theme === "auto") document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme", theme); }
   $("#theme").addEventListener("click", function () { theme = themes[(themes.indexOf(theme) + 1) % 3]; Lab.save("theme", theme); applyTheme(); });
   applyTheme();
+  /* Weniger Bewegung: Gegenwart-Attribut, im Browser gemerkt */
+  (function () {
+    var box = $("#ruhig"), an = Lab.load("ruhig", false);
+    function setz(v) { if (v) document.documentElement.setAttribute("data-bewegung", "weniger"); else document.documentElement.removeAttribute("data-bewegung"); }
+    box.checked = !!an; setz(an);
+    box.addEventListener("change", function () { Lab.save("ruhig", box.checked); setz(box.checked); });
+  })();
+  function ruhig() { return document.documentElement.getAttribute("data-bewegung") === "weniger" || (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches); }
 
-  /* ---------- Lernübersicht als Schublade ---------- */
+  /* ---------- Lernübersicht ---------- */
   function fillFigs(root) {
     $$("[data-fig]", root).forEach(function (el) {
       var f = el.getAttribute("data-fig");
-      el.innerHTML = f === "linien" ? F.linien(160, 120, 200, 160) : f === "halo" ? F.halo() : F.vorurteil();
+      el.innerHTML = f === "asch" ? F.aschTisch() : f === "halo" ? F.halo() : f === "gruende" ? F.gruende() : F.vorurteil();
     });
   }
   function uebersichtHTML() { return $("#tpl-ue").innerHTML; }
@@ -2357,17 +3534,19 @@ var DATA = {
   Lab.Steps({ hash: true, onShow: function (id) {
     if (id === "s-4") showLine();
     if (id === "s-5") renderQR();
-    if (id === "s-7") unlock();
     if (id === "s-6") renderAufl();
-    if (id === "s-7") renderChecklist();
+    if (["s-prod", "s-ende"].indexOf(id) >= 0) unlock();
+    if (id === "s-prod") renderProd();
+    if (id === "s-ende") renderChecklist();
   } });
 
-  /* ---------- Erster Eindruck: Herr Fotiou ---------- */
+  /* ---------- Erster Eindruck ---------- */
+  $("#fot-bild").innerHTML = F.fotiou(fassungFot(st));
   var fot = st.fot ? st.fot.slice() : D.fotiou.map(function () { return null; });
   $("#fot-rows").innerHTML = D.fotiou.map(function (name, i) {
     return '<div class="fot-row"><span class="fot-name">' + name + '</span><div class="seg3" data-i="' + i + '">' + [1, 2, 3, 4, 5, 0].map(function (v) { return '<button type="button" data-v="' + v + '" aria-label="' + name + " " + (v || "kann ich nicht sagen") + '">' + (v || "?") + "</button>"; }).join("") + "</div></div>";
   }).join("");
-  function fotPaint() { $$("#fot-rows .seg3").forEach(function (g) { var i = +g.getAttribute("data-i"); $$("button", g).forEach(function (b) { b.classList.toggle("on", fot[i] !== null && +b.getAttribute("data-v") === fot[i]); }); }); $("#fot-save").disabled = fot.some(function (x) { return x === null; }); }
+  function fotPaint() { $$("#fot-rows .seg3").forEach(function (g) { var i = +g.getAttribute("data-i"); $$("button", g).forEach(function (b) { b.classList.toggle("on", fot[i] !== null && +b.getAttribute("data-v") === fot[i]); b.setAttribute("aria-pressed", String(fot[i] !== null && +b.getAttribute("data-v") === fot[i])); }); }); $("#fot-save").disabled = fot.some(function (x) { return x === null; }); }
   $$("#fot-rows .seg3 button").forEach(function (b) { b.addEventListener("click", function () { if (st.fot) return; fot[+b.parentNode.getAttribute("data-i")] = +b.getAttribute("data-v"); fotPaint(); }); });
   function lockFot() { $$("#fot-rows button").forEach(function (b) { b.disabled = true; }); $("#fot-save").hidden = true; $("#fot-ok").hidden = false; $("#to-verm").disabled = false; }
   $("#fot-save").addEventListener("click", function () { st.fot = fot.slice(); save(); lockFot(); });
@@ -2407,13 +3586,11 @@ var DATA = {
   }
   function showResp1() {
     var p = D.punkte[r1];
-    (function () {
-      $("#stage1").innerHTML = '<div class="msgc">Wie viele Punkte waren es?</div>';
-      $("#t1-others").hidden = !withGroup;
-      if (withGroup) $("#t1-nums").innerHTML = p.andere.map(function (x) { return "<span>" + x + "</span>"; }).join("");
-      $("#t1-input").value = ""; sure = 0; $$("#t1-sure button").forEach(function (b) { b.classList.remove("on"); }); t1Upd();
-      $("#t1-resp").hidden = false; busy1 = false;
-    })();
+    $("#stage1").innerHTML = '<div class="msgc">Wie viele Punkte waren es?</div>';
+    $("#t1-others").hidden = !withGroup;
+    if (withGroup) $("#t1-nums").innerHTML = p.andere.map(function (x) { return "<span>" + x + "</span>"; }).join("");
+    $("#t1-input").value = ""; sure = 0; $$("#t1-sure button").forEach(function (b) { b.classList.remove("on"); }); t1Upd();
+    $("#t1-resp").hidden = false; busy1 = false;
   }
   $("#stage1").addEventListener("click", runDots);
   $("#stage1").addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); runDots(); } });
@@ -2425,23 +3602,37 @@ var DATA = {
     if (r1 >= 3) { t1Finish(); return; }
     $("#stage1").innerHTML = '<div class="msgc">Tippe hier für die nächste Runde.</div>'; t1Count();
   });
-  t1Count(); if (r1 >= 3) t1Finish();
-  /* Nach Neuladen: Punkte dieser Runde nicht noch einmal zeigen, sondern direkt antworten lassen */
-  else if (st.seen === r1 + 1) showResp1();
+  t1Count(); if (r1 >= 3) t1Finish(); else if (st.seen === r1 + 1) showResp1();
 
-  /* ---------- Teil 2: Linien (nach Asch) ---------- */
-  var r2 = st.wahl.length, pick = null;
+  /* ---------- Teil 2: Linien im Gruppenchat ---------- */
+  var r2 = st.wahl.length, pick = null, chatTimer = [];
+  function bubble(text, wer, cls) {
+    var b = document.createElement("div"); b.className = "bubble neu " + (cls || "");
+    b.innerHTML = (wer ? "<small>" + Lab.esc(wer) + "</small>" : "") + Lab.esc(text);
+    $("#chat-verlauf").appendChild(b); return b;
+  }
   function showLine() {
-    if (r2 >= 3) { $("#stage2").hidden = true; $("#t2-count").hidden = true; $("#t2-resp").hidden = true; $("#t2-others").hidden = true; $("#t2-done").hidden = false; return; }
+    chatTimer.forEach(clearTimeout); chatTimer = [];
+    if (r2 >= 3) { $("#stage2").hidden = true; $("#t2-count").hidden = true; $("#t2-resp").hidden = true; $("#chat").hidden = true; $("#t2-done").hidden = false; return; }
     var t = D.linien[r2];
     $("#stage2").innerHTML = F.linien(t.l[0], t.l[1], t.l[2], t.l[3]);
     $("#t2-count").textContent = "Runde " + (r2 + 1) + " von 3";
-    $("#t2-others").hidden = !withGroup;
-    if (withGroup) $("#t2-nums").innerHTML = [1, 2, 3, 4, 5].map(function () { return "<span>" + t.gruppe + "</span>"; }).join("");
-    pick = null; $$("#t2-abc button").forEach(function (b) { b.classList.remove("on"); }); $("#t2-ok").disabled = true;
+    $("#chat-verlauf").innerHTML = "";
+    $("#chat-wer").textContent = withGroup ? "6 Mitglieder · du bist nach allen anderen dran" : "du antwortest zuerst";
+    bubble("Runde " + (r2 + 1) + ": Welche Linie ist gleich lang wie die Vergleichslinie?", "", "sys");
+    pick = null; $$("#t2-abc button").forEach(function (b) { b.classList.remove("on"); b.disabled = withGroup; }); $("#t2-ok").disabled = true;
+    if (!withGroup) { $$("#t2-abc button").forEach(function (b) { b.disabled = false; }); return; }
+    var schritt = ruhig() ? 0 : 650;
+    D.chatNamen.forEach(function (n, i) {
+      chatTimer.push(setTimeout(function () { bubble(t.gruppe, n); if (i === D.chatNamen.length - 1) $$("#t2-abc button").forEach(function (b) { b.disabled = false; }); }, schritt * (i + 1)));
+    });
   }
-  $$("#t2-abc button").forEach(function (b) { b.addEventListener("click", function () { $$("#t2-abc button").forEach(function (x) { x.classList.remove("on"); }); b.classList.add("on"); pick = b.getAttribute("data-v"); $("#t2-ok").disabled = false; }); });
-  $("#t2-ok").addEventListener("click", function () { if (!pick) return; st.wahl.push(pick); r2++; save(); showLine(); });
+  $$("#t2-abc button").forEach(function (b) { b.addEventListener("click", function () { $$("#t2-abc button").forEach(function (x) { x.classList.remove("on"); x.setAttribute("aria-pressed", "false"); }); b.classList.add("on"); b.setAttribute("aria-pressed", "true"); pick = b.getAttribute("data-v"); $("#t2-ok").disabled = false; }); });
+  $("#t2-ok").addEventListener("click", function () {
+    if (!pick) return; st.wahl.push(pick); r2++; save();
+    bubble(pick, "du", "ich"); $("#t2-ok").disabled = true; $$("#t2-abc button").forEach(function (b) { b.disabled = true; });
+    chatTimer.push(setTimeout(showLine, ruhig() ? 200 : 900));
+  });
 
   /* ---------- Auswertung der eigenen Daten ---------- */
   function stats(s) {
@@ -2452,10 +3643,12 @@ var DATA = {
     (s.wahl || []).forEach(function (w, i) { if (w === D.linien[i].ok) right++; if (w === D.linien[i].gruppe) follow++; });
     return { ratio: ratio, sure: sureM, right: right, follow: follow };
   }
-  function fmt(x, d) { return isNaN(x) ? "–" : (Math.round(x * Math.pow(10, d || 1)) / Math.pow(10, d || 1)).toString().replace(".", ","); }
-  function complete() { return st.schaetz.length >= 3 && st.wahl.length >= 3 && !!st.fot; }
   function fotCount(s) { return (s.fot || []).filter(function (x) { return x > 0; }).length; }
-  function payload() { var k = stats(st); return ["ds05", st.id, st.G, Math.round(k.ratio * 100), k.follow, k.right, Math.round(k.sure * 10), fotCount(st)].join("."); }
+  function fotPos(s) { var v = D.fotiouPositiv.map(function (i) { return (s.fot || [])[i]; }).filter(function (x) { return x > 0; }); return v.length ? v.reduce(function (a, b) { return a + b; }, 0) / v.length : NaN; }
+  function fmt(x) { return isNaN(x) ? "–" : (Math.round(x * 10) / 10).toString().replace(".", ","); }
+  function complete() { return st.schaetz.length >= 3 && st.wahl.length >= 3 && !!st.fot; }
+  /* Code: ds05.id.G|O.schätzung÷wahr×100.gefolgt.richtig.sicher×10.fotiouAnzahl.fotiouPositiv×10 (0 = keine) */
+  function payload() { var k = stats(st), fp = fotPos(st); return ["ds05", st.id, st.G, Math.round(k.ratio * 100), k.follow, k.right, Math.round(k.sure * 10), fotCount(st), isNaN(fp) ? 0 : Math.round(fp * 10)].join("."); }
   function renderQR() {
     if (!complete()) { $("#qr").innerHTML = '<p class="small">Es fehlen noch Antworten. Geh zurück und beende alle Schritte.</p>'; $("#code").textContent = "–"; return; }
     var p = payload(); $("#qr").innerHTML = Lab.qrSVG(Lab.resultURL(p), 230); $("#code").textContent = p;
@@ -2470,52 +3663,202 @@ var DATA = {
     D.linien.forEach(function (t, i) { h += "<tr><td>Runde " + (i + 1) + "</td><td>" + t.ok + "</td><td>" + (s.wahl[i] || "–") + "</td>" + (s.G === "G" ? "<td>" + t.gruppe + "</td>" : "") + "</tr>"; });
     return h + "</table>";
   }
-  function renderAufl() {
-    $("#my-res").innerHTML = "<p><strong>Du hattest die Fassung " + (withGroup ? "<u>mit</u> den Antworten anderer" : "<u>ohne</u> Antworten anderer") + ".</strong></p>" + resTable(st);
+  function renderAufl() { $("#my-res").innerHTML = "<p><strong>Du hattest die Fassung " + (withGroup ? "<u>mit</u> den Antworten anderer" : "<u>ohne</u> Antworten anderer") + ".</strong></p>" + resTable(st); }
+  function textFelder(ids, knopf, hint, mind) {
+    function upd() { var ok = ids.every(function (id) { return $("#" + id).value.trim().length >= (mind || 8); }); if (knopf) $("#" + knopf).disabled = !ok; if (hint) $("#" + hint).hidden = ok; return ok; }
+    ids.forEach(function (id) { var t = $("#" + id); t.value = st[id] || ""; t.addEventListener("input", function () { st[id] = t.value; save(); upd(); }); });
+    return upd;
+  }
+  textFelder(["b1", "v1"], "to-st1", "a-hint")();
+
+  /* ---------- Muster 1: Vorhersage → Auflösung ---------- */
+  function vhBlock(root, id, frage, opts, nachher) {
+    var s = st.vh[id];
+    var h = '<fieldset><legend>Bevor du den Befund siehst: ' + Lab.esc(frage) + '</legend>' + opts.map(function (o, i) {
+      return '<label class="wahlknopf"><input type="radio" name="vh-' + id + '" value="' + i + '"' + (s && s.o === i ? " checked" : "") + (s ? " disabled" : "") + '><span>' + Lab.esc(o) + "</span></label>"; }).join("") + "</fieldset>";
+    h += '<label class="field-label" for="vhs-' + id + '">Ein Satz, warum:</label><textarea id="vhs-' + id + '" class="short" maxlength="160"' + (s ? " readonly" : "") + ">" + Lab.esc(s ? s.s : "") + "</textarea>";
+    h += '<div class="actions"><button class="btn" type="button" data-vh-los' + (s ? " hidden" : " disabled") + '>Befund zeigen</button>' + (s ? '<span class="saved">Festgelegt.</span>' : "") + "</div>";
+    root.innerHTML = h;
+    var los = $("[data-vh-los]", root), feld = $("textarea", root);
+    function pruef() { los.disabled = !($("input:checked", root) && feld.value.trim().length >= 12); }
+    if (!s) { root.addEventListener("change", pruef); feld.addEventListener("input", pruef); }
+    los.addEventListener("click", function () { st.vh[id] = { o: +$("input:checked", root).value, s: feld.value.trim() }; save(); vhBlock(root, id, frage, opts, nachher); nachher(true); });
+    if (s) nachher(false);
+  }
+  function bedBlock(root) {
+    var s = st.vh.bed;
+    var h = '<fieldset style="border:0;padding:0;margin:0"><legend>Bevor du den Befund siehst: Wie verändert sich die Anpassung im Vergleich zum normalen Versuch?</legend><div class="bed">' + D.bed.map(function (b) {
+      return '<div class="zeile"><p>' + Lab.esc(b.text) + '</p><div class="seg3" role="radiogroup" aria-label="' + Lab.esc(b.text) + '">' + D.bedOpt.map(function (o, i) { var on = s && s[b.id] === i; return '<button type="button" role="radio" data-b="' + b.id + '" data-v="' + i + '" class="' + (on ? "on" : "") + '" aria-checked="' + on + '"' + (s ? " disabled" : "") + ">" + o + "</button>"; }).join("") + "</div></div>"; }).join("") + "</div></fieldset>";
+    h += '<label class="field-label" for="vhs-bed">Ein Satz, warum:</label><textarea id="vhs-bed" class="short" maxlength="160"' + (s ? " readonly" : "") + ">" + Lab.esc(s ? s.s : "") + "</textarea>";
+    h += '<div class="actions"><button class="btn" type="button" data-vh-los' + (s ? " hidden" : " disabled") + '>Befund zeigen</button>' + (s ? '<span class="saved">Festgelegt.</span>' : "") + "</div>";
+    root.innerHTML = h;
+    var tmp = {}, los = $("[data-vh-los]", root), feld = $("textarea", root);
+    function pruef() { los.disabled = !(D.bed.every(function (b) { return tmp[b.id] !== undefined; }) && feld.value.trim().length >= 12); }
+    if (!s) {
+      $$("button[data-b]", root).forEach(function (bt) { bt.addEventListener("click", function () { var id = bt.getAttribute("data-b"); tmp[id] = +bt.getAttribute("data-v"); $$('button[data-b="' + id + '"]', root).forEach(function (x) { var on = x === bt; x.classList.toggle("on", on); x.setAttribute("aria-checked", String(on)); }); pruef(); }); });
+      feld.addEventListener("input", pruef);
+      los.addEventListener("click", function () { tmp.s = feld.value.trim(); st.vh.bed = tmp; save(); bedBlock(root); zeigeBed(true); });
+    } else zeigeBed(false);
+  }
+
+  /* Station 1 */
+  $("#fig-asch").innerHTML = F.aschTisch() + '<figcaption>Schaubild · vereinfacht. Die Tafel zeigt links die Vergleichslinie, rechts A, B und C.</figcaption>';
+  (function video() {
+    var v = D.video, box = $("#video");
+    box.innerHTML = '<p style="margin:0 0 6px"><strong>Video auf diesem iPad ansehen</strong> <span class="small">(nur, wenn deine Lehrkraft es sagt)</span></p><p class="small" style="margin:0 0 8px">' + Lab.esc(v.hinweis) + ' Beim Laden überträgt YouTube Daten (z. B. deine IP-Adresse).</p><button class="btn secondary" type="button" id="video-los">Video laden (YouTube, ohne Cookies)</button>';
+    $("#video-los").addEventListener("click", function () {
+      var f = document.createElement("iframe");
+      f.src = "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(v.id) + "?rel=0";
+      f.title = v.titel; f.allow = "encrypted-media; picture-in-picture"; f.referrerPolicy = "strict-origin-when-cross-origin"; f.loading = "lazy";
+      box.appendChild(f); $("#video-los").remove();
+    });
+  })();
+  var updVid = textFelder(["vid1", "vid2"], null, null, 8);
+  function aschFrei() { $("#to-st2").disabled = !(st.vh.asch && (updVid() || st.vidOhne)); }
+  ["vid1", "vid2"].forEach(function (id) { $("#" + id).addEventListener("input", aschFrei); });
+  $("#vid-ohne").checked = !!st.vidOhne; $("#vid-ohne").addEventListener("change", function () { st.vidOhne = this.checked; save(); aschFrei(); });
+  vhBlock($("#vh-asch"), "asch", D.vhAsch.frage, D.vhAsch.opt, function (neu) {
+    var s = st.vh.asch, a = $("#aufl-asch");
+    a.hidden = false;
+    a.innerHTML = '<p class="meine">Deine Vorhersage: ' + Lab.esc(D.vhAsch.opt[s.o]) + "</p>" +
+      '<p style="margin:0 0 6px"><strong>Befund</strong> (Asch 1951, 1956):</p><div class="zahlen"><div><b>&lt; 1 %</b>Fehler, wenn man allein antwortet</div><div><b>≈ 1 von 3</b>Antworten folgten der falschen Mehrheit</div><div><b>3 von 4</b>Personen folgten mindestens einmal</div><div><b>2 von 3</b>Antworten blieben trotzdem richtig</div></div>' +
+      "<p><strong>Warum gingen sie mit?</strong> Im Interview sagten nur wenige, sie hätten die Linien wirklich anders gesehen. Viele zweifelten an ihrem eigenen Urteil. Andere wussten, dass die Gruppe falsch lag – und wollten nicht auffallen.</p>" +
+      '<p style="margin:0"><strong>Was denkst du jetzt?</strong> ' + (s.o === 1 ? "Du lagst richtig. Überrascht dich, dass jede vierte Person nie mitging?" : s.o === 0 ? "Es war deutlich mehr. Selbst bei eindeutigen Linien wirkt die Gruppe." : "Es war weniger: Zwei Drittel der Antworten blieben richtig.") + "</p>";
+    $("#info-konf").hidden = false;
+    if (neu && !ruhig() && G) G.bewegen(a, [{ opacity: 0, transform: "translateY(6px)" }, { opacity: 1, transform: "none" }], { dauer: 300 });
+    aschFrei();
+  });
+
+  /* Station 2 */
+  function zeigeBed(neu) {
+    var s = st.vh.bed, a = $("#aufl-bed"); a.hidden = false;
+    var max = 35;
+    a.innerHTML = '<p style="margin:0 0 8px"><strong>Befund bei Asch</strong> – Anteil der Antworten, die der falschen Mehrheit folgten (gerundet):</p>' +
+      '<div class="g-balken" id="balken">' + D.balken.map(function (b) { return '<div class="g-balken__zeile"><span class="g-balken__name">' + Lab.esc(b[0]) + '</span><span class="g-balken__spur"><span class="g-balken__wert" style="--w:' + Math.round(b[1] / max * 100) + '"></span></span><span class="g-balken__zahl">' + b[2] + "</span></div>"; }).join("") + "</div>" +
+      '<ul style="margin:10px 0 0;padding-left:22px">' + D.bed.map(function (b) { return "<li>" + Lab.esc(b.text) + '<br><span class="meine">Deine Vorhersage: ' + D.bedOpt[s[b.id]] + (s[b.id] === b.richtig ? " – passt." : "") + "</span> Befund: <strong>" + Lab.esc(b.erkl) + "</strong></li>"; }).join("") + "</ul>" +
+      '<p class="small" style="margin:8px 0 0">Gruppengröße nach Asch (1955), Verbündeter und geheime Antwort nach Asch (1956), wiedergegeben in Lehrbuch-Sekundärquellen. * Berichtet wird „auf etwa ein Viertel“; die 8 % sind daraus gerechnet (ein Viertel von 32 %).</p>';
+    if (neu && G && !ruhig()) G.staffel($$(".g-balken__wert", a), [{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }], { dauer: 440 });
+    $("#teil-gruende").hidden = false;
+    $("#fig-gruende").innerHTML = F.gruende();
+    pruefStation("gruende", "to-st3");
+  }
+  bedBlock($("#vh-bed"));
+
+  /* ---------- Muster 3: Zuordnen mit Begründung (Gegenwart „wahl“) ---------- */
+  var WORT = { zentral: "zentral", begruendbar: "auch begründbar", kaum: "passt kaum" };
+  function wahlHTML(z) {
+    var s = st.zu[z.id], zu = !!s;
+    return '<div class="g"><div class="g-wahl" data-g="wahl" data-mind="8" data-id="' + z.id + '"' + (zu ? " data-zu" : "") + '><fieldset><legend>' + Lab.esc(z.text) + "</legend>" + z.opt.map(function (o, i) {
+      return '<label class="g-option" data-urteil="' + o[1] + '" data-grund="' + Lab.esc(o[2]) + '"><input type="radio" name="zu-' + z.id + '" value="' + i + '"' + (s && s.o === i ? " checked" : "") + (zu ? " disabled" : "") + '><span>' + Lab.esc(o[0]) + '<span class="g-option__urteil">' + WORT[o[1]] + " – " + Lab.esc(o[2]) + "</span></span></label>"; }).join("") + "</fieldset>" +
+      '<label>Begründung in einem Satz<textarea rows="2" maxlength="140"' + (zu ? " readonly" : "") + ' placeholder="Ich ordne das so zu, weil …">' + Lab.esc(s ? s.g : "") + "</textarea></label>" +
+      '<div class="g-wahl__fuss"><button type="button" class="g-knopf g-knopf--primaer" data-g-festlegen' + (zu ? " disabled" : "") + '>Festlegen</button><span class="g-stempel"' + (zu ? "" : " hidden") + '>Festgelegt</span><span class="g-sr" aria-live="polite"></span></div></div></div>';
+  }
+  var STATION = { gruende: "zu-gruende", halo: "zu-halo", pruef: "zu-pruef" };
+  function pruefStation(name, knopf) { var alle = D.zuordnen[name].every(function (z) { return st.zu[z.id]; }); $("#" + knopf).disabled = !alle; }
+  Object.keys(STATION).forEach(function (name) {
+    var root = $("#" + STATION[name]);
+    root.innerHTML = D.zuordnen[name].map(wahlHTML).join("");
+    if (G) G.init(root);
+    $$(".g-wahl", root).forEach(function (w) {
+      var id = w.getAttribute("data-id"), feld = $("textarea", w), los = $("[data-g-festlegen]", w);
+      function streng() { if (!w.hasAttribute("data-zu")) los.disabled = !($("input:checked", w) && feld.value.trim().length >= 8); }
+      w.addEventListener("change", streng); feld.addEventListener("input", streng); streng();
+      los.addEventListener("click", function () {
+        var gew = $("input:checked", w); if (!gew || st.zu[id]) return;
+        st.zu[id] = { o: +gew.value, g: feld.value.trim() }; save();
+        pruefStation(name, { gruende: "to-st3", halo: "to-st4", pruef: "to-prod" }[name]);
+      });
+    });
+    pruefStation(name, { gruende: "to-st3", halo: "to-st4", pruef: "to-prod" }[name]);
+  });
+
+  /* Station 3: Halo */
+  $("#paar").innerHTML = ["laecheln", "ernst"].map(function (f) {
+    var mein = fassungFot(st) === f;
+    return '<figure><div class="fotiou' + (mein ? " mein" : "") + '">' + F.fotiou(f) + '</div><figcaption class="bildzeile">' + (f === "laecheln" ? "lächelnd" : "ernst") + (mein ? " · <strong>deine Zeichnung</strong>" : "") + "</figcaption></figure>";
+  }).join("");
+  vhBlock($("#vh-halo"), "halo", D.vhHalo.frage, D.vhHalo.opt, function () {
+    var a = $("#aufl-halo"), s = st.vh.halo, fp = fotPos(st); a.hidden = false;
+    a.innerHTML = '<p class="meine">Deine Vorhersage: ' + Lab.esc(D.vhHalo.opt[s.o]) + "</p>" +
+      "<p><strong>Deine Einschätzung</strong> (" + (fassungFot(st) === "laecheln" ? "lächelnde" : "ernste") + " Zeichnung): " + D.fotiou.map(function (n, i) { return n + " " + (st.fot && st.fot[i] ? st.fot[i] : "?"); }).join(" · ") + " – Durchschnitt der positiven Eigenschaften: <strong>" + fmt(fp) + "</strong></p>" +
+      "<p><strong>Kursergebnis:</strong> Deine Lehrkraft zeigt am Beamer, wie die beiden Gruppen Herrn Fotiou eingeschätzt haben. Vergleiche mit deiner Vorhersage.</p>" +
+      '<p style="margin:0"><strong>Wichtig:</strong> Keine dieser Eigenschaften kann man auf einer Zeichnung verlässlich sehen. Bei so wenigen Personen ist ein Unterschied ein Hinweis, kein Beweis. Belastbar wird es erst mit vielen Personen und zufälliger Verteilung – wie in der Forschung.</p>';
+    $("#teil-halo").hidden = false; pruefStation("halo", "to-st4");
+  });
+
+  /* ---------- Muster 10: Satzanfänge → Kriterienraster ---------- */
+  function woerter(t) { return (t.trim().match(/\S+/g) || []).length; }
+  function renderProd() {
+    var v = st.vermutung ? "„" + D.vermutungOptionen[st.vermutung.v] + "“ – " + st.vermutung.grund : "–";
+    $("#rueck-verm").innerHTML = "Am Anfang hast du gesagt: <span class=\"meinvh\">" + Lab.esc(v) + "</span>";
   }
   (function () {
-    function upd() { var ok = ["b1", "v1"].every(function (id) { return $("#" + id).value.trim().length >= 8; }); $("#to-mappe").disabled = !ok; $("#a-hint").hidden = ok; }
-    ["b1", "v1"].forEach(function (id) { var t = $("#" + id); t.value = st[id] || ""; t.addEventListener("input", function () { st[id] = t.value; save(); upd(); }); });
+    var t = $("#tipp"); t.value = st.tipp || "";
+    function upd() { var n = woerter(t.value); $("#wz").textContent = n + " Wörter" + (n < 40 ? " – noch " + (40 - n) + " bis zum Vergleich" : ""); $("#raster-zeigen").disabled = n < 40 || !!st.rasterOffen; }
+    t.addEventListener("input", function () { st.tipp = t.value; save(); upd(); });
+    $("#raster-zeigen").addEventListener("click", function () { st.rasterOffen = true; save(); zeigRaster(true); upd(); });
+    function zeigRaster(neu) {
+      var r = $("#raster"); r.hidden = false; st.selbst = st.selbst || [];
+      r.innerHTML = '<div class="info"><span class="label i">Kriterien</span><p style="margin:0 0 6px">Lies deinen Tipp noch einmal. Wo stehst du?</p><table class="raster"><tr><th>Stufe</th><th>Kriterium</th><th>Bei mir</th></tr>' + D.raster.map(function (z, i) {
+        return "<tr><td><b>" + z[0] + "</b></td><td>" + z[1] + '</td><td><div class="selbst" role="radiogroup" aria-label="' + z[0] + '">' + ["erfüllt", "teilweise", "noch nicht"].map(function (w, j) { var on = st.selbst[i] === j; return '<button type="button" role="radio" aria-checked="' + on + '" data-i="' + i + '" data-j="' + j + '" class="' + (on ? "on" : "") + '">' + w + "</button>"; }).join("") + "</div></td></tr>"; }).join("") + "</table><p class=\"small\" style=\"margin:0\">Du darfst deinen Tipp danach noch verbessern.</p></div>";
+      $$(".selbst button", r).forEach(function (b) { b.addEventListener("click", function () { st.selbst[+b.getAttribute("data-i")] = +b.getAttribute("data-j"); save(); zeigRaster(false); prodFrei(); }); });
+      $("#rueck").hidden = false;
+    }
+    if (st.rasterOffen) zeigRaster(false);
     upd();
   })();
+  var updJetzt = textFelder(["jetzt"], null, null, 12);
+  function prodFrei() { $("#to-ende").disabled = !(st.rasterOffen && updJetzt()); }
+  $("#jetzt").addEventListener("input", prodFrei); prodFrei();
 
-  /* ---------- Lernmappe ---------- */
+  /* ---------- Zusammenfassung ---------- */
   function renderChecklist() {
-    var items = [["Lernübersicht (Seite 1–2)", true], ["deine Einschätzung von Herrn Fotiou", !!st.fot], ["deine Vermutung", !!st.vermutung], ["deine Schätzungen und Linienantworten", complete()], ["deine Beobachtung und Vermutung", !!(st.b1 && st.v1)], ["Arbeitsblatt mit Ergebnissicherung (Seite 3–4, zum Ausfüllen in GoodNotes)", true]];
+    var items = [["Lernübersicht (Seite 1–2)", true], ["deine Versuchsdaten und Herr Fotiou", complete()], ["deine Vorhersagen und die Befunde", !!(st.vh.asch && st.vh.bed && st.vh.halo)], ["deine sieben Zuordnungen mit Rückmeldung", Object.keys(st.zu).length >= 7], ["dein Tipp und deine Vermutung – damals und jetzt", !!(st.tipp && st.jetzt)]];
     $("#checklist").innerHTML = items.map(function (i) { return '<li class="' + (i[1] ? "" : "miss") + '">' + i[0] + (i[1] ? "" : " – fehlt noch") + "</li>"; }).join("");
   }
   function lines(n) { var s = ""; for (var i = 0; i < n; i++) s += '<div class="ln"></div>'; return s; }
-  function datenBox(s, mode) {
-    var leer = mode === "leer", k = leer ? null : stats(s), h = '<div class="databox avoid"><b style="color:#0e6b68">Meine Daten aus dem Labor</b>' + (mode === "beispiel" ? ' <span class="demo">Beispiel mit ausgedachten Antworten</span>' : "") + ' <span style="color:#545b6b;font-size:8.5pt">· Deine Daten zeigst du nur, wenn du willst. Sich an anderen zu orientieren ist normal – bei Unsicherheit oft sogar vernünftig.</span><table>';
+  function e(t) { return Lab.esc(t || ""); }
+  function datenBox(s, leer) {
+    var k = leer ? null : stats(s), h = '<div class="databox avoid"><table>';
     if (leer) {
-      h += "<tr><th>Meine Fassung</th><td>○ mit Antworten anderer ○ ohne</td></tr>";
-      h += "<tr><th>Punkte</th><td>wahre Anzahl → meine Schätzung: 74 → ______ · 132 → ______ · 203 → ______ · so sicher war ich: ____________</td></tr>";
-      h += "<tr><th>Linien</th><td>richtig: ____ von 3 · der falschen Gruppe gefolgt (nur Fassung „mit“): ____-mal</td></tr>";
-      h += "<tr><th>Beobachtung</th><td>" + lines(1) + "</td></tr><tr><th>Erste Vermutung</th><td>" + lines(1) + "</td></tr>";
+      h += "<tr><th>Meine Fassung</th><td>○ mit Antworten anderer ○ ohne</td></tr><tr><th>Punkte</th><td>wahre Anzahl → meine Schätzung: 74 → ____ · 132 → ____ · 203 → ____</td></tr><tr><th>Linien</th><td>richtig: ___ von 3 · der falschen Gruppe gefolgt: ___-mal</td></tr><tr><th>Herr Fotiou</th><td>○ lächelnd ○ ernst · Durchschnitt positiv: ____</td></tr><tr><th>Beobachtung</th><td>" + lines(1) + "</td></tr><tr><th>Erklärungsidee</th><td>" + lines(1) + "</td></tr>";
     } else {
-      h += "<tr><th>Meine Fassung</th><td>" + (s.G === "G" ? "mit Antworten anderer (erfunden, absichtlich falsch)" : "ohne Antworten anderer") + "</td></tr>";
-      h += "<tr><th>Punkte</th><td>wahre Anzahl → meine Schätzung: " + D.punkte.map(function (p, i) { var e = s.schaetz[i]; return p.n + " → <b>" + (e ? e.e : "–") + "</b>" + (e ? " (" + D.sicher[e.s] + ")" : ""); }).join(" · ") + "</td></tr>";
+      h += "<tr><th>Meine Fassung</th><td>" + (s.G === "G" ? "mit Antworten anderer (erfunden) · lächelnde Zeichnung" : "ohne Antworten anderer · ernste Zeichnung") + "</td></tr>";
+      h += "<tr><th>Punkte</th><td>wahre Anzahl → meine Schätzung: " + D.punkte.map(function (p, i) { var x = s.schaetz[i]; return p.n + " → <b>" + (x ? x.e : "–") + "</b>" + (x ? " (" + D.sicher[x.s] + ")" : ""); }).join(" · ") + "</td></tr>";
       h += "<tr><th>Linien</th><td>richtig: <b>" + k.right + " von 3</b>" + (s.G === "G" ? " · der falschen Gruppe gefolgt: <b>" + k.follow + "-mal</b>" : "") + "</td></tr>";
-      h += "<tr><th>Beobachtung</th><td>" + Lab.esc(s.b1 || "–") + "</td></tr><tr><th>Erste Vermutung</th><td>" + Lab.esc(s.v1 || "–") + "</td></tr>";
+      h += "<tr><th>Herr Fotiou</th><td>" + D.fotiou.map(function (n, i) { return n + " " + (s.fot && s.fot[i] ? s.fot[i] : "?"); }).join(" · ") + " · Ø positiv <b>" + fmt(fotPos(s)) + "</b></td></tr>";
+      h += '<tr><th>Beobachtung</th><td class="ich">' + e(s.b1) + '</td></tr><tr><th>Erklärungsidee</th><td class="ich">' + e(s.v1) + "</td></tr>";
+      h += '<tr><th>Video</th><td class="ich">' + e(s.vid1) + " " + e(s.vid2) + "</td></tr>";
     }
-    h += "<tr><th>Kursergebnis (Beamer)</th><td>Punkte, Schätzung ÷ wahre Anzahl (1,0 = genau richtig; 1,5 = um die Hälfte zu hoch): mit Antworten anderer Ø ______ · ohne Ø ______<br>Linien, Fassung „mit“: der falschen Gruppe gefolgt ______ von ______ Antworten</td></tr>";
-    return h + "</table></div>";
+    h += "<tr><th>Kurs (Beamer)</th><td>Punkte, Schätzung ÷ wahre Anzahl (1,0 = genau): mit ____ · ohne ____ · Fotiou Ø positiv: lächelnd ____ · ernst ____</td></tr>";
+    return h + "</table><p style=\"font-size:8.5pt;color:#545b6b;margin:3pt 0 0\">Deine Daten zeigst du nur, wenn du willst. Sich an anderen zu orientieren ist normal – bei Unsicherheit oft sogar vernünftig.</p></div>";
   }
-  function fotiouHTML(s, mode) {
-    return '<span class="rate">' + D.fotiou.map(function (n, i) {
-      var v = (mode === "leer" || !s.fot) ? "___" : "<b>" + (s.fot[i] || "?") + "</b>";
-      return "<span>" + n + " " + v + "</span>";
-    }).join("") + '<span style="font-size:8.5pt;color:#545b6b">? = kann ich nicht sagen</span></span>';
+  function aschBox(s, leer) {
+    var vh = s.vh || {}, h = '<table class="mine-p erg avoid"><tr><th>Frage</th><td><b>Meine Vorhersage</b></td><td><b>Befund</b></td></tr>';
+    h += "<tr><th>Wie oft gingen sie mit?</th><td class=\"ich\">" + (leer || !vh.asch ? "" : e(D.vhAsch.opt[vh.asch.o]) + " – " + e(vh.asch.s)) + "</td><td>≈ jede dritte Antwort; 3 von 4 mind. einmal, jede vierte nie; 2/3 richtig. Gründe: wenige sahen es anders, viele zweifelten an sich, andere wollten nicht auffallen.</td></tr>";
+    h += "<tr><th>Weniger Anpassung? (1) Mehrheit aus nur 1 Person · (2) ein Verbündeter · (3) geheim antworten · (4) 15 statt 7 Eingeweihte</th><td class=\"ich\">" + (leer || !vh.bed ? "(1) ______ (2) ______ (3) ______ (4) ______" : D.bed.map(function (b, i) { return "(" + (i + 1) + ") " + D.bedOpt[vh.bed[b.id]]; }).join(" · ") + (leer || !vh.bed ? "" : " – " + e(vh.bed.s))) + "</td><td>(1)–(3) weniger: ≈ 3 % · auf etwa ein Viertel des Werts · ≈ 12,5 % · (4) etwa gleich</td></tr>";
+    h += "<tr><th>Herr Fotiou: lächelnd oder ernst?</th><td class=\"ich\">" + (leer || !vh.halo ? "" : e(D.vhHalo.opt[vh.halo.o]) + " – " + e(vh.halo.s)) + "</td><td>Kursergebnis am Beamer (Hinweis, kein Beweis)</td></tr>";
+    return h + "</table>";
+  }
+  function zuBox(s, leer) {
+    var zu = s.zu || {}, h = '<table class="mine-p erg avoid"><tr><th>Situation</th><td><b>Meine Wahl und Begründung</b></td><td><b>Rückmeldung</b></td></tr>';
+    ["gruende", "halo", "pruef"].forEach(function (n) { D.zuordnen[n].forEach(function (z) {
+      var a = zu[z.id], o = a ? z.opt[a.o] : null;
+      h += "<tr><th style=\"width:58mm\">" + e(z.text) + "</th><td class=\"ich\">" + (leer || !a ? "" : "<b>" + e(o[0]) + "</b> – " + e(a.g)) + "</td><td>" + (leer || !a ? "" : WORT[o[1]] + ": " + e(o[2])) + "</td></tr>"; }); });
+    return h + "</table>";
   }
   function buildPrint(mode) {
-    var s = mode === "beispiel" ? D.beispiel : st, h;
+    var s = mode === "beispiel" ? D.beispiel : st, leer = mode === "leer", h;
     if (mode === "loesung") h = $("#tpl-loesung").innerHTML;
     else {
-      h = uebersichtHTML() + $("#tpl-ab").innerHTML;
-      h = h.replace('<div data-slot="daten"></div>', datenBox(s, mode));
-      h = h.replace('<span data-slot="fotiou"></span>', fotiouHTML(s, mode));
-      var verm = (mode === "leer" || !s.vermutung) ? "____________________________________" : "„" + D.vermutungOptionen[s.vermutung.v] + "“ – " + Lab.esc(s.vermutung.grund);
-      h = h.replace('<span data-slot="vermutung"></span>', "<i>" + verm + "</i>");
+      h = uebersichtHTML() + $("#tpl-erg").innerHTML;
+      h = h.replace('<div data-slot="daten"></div>', (mode === "beispiel" ? '<p><span class="demo">Beispiel mit ausgedachten Antworten</span></p>' : "") + datenBox(s, leer));
+      h = h.replace('<div data-slot="asch"></div>', aschBox(s, leer));
+      h = h.replace('<div data-slot="zuordnungen"></div>', zuBox(s, leer));
+      var sel = (s.selbst || []);
+      h = h.replace('<div data-slot="tipp"></div>', '<div class="scn avoid"><div class="ich" style="color:#1e4fb5">' + (leer || !s.tipp ? lines(5) : e(s.tipp)) + '</div><p style="font-size:9pt;margin:4pt 0 0">Selbsteinschätzung: ' + D.raster.map(function (r, i) { return r[0] + " – " + (leer || sel[i] === undefined ? "____" : ["erfüllt", "teilweise", "noch nicht"][sel[i]]); }).join(" · ") + "</p></div>");
+      var verm = (leer || !s.vermutung) ? "" : "„" + D.vermutungOptionen[s.vermutung.v] + "“ – " + e(s.vermutung.grund);
+      h = h.replace('<div data-slot="rueck"></div>', '<table class="mine-p avoid"><tr><th>Damals</th><td class="ich" style="color:#1e4fb5">' + (verm || lines(1)) + '</td></tr><tr><th>Jetzt</th><td class="ich" style="color:#1e4fb5">' + (leer || !s.jetzt ? lines(2) : e(s.jetzt)) + "</td></tr></table>");
     }
     var p = $("#print"); p.innerHTML = h; fillFigs(p);
     $$(".lines", p).forEach(function (el) { el.innerHTML = lines(+el.getAttribute("data-n")); });
@@ -2525,12 +3868,11 @@ var DATA = {
   window.addEventListener("beforeprint", function () { if (!dm) buildPrint("person"); });
   if (dm) buildPrint(dm[1]);
 
-  $("#btn-reset").addEventListener("click", function () {
-    if (!confirm("Alle Eingaben dieser Stunde auf diesem iPad löschen?")) return;
-    Lab.remove("ds05"); window.location.hash = ""; window.location.reload();
-  });
+  /* Löschen mit Rückfrage auf der Seite */
+  $("#btn-reset").addEventListener("click", function () { $("#loeschen-frage").hidden = false; $("#loeschen-nein").focus(); });
+  $("#loeschen-nein").addEventListener("click", function () { $("#loeschen-frage").hidden = true; $("#btn-reset").focus(); });
+  $("#loeschen-ja").addEventListener("click", function () { Lab.remove(KEY); Lab.remove("ds05"); window.location.hash = ""; window.location.reload(); });
 })();
 </script>
-  <p class="urheberzeile" style="font-size:1rem;opacity:.72;margin-top:1.5rem">© 2026 Mario Walter · Inhalte CC BY-NC-SA 4.0 · Code MIT · mit KI-Unterstützung entwickelt</p>
 </body>
 </html>
