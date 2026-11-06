@@ -50,7 +50,7 @@
   var items = Object.keys(B).filter(function (k) { return B[k] && B[k].datei; }).map(function (k) { return B[k]; });
   items.concat(B.geplant.map(function (g) { g.soon = true; return g; })).sort(function (a, b) { return a.ds - b.ds; }).forEach(function (b) {
     if (b.soon) html += '<div class="tile soon"><div class="ds">DS ' + b.ds + ' · bald</div><h3>' + Lab.esc(b.titel) + "</h3><p>" + Lab.esc(b.thema) + "</p></div>";
-    else html += '<a class="tile" href="' + b.datei + '"><div class="ds">DS ' + b.ds + "</div><h3>" + Lab.esc(b.titel) + "</h3><p>" + Lab.esc(b.thema) + '</p><span class="go">›</span></a>';
+    else html += '<a class="tile" href="' + b.datei + '"><div class="ds">' + (b.label ? Lab.esc(b.label) : "DS " + b.ds) + "</div><h3>" + Lab.esc(b.titel) + "</h3><p>" + Lab.esc(b.thema) + '</p><span class="go">›</span></a>';
   });
   document.getElementById("tiles").innerHTML = html;
 })();
