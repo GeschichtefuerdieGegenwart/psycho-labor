@@ -15,7 +15,7 @@ Mehrwert gegenüber Papier in einem Satz: verdeckte Bedingungen für zwei Kursh�
 | Start | `#s-1` | Lernweg, Ziele, Ankündigung der Täuschung, Schalter »Weniger Bewegung« |
 | Erleben 1–6 | `#s-fot` … `#s-6` | Herr Fotiou einschätzen (vor jeder Täuschung) → Vermutung → Punkte → Linien im Gruppenchat → QR → Auflösung |
 | Station 1 | `#s-asch` | Schaubild Asch-Tisch, Video mit zwei Beobachtungsfragen, Vorhersage → Befund, Konformität |
-| Station 2 | `#s-bed` | drei Bedingungen vorhersagen → Balken; zwei Gründe (Schaubild); drei Zuordnungen |
+| Station 2 | `#s-bed` | vier Bedingungen vorhersagen (drei senken die Anpassung, eine nicht) → Balken und Erklärung je Bedingung; zwei Gründe (Schaubild); drei Zuordnungen |
 | Station 3 | `#s-halo` | beide Zeichnungen, Vorhersage → Kursergebnis am Beamer; Halo, Vorurteil; zwei Zuordnungen |
 | Station 4 | `#s-pruef` | Demo oder Studie, Ethik; zwei Zuordnungen |
 | Sichern | `#s-prod`, `#s-ende` | Tipp ab 40 Wörtern → Kriterienraster, Selbsteinschätzung, Vermutung jetzt; Zusammenfassung (4 Seiten), Eingaben löschen |
@@ -45,7 +45,7 @@ Neuer Schlüssel `psycholabor:ds05b` (Schritte geändert). »Alle Eingaben lösc
 | Element | Status | Beleg |
 | --- | --- | --- |
 | Asch-Befunde (unter 1 %, ≈ 1/3, 3 von 4, jede vierte nie) | belegt, Sekundärquellen | Simply Psychology »Asch Conformity Experiment«; themantic education »Key Study: Conformity – Asch (1955)« |
-| Bedingungen (≈ 3 %, ≈ 13 %, ≈ 32 %, Verbündeter auf etwa ein Viertel, geheim ≈ 12,5 %) | belegt, gerundet, Sekundärquellen | wie oben |
+| Bedingungen (≈ 3 %, ≈ 13 %, ≈ 32 %, größere Gruppen kaum mehr, Verbündeter auf etwa ein Viertel des Werts – 8 % daraus gerechnet, geheim ≈ 12,5 %) | belegt, gerundet, Sekundärquellen | wie oben |
 | Interviewgründe | korrigiert: drei Arten ohne Rangfolge | wie oben; Korrekturliste der Vorprüfung, Punkt 5 |
 | Deutsch & Gerard 1955, Sherif 1935, Thorndike 1920, Bond & Smith 1996 | belegt | Lehrbuchwissen, in Fassung 1 geprüft |
 | Video YouTube `TYIh4MkcfJA` | **prüfbedürftig** | laut Simply Psychology nachgestellte TV-Szene, nicht Original; nicht selbst angesehen |
@@ -53,6 +53,14 @@ Neuer Schlüssel `psycholabor:ds05b` (Schritte geändert). »Alle Eingaben lösc
 | Schaubilder Asch-Tisch, zwei Gründe | Modell | – |
 
 Korrigiert gegenüber Fassung 1: »Im Interview sagten viele, sie hätten gewusst, dass die Gruppe falsch lag« → drei Gründe ohne Rangfolge; »auf etwa 5 %« (Verbündeter) → »auf etwa ein Viertel«.
+
+## Lernübersicht
+
+Die Übersicht (Schublade oben rechts) wird erst beim Tipp freigeschaltet, weil sie die Befunde der Stationen enthält und sonst die Vorhersagen verrät.
+
+## Ethik
+
+In der Forschung: harmlos, für den Versuch nötig, danach vollständig aufgeklärt. Die vorherige Ankündigung ist eine zusätzliche Schulregel.
 
 ## Gegenwart
 
@@ -70,6 +78,6 @@ Gelaufen:
 - Zusammenfassung: 4 Seiten A4 (eigene Eingaben, leer, Beispiel, Belastungstest mit vollen Feldern); Lösungskarte 1 Seite.
 - Breiten 375, 768, 1024, 1280, 1366 px hell und dunkel ohne waagerechtes Scrollen; kein Bildschirmtext unter 16 px.
 - Auswertungsseite mit Codes aus Fassung 1 und 2.
-- Unabhängige Prüfung aus Sicht einer Schülerin ohne Vorkenntnisse (Ergebnisse siehe Pull Request).
+- Unabhängige Prüfung aus Sicht einer Schülerin ohne Vorkenntnisse (Subagent). Behoben: Rückmeldungen waren vor dem Festlegen sichtbar (CSS-Vorrang im Bundle); Übersicht verriet Befunde; »widersprechen« doppeldeutig; Verbündeter-Wert uneinheitlich; Station 2 ohne Erklärung und ohne Gegenbeispiel; z6 setzte ein Kursergebnis voraus, »Zufall, also wertlos« zu milde bewertet; Ethik-Bedingungen der Forschung ungenau; Kriterienraster bei 375 px zu breit; Video-Fragen ohne Ausweichweg; Zeitangaben; feste weibliche Formen; QR-Text; »nicht verlässlich sehen«.
 
 Nicht gelaufen: echtes iPad (Safari, hoch/quer), VoiceOver, Zoom 200 %, Export nach GoodNotes, Video selbst angesehen, axe.

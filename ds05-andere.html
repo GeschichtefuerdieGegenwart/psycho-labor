@@ -730,6 +730,7 @@ html.dm[data-theme="dark"] {
   .g .g-option__urteil { font-weight: 400; font-size: 17px; padding: 0; border: 0; min-height: 0; background: transparent; box-shadow: none; }
   .g .g-option span span::before, .g .g-option span span::after { display: none !important; }
   .g { background: transparent; }
+  .g-wahl:not([data-zu]) .g-option__urteil { display: none !important; }
   .g-wahl legend { font-weight: 700; font-size: 19px; }
   .g-wahl { margin: 0 0 18px; }
 
@@ -805,6 +806,7 @@ html.dm[data-theme="dark"] {
   .raster { width: 100%; border-collapse: collapse; margin: 10px 0; }
   .raster th, .raster td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; background: var(--paper); font-size: 17px; }
   .raster th { background: var(--accent-soft); }
+  @media screen and (max-width: 600px) { .raster, .raster tbody, .raster tr, .raster td, .raster th { display: block; width: 100%; } .raster tr:first-child { display: none; } .raster td { border-top: 0; } .raster tr { margin-bottom: 8px; } }
   .wortzahl { font-size: 16px; color: var(--ink-soft); }
   .selbst { display: flex; gap: 6px; flex-wrap: wrap; }
   .selbst button { -webkit-appearance: none; appearance: none; min-height: 44px; padding: 0 12px; border: 2px solid var(--line); border-radius: 999px; background: var(--paper); color: var(--ink); font: 600 16px var(--font); cursor: pointer; }
@@ -832,7 +834,7 @@ html.dm[data-theme="dark"] {
   <a class="lab-logo" href="index.html"><span id="logo"></span>Psycho-Labor</a>
   <span class="lab-title">DS 5 · Wie sehr beeinflussen mich andere?</span>
   <div class="lab-progress" aria-hidden="true"></div>
-  <button class="top-btn" id="btn-ue" type="button" disabled title="Wird nach dem Versuch freigeschaltet">
+  <button class="top-btn" id="btn-ue" type="button" disabled title="Wird nach den Stationen freigeschaltet">
     <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M4 2h9l3 3v13H4z" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M7 8h6M7 11h6M7 14h4" stroke="currentColor" stroke-width="1.7"/></svg>
     <span class="t">Übersicht</span>
   </button>
@@ -850,10 +852,10 @@ html.dm[data-theme="dark"] {
     <div class="card">
       <h3>Dein Weg (ca. 75 Min.)</h3>
       <ol class="plan">
-        <li>Erleben: erster Eindruck, Vermutung, zwei Versuche <span>· allein · 15 Min.</span></li>
+        <li>Erleben: erster Eindruck, Vermutung, zwei Versuche <span>· allein · 12 Min.</span></li>
         <li>Auflösung mit dem Kurs <span>· gemeinsam · 8 Min.</span></li>
         <li>Station 1: Die Asch-Studie mit Video <span>· 12 Min.</span></li>
-        <li>Station 2: Wann passen wir uns an – und warum? <span>· 12 Min.</span></li>
+        <li>Station 2: Wann passen wir uns an – und warum? <span>· 15 Min.</span></li>
         <li>Station 3: Wie ich andere sehe <span>· 10 Min.</span></li>
         <li>Station 4: Demo oder Studie? <span>· 5 Min.</span></li>
         <li>Dein Tipp und deine Zusammenfassung <span>· 13 Min.</span></li>
@@ -972,7 +974,7 @@ html.dm[data-theme="dark"] {
   <div class="timebox"><b>Erleben · Schritt 5 von 6</b><i>Ergebnis an die Lehrkraft</i></div>
   <h2>Dein Ergebnis für den Kurs</h2>
   <p>Zeig diesen QR-Code deiner Lehrkraft. Dein Ergebnis erscheint <strong>ohne Namen</strong> im Kursdiagramm.</p>
-  <div class="card"><div class="qr-box"><div id="qr"></div><div style="flex:1;min-width:220px"><p class="small">Im Code stehen nur Zahlen: deine Schätzungen im Verhältnis zur wahren Anzahl, deine Linienantworten, deine Sicherheit, welche Fassung du hattest und deine Einschätzung von Herrn Fotiou.</p><p class="small">Falls das Scannen nicht klappt:</p><div class="code" id="code"></div></div></div></div>
+  <div class="card"><div class="qr-box"><div id="qr"></div><div style="flex:1;min-width:220px"><p class="small">Im Code stehen nur eine zufällige Kennung, deine Fassung und Zahlen: deine Schätzungen im Verhältnis zur wahren Anzahl, deine Linienantworten, deine Sicherheit, welche Fassung du hattest und deine Einschätzung von Herrn Fotiou.</p><p class="small">Falls das Scannen nicht klappt:</p><div class="code" id="code"></div></div></div></div>
   <div class="card warm"><strong>Warte jetzt, bis alle fertig sind.</strong> Die Auflösung machen wir gemeinsam.</div>
   <div class="actions"><button class="btn big" data-next>Zur Auflösung (erst auf Ansage)</button></div>
 </section>
@@ -1014,11 +1016,12 @@ html.dm[data-theme="dark"] {
   </div>
   <div class="auftrag">
     <span class="label a">Auftrag 1 · Video (am Beamer)</span>
-    <p style="margin:0 0 6px">Schau dir das Video an. Achte nur auf die eine echte Versuchsperson.</p>
+    <p style="margin:0 0 6px">Schau dir das Video an. Achte nur auf die eine echte Versuchsperson. Notiere danach:</p>
     <label class="field-label" for="vid1">Was macht sie, wenn sie an der Reihe ist? (Körper, Gesicht, Antwort)</label>
     <textarea id="vid1" class="short" maxlength="150"></textarea>
     <label class="field-label" for="vid2">Woran merkst du, dass die Situation für sie unangenehm ist?</label>
     <textarea id="vid2" class="short" maxlength="150"></textarea>
+    <label class="schalter"><input type="checkbox" id="vid-ohne"> Wir konnten das Video nicht ansehen.</label>
     <div class="video" id="video"></div>
   </div>
   <div class="vh" id="vh-asch"></div>
@@ -1032,7 +1035,7 @@ html.dm[data-theme="dark"] {
 
 <!-- ===================== Station 2: Wann und warum ===================== -->
 <section class="step" id="s-bed">
-  <div class="timebox"><b>⏱ 12 Min.</b><i>allein, dann zu zweit vergleichen</i><span>Station 2 von 4</span></div>
+  <div class="timebox"><b>⏱ 15 Min.</b><i>allein, dann zu zweit vergleichen</i><span>Station 2 von 4</span></div>
   <h2>Station 2: Wann passen wir uns an – und warum?</h2>
   <div class="vh" id="vh-bed"></div>
   <div class="aufl" id="aufl-bed" hidden aria-live="polite"></div>
@@ -1176,7 +1179,7 @@ html.dm[data-theme="dark"] {
       <tr><td><b>Was ändert sich?</b></td><td>oft auch meine Überzeugung</td><td>oft nur meine Antwort nach außen</td></tr>
       <tr><td><b>Studie</b></td><td>Sherif (1935): Lichtpunkt im Dunkeln (er steht still) – in der Gruppe glichen sich die Schätzungen an.</td><td>Asch: Mitgehen, obwohl man die Linien richtig sah.</td></tr>
     </table>
-    <p class="merk">Bedingungen bei Asch (gerundet): Gegenüber nur <u>einer</u> Person kaum Anpassung (≈ 3 %), bei zwei ≈ 13 %, ab drei ≈ 32 % – mehr Personen änderten kaum noch etwas. Schon <u>ein</u> Verbündeter senkte die Anpassung auf etwa ein Viertel; geheim (schriftlich) ≈ 12,5 %.</p>
+    <p class="merk">Bedingungen bei Asch (gerundet): Gegenüber nur <u>einer</u> Person kaum Anpassung (≈ 3 %), bei zwei ≈ 13 %, ab drei ≈ 32 % – mehr Personen änderten kaum noch etwas. Schon <u>ein</u> Verbündeter senkte die Anpassung auf etwa ein Viertel des Werts (≈ 8 statt 32 %); geheim (schriftlich) ≈ 12,5 %.</p>
     <p class="status">Personen in Beispielen und Fällen sind ausgedacht. Schaubilder und Zeichnungen sind vereinfachte Modelle. Zahlen zu Asch nach Asch (1951, 1955, 1956), wiedergegeben in Lehrbuch-Sekundärquellen.</p>
   </div>
   <div class="pg ue">
@@ -1201,7 +1204,7 @@ html.dm[data-theme="dark"] {
       <tr><td><b>Personen</b></td><td>unser Kurs, auf zwei Fassungen verteilt</td><td>123 Versuchspersonen; später über 130 Wiederholungen in 17 Ländern (Bond &amp; Smith 1996)</td></tr>
       <tr><td><b>Aussage</b></td><td>zeigt anschaulich, wie Einfluss wirken kann</td><td>zeigt, wie stark und unter welchen Bedingungen er wirkt</td></tr>
     </table>
-    <p style="margin-top:6px"><b>Ethik:</b> Täuschung ist nur vertretbar, wenn sie harmlos ist, angekündigt wird („Nicht alle bekommen dieselben Informationen“) und danach vollständig aufgeklärt wird.</p>
+    <p style="margin-top:6px"><b>Ethik:</b> In der Forschung ist Täuschung nur vertretbar, wenn sie harmlos ist, der Versuch sie braucht und danach vollständig aufgeklärt wird. Im Unterricht kündigen wir sie zusätzlich vorher an („Nicht alle bekommen dieselben Informationen“).</p>
   </div>
 </template>
 
@@ -1236,9 +1239,9 @@ html.dm[data-theme="dark"] {
       <tr><td>Auflösung: Erklärungsidee</td><td>Bei den Punkten ist man unsicher (2 Sekunden), bei den Linien ist die Antwort eindeutig, und niemand sieht die eigene Antwort.</td></tr>
       <tr><td>Video</td><td>Zögern, Blick zu den anderen, Lächeln oder Schulterzucken, leise Antwort; Unbehagen beim Widersprechen.</td></tr>
       <tr><td>Station 1</td><td>Befund: etwa jede dritte Antwort; drei von vier mindestens einmal, jede vierte nie; zwei Drittel richtig. Gründe laut Interviews: wenige sahen es anders, viele zweifelten an sich, andere wollten nicht auffallen.</td></tr>
-      <tr><td>Station 2</td><td>Alle drei Bedingungen senken die Anpassung: eine Gegenperson ≈ 3 %, ein Verbündeter auf etwa ein Viertel, geheim ≈ 12,5 %. Zuordnungen: Mia informativ · Tom normativ · Asch-Zweifel informativ (normativ auch begründbar, weil laut vor der Gruppe).</td></tr>
+      <tr><td>Station 2</td><td>Bedingung 1–3 senken die Anpassung (Mehrheit aus 1 Person ≈ 3 %, Verbündeter auf etwa ein Viertel des Werts, geheim ≈ 12,5 %); Bedingung 4 (15 statt 7) ändert kaum etwas. Zuordnungen: Mia informativ · Tom normativ · Asch-Zweifel informativ (normativ auch begründbar, weil laut vor der Gruppe).</td></tr>
       <tr><td>Station 3</td><td>Lächelnd gesehen → oft positivere Einschätzung (Halo); bei wenigen Personen nur ein Hinweis. Lina: Halo · Leon: Vorurteil.</td></tr>
-      <tr><td>Station 4</td><td>Demo zeigt, wie Einfluss wirken kann, beweist aber nichts für alle; Täuschung vertretbar, weil harmlos, angekündigt, aufgeklärt.</td></tr>
+      <tr><td>Station 4</td><td>Demo zeigt, wie Einfluss wirken kann, beweist aber nichts für alle; Täuschung vertretbar, weil harmlos, für den Versuch nötig und danach aufgeklärt (im Unterricht zusätzlich angekündigt).</td></tr>
       <tr><td>Tipp (Raster)</td><td>Grundlegend: ein Fachbegriff richtig, Tipp passt · Sicher: normativer Einfluss erklärt (niemand will auffallen) · Souverän: zusätzlich Asch-Befund (ein Verbündeter senkt die Anpassung stark) und ein konkreter Vorschlag (widersprechen, der Person zeigen, dass sie nicht allein ist).</td></tr>
       <tr><td>Vermutung jetzt</td><td>Vermutung aufgreifen, mit Ergebnis und Fachbegriff verbinden; jede begründete Richtung ist in Ordnung.</td></tr>
     </table>
@@ -3412,13 +3415,14 @@ var DATA = {
   video: { id: "TYIh4MkcfJA", titel: "Nachstellung des Asch-Versuchs (YouTube)", hinweis: "Nachgestellte Szene, nicht der Originalversuch von 1951. Prüfbedürftig: Deine Lehrkraft hat das Video vor dem Einsatz angesehen." },
   vhAsch: { frage: "Wie oft gingen die echten Versuchspersonen mit der falschen Mehrheit mit?", opt: ["fast nie (unter 5 %)", "etwa jedes dritte Mal", "meistens (mehr als die Hälfte)"], richtig: 1 },
   bed: [
-    { id: "b1", text: "Statt sechs Eingeweihten widerspricht dir nur eine einzige Person." },
-    { id: "b2", text: "Eine der eingeweihten Personen nennt die richtige Linie – du hast einen Verbündeten." },
-    { id: "b3", text: "Du schreibst deine Antwort geheim auf, statt sie laut zu sagen." }
+    { id: "b1", text: "Statt sechs Eingeweihten nennt nur eine einzige Person die falsche Linie.", richtig: 0, erkl: "weniger (≈ 3 %): Eine einzelne Gegenstimme hält man leicht für einen Irrtum – der Druck ist klein." },
+    { id: "b2", text: "Eine der eingeweihten Personen nennt die richtige Linie – du hast einen Verbündeten.", richtig: 0, erkl: "weniger (auf etwa ein Viertel des Werts): Mit Verbündetem fällt man nicht allein auf – der normative Druck sinkt." },
+    { id: "b3", text: "Du schreibst deine Antwort geheim auf, statt sie laut zu sagen.", richtig: 0, erkl: "weniger (≈ 12,5 %): Niemand hört deine Antwort – der normative Druck fällt fast weg." },
+    { id: "b4", text: "Statt sechs bis acht sind es fünfzehn Eingeweihte, die alle dieselbe falsche Linie nennen.", richtig: 1, erkl: "etwa gleich: Ab drei Personen stieg die Anpassung kaum noch weiter." }
   ],
   bedOpt: ["weniger Anpassung", "etwa gleich", "mehr Anpassung"],
   /* gerundete Befunde (Sekundärquellen, siehe README) */
-  balken: [["falsche Mehrheit (6–8 Personen)", 33, "≈ 1/3"], ["nur eine Person widerspricht", 3, "≈ 3 %"], ["zwei Personen widersprechen", 13, "≈ 13 %"], ["drei Personen widersprechen", 32, "≈ 32 %"], ["mit einem Verbündeten", 8, "≈ 8 %"], ["Antwort geheim (schriftlich)", 12.5, "≈ 12,5 %"]],
+  balken: [["falsche Mehrheit (6–8 Personen)", 33, "≈ 1/3"], ["falsche Mehrheit aus nur 1 Person", 3, "≈ 3 %"], ["falsche Mehrheit aus 2 Personen", 13, "≈ 13 %"], ["falsche Mehrheit aus 3 Personen", 32, "≈ 32 %"], ["mit einem Verbündeten", 8, "≈ 8 % *"], ["Antwort geheim (schriftlich)", 12.5, "≈ 12,5 %"]],
   vhHalo: { frage: "Ein Teil des Kurses sah Herrn Fotiou lächelnd, der andere ernst. Was vermutest du über die Einschätzungen?", opt: ["Wer ihn lächelnd sah, schätzte ihn positiver ein.", "Beide Gruppen schätzten ihn ungefähr gleich ein.", "Wer ihn ernst sah, schätzte ihn positiver ein."] },
   zuordnen: {
     gruende: [
@@ -3446,14 +3450,14 @@ var DATA = {
         ["informativer Einfluss", "kaum", "Leon ist nicht unsicher, er hält an seinem Urteil fest."]] }
     ],
     pruef: [
-      { id: "z6", text: "In unserem Kurs schätzten die mit den Antworten anderer bei den Punkten höher. Was folgt daraus?", opt: [
-        ["Das Ergebnis ist Zufall, also wertlos.", "begruendbar", "Zufall ist bei so wenigen Personen möglich. Zusammen mit belastbaren Studien ist das Ergebnis aber ein gutes Anschauungsbeispiel."],
+      { id: "z6", text: "Angenommen, in unserem Kurs schätzten die mit den Antworten anderer bei den Punkten höher. Was folgt daraus?", opt: [
+        ["Das Ergebnis ist Zufall, also wertlos.", "kaum", "Zufall ist bei so wenigen Personen möglich, aber nicht bewiesen – und eine Demo ist nicht wertlos: Sie zeigt anschaulich, was belastbare Studien gefunden haben."],
         ["Menschen passen sich immer an.", "kaum", "Wenige Personen und eine erfundene Gruppe zeigen nicht, was für alle gilt – und bei Asch blieben zwei Drittel der Antworten richtig."],
         ["Bei uns hat die Information der anderen offenbar gewirkt – das passt zu Sherif und Asch, beweist aber nichts für alle.", "zentral", "Genau: eine anschauliche Demo, die zu belastbaren Studien passt."]] },
       { id: "z7", text: "War die Täuschung in unserem Versuch in Ordnung?", opt: [
-        ["Nein, Täuschung ist in der Forschung immer verboten.", "kaum", "Harmlose Täuschung ist erlaubt, wenn sie angekündigt und danach vollständig aufgeklärt wird."],
-        ["Ja, weil es nur ein Spiel war.", "begruendbar", "Harmlos ist wichtig – entscheidend sind aber Ankündigung und vollständige Aufklärung."],
-        ["Ja, weil sie harmlos war, angekündigt und danach aufgeklärt wurde.", "zentral", "Das sind genau die drei Bedingungen, unter denen Täuschung vertretbar ist."]] }
+        ["Nein, Täuschung ist in der Forschung immer verboten.", "kaum", "Die Forschung erlaubt harmlose Täuschung, wenn der Versuch sie braucht und danach vollständig aufgeklärt wird."],
+        ["Ja, weil es nur ein Spiel war.", "begruendbar", "Harmlos ist wichtig – entscheidend ist aber auch: Der Versuch braucht die Täuschung, und danach wird vollständig aufgeklärt."],
+        ["Ja: Sie war harmlos, für den Versuch nötig und wurde danach aufgeklärt – im Unterricht sogar vorher angekündigt.", "zentral", "Genau: Das sind die Bedingungen der Forschung. Die Ankündigung ist eine zusätzliche Regel für den Unterricht."]] }
     ]
   },
   raster: [
@@ -3466,9 +3470,9 @@ var DATA = {
     b1: "Die Fassung mit den Antworten anderer hat bei den Punkten viel höher geschätzt. Bei den Linien haben fast alle richtig gewählt.",
     v1: "Bei den Punkten war ich unsicher. Bei den Linien war es eindeutig.",
     vid1: "Sie zögert, schaut zu den anderen und sagt dann leise dieselbe Linie.", vid2: "Sie lächelt verlegen und rutscht auf dem Stuhl.",
-    vh: { asch: { o: 0, s: "Bei so eindeutigen Linien macht doch niemand mit." }, bed: { b1: 0, b2: 0, b3: 1, s: "Je weniger Druck, desto weniger Anpassung." }, halo: { o: 0, s: "Ein Lächeln wirkt sympathisch." } },
-    zu: { z1: { o: 1, g: "Sie ist unsicher." }, z2: { o: 0, g: "Er will nicht auffallen." }, z3: { o: 1, g: "Die Antwort war laut vor allen." }, z4: { o: 1, g: "Selbstbewusst färbt auf klug ab." }, z5: { o: 0, g: "Urteil über alle Gamer." }, z6: { o: 2, g: "Wenige Personen." }, z7: { o: 2, g: "Harmlos und aufgeklärt." } },
-    tipp: "Wenn alle lästern, wirkt normativer Einfluss: Keiner will auffallen, deshalb sagt niemand etwas. Bei Asch sank die Anpassung stark, sobald nur eine Person widersprach. Deshalb kannst du die erste Person sein, die schreibt: Das finde ich nicht fair. Dann trauen sich vielleicht auch andere, und die Person merkt, dass sie nicht allein ist.",
+    vh: { asch: { o: 0, s: "Bei so eindeutigen Linien macht doch niemand mit." }, bed: { b1: 0, b2: 0, b3: 1, b4: 2, s: "Je weniger Druck, desto weniger Anpassung." }, halo: { o: 0, s: "Ein Lächeln wirkt sympathisch." } },
+    zu: { z1: { o: 1, g: "Sie ist unsicher." }, z2: { o: 0, g: "Er will nicht auffallen." }, z3: { o: 1, g: "Die Antwort war laut vor allen." }, z4: { o: 1, g: "Selbstbewusst färbt auf klug ab." }, z5: { o: 0, g: "Urteil über alle Gamer." }, z6: { o: 2, g: "Wenige Personen, aber passt zu Asch." }, z7: { o: 2, g: "Harmlos und aufgeklärt." } },
+    tipp: "Wenn alle lästern, wirkt normativer Einfluss: Keiner will auffallen, deshalb sagt niemand etwas. Bei Asch sank die Anpassung stark, sobald eine andere Person die richtige Linie nannte. Deshalb kannst du die erste Person sein, die schreibt: Das finde ich nicht fair. Dann trauen sich vielleicht auch andere, und die Person merkt, dass sie nicht allein ist.",
     selbst: [2, 2, 1], jetzt: "Ich dachte, nur bei Unsicherheit. Bei Asch wirkte aber auch normativer Einfluss, obwohl die Linien eindeutig waren." }
 };
 
@@ -3531,7 +3535,7 @@ var DATA = {
     if (id === "s-4") showLine();
     if (id === "s-5") renderQR();
     if (id === "s-6") renderAufl();
-    if (["s-asch", "s-bed", "s-halo", "s-pruef", "s-prod", "s-ende"].indexOf(id) >= 0) unlock();
+    if (["s-prod", "s-ende"].indexOf(id) >= 0) unlock();
     if (id === "s-prod") renderProd();
     if (id === "s-ende") renderChecklist();
   } });
@@ -3614,7 +3618,7 @@ var DATA = {
     $("#stage2").innerHTML = F.linien(t.l[0], t.l[1], t.l[2], t.l[3]);
     $("#t2-count").textContent = "Runde " + (r2 + 1) + " von 3";
     $("#chat-verlauf").innerHTML = "";
-    $("#chat-wer").textContent = withGroup ? "6 Mitglieder · du bist als Sechste dran" : "du antwortest als Erste";
+    $("#chat-wer").textContent = withGroup ? "6 Mitglieder · du bist nach allen anderen dran" : "du antwortest zuerst";
     bubble("Runde " + (r2 + 1) + ": Welche Linie ist gleich lang wie die Vergleichslinie?", "", "sys");
     pick = null; $$("#t2-abc button").forEach(function (b) { b.classList.remove("on"); b.disabled = withGroup; }); $("#t2-ok").disabled = true;
     if (!withGroup) { $$("#t2-abc button").forEach(function (b) { b.disabled = false; }); return; }
@@ -3710,8 +3714,9 @@ var DATA = {
     });
   })();
   var updVid = textFelder(["vid1", "vid2"], null, null, 8);
-  function aschFrei() { $("#to-st2").disabled = !(st.vh.asch && updVid()); }
+  function aschFrei() { $("#to-st2").disabled = !(st.vh.asch && (updVid() || st.vidOhne)); }
   ["vid1", "vid2"].forEach(function (id) { $("#" + id).addEventListener("input", aschFrei); });
+  $("#vid-ohne").checked = !!st.vidOhne; $("#vid-ohne").addEventListener("change", function () { st.vidOhne = this.checked; save(); aschFrei(); });
   vhBlock($("#vh-asch"), "asch", D.vhAsch.frage, D.vhAsch.opt, function (neu) {
     var s = st.vh.asch, a = $("#aufl-asch");
     a.hidden = false;
@@ -3730,8 +3735,8 @@ var DATA = {
     var max = 35;
     a.innerHTML = '<p style="margin:0 0 8px"><strong>Befund bei Asch</strong> – Anteil der Antworten, die der falschen Mehrheit folgten (gerundet):</p>' +
       '<div class="g-balken" id="balken">' + D.balken.map(function (b) { return '<div class="g-balken__zeile"><span class="g-balken__name">' + Lab.esc(b[0]) + '</span><span class="g-balken__spur"><span class="g-balken__wert" style="--w:' + Math.round(b[1] / max * 100) + '"></span></span><span class="g-balken__zahl">' + b[2] + "</span></div>"; }).join("") + "</div>" +
-      '<ul style="margin:10px 0 0;padding-left:22px">' + D.bed.map(function (b) { return '<li><span class="meine">Deine Vorhersage: ' + D.bedOpt[s[b.id]] + "</span> – Befund: <strong>weniger Anpassung</strong>. " + Lab.esc(b.text) + "</li>"; }).join("") + "</ul>" +
-      '<p class="small" style="margin:8px 0 0">Gruppengröße nach Asch (1955), Verbündeter und geheime Antwort nach Asch (1956), wiedergegeben in Lehrbuch-Sekundärquellen.</p>';
+      '<ul style="margin:10px 0 0;padding-left:22px">' + D.bed.map(function (b) { return "<li>" + Lab.esc(b.text) + '<br><span class="meine">Deine Vorhersage: ' + D.bedOpt[s[b.id]] + (s[b.id] === b.richtig ? " – passt." : "") + "</span> Befund: <strong>" + Lab.esc(b.erkl) + "</strong></li>"; }).join("") + "</ul>" +
+      '<p class="small" style="margin:8px 0 0">Gruppengröße nach Asch (1955), Verbündeter und geheime Antwort nach Asch (1956), wiedergegeben in Lehrbuch-Sekundärquellen. * Berichtet wird „auf etwa ein Viertel“; die 8 % sind daraus gerechnet (ein Viertel von 32 %).</p>';
     if (neu && G && !ruhig()) G.staffel($$(".g-balken__wert", a), [{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }], { dauer: 440 });
     $("#teil-gruende").hidden = false;
     $("#fig-gruende").innerHTML = F.gruende();
@@ -3777,7 +3782,7 @@ var DATA = {
     a.innerHTML = '<p class="meine">Deine Vorhersage: ' + Lab.esc(D.vhHalo.opt[s.o]) + "</p>" +
       "<p><strong>Deine Einschätzung</strong> (" + (fassungFot(st) === "laecheln" ? "lächelnde" : "ernste") + " Zeichnung): " + D.fotiou.map(function (n, i) { return n + " " + (st.fot && st.fot[i] ? st.fot[i] : "?"); }).join(" · ") + " – Durchschnitt der positiven Eigenschaften: <strong>" + fmt(fp) + "</strong></p>" +
       "<p><strong>Kursergebnis:</strong> Deine Lehrkraft zeigt am Beamer, wie die beiden Gruppen Herrn Fotiou eingeschätzt haben. Vergleiche mit deiner Vorhersage.</p>" +
-      '<p style="margin:0"><strong>Wichtig:</strong> Keine dieser Eigenschaften kann man auf einer Zeichnung sehen. Bei so wenigen Personen ist ein Unterschied ein Hinweis, kein Beweis. Belastbar wird es erst mit vielen Personen und zufälliger Verteilung – wie in der Forschung.</p>';
+      '<p style="margin:0"><strong>Wichtig:</strong> Keine dieser Eigenschaften kann man auf einer Zeichnung verlässlich sehen. Bei so wenigen Personen ist ein Unterschied ein Hinweis, kein Beweis. Belastbar wird es erst mit vielen Personen und zufälliger Verteilung – wie in der Forschung.</p>';
     $("#teil-halo").hidden = false; pruefStation("halo", "to-st4");
   });
 
@@ -3831,7 +3836,7 @@ var DATA = {
   function aschBox(s, leer) {
     var vh = s.vh || {}, h = '<table class="mine-p erg avoid"><tr><th>Frage</th><td><b>Meine Vorhersage</b></td><td><b>Befund</b></td></tr>';
     h += "<tr><th>Wie oft gingen sie mit?</th><td class=\"ich\">" + (leer || !vh.asch ? "" : e(D.vhAsch.opt[vh.asch.o]) + " – " + e(vh.asch.s)) + "</td><td>≈ jede dritte Antwort; 3 von 4 mind. einmal, jede vierte nie; 2/3 richtig. Gründe: wenige sahen es anders, viele zweifelten an sich, andere wollten nicht auffallen.</td></tr>";
-    h += "<tr><th>Weniger Anpassung? (1) nur eine Person widerspricht · (2) ein Verbündeter · (3) geheim antworten</th><td class=\"ich\">" + (leer || !vh.bed ? "(1) ______ (2) ______ (3) ______" : D.bed.map(function (b, i) { return "(" + (i + 1) + ") " + D.bedOpt[vh.bed[b.id]]; }).join(" · ") + (leer || !vh.bed ? "" : " – " + e(vh.bed.s))) + "</td><td>alle drei: weniger Anpassung (≈ 3 % · auf etwa ein Viertel · ≈ 12,5 %)</td></tr>";
+    h += "<tr><th>Weniger Anpassung? (1) Mehrheit aus nur 1 Person · (2) ein Verbündeter · (3) geheim antworten · (4) 15 statt 7 Eingeweihte</th><td class=\"ich\">" + (leer || !vh.bed ? "(1) ______ (2) ______ (3) ______ (4) ______" : D.bed.map(function (b, i) { return "(" + (i + 1) + ") " + D.bedOpt[vh.bed[b.id]]; }).join(" · ") + (leer || !vh.bed ? "" : " – " + e(vh.bed.s))) + "</td><td>(1)–(3) weniger: ≈ 3 % · auf etwa ein Viertel des Werts · ≈ 12,5 % · (4) etwa gleich</td></tr>";
     h += "<tr><th>Herr Fotiou: lächelnd oder ernst?</th><td class=\"ich\">" + (leer || !vh.halo ? "" : e(D.vhHalo.opt[vh.halo.o]) + " – " + e(vh.halo.s)) + "</td><td>Kursergebnis am Beamer (Hinweis, kein Beweis)</td></tr>";
     return h + "</table>";
   }
