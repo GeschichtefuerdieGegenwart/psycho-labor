@@ -20,7 +20,7 @@ Interaktive Selbstversuche und Modelle für das Wahlfach Psychologie (J2) – �
 | `ds02-veraenderungsblindheit.html` | DS 2: Flacker-Test zur Veränderungsblindheit |
 | `ds03-gestalten.html` | DS 3: Gestalt-Labor |
 | `ds04-erwartungen.html` | DS 4: Spielkarten und Wortliste (Erwartungen) |
-| `ds05-andere.html` | DS 5: Punkte schätzen und Linien (Konformität), Herr Fotiou |
+| `ds05-andere.html` | DS 5: Lernweg zur Konformität – Herr Fotiou, Punkte, Linien im Gruppenchat, vier Stationen, Zusammenfassung (Fassung 2, siehe `docs/ds05-fassung2.md`) |
 | `ds06-antrieb.html` | DS 6: Ziele setzen (Anspruchsniveau) |
 | `src/` | Quelldateien; `node tools/inline.js src/<datei>.html` erzeugt die Einzeldatei im Hauptordner |
 | `PRODUCT.md`, `DESIGN.md` | Zweck, Rahmen und Gestaltungsregeln des Labors |
@@ -28,9 +28,12 @@ Interaktive Selbstversuche und Modelle für das Wahlfach Psychologie (J2) – �
 | `assets/lab.css`, `assets/lab.js` | gemeinsames Design und Werkzeuge |
 | `assets/bausteine.js` | Verzeichnis der Bausteine (für Startseite und Auswertung) |
 | `assets/szenen-ds02.js` | selbst gezeichnete Bildpaare für DS 2 |
+| `assets/gegenwart/` | Bausteine aus dem Designsystem Gegenwart (Wahl, Balken, Bewegung), in Psycho-Labor-Farben |
 | `assets/qrcode.js` | QR-Code-Erzeugung (Kazuhiko Arase, MIT-Lizenz) |
 
-Alle Bilder sind selbst gezeichnet (SVG). Fotos aus dem Unterrichtsmaterial (z. B. Herr Fotiou, Guinness-Rekorde) stehen nur in den Folien, nicht im Labor.
+Alle Bilder sind selbst gezeichnet (SVG), auch Herr Fotiou (zwei Zeichnungen ab DS 5, Fassung 2). Fotos aus dem Unterrichtsmaterial stehen nur in älteren Folien, nicht im Labor.
+
+DS 5 bindet ein YouTube-Video ein, das erst nach Antippen lädt (`youtube-nocookie.com`); dann überträgt YouTube Daten. Gedacht ist die Vorführung am Beamer. Eine andere Video-ID lässt sich über `ds05-andere.html?video=…` einstellen.
 
 ## Arbeitsweise
 

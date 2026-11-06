@@ -1,0 +1,241 @@
+/* Gegenwart – Komponenten. Werte kommen aus tokens.css (var(--…)); Klassen-Präfix g-.
+   Ruhezustand = Endzustand: ohne JavaScript, im Druck und bei weniger Bewegung ist alles lesbar. */
+
+.g{background:var(--grund);color:var(--text);font:400 1.125rem/1.55 var(--font-text);-webkit-tap-highlight-color:transparent}
+.g *,.g *::before,.g *::after{box-sizing:border-box}
+.g [hidden]{display:none!important}
+.g :where(h1,h2,h3){font-family:var(--font-display);margin:0;text-wrap:balance}
+.g :where(p){margin:0;text-wrap:pretty}
+.g-reihe{display:flex;flex-wrap:wrap;gap:var(--space-4);align-items:center}
+.g-stapel{display:grid;gap:var(--space-4)}
+.g-meta{font-size:1rem;color:var(--leise);font-variant-numeric:tabular-nums}
+.g-frage{font:italic 600 1.875rem/1.25 var(--font-stimme);color:var(--text)}
+.g-zitat{font:italic 600 1.375rem/1.4 var(--font-stimme)}
+.g-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.g :focus-visible{outline:3px solid var(--text);outline-offset:2px;box-shadow:var(--fokus-innen)}
+
+/* ---------- Bewegung: nur wenn erlaubt ---------- */
+@media (prefers-reduced-motion:no-preference){
+  :root:not([data-bewegung=weniger]) .g-knopf{transition:transform var(--dauer-druck) var(--kurve-aus),box-shadow var(--dauer-schnell) var(--kurve-aus)}
+  :root:not([data-bewegung=weniger]) .g-karte{transition:transform var(--dauer-schnell) var(--kurve-aus),box-shadow var(--dauer-schnell) var(--kurve-aus)}
+  :root:not([data-bewegung=weniger]) .g-option span,:root:not([data-bewegung=weniger]) .g-punkt{transition:background-color var(--dauer-schnell) var(--kurve-aus),border-color var(--dauer-schnell) var(--kurve-aus),transform var(--dauer-langsam) var(--kurve-feder,var(--kurve-aus))}
+  :root:not([data-bewegung=weniger]) .g-wende__innen{transition:transform var(--dauer-wende) var(--kurve-beidseits)}
+  :root:not([data-bewegung=weniger]) .g-mark{transition:background-size 260ms var(--kurve-aus)}
+  :root:not([data-bewegung=weniger]) .g-balken__wert{transition:transform var(--dauer-reihe) var(--kurve-aus)}
+  :root:not([data-bewegung=weniger]) .g-hilfe__stufe{transition:opacity var(--dauer-mittel) var(--kurve-aus),transform var(--dauer-mittel) var(--kurve-aus)}
+}
+
+/* ---------- Knopf ---------- */
+.g-knopf{display:inline-flex;align-items:center;gap:10px;min-height:var(--knopf-hoehe);padding:12px 20px;border-radius:var(--radius-sm);border:2px solid var(--text);font:700 1.0625rem/1.2 var(--font-text);cursor:pointer;text-decoration:none;touch-action:manipulation}
+.g-knopf--primaer{background:var(--text);color:var(--grund)}
+.g-knopf--sekundaer{background:var(--flaeche);color:var(--text);border-color:var(--stahl)}
+.g-knopf--hell{background:var(--flaeche);color:var(--text);border-color:var(--flaeche)}
+.g-knopf--still{background:transparent;color:var(--text);border-color:transparent;min-height:44px;padding:8px 14px;font-size:1rem;text-decoration:underline;text-underline-offset:.2em;text-decoration-thickness:2px}
+.g-knopf:active{transform:translate(2px,2px)}
+.g-knopf[disabled]{opacity:.55;cursor:not-allowed}
+@media (hover:hover) and (pointer:fine){.g-knopf:not([disabled]):hover{box-shadow:var(--platte-knopf)}}
+
+/* ---------- Etikett ---------- */
+.g-etikett{justify-self:start;width:fit-content;display:inline-flex;align-items:center;gap:6px;font:700 1rem/1.3 var(--font-text);padding:2px 8px;border-radius:var(--radius-sm)}
+.g-etikett--ki{background:var(--honigplatte);color:var(--auf-honig);box-shadow:inset 0 0 0 2px var(--honig)}
+.g-etikett--lernen{background:var(--petrol);color:var(--auf-petrol)}
+.g-etikett--beide{background:var(--ueberdruck);color:var(--auf-ueberdruck)}
+.g-etikett--these{background:var(--oxid-hi);color:var(--text);box-shadow:inset 0 0 0 2px var(--oxid)}
+.g-etikett--erprobt{background:var(--erfolg-hi);color:var(--text)}
+.g-etikett--offen{background:transparent;color:var(--text);box-shadow:inset 0 0 0 2px var(--stahl)}
+
+/* ---------- Karte + Wende ---------- */
+.g-karte{position:relative;background:var(--flaeche);color:var(--text);border-radius:var(--radius-sm);padding:var(--space-5);box-shadow:6px 6px 0 0 var(--platte-farbe,var(--karton));display:grid;gap:var(--space-2);align-content:start}
+.g-karte--ki{--platte-farbe:var(--honigplatte)}.g-karte--lernen{--platte-farbe:var(--petrol)}.g-karte--beide{--platte-farbe:var(--ueberdruck)}
+.g-karte__titel{font:600 1.375rem/1.2 var(--font-display)}
+.g-karte__titel a{color:inherit;text-decoration:none}
+.g-karte__titel a::after{content:"";position:absolute;inset:0}
+@media (hover:hover) and (pointer:fine){.g-karte:has(a):hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 0 var(--platte-farbe,var(--karton))}}
+.g-karte:has(a):active{transform:translate(4px,4px);box-shadow:2px 2px 0 0 var(--platte-farbe,var(--karton))}
+.g-karte:focus-within{outline:3px solid var(--text);outline-offset:2px}
+
+.g-wende{perspective:1200px}
+.g-wende__innen{display:grid;gap:var(--space-4)}
+.g-wende__seite{background:var(--flaeche);border-radius:var(--radius-sm);padding:var(--space-5);box-shadow:var(--platte);display:grid;gap:var(--space-3);align-content:start}
+.g-wende__seite--hinten{background:var(--petrol-hi)}
+.g-ist-js .g-wende__innen{display:grid;grid-template-areas:"s";transform-style:preserve-3d}
+.g-ist-js .g-wende__seite{grid-area:s;backface-visibility:hidden}
+.g-ist-js .g-wende__seite--hinten{transform:rotateY(180deg)}
+.g-ist-js .g-wende[data-gewendet] .g-wende__innen{transform:rotateY(180deg)}
+.g-wende__knopf{justify-self:start}
+
+/* ---------- Kasten (Auftrag, Info, Hilfe) ---------- */
+.g-kasten{border-radius:var(--radius-md);padding:var(--space-5);display:grid;gap:var(--space-3)}
+.g-kasten__kopf{font:700 1rem/1.3 var(--font-text);display:flex;gap:8px;align-items:center}
+.g-kasten--auftrag{background:var(--text);color:var(--grund)}
+.g-kasten--info{background:var(--flaeche);border:2px dashed var(--stahl)}
+.g-kasten--hilfe{background:var(--honig-hi)}
+.g-hilfe__stufe{background:var(--flaeche);border-radius:var(--radius-sm);padding:var(--space-3) var(--space-4)}
+.g-hilfe__stufe[hidden]{display:none}
+.g-hilfe__stufe.g-neu{opacity:0;transform:translateY(6px)}
+
+/* ---------- Wahl: Denken vor Klicken ---------- */
+.g-wahl{display:grid;gap:var(--space-4)}
+.g-wahl fieldset{border:0;margin:0;padding:0;display:grid;gap:var(--space-2)}
+.g-wahl legend{padding:0;margin-bottom:var(--space-3)}
+.g-option{position:relative;display:block}
+.g-option input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.g-option span{display:grid;gap:4px;min-height:var(--tablet-ziel);padding:12px 16px 12px 52px;border:2px solid var(--stahl);border-radius:var(--radius-md);background:var(--flaeche);position:relative}
+.g-option span::before{content:"";position:absolute;left:16px;top:16px;width:22px;height:22px;border:2px solid var(--stahl);border-radius:999px;background:var(--flaeche)}
+.g-option input:checked+span{border-color:var(--kuli);box-shadow:inset 0 0 0 1px var(--kuli)}
+.g-option input:checked+span::before{border-color:var(--kuli);background:radial-gradient(circle,var(--kuli) 0 5px,transparent 6px)}
+.g-option input:focus-visible+span{outline:3px solid var(--text);outline-offset:2px}
+.g-option__urteil{display:none;font-weight:700}
+.g-wahl[data-zu] .g-option span{padding-left:58px}
+.g-wahl[data-zu] .g-option span::after{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;border-radius:var(--radius-md) 0 0 var(--radius-md);background:var(--stahl)}
+.g-wahl[data-zu] .g-option[data-urteil=zentral] span::after{background:var(--erfolg)}
+.g-wahl[data-zu] .g-option[data-urteil=begruendbar] span::after{background:var(--warnung)}
+.g-wahl[data-zu] .g-option[data-urteil=kaum] span::after{background:var(--fehler)}
+.g-wahl[data-zu] .g-option__urteil{display:block}
+.g-wahl[data-zu] .g-option[data-urteil=zentral] .g-option__urteil{color:var(--erfolg)}
+.g-wahl[data-zu] .g-option[data-urteil=begruendbar] .g-option__urteil{color:var(--warnung)}
+.g-wahl[data-zu] .g-option[data-urteil=kaum] .g-option__urteil{color:var(--fehler)}
+.g-wahl textarea{font:400 1.0625rem/1.4 var(--font-text);min-height:72px;padding:10px 14px;border:2px solid var(--stahl);border-radius:var(--radius-sm);background:var(--flaeche);color:var(--kuli);width:100%;resize:vertical}
+.g-wahl__fuss{display:flex;flex-wrap:wrap;gap:var(--space-3);align-items:center}
+
+/* ---------- Stempel / Siegel ---------- */
+.g-stempel{display:inline-grid;place-items:center;width:112px;height:112px;border-radius:999px;border:3px solid var(--oxid);color:var(--oxid);font:700 .95rem/1.1 var(--font-text);text-align:center;transform:rotate(-8deg);padding:10px;background:var(--grund)}
+.g-stempel[hidden]{display:none}
+
+/* ---------- Skala ---------- */
+.g-skala{display:grid;gap:var(--space-3)}
+.g-skala__spur{position:relative;padding-block:10px}
+.g-skala input[type=range]{width:100%;accent-color:var(--kuli);height:32px;margin:0}
+.g-skala__enden{display:flex;justify-content:space-between;font-size:1rem;color:var(--leise)}
+.g-skala__wert{font:700 1.0625rem/1.2 var(--font-text);color:var(--kuli);font-variant-numeric:tabular-nums}
+.g-skala__ref{position:absolute;top:0;bottom:0;width:4px;margin-left:-2px;background:var(--oxid);border-radius:2px}
+.g-skala__ref[hidden]{display:none}
+.g-skala__ref-text{color:var(--oxid);font-weight:700}
+
+/* ---------- Schwärzung / Aufdecken ---------- */
+.g-schwarz{position:relative}
+.g-ist-js .g-aufdecken:not([data-offen]) .g-schwarz{color:transparent;user-select:none}
+.g-ist-js .g-schwarz::after{content:"";position:absolute;left:-2px;right:-2px;top:.12em;bottom:.06em;background:var(--text);transform-origin:right center;pointer-events:none}
+.g-ist-js .g-aufdecken[data-offen] .g-schwarz::after{transform:scaleX(0)}
+@media (prefers-reduced-motion:no-preference){
+  :root:not([data-bewegung=weniger]) .g-ist-js .g-schwarz::after{transition:transform var(--dauer-aufdecken) var(--kurve-aus);transition-delay:calc(var(--i,0) * 70ms)}
+  :root:not([data-bewegung=weniger]) .g-ist-js .g-schwarz{transition:color 1ms linear;transition-delay:calc(var(--i,0) * 70ms + 200ms)}
+}
+
+/* ---------- Markieren ---------- */
+.g-stifte{display:flex;gap:var(--space-2);flex-wrap:wrap}
+.g-stift{min-height:44px;padding:8px 14px;border-radius:999px;border:2px solid var(--stahl);background:var(--flaeche);color:var(--text);font:700 1rem/1.2 var(--font-text);cursor:pointer}
+.g-stift[aria-pressed=true]{background:var(--text);color:var(--grund);border-color:var(--text)}
+.g-wort{cursor:pointer;border-radius:2px}
+.g-mark{background-repeat:no-repeat;background-size:0 100%;background-position:0 0}
+.g-mark--beleg{background-image:linear-gradient(var(--marker),var(--marker));background-size:100% 100%;text-decoration:underline 3px var(--honig);text-underline-offset:.18em}
+.g-mark--gedanke{color:var(--kuli);text-decoration:underline 3px dotted var(--kuli);text-underline-offset:.22em}
+.g-mark--beleg::before{content:"▲ ";font-size:.7em;vertical-align:.15em}
+.g-mark--gedanke::before{content:"● ";font-size:.7em;vertical-align:.15em}
+
+/* ---------- Fortschritt (Stanzloch) ---------- */
+.g-fortschritt{display:flex;align-items:center;gap:var(--space-4);flex-wrap:wrap}
+.g-punkte{display:flex;gap:8px;list-style:none;margin:0;padding:0}
+.g-punkt{width:18px;height:18px;border-radius:999px;border:2px solid var(--stahl);background:var(--flaeche)}
+.g-punkt[data-stand=fertig]{background:var(--petrol);border-color:var(--petrol)}
+.g-punkt[data-stand=jetzt]{background:var(--oxid);border-color:var(--oxid);transform:scale(1.25)}
+
+/* ---------- Zeitleiste ---------- */
+.g-zeit{position:relative;display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:var(--space-2);list-style:none;margin:0;padding:28px 0 0}
+.g-zeit::before{content:"";position:absolute;left:0;right:0;top:36px;height:3px;background:var(--text)}
+.g-zeit li{position:relative;display:grid;gap:6px;justify-items:start}
+.g-zeit button{all:unset;cursor:pointer;display:grid;gap:4px;padding-top:24px;position:relative}
+.g-zeit button::before{content:"";position:absolute;top:0;left:0;width:18px;height:18px;border-radius:999px;background:var(--flaeche);border:3px solid var(--text)}
+.g-zeit li[data-offen] button::before{border-style:dashed;border-color:var(--stahl)}
+.g-zeit li[data-offen] .g-zeit__jahr{color:var(--leise)}
+.g-zeit__jahr{font:700 1.0625rem/1.2 var(--font-display);font-variant-numeric:tabular-nums}
+.g-zeit__text{font-size:1rem}
+.g-zeit button:focus-visible{outline:3px solid var(--text);outline-offset:4px}
+.g-zeit__hier{position:absolute;top:0;left:0;font:700 .95rem/1 var(--font-text);background:var(--oxid);color:var(--grund);padding:4px 8px;border-radius:var(--radius-sm);white-space:nowrap}
+
+/* ---------- Balken ---------- */
+.g-balken{display:grid;gap:var(--space-3)}
+.g-balken__zeile{display:grid;grid-template-columns:minmax(6rem,9rem) 1fr 4.75rem;gap:var(--space-3);align-items:center}
+.g-balken__spur{height:22px;background:var(--karton);border-radius:var(--radius-sm);overflow:hidden}
+.g-balken__wert{display:block;height:100%;width:calc(var(--w) * 1%);background:var(--farbe,var(--petrol));transform-origin:left center}
+.g-balken__zahl{white-space:nowrap;font:700 1.0625rem/1 var(--font-text);font-variant-numeric:tabular-nums;text-align:right}
+
+/* ---------- Platten (Registrieren) ---------- */
+.g-platten{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-template-rows:16px auto 16px}
+.g-platte{padding:var(--space-5);display:grid;gap:var(--space-2);align-content:start}
+.g-platte h3{font-size:1.5rem}
+.g-platte--ki{grid-column:1/8;grid-row:1/3;background:var(--honigplatte);color:var(--auf-honig);box-shadow:inset 0 0 0 2px var(--honig);padding-right:calc(2/7*100% + 16px)}
+.g-platte--lernen{grid-column:6/13;grid-row:2/4;background:var(--petrol);color:var(--auf-petrol);padding-left:calc(2/7*100% + 16px)}
+.g-schnitt{grid-column:6/8;grid-row:2/3;z-index:1;background:var(--ueberdruck);color:var(--auf-ueberdruck);padding:var(--space-4);display:flex;align-items:flex-end;font-weight:700;line-height:1.25}
+@media (max-width:600px){.g-platten{grid-template-columns:1fr;grid-template-rows:auto}.g-platte--ki,.g-platte--lernen,.g-schnitt{grid-column:1;grid-row:auto;padding:var(--space-5)}}
+
+/* ---------- Bewegungsschalter ---------- */
+.g-schalter{display:inline-flex;align-items:center;gap:12px;min-height:44px;cursor:pointer;font-weight:700}
+.g-schalter input{appearance:none;width:52px;height:30px;border-radius:999px;border:2px solid var(--stahl);background:var(--flaeche);position:relative;margin:0;cursor:pointer}
+.g-schalter input::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:999px;background:var(--stahl)}
+.g-schalter input:checked{background:var(--text);border-color:var(--text)}
+.g-schalter input:checked::after{left:25px;background:var(--grund)}
+
+/* ---------- Musterbuch ---------- */
+.g-muster{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:var(--space-4)}
+.g-muster__feld{background:var(--flaeche);border-radius:var(--radius-sm);padding:var(--space-4);display:grid;gap:var(--space-3);align-content:start}
+.g-muster__buehne{height:96px;display:grid;place-items:center;background:var(--grund);border-radius:var(--radius-sm);overflow:hidden;position:relative}
+.g-muster__name{font:700 1rem/1.2 var(--font-text)}
+.g-muster__werte{font-size:1rem;color:var(--leise);font-variant-numeric:tabular-nums}
+.g-klotz{width:56px;height:40px;background:var(--petrol);border-radius:var(--radius-sm)}
+.g-klotz--honig{background:var(--honigplatte);box-shadow:inset 0 0 0 2px var(--honig)}
+.g-klotz--klein{width:22px;height:22px;border-radius:999px;background:var(--text)}
+
+@media print{.g-knopf,.g-stifte,.g-schalter{display:none}}
+
+/* ---------- Leinwand (Canvas) ---------- */
+.g-leinwand{display:block;width:100%;background:var(--flaeche);border-radius:var(--radius-sm);touch-action:none}
+.g-leinwand:focus-visible{outline:3px solid var(--text);outline-offset:2px}
+.g-zeichnen{position:relative;max-width:640px}
+.g-zeichnen__text{padding:var(--space-5);font:400 1.125rem/1.6 var(--font-text);background:var(--flaeche);border-radius:var(--radius-sm);user-select:none}
+.g-zeichnen .g-leinwand{position:absolute;inset:0;background:transparent;cursor:crosshair}
+.g-achsen{display:grid;grid-template-columns:auto 1fr auto;grid-template-rows:auto 1fr auto;gap:var(--space-2);align-items:center;max-width:520px;font-size:1rem;color:var(--leise)}
+.g-achsen .g-leinwand{grid-column:2;grid-row:2;aspect-ratio:1;cursor:crosshair}
+.g-achsen .oben{grid-column:2;grid-row:1;text-align:center}.g-achsen .unten{grid-column:2;grid-row:3;text-align:center}
+.g-achsen .links{grid-column:1;grid-row:2;writing-mode:vertical-rl;transform:rotate(180deg)}.g-achsen .rechts{grid-column:3;grid-row:2;writing-mode:vertical-rl}
+.g-sitze__stand,.g-verlauf__stand{font-weight:700;font-variant-numeric:tabular-nums}
+.g-sitze .g-leinwand{aspect-ratio:2/1.05;max-width:560px}
+.g-verlauf .g-leinwand{aspect-ratio:4/1;cursor:ew-resize}
+.g-schicksal .g-leinwand{aspect-ratio:16/9;max-width:560px}
+
+/* ---------- Scrub, Aufbauen, Schieber, Zeitstrahl ---------- */
+.g-wortauf{opacity:0;transform:translateY(.25em);display:inline-block}
+.g-wortauf.ist-da{opacity:1;transform:none}
+@media (prefers-reduced-motion:no-preference){:root:not([data-bewegung=weniger]) .g-wortauf{transition:opacity var(--dauer-mittel) var(--kurve-aus),transform var(--dauer-mittel) var(--kurve-aus)}}
+.g-schieber{display:grid;gap:var(--space-3);max-width:640px}
+.g-schieber__buehne{position:relative;aspect-ratio:16/7;overflow:hidden;border-radius:var(--radius-sm);cursor:ew-resize;touch-action:none;user-select:none}
+.g-schieber__vor,.g-schieber__nach{position:absolute;inset:0;display:grid;align-content:center;padding:var(--space-5);gap:var(--space-2)}
+.g-schieber__vor{background:var(--honig-hi);color:var(--text)}
+.g-schieber__nach{background:var(--petrol-hi);color:var(--text)}
+.g-schieber__griff{position:absolute;top:0;bottom:0;width:4px;margin-left:-2px;background:var(--text);pointer-events:none}
+.g-schieber__griff::after{content:"⇆";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;border-radius:999px;background:var(--text);color:var(--grund);display:grid;place-items:center;font-size:1.25rem}
+.g-schieber__marke{position:absolute;top:var(--space-3);font:700 1rem/1.2 var(--font-text);padding:2px 8px;border-radius:var(--radius-sm);background:var(--text);color:var(--grund)}
+.g-schieber__vor .g-schieber__marke{left:var(--space-3)}.g-schieber__nach .g-schieber__marke{right:var(--space-3)}
+.g-schieber__stand{font-weight:700;font-variant-numeric:tabular-nums}
+.g-zeitstrahl{display:grid;gap:var(--space-3);max-width:640px}
+.g-zeitstrahl .g-leinwand{aspect-ratio:16/8}
+.g-zeitstrahl__jahr{font:700 2rem/1 var(--font-display);font-variant-numeric:tabular-nums}
+.g-zeitstrahl__text{min-height:3.2em}
+.g-zustaende{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:var(--space-3)}
+.g-zustand{display:grid;gap:var(--space-2);padding:var(--space-3);background:var(--flaeche);border-radius:var(--radius-sm);align-content:start;outline:2px solid transparent;outline-offset:2px}
+.g-zustand.ist-aktiv{outline-color:var(--oxid)}
+.g-zustand__name{font:700 1rem/1.2 var(--font-text)}
+.g-zustand__was{font-size:1rem;color:var(--leise)}
+.g-sim-ueberfahren{box-shadow:var(--platte-knopf)}
+.g-sim-gedrueckt{transform:translate(2px,2px)}
+.g-sim-fokus{outline:3px solid var(--text);outline-offset:2px;box-shadow:var(--fokus-innen)}
+.g-ansicht{max-width:640px}
+.g-ansicht__liste{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-5)}
+.g-ansicht__bild{aspect-ratio:16/10;border-radius:var(--radius-sm);background:var(--karton)}
+.g-ansicht__bild--ki{background:var(--honigplatte);box-shadow:inset 0 0 0 2px var(--honig)}
+.g-ansicht__bild--lernen{background:var(--petrol)}
+.g-ansicht__detail{display:grid;gap:var(--space-4)}
+.g-ansicht__detail .g-ansicht__bild{aspect-ratio:16/7}
+.g-ansicht__titel{font:600 1.75rem/1.15 var(--font-display)}
+::view-transition-old(root),::view-transition-new(root){animation-duration:var(--dauer-mittel,200ms)}
+::view-transition-group(bild),::view-transition-group(titel){animation-duration:var(--dauer-reihe,440ms);animation-timing-function:var(--kurve-beidseits)}

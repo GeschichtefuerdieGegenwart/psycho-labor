@@ -144,12 +144,12 @@
     titel: "Wie sehr beeinflussen mich andere?",
     thema: "Wahrnehmung · Konformität (Punkte schätzen, Linien nach Asch)",
     datei: "ds05-andere.html",
-    /* Code: ds05.id.fassung(G = mit erfundenen Gruppenantworten / O = ohne).schaetzung÷wahr(×100).derGruppeGefolgt(0–3).linienRichtig(0–3).sicherheit(×10, 1–3).fotiouEingeschaetzt(0–5) */
+    /* Code: ds05.id.fassung(G = erfundene Gruppenantworten + lächelnde Zeichnung / O = ohne + ernste Zeichnung).schaetzung÷wahr(×100).derGruppeGefolgt(0–3).linienRichtig(0–3).sicherheit(×10, 1–3).fotiouEingeschaetzt(0–5)[.fotiouPositiv(×10, 0 = keine Angabe) – ab Fassung 2] */
     decode: function (parts) {
-      if (parts.length !== 8 || (parts[2] !== "G" && parts[2] !== "O")) return null;
-      var n = parts.slice(3, 8).map(Number);
+      if ((parts.length !== 8 && parts.length !== 9) || (parts[2] !== "G" && parts[2] !== "O")) return null;
+      var n = parts.slice(3).map(Number);
       if (n.some(isNaN)) return null;
-      return { id: parts[1], G: parts[2], q: n[0] / 100, f: n[1], r: n[2], s: n[3] / 10, fo: n[4] };
+      return { id: parts[1], G: parts[2], q: n[0] / 100, f: n[1], r: n[2], s: n[3] / 10, fo: n[4], fp: n.length > 5 && n[5] > 0 ? n[5] / 10 : NaN };
     },
     render: function (recs) {
       var G = recs.filter(function (r) { return r.G === "G"; }), O = recs.filter(function (r) { return r.G === "O"; });
@@ -164,20 +164,31 @@
         '<p class="small">Jeder Punkt ist eine Person (Durchschnitt aus drei Runden). Die Fassungen wurden zufällig verteilt.</p>';
       var fG = G.reduce(function (s, r) { return s + r.f; }, 0), rO = O.reduce(function (s, r) { return s + r.r; }, 0), rG = G.reduce(function (s, r) { return s + r.r; }, 0);
       var sG = Lab.mean(G.map(function (r) { return r.s; })), sO = Lab.mean(O.map(function (r) { return r.s; }));
-      var rest = '<div class="card"><h3>Teil 2 · Linien vergleichen</h3><p>Mit Antworten anderer: der falschen Gruppe gefolgt <strong>' + fG + "</strong> von " + 3 * G.length + " Antworten · richtig " + rG + " von " + 3 * G.length + "</p><p>Ohne Antworten anderer: richtig <strong>" + rO + "</strong> von " + 3 * O.length + " Antworten</p>" +
+      var rest = '<div class="card"><h3>Teil 2 · Linien im Gruppenchat</h3><p>Mit Antworten anderer: der falschen Gruppe gefolgt <strong>' + fG + "</strong> von " + 3 * G.length + " Antworten · richtig " + rG + " von " + 3 * G.length + "</p><p>Ohne Antworten anderer: richtig <strong>" + rO + "</strong> von " + 3 * O.length + " Antworten</p>" +
         '<p class="small">Sicherheit beim Punkteschätzen (1 = unsicher · 3 = sicher): mit ' + f1(sG) + " · ohne " + f1(sO) + "</p></div>";
-      var fo = recs.reduce(function (a, r) { return a + r.fo; }, 0);
-      rest += '<div class="card"><h3>Erster Eindruck · Herr Fotiou</h3><p>Von <strong>' + 5 * recs.length + "</strong> möglichen Einschätzungen (intelligent, geduldig, streng, humorvoll, hilfsbereit) wurden <strong>" + fo + "</strong> abgegeben, " + (5 * recs.length - fo) + "-mal „kann ich nicht sagen“.</p>" + '<p class="small">Keine dieser Eigenschaften ist auf einem Foto zu sehen. Erst im Teil B (Halo-Effekt) zeigen.</p></div>';
+      var mit = recs.filter(function (r) { return !isNaN(r.fp); });
+      if (mit.length) {
+        var pG = mit.filter(function (r) { return r.G === "G"; }), pO = mit.filter(function (r) { return r.G === "O"; });
+        rest += '<div class="card"><h3>Station 3 · Herr Fotiou: lächelnd oder ernst?</h3>' + Lab.dotPlot([
+          { label: "lächelnde Zeichnung (" + pG.length + ")", color: "#d9643f", values: pG.map(function (r) { return r.fp; }) },
+          { label: "ernste Zeichnung (" + pO.length + ")", color: "#0e6b68", values: pO.map(function (r) { return r.fp; }) }
+        ], { aria: "Einschätzung von Herrn Fotiou", rowH: 80, max: 5, unit: "Durchschnitt aus intelligent, geduldig, humorvoll, hilfsbereit (1–5)", fmt: f1 }) +
+          "<p>Durchschnitt: lächelnd <strong>" + f1(Lab.mean(pG.map(function (r) { return r.fp; }))) + "</strong> · ernst <strong>" + f1(Lab.mean(pO.map(function (r) { return r.fp; }))) + "</strong></p>" +
+          '<p class="small">Erst in Station 3 zeigen. Bei so wenigen Personen ist ein Unterschied ein Hinweis, kein Beweis. „Streng“ zählt nicht zum Durchschnitt; „kann ich nicht sagen“ auch nicht.</p></div>';
+      } else {
+        var fo = recs.reduce(function (a, r) { return a + r.fo; }, 0);
+        rest += '<div class="card"><h3>Erster Eindruck · Herr Fotiou</h3><p>Von <strong>' + 5 * recs.length + "</strong> möglichen Einschätzungen wurden <strong>" + fo + "</strong> abgegeben, " + (5 * recs.length - fo) + "-mal „kann ich nicht sagen“.</p></div>";
+      }
       return { main: main, rest: rest };
     },
-    befund: "Asch (1951, 1956): Allein unter 1 % Fehler; mit einer falschen Mehrheit am Tisch folgte etwa jede dritte Antwort der Gruppe, rund drei Viertel folgten mindestens einmal. Mit einem einzigen Verbündeten sank die Anpassung auf etwa 5 %, bei schriftlicher Antwort ebenfalls deutlich. Sherif (1935): Bei unklaren Schätzungen gleichen sich Urteile in der Gruppe an (informativer Einfluss).",
+    befund: "Asch (1951, 1956): Allein unter 1 % Fehler; mit einer falschen Mehrheit am Tisch folgte etwa jede dritte Antwort der Gruppe, rund drei Viertel folgten mindestens einmal, jede vierte nie. Gegenüber nur einer Person kaum Anpassung (≈ 3 %), ab drei ≈ 32 %. Mit einem einzigen Verbündeten sank die Anpassung auf etwa ein Viertel, bei geheimer (schriftlicher) Antwort auf ≈ 12,5 %. Sherif (1935): Bei unklaren Schätzungen gleichen sich Urteile in der Gruppe an (informativer Einfluss).",
     fragen: [
       "Punkte: Was beobachten wir? Vergleicht die beiden Fassungen – nur beschreiben.",
       "Linien: Folgt hier jemand der falschen Gruppe? Vergleicht mit Asch – was fehlt in unserem Labor?",
-      "Was kann eine Demo mit 7 Personen und erfundener Gruppe zeigen – und was nicht?"
+      "Station 3: Unterscheiden sich die Einschätzungen von Herrn Fotiou? Hinweis oder Beweis?"
     ],
     beispiel: function () {
-      var rows = [["G", 152, 0, 3, 13, 5], ["O", 98, 0, 3, 17, 4], ["G", 131, 1, 2, 15, 5], ["O", 84, 0, 3, 13, 5], ["G", 165, 0, 3, 10, 3], ["O", 110, 0, 3, 20, 5], ["G", 120, 0, 3, 17, 5]];
+      var rows = [["G", 152, 0, 3, 13, 4, 38], ["O", 98, 0, 3, 17, 4, 30], ["G", 131, 1, 2, 15, 5, 40], ["O", 84, 0, 3, 13, 5, 33], ["G", 165, 0, 3, 10, 3, 35], ["O", 110, 0, 3, 20, 5, 28], ["G", 120, 0, 3, 17, 4, 43]];
       return rows.map(function (r, i) { return ["ds05", "bsp" + i].concat(r).join("."); });
     }
   };
