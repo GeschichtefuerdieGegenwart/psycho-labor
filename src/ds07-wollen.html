@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Wann wird ein Muss zum Wollen? – Psycho-Labor</title>
+<link rel="stylesheet" href="../assets/gegenwart/tokens.css">
+<link rel="stylesheet" href="../assets/gegenwart/bundle.css">
+<link rel="stylesheet" href="../assets/motiv.css">
+</head>
+<body>
+<header class="m-kopf">
+  <div class="m-kopf__in">
+    <a class="m-marke" href="index.html">Psycho-Labor<b>Motivation</b></a>
+    <ol class="m-weg" id="weg" aria-label="Lernweg dieser Stunde"></ol>
+  </div>
+</header>
+
+<main>
+<!-- ============ Start ============ -->
+<section class="m-schritt" id="s-start" data-name="Start">
+  <p class="m-meta">Motivation · Stunde 2 von 6 · etwa 85 Minuten</p>
+  <h1>Wann wird ein Muss zum Wollen?</h1>
+  <p class="m-frage">Was braucht ein Mensch, damit er etwas von sich aus tut?</p>
+  <div class="m-raster">
+    <div class="m-karte m-karte--honig">
+      <h3>So läuft die Stunde</h3>
+      <ol>
+        <li>Erinnern ohne Heft</li>
+        <li>Drei Grundbedürfnisse – drei Spuren</li>
+        <li>Was braucht Josef?</li>
+        <li>Vom Muss zum Wollen: das Kontinuum</li>
+        <li>Der Kreis der 99 – stimmt die Botschaft?</li>
+        <li>Begriffsnetz, Blick auf dich, Sichern</li>
+      </ol>
+    </div>
+    <div class="m-karte">
+      <h3>Am Ende kannst du …</h3>
+      <ul>
+        <li>die drei Grundbedürfnisse nach Deci und Ryan erklären,</li>
+        <li>Gründe für eine Handlung auf dem Kontinuum der Regulation einordnen,</li>
+        <li>die Botschaft einer Geschichte mit der Theorie prüfen.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="g"><div class="g-kasten g-kasten--auftrag">
+    <div class="g-kasten__kopf">Erinnern ohne Heft · 3 Minuten · allein</div>
+    <ol>
+      <li>Was ist der Unterschied zwischen Motiv und Motivation?</li>
+      <li>Woran erkennt man Motivation von außen? Nenne drei Merkmale.</li>
+      <li>Was hat sich beim Diener im Kreis der 99 verändert – in Fachsprache?</li>
+    </ol>
+    <p>Antworte im Kopf oder auf Papier. Dann decke auf.</p>
+  </div></div>
+  <button type="button" class="g-knopf g-knopf--sekundaer" id="abruf-auf">Ich habe geantwortet – aufdecken</button>
+  <div id="abruf-loes" hidden>
+    <div class="g"><div class="g-kasten g-kasten--sichern">
+      <div class="g-kasten__kopf">Zum Vergleich</div>
+      <ol>
+        <li>Ein Motiv ist ein Beweggrund, den man von außen nicht sieht. Motivation ist der Vorgang, in dem er jetzt Verhalten in Gang setzt und auf ein Ziel ausrichtet.</li>
+        <li>Zielrichtung, Ausdauer, Intensität.</li>
+        <li>Er ist stark motiviert, aber anders: von intrinsisch (Freude am Tun) zu extrinsisch (Arbeit für die Münze).</li>
+      </ol>
+    </div></div>
+    <p id="profil-hinweis" class="m-klein"></p>
+  </div>
+  <div class="m-weiter"><button type="button" class="g-knopf g-knopf--primaer" data-ziel="s-beduerf">Zu den drei Spuren <span aria-hidden="true">→</span></button></div>
+</section>
+
+<!-- ============ 1 Grundbedürfnisse ============ -->
+<section class="m-schritt" id="s-beduerf" data-name="Grundbedürfnisse">
+  <div class="m-zeit"><span>25 Minuten</span><span>allein, dann Plenum</span></div>
+  <h2>Drei Spuren zu drei Bedürfnissen</h2>
+  <p>Deci und Ryan nehmen an: Jeder Mensch hat drei angeborene <strong>Grundbedürfnisse</strong>. Sind sie erfüllt, tritt intrinsische Motivation eher auf. Welche drei? Folge den Spuren und stelle bei jeder eine Vermutung auf.</p>
+
+  <!-- Spur A -->
+  <div class="m-station">
+    <p class="m-meta">Spur 1 von 3 · ein kurzer Selbsttest</p>
+    <h3>Wann bleibe ich gern dran?</h3>
+    <p class="m-privat">Nur für dich</p>
+    <div class="m-legende" aria-hidden="true"><span><b>1</b> trifft nicht zu</span><span>…</span><span><b>5</b> trifft voll zu</span></div>
+    <div class="m-test" id="ta"></div>
+    <div id="a-nach" hidden>
+      <div data-fest="hypA" data-mind="3">
+        <label class="m-feld"><span class="m-luecke">Ich bin besonders häufig intrinsisch motiviert, wenn ich mich dabei … fühle.</span>
+          <textarea rows="1" maxlength="60" placeholder="ein Wort"></textarea></label>
+        <div class="g-wahl__fuss"><button type="button" class="g-knopf g-knopf--primaer">Festlegen</button><span class="g-stempel" hidden>Festgelegt</span></div>
+      </div>
+      <div data-nach="hypA" hidden>
+        <div class="m-karte m-karte--honig">
+          <h3>Grundbedürfnis nach Kompetenz</h3>
+          <p>Menschen wollen sich beim Handeln als fähig erleben. Wird das erfüllt, steigt die Wahrscheinlichkeit für intrinsische Motivation. Kompetent fühlen wir uns, wenn eine Aufgabe <strong>weder zu leicht noch zu schwer</strong> ist (Harter 1978). Positive Rückmeldung kann das Kompetenzerleben stärken.</p>
+          <p class="m-klein">Aber: Man kann sich beim Vokabellernen kompetent fühlen, ohne intrinsisch motiviert zu sein. Kompetenz allein reicht nicht.</p>
+        </div>
+        <div id="wahl-a"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Spur B -->
+  <div class="m-station" id="spur-b" hidden>
+    <p class="m-meta">Spur 2 von 3 · ein Experiment</p>
+    <h3>Puzzeln für Geld</h3>
+    <div class="m-befund">
+      <p><strong>Deci (1971):</strong> Studierende lösen an drei Terminen knifflige Legepuzzles. Am zweiten Termin bekommt eine Gruppe für jedes gelöste Puzzle Geld, die andere nicht. Am dritten Termin gibt es für niemanden Geld. Zwischendurch verlässt der Versuchsleiter jeweils für einige Minuten den Raum. Die Personen dürfen tun, was sie wollen: weiterpuzzeln, Zeitschriften lesen, nichts tun.</p>
+    </div>
+    <p class="m-status">Belegte Quelle · vereinfacht</p>
+    <div id="wahl-b1"></div>
+    <div id="b-nach" hidden>
+      <div class="m-befund">
+        <p><strong>Befund:</strong> Die Gruppe, die Geld bekommen hatte, beschäftigte sich am dritten Termin in der freien Zeit <strong>weniger</strong> mit den Puzzles als vorher. Die andere Gruppe nicht. Das nennt man <strong>Unterminierungseffekt</strong>: Eine Belohnung von außen kann die Freude an einer Tätigkeit untergraben.</p>
+      </div>
+      <div data-fest="hypB" data-mind="3">
+        <label class="m-feld"><span class="m-luecke">Die Belohnung hat den Personen das Gefühl genommen, … zu sein.</span>
+          <textarea rows="1" maxlength="60" placeholder="ein Wort"></textarea></label>
+        <div class="g-wahl__fuss"><button type="button" class="g-knopf g-knopf--primaer">Festlegen</button><span class="g-stempel" hidden>Festgelegt</span></div>
+      </div>
+      <div data-nach="hypB" hidden>
+        <div class="m-karte m-karte--honig">
+          <h3>Grundbedürfnis nach Selbstbestimmung (Autonomie)</h3>
+          <p>Menschen wollen erleben, dass sie selbst entscheiden, was sie tun. Kommt eine Belohnung dazu, verschiebt sich der Grund nach außen: »Ich tue es fürs Geld«. Je mehr wir eine Handlung als frei gewählt erleben, desto wahrscheinlicher ist intrinsische Motivation. In Klassen, die Selbstbestimmung fördern, waren Kinder häufiger intrinsisch motiviert.</p>
+        </div>
+        <div class="g"><div class="g-kasten g-kasten--info">
+          <div class="g-kasten__kopf">Wann der Effekt auftritt</div>
+          <p>Eine Auswertung von 128 Experimenten zeigt: Untergraben wird die Freude vor allem durch <strong>erwartete, greifbare</strong> Belohnungen (Geld, Preise), die man <strong>für das Tun</strong> bekommt. Ehrliches Lob stärkt die Motivation eher. Eine Überraschung danach schadet kaum (Deci, Koestner &amp; Ryan 1999). Wie stark der Effekt ist, wird bis heute diskutiert.</p>
+        </div></div>
+        <div id="wahl-b2"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Spur C -->
+  <div class="m-station" id="spur-c" hidden>
+    <p class="m-meta">Spur 3 von 3 · Befunde aus der Forschung</p>
+    <h3>Was andere mit meiner Motivation zu tun haben</h3>
+    <div class="m-befund">
+      <ul>
+        <li>Kinder, die in ihrer Gruppe beliebt sind, haben höhere Motivationswerte als wenig beliebte Kinder.</li>
+        <li>Kooperatives Lernen hat meist positive Wirkungen auf die Lern- und Leistungsmotivation.</li>
+        <li>Jugendliche halten Aktivitäten mit Gleichaltrigen für besonders wichtig.</li>
+        <li>In Klassen mit schlechtem Klima zeigten Lernende mehr Hilflosigkeit und Angst und weniger Selbstwertgefühl als in Klassen mit gutem Klima.</li>
+      </ul>
+      <p class="m-klein">Zusammengefasst nach Wigfield u. a. (2006) und Jerusalem &amp; Schwarzer (1991), aus dem Unterrichtsmaterial M4.</p>
+    </div>
+    <div data-fest="hypC" data-mind="3">
+      <label class="m-feld"><span class="m-luecke">Ich bin besonders häufig intrinsisch motiviert, wenn ich mich … fühle.</span>
+        <textarea rows="1" maxlength="60" placeholder="ein bis zwei Wörter"></textarea></label>
+      <div class="g-wahl__fuss"><button type="button" class="g-knopf g-knopf--primaer">Festlegen</button><span class="g-stempel" hidden>Festgelegt</span></div>
+    </div>
+    <div data-nach="hypC" hidden>
+      <div class="m-karte m-karte--honig">
+        <h3>Grundbedürfnis nach sozialer Eingebundenheit</h3>
+        <p>Menschen wollen sich mit anderen verbunden fühlen und vertrauensvolle Beziehungen aufbauen. Das erklärt, warum Anerkennung so stark wirkt. Und es beeinflusst Interessen: Man übernimmt zum Beispiel das Hobby einer Freundin.</p>
+      </div>
+      <h3>Denkwerkzeug: Zusammenhang oder Ursache?</h3>
+      <div id="wahl-c"></div>
+    </div>
+  </div>
+  <div class="m-weiter"><button type="button" class="g-knopf g-knopf--primaer" data-ziel="s-josef" id="zu-josef" disabled>Weiter zu Josef <span aria-hidden="true">→</span></button></div>
+</section>
+
+<!-- ============ 2 Josef ============ -->
+<section class="m-schritt" id="s-josef" data-name="Josef">
+  <div class="m-zeit"><span>8 Minuten</span><span>zu zweit</span></div>
+  <h2>Was braucht Josef?</h2>
+  <p class="m-status">Ausgedachter Fall</p>
+  <div class="m-karte m-karte--honig">
+    <p>Zur Erinnerung: Josef war an der Realschule gut, besonders in Mathe. Jetzt ist keine Arbeit besser als 3–4. »Ich check es ohnehin nicht.« Er ist in einer kleinen Gruppe mit Ali, Melissa und Slobodan und freut sich manchmal sogar auf die Schule. Sein Vater ist enttäuscht. Die Eltern versprechen eine Belohnung, wenn aus jeder 3–4 eine 3 wird.</p>
+  </div>
+  <p>Wie gut ist jedes Bedürfnis bei Josef gerade erfüllt? Tippe an und nenne einen Beleg aus dem Fall.</p>
+  <div id="josef-skala"></div>
+  <div id="josef-nach" hidden>
+    <div id="wahl-josef"></div>
+  </div>
+  <div class="m-weiter"><button type="button" class="g-knopf g-knopf--primaer" data-ziel="s-kont" id="zu-kont" disabled>Weiter zum Kontinuum <span aria-hidden="true">→</span></button></div>
+</section>
+
+<!-- ============ 3 Kontinuum ============ -->
+<section class="m-schritt" id="s-kont" data-name="Kontinuum">
+  <div class="m-zeit"><span>17 Minuten</span><span>allein, dann Plenum</span></div>
+  <h2>Vom Muss zum Wollen</h2>
+  <p>In Stunde 1 blieb eine Frage offen: Ali lernt fürs Studium – extrinsisch und trotzdem aus eigenem Antrieb? Deci und Ryan sagen: Extrinsische Motivation gibt es in vier Formen. Sie liegen auf einem <strong>Kontinuum</strong> zwischen fremdbestimmt und selbstbestimmt.</p>
+  <div id="kont-bild"></div>
+  <div class="m-raster m-raster--vier">
+    <div class="m-karte m-karte--petrol"><h3>external</h3><p>Ich tue es, um eine Belohnung zu bekommen oder einer Strafe zu entgehen. Der Anstoß kommt von außen.</p></div>
+    <div class="m-karte m-karte--petrol"><h3>introjiziert</h3><p>Ich tue es, »weil es sich gehört« oder weil ich sonst ein schlechtes Gewissen hätte. Der Druck kommt von innen, gehört aber nicht zu mir: Antreiber und Angetriebener sind verschieden, obwohl beide in mir wohnen.</p></div>
+    <div class="m-karte m-karte--petrol"><h3>identifiziert</h3><p>Ich tue es, weil ich es selbst für wichtig halte. Es kann aber noch mit anderen Zielen von mir in Konflikt stehen.</p></div>
+    <div class="m-karte m-karte--petrol"><h3>integriert</h3><p>Ich tue es, weil das Ziel zu mir gehört und zu meinen anderen Zielen passt. Es bleibt Mittel zum Zweck – das unterscheidet es von intrinsisch.</p></div>
+  </div>
+  <p class="m-klein">Den Weg von links nach rechts nennen Deci und Ryan <strong>Internalisierung</strong>: Werte und Regeln von außen werden zu eigenen. Theorie der organismischen Integration nach Deci &amp; Ryan (1993); Schaubild in Anlehnung an Deci &amp; Ryan (2002).</p>
+
+  <h3>Lege die Karten auf das Kontinuum</h3>
+  <p>Tippe eine Karte an, dann die Stelle, an die sie gehört. Ab fünf Karten kannst du den Zwischenstand prüfen.</p>
+  <div id="sort-kont"></div>
+  <div id="kont-nach" hidden>
+    <h3>Und Ali?</h3>
+    <div id="wahl-ali"></div>
+  </div>
+
+  <div id="reg-teil" hidden>
+    <h3>Warum lerne ich?</h3>
+    <p class="m-privat">Nur für dich</p>
+    <p>Denk an ein Fach, für das du gerade lernst. Du musst es nicht nennen. <strong>Ich lerne für dieses Fach, …</strong></p>
+    <div class="m-legende" aria-hidden="true"><span><b>++</b> stimme voll zu</span><span><b>+</b> eher ja</span><span><b>−</b> eher nein</span><span><b>−−</b> stimme gar nicht zu</span></div>
+    <div class="m-test" id="tr"></div>
+    <div id="reg-bild" hidden>
+      <div class="m-karte m-karte--honig">
+        <h3>Deine Gründe für dieses Fach</h3>
+        <div class="m-balken" id="reg-balken"></div>
+        <p class="m-klein">Mehrere Gründe zugleich sind normal. Der Bogen ist angelehnt an Fragebögen von Ryan und Connell (1989), aber nicht geprüft und keine Diagnose. Integriert fehlt, weil es sich mit so kurzen Sätzen kaum von identifiziert trennen lässt.</p>
+      </div>
+    </div>
+  </div>
+  <div class="m-weiter"><button type="button" class="g-knopf g-knopf--primaer" data-ziel="s-geschichte" id="zu-geschichte" disabled>Weiter zur Geschichte <span aria-hidden="true">→</span></button></div>
+</section>
+
+<!-- ============ 4 Geschichte ============ -->
+<section class="m-schritt" id="s-geschichte" data-name="Geschichte">
+  <div class="m-zeit"><span>12 Minuten</span><span>allein, dann Plenum</span></div>
+  <h2>Der Kreis der 99 – zweite Lektüre</h2>
+  <p class="m-meta">Jorge Bucay: Komm, ich erzähl dir eine Geschichte</p>
+  <p>In Stunde 1 hast du die Geschichte übersetzt. Jetzt prüfst du sie mit dem, was du heute gelernt hast. Die Geschichte wird noch einmal kurz zusammengefasst oder vorgelesen.</p>
+  <div id="wahl-geschichte"></div>
+  <div id="geschichte-nach" hidden>
+    <h3>Deine Übersetzungstabelle wächst</h3>
+    <table class="m-sprachen" id="sprachen"></table>
+  </div>
+  <div class="m-weiter"><button type="button" class="g-knopf g-knopf--primaer" data-ziel="s-netz" id="zu-netz" disabled>Weiter zum Begriffsnetz <span aria-hidden="true">→</span></button></div>
+</section>
+
+<!-- ============ 5 Netz ============ -->
+<section class="m-schritt" id="s-netz" data-name="Begriffsnetz">
+  <div class="m-zeit"><span>5 Minuten</span><span>allein, dann am Board</span></div>
+  <h2>Das Netz wächst</h2>
+  <p>Die Verbindungen aus Stunde 1 stehen schon. Wähle für die vier neuen Pfeile die passende Verbindung.</p>
+  <ol class="m-kanten" id="kanten"></ol>
+  <div class="g-wahl__fuss" style="margin-bottom:var(--space-4)"><button type="button" class="g-knopf g-knopf--sekundaer" id="netz-pruefen" disabled>Netz prüfen</button></div>
+  <div id="netz-rueck" aria-live="polite"></div>
+  <div id="netz-bild"></div>
+  <p class="m-status">Modell</p>
+  <p class="m-klein">Grau: aus Stunde 1. Was lässt das Netz weg? Zum Beispiel, warum jemand einer Aufgabe überhaupt einen Wert gibt und ob er Erfolg erwartet. Das kommt in Stunde 3.</p>
+  <div class="m-weiter"><button type="button" class="g-knopf g-knopf--primaer" data-ziel="s-sichern" id="zu-sichern" disabled>Weiter zum Sichern <span aria-hidden="true">→</span></button></div>
+</section>
+
+<!-- ============ 6 Sichern ============ -->
+<section class="m-schritt" id="s-sichern" data-name="Sichern">
+  <div class="m-zeit"><span>12 Minuten</span><span>allein</span></div>
+  <h2>Stimmt die Botschaft?</h2>
+  <div class="g"><div class="g-kasten g-kasten--auftrag">
+    <div class="g-kasten__kopf">Auftrag</div>
+    <p>Eine Lesart der Geschichte lautet: <em>»Wer immer mehr will, verliert seine Freude.«</em> Beurteile diese Botschaft mit der Selbstbestimmungstheorie. Schreibe fünf bis acht Sätze: Wo hat die Geschichte recht, wo greift sie zu kurz? Nutze mindestens zwei Begriffe von heute.</p>
+  </div></div>
+  <details class="m-hilfe"><summary>Hilfe 1: Satzanfänge</summary>
+    <ul><li>Die Geschichte hat recht, wenn …, denn beim Diener …</li><li>Nach Deci und Ryan kommt es aber nicht darauf an, ob man mehr will, sondern …</li><li>Ein Gegenbeispiel ist …, der/die sein Ziel selbst gewählt hat und …</li><li>Insgesamt halte ich die Botschaft für …, weil …</li></ul></details>
+  <details class="m-hilfe"><summary>Hilfe 2: Begriffe zur Auswahl</summary>
+    <p>Selbstbestimmung · Kompetenz · soziale Eingebundenheit · external · introjiziert · identifiziert · integriert · Internalisierung · Unterminierungseffekt</p></details>
+  <div data-fest="produkt" data-mind="50" data-worte>
+    <label class="m-feld">Dein Urteil <span class="m-zaehler"></span>
+      <textarea rows="8" maxlength="1500"></textarea></label>
+    <div class="g-wahl__fuss"><button type="button" class="g-knopf g-knopf--primaer">Festlegen und vergleichen</button><span class="g-stempel" hidden>Festgelegt</span></div>
+  </div>
+  <div data-nach="produkt" hidden>
+    <h3>Vergleiche mit den Kriterien</h3>
+    <table class="m-kriterien">
+      <tr><th>Grundlegend</th><td>Ich ordne den Diener vorher und nachher mit Fachbegriffen ein.</td></tr>
+      <tr><th>Sicher</th><td>Ich erkläre mit der Theorie, warum die Freude verschwindet, und nenne, wo die Geschichte recht hat.</td></tr>
+      <tr><th>Souverän</th><td>Ich zeige außerdem mit einem Gegenbeispiel, wo die Botschaft zu weit geht (selbst gewählte Ziele), und komme zu einem begründeten Urteil.</td></tr>
+    </table>
+
+    <h3>Ein Blick auf dich</h3>
+    <p class="m-privat">Nur für dich · freiwillig</p>
+    <div id="blick"></div>
+    <div data-fest="selbst" data-mind="15">
+      <label class="m-feld">Welches der drei Bedürfnisse ist dir beim Lernen besonders wichtig? Begründe mit einem Beispiel.
+        <textarea rows="3" maxlength="500" placeholder="Mir ist … besonders wichtig. Das merke ich zum Beispiel, wenn …"></textarea></label>
+      <div class="g-wahl__fuss"><button type="button" class="g-knopf g-knopf--primaer">Festlegen</button><span class="g-stempel" hidden>Festgelegt</span></div>
+    </div>
+
+    <h3>Das kann ich</h3>
+    <ul class="m-kann" id="kann"></ul>
+    <details class="m-hilfe"><summary>Für Schnelle</summary>
+      <p>Wähle ein Spiel oder eine App, die du gern nutzt. Zeige an je einem Beispiel, wie sie Kompetenz, Selbstbestimmung und soziale Eingebundenheit anspricht. Wo nutzt sie extrinsische Anreize?</p></details>
+    <div class="g"><div class="g-kasten g-kasten--sichern">
+      <div class="g-kasten__kopf">Sichern</div>
+      <p>Die Lernmappe enthält die Merkseite, die Befunde und deine Eingaben. Dein Motivprofil brauchst du in Stunde 3 wieder.</p>
+      <div class="g-wahl__fuss">
+        <button type="button" class="g-knopf g-knopf--primaer" id="drucken">Lernmappe drucken oder als PDF sichern</button>
+        <button type="button" class="g-knopf g-knopf--sekundaer" id="datei-speichern">Motivprofil als Datei speichern</button>
+      </div>
+    </div></div>
+    <p class="m-intro"><strong>Fertig.</strong> Tablet umdrehen – wir vergleichen die Urteile im Plenum.</p>
+  </div>
+</section>
+</main>
+
+<footer class="m-fuss">
+  <div class="m-fuss__zeile">
+    <label>Ansicht <select id="ansicht"><option value="hell">Hell</option><option value="dunkel">Dunkel</option><option value="beamer">Beamer</option></select></label>
+    <span class="g"><label class="g-schalter" data-g="bewegung"><input type="checkbox"> Weniger Bewegung</label></span>
+    <label class="g-knopf g-knopf--still" style="cursor:pointer">Motivprofil aus Datei laden<input type="file" id="datei-laden" accept="application/json,.json" class="m-sr"></label>
+    <button type="button" class="g-knopf g-knopf--still" id="loeschen-auf">Eingaben löschen …</button>
+  </div>
+  <p id="datei-rueck" aria-live="polite"></p>
+  <div class="m-loeschen" id="loeschen" hidden>
+    <strong>Was soll gelöscht werden?</strong>
+    <div class="m-fuss__zeile">
+      <button type="button" class="g-knopf g-knopf--sekundaer" id="loeschen-stunde">Nur diese Stunde</button>
+      <button type="button" class="g-knopf g-knopf--sekundaer" id="loeschen-alles">Den ganzen Block Motivation</button>
+      <button type="button" class="g-knopf g-knopf--still" id="loeschen-nein">Nichts löschen</button>
+    </div>
+    <span>Gelöschtes lässt sich nicht zurückholen. Ansicht und Bewegung bleiben.</span>
+  </div>
+  <p>Datenschutz: Diese Seite sendet nichts. Deine Eingaben liegen nur im Speicher dieses Browsers; mit »Eingaben löschen« sind sie weg. Die Selbsttests sind Denkanstöße, keine Diagnose.</p>
+  <p>© 2026 Mario Walter · Inhalte CC BY-NC-SA 4.0 · Code MIT · mit KI-Unterstützung entwickelt</p>
+</footer>
+
+<div class="m-druck" id="druck"></div>
+
+<script src="../assets/gegenwart/bundle.js"></script>
+<script src="../assets/motiv.js"></script>
+<script>
+(function () {
+  "use strict";
+  var M = window.Motiv, $ = M.$, $$ = M.$$, esc = M.esc, st = M.stunde("ds07");
+  var d6 = function () { return M.daten.ds06 || {}; };
+
+  /* ================= Inhalte ================= */
+  /* Spur A: Fragebogen aus M4, Teil Kompetenz (sprachlich geglättet) */
+  var ITEMS_A = ["Ich bin besonders oft intrinsisch motiviert in Bereichen, die ich gut beherrsche.", "Ich vermeide Tätigkeiten, die ich nicht beherrsche.", "Wenn ich eine positive Rückmeldung für meine Leistung erhalte, fühle ich mich besser.", "Fächer, in denen ich keine guten Noten habe, erlebe ich weniger positiv.", "Wenn ich in einer Stunde nicht mitkomme, sehe ich ständig auf die Uhr.", "Ich lese einen Text eher freiwillig, wenn ich mich in dem Thema gut auskenne.", "Wenn ich die Möglichkeit habe, wähle ich die Fächer ab, in denen ich nicht gut bin."];
+  var STUFEN5 = [["1", "trifft nicht zu", 1], ["2", "trifft eher nicht zu", 2], ["3", "teils, teils", 3], ["4", "trifft eher zu", 4], ["5", "trifft voll zu", 5]];
+  var STUFEN4 = [["++", "stimme voll zu", 3], ["+", "eher ja", 2], ["−", "eher nein", 1], ["−−", "stimme gar nicht zu", 0]];
+
+  var W_A = [{ id: "a1", text: "Wann fühlen wir uns nach Harter am ehesten kompetent?", opt: [
+    ["wenn die Aufgabe leicht ist", "kaum", "Eine zu leichte Aufgabe zeigt nicht, was man kann. Man ist unterfordert und langweilt sich eher."],
+    ["wenn wir eine gute Note bekommen", "begruendbar", "Rückmeldung kann das Kompetenzerleben stärken. Entscheidend ist aber, ob die Aufgabe zum eigenen Können passt."],
+    ["wenn die Aufgabe weder zu leicht noch zu schwer ist", "zentral", "Dann erlebt man, dass das eigene Können den Unterschied macht."]] }];
+  var W_B1 = [{ id: "b1", text: "Deine Vorhersage: Was passiert am dritten Termin in der freien Zeit?", opt: [
+    ["Die Gruppe mit Geld puzzelt mehr – sie ist ja geübt und motiviert.", "kaum", "Klingt logisch, ist aber nicht eingetreten. Genau das macht den Befund so überraschend."],
+    ["Es gibt keinen Unterschied – Geld hat mit Spaß nichts zu tun.", "begruendbar", "Eine vorsichtige Vermutung. Der Befund zeigt aber einen Unterschied."],
+    ["Die Gruppe mit Geld puzzelt weniger als vorher.", "zentral", "So kam es. Wer bezahlt wurde, hörte eher auf, als das Geld wegfiel."]] }];
+  var W_B2 = [{ id: "b2", text: "Josefs Lehrerin lobt ihn ehrlich für einen guten Lösungsweg. Untergräbt das seine Motivation?", opt: [
+    ["Ja – jede Belohnung untergräbt die Freude.", "kaum", "Das geht zu weit. Der Effekt betrifft vor allem erwartete, greifbare Belohnungen für das Tun."],
+    ["Nein – ehrliches Lob stärkt eher sein Kompetenzerleben.", "zentral", "Lob, das informiert (»dein Lösungsweg ist klar«), wirkt in Studien eher positiv."],
+    ["Es kommt darauf an, ob das Lob kontrollierend wirkt.", "begruendbar", "Gut beobachtet: Lob wie »Siehst du, so musst du es machen« kann Druck erzeugen. Ehrliches Lob für einen Lösungsweg tut das meist nicht."]] }];
+  var W_C = [{ id: "c1", text: "»Beliebte Kinder haben höhere Motivationswerte.« – Was folgt daraus?", opt: [
+    ["Beliebtheit macht Kinder motiviert.", "kaum", "Das sagt der Befund nicht. Er zeigt nur, dass beides zusammen auftritt."],
+    ["Beides tritt zusammen auf. Ob das eine das andere verursacht, bleibt offen.", "zentral", "Genau: Es könnte auch umgekehrt sein (motivierte Kinder werden beliebter), oder ein Drittes beeinflusst beides."],
+    ["Nichts – solche Studien sind wertlos.", "kaum", "Ein Zusammenhang ist ein wichtiger Hinweis. Er beweist nur keine Ursache."]] }];
+
+  var BED = ["Kompetenz", "Selbstbestimmung", "soziale Eingebundenheit"];
+  var W_JOSEF = [
+    { id: "j1", text: "Wo würdest du bei Josef zuerst ansetzen?", opt: [
+      ["bei der sozialen Eingebundenheit", "kaum", "Hier steht Josef vergleichsweise gut da: Er hat eine Gruppe und freut sich manchmal auf die Schule."],
+      ["bei der Kompetenz", "zentral", "»Ich check es ohnehin nicht«: Josef erlebt sich als unfähig. Aufgaben, die weder zu leicht noch zu schwer sind, und ehrliche Rückmeldung setzen genau hier an."],
+      ["bei der Selbstbestimmung", "begruendbar", "Auch begründbar: Belohnung und Enttäuschung der Eltern verlagern den Grund nach außen. Solange er nicht glaubt, es zu schaffen, hilft mehr Wahlfreiheit aber wenig."]] },
+    { id: "j2", text: "Was bewirkt die versprochene Belohnung der Eltern nach Deci und Ryan am ehesten?", opt: [
+      ["Sie untergräbt Josefs Freude an Mathe.", "begruendbar", "Der Gedanke passt zum Unterminierungseffekt. Der setzt aber voraus, dass Josef vorher Freude an Mathe hatte – die ist gerade weg."],
+      ["Sie macht Josef intrinsisch motiviert.", "kaum", "Eine Belohnung von außen ist extrinsisch. Sie kann Verhalten anstoßen, aber nicht Freude an der Sache erzeugen."],
+      ["Sie setzt außen an (external) und stärkt sein Kompetenzerleben nicht.", "zentral", "Wer nicht glaubt, es zu schaffen, dem hilft ein Anreiz wenig. Das Bedürfnis, das am wenigsten erfüllt ist, bleibt unberührt."]] }
+  ];
+
+  var STELLEN = [
+    { id: "am", titel: "Amotivation", text: "keine Motivation" },
+    { id: "ex", titel: "external", text: "Belohnung, Strafe" },
+    { id: "in", titel: "introjiziert", text: "innerer Druck, Gewissen" },
+    { id: "id", titel: "identifiziert", text: "selbst für wichtig gehalten" },
+    { id: "ig", titel: "integriert", text: "gehört zu mir, passt zu allem" },
+    { id: "it", titel: "intrinsisch", text: "um der Sache willen" }
+  ];
+  var KARTEN = [
+    ["»Ich lerne Vokabeln, weil meine Eltern mir sonst das Handy wegnehmen.«", "ex", "Der Anstoß kommt von außen: einer Strafe entgehen."],
+    ["»Ich mache die Hausaufgaben, weil ich sonst ein schlechtes Gewissen hätte.«", "in", "Niemand zwingt dich von außen. Der Druck kommt von innen, gehört aber nicht zu dir."],
+    ["»Ich bereite mich aufs Abitur vor, weil ich ein Studium anstrebe, das ich mir selbst ausgesucht habe.«", "id", "Du hältst das Ziel selbst für wichtig. Das Lernen bleibt Mittel zum Zweck."],
+    ["»Ich trainiere, weil Gesundheit zu dem gehört, wer ich sein will – und es passt zu allem, was mir wichtig ist.«", "ig", "Das Ziel ist Teil des Selbst und steht mit keinem anderen Ziel im Konflikt."],
+    ["»Ich lese über Psychologie, weil mich das Thema einfach packt.«", "it", "Die Freude liegt in der Tätigkeit selbst."],
+    ["»Ich poste jeden Tag eine Story, weil ich mich sonst wie ein Außenseiter fühle.«", "in", "Es geht um deinen Selbstwert. Das ist innerer Druck, kein eigenes Ziel."],
+    ["»Ich gehe zur Nachhilfe, weil es dafür 20 € Taschengeld extra gibt.«", "ex", "Eine Belohnung von außen steuert das Verhalten."],
+    ["»Ich sehe nicht, wozu das gut sein soll. Ich mache einfach nichts.«", "am", "Hier gibt es keinen Grund und kein Ziel – weder von außen noch von innen."]
+  ];
+  var W_ALI = [{ id: "ali", text: "Ali möchte unbedingt Psychologie studieren und lernt dafür. Wo steht er auf dem Kontinuum?", opt: [
+    ["intrinsisch", "kaum", "Das Lernen dient dem Studienplatz. Es ist Mittel zum Zweck, nicht Selbstzweck."],
+    ["identifiziert", "zentral", "Ali hält das Ziel selbst für wichtig. Deci und Ryan nennen fast genau dieses Beispiel: Abitur fürs selbst gewählte Studium. Extrinsisch – und doch selbstbestimmt."],
+    ["integriert", "begruendbar", "Möglich, wenn das Studium zu allem passt, was Ali wichtig ist. Der Fall verrät dazu aber nichts."]] }];
+
+  var ITEMS_R = [
+    ["… weil ich sonst Ärger bekomme.", "ex"], ["… weil ich mich sonst schlecht fühlen würde.", "in"], ["… weil ich es für mich wichtig finde.", "id"], ["… weil es mir Spaß macht.", "it"],
+    ["… weil es von mir verlangt wird.", "ex"], ["… weil ich will, dass andere mich für gut halten.", "in"], ["… weil es mir hilft, meine Ziele zu erreichen.", "id"], ["… weil ich die Inhalte spannend finde.", "it"]
+  ];
+  var REG_NAME = { ex: "external", in: "introjiziert", id: "identifiziert", it: "intrinsisch" };
+
+  /* Geschichte: Bilder in eigenen Worten (kein Zitat), dieselben wie in Stunde 1 */
+  var W_GESCHICHTE = [
+    { id: "k4", bild: "Der Diener kommt nicht mehr zur Ruhe, bis die fehlende Münze da ist.", text: "Bild 1: Der Diener kommt nicht mehr zur Ruhe, bis die fehlende Münze da ist. Niemand verlangt das von ihm. – Wo steht er jetzt auf dem Kontinuum?", opt: [
+      ["identifiziert", "kaum", "Er hält das Arbeiten nicht für wertvoll. Es ist nur noch Weg zur Münze."],
+      ["introjiziert", "zentral", "Der Druck kommt von innen, gehört aber nicht zu ihm: Er kann nicht anders, obwohl es ihn unglücklich macht."],
+      ["external", "begruendbar", "Die Münze ist ein Anreiz außerhalb des Tuns. Aber niemand von außen belohnt oder bestraft ihn – er treibt sich selbst."]] },
+    { id: "k5", bild: "Die Münzen waren ein Geschenk, kein Lohn für seine Arbeit.", text: "Bild 2: Die Münzen waren ein Geschenk, kein Lohn für seine Arbeit. – Passt der Unterminierungseffekt?", opt: [
+      ["Ja, genau: Die Belohnung untergräbt seine Freude.", "begruendbar", "Das Ergebnis ist ähnlich. Aber im Experiment gab es das Geld für das Tun. Hier nicht."],
+      ["Teilweise: Das Ergebnis ist ähnlich, eine Bedingung fehlt.", "zentral", "Die Freude verschwindet, weil sich der Grund nach außen verschiebt – wie im Experiment. Die Münzen waren aber keine erwartete Belohnung für die Arbeit."],
+      ["Nein, das hat damit nichts zu tun.", "kaum", "Zu schnell abgetan: Der Wechsel von Freude am Tun zur Arbeit für ein Ziel ist der Kern beider Fälle."]] },
+    { id: "k6", bild: "Am Anfang singt der Diener bei der Arbeit.", text: "Bild 3: Am Anfang singt der Diener bei der Arbeit. – Welches Bedürfnis geht ihm mit der Jagd nach der Münze vor allem verloren?", opt: [
+      ["Selbstbestimmung", "zentral", "Er tut nicht mehr, was er will, sondern was die Münze verlangt. Er ist nicht mehr frei."],
+      ["Kompetenz", "kaum", "Er kann seine Arbeit weiterhin gut. Er arbeitet sogar mehr."],
+      ["soziale Eingebundenheit", "begruendbar", "Möglich, wenn er sich von anderen zurückzieht. Den Kern trifft es nicht."]] }
+  ];
+  var FACH6 = [["Der Diener ist fröhlich bei der Arbeit, obwohl ihm niemand etwas dafür versprochen hat.", "intrinsische Motivation", "k1"], ["Die eine Münze, die zum Hundert fehlt.", "extrinsischer Anreiz: Ziel außerhalb der Handlung", "k2"], ["Der Diener arbeitet mehr als je zuvor – und die Freude ist weg.", "Wechsel der Motivationsform; Intensität steigt, Freude sinkt", "k3"]];
+  var FACH7 = { k4: "introjizierte Regulation: innerer Druck, der nicht zu ihm gehört", k5: "Unterminierungseffekt – nur teilweise: keine Belohnung für das Tun", k6: "Selbstbestimmung geht verloren" };
+
+  var REL = [["", "bitte wählen"], ["foerdern", "fördern, wenn erfüllt,"], ["unter", "kann untergraben:"], ["selbst", "macht selbstbestimmter:"], ["form", "sind Formen von"]];
+  var KANTEN = [
+    { id: "n5", von: "drei Grundbedürfnisse", nach: "intrinsische Motivation", r: "foerdern", tipp: "Sind Kompetenz, Selbstbestimmung und soziale Eingebundenheit erfüllt, tritt intrinsische Motivation wahrscheinlicher auf." },
+    { id: "n6", von: "erwartete Belohnung für das Tun", nach: "intrinsische Motivation", r: "unter", tipp: "Das ist der Unterminierungseffekt (Deci 1971) – unter Bedingungen." },
+    { id: "n7", von: "external · introjiziert · identifiziert · integriert", nach: "extrinsische Motivation", r: "form", tipp: "Die vier Regulationsformen sind Formen der extrinsischen Motivation." },
+    { id: "n8", von: "Internalisierung", nach: "extrinsische Motivation", r: "selbst", tipp: "Werte von außen werden zu eigenen. So rückt extrinsische Motivation auf dem Kontinuum nach rechts." }
+  ];
+  var KANN = ["Ich kann die drei Grundbedürfnisse erklären und mit einem Befund belegen.", "Ich kann Gründe für eine Handlung auf dem Kontinuum einordnen.", "Ich kann die Botschaft einer Geschichte mit der Theorie prüfen."];
+  var KANN_STUFEN = ["sicher", "geht so", "noch nicht"];
+
+  /* ================= Start ================= */
+  function profilHinweis() {
+    var p = d6().test && Object.keys(d6().test).length;
+    $("#profil-hinweis").textContent = p ? "Dein Motivprofil aus Stunde 1 ist auf diesem Gerät. Du brauchst es am Ende." : "Dein Selbsttest aus Stunde 1 ist nicht auf diesem Gerät. Wenn du ihn als Datei gespeichert hast, lade ihn unten. Sonst geht es auch ohne.";
+  }
+  if (st.abruf) $("#abruf-loes").hidden = false;
+  $("#abruf-auf").addEventListener("click", function () { st.abruf = 1; M.merken(); $("#abruf-loes").hidden = false; });
+  profilHinweis();
+
+  /* ================= Spur A ================= */
+  if (!st.ta) st.ta = {};
+  M.skala($("#ta"), ITEMS_A, STUFEN5, st.ta, weiter);
+  M.wahlen($("#wahl-a"), W_A, st, weiter);
+  M.wahlen($("#wahl-b1"), W_B1, st, weiter);
+  M.wahlen($("#wahl-b2"), W_B2, st, weiter);
+  M.wahlen($("#wahl-c"), W_C, st, weiter);
+
+  /* ================= Josef ================= */
+  if (!st.josef) st.josef = {};
+  if (!st.beleg) st.beleg = {};
+  $("#josef-skala").innerHTML = BED.map(function (b, i) {
+    return '<fieldset class="m-item" data-i="' + i + '" style="grid-template-columns:1fr"><legend><strong>' + b + '</strong></legend><div class="m-stufen">' + [1, 2, 3, 4, 5].map(function (v) {
+      return '<label><input type="radio" name="jo' + i + '" value="' + v + '"' + (st.josef[i] === v ? " checked" : "") + '><span aria-hidden="true">' + v + '</span><span class="m-sr">' + (v === 1 ? "kaum erfüllt" : v === 5 ? "voll erfüllt" : "Stufe " + v) + "</span></label>";
+    }).join("") + '<span class="m-klein" style="align-self:center">1 kaum · 5 voll erfüllt</span></div><label class="m-feld" style="margin:0">Beleg aus dem Fall<textarea rows="1" maxlength="160" data-beleg="' + i + '">' + esc(st.beleg[i] || "") + "</textarea></label></fieldset>";
+  }).join("");
+  $("#josef-skala").addEventListener("change", function (e) { if (e.target.type === "radio") { st.josef[e.target.name.slice(2)] = +e.target.value; M.merken(); weiter(); } });
+  $("#josef-skala").addEventListener("input", function (e) { var b = e.target.getAttribute("data-beleg"); if (b !== null) { st.beleg[b] = e.target.value; M.merken(); weiter(); } });
+  M.wahlen($("#wahl-josef"), W_JOSEF, st, weiter);
+
+  /* ================= Kontinuum ================= */
+  function kontBild(punkte) {
+    var x = [70, 190, 310, 430, 550, 690], lab = ["Amotivation", "external", "introjiziert", "identifiziert", "integriert", "intrinsisch"];
+    var s = '<svg class="m-kont" viewBox="0 0 780 150" role="img" aria-label="Kontinuum der Regulation von links nach rechts: Amotivation, external, introjiziert, identifiziert, integriert, intrinsisch. Von nicht selbstbestimmt zu selbstbestimmt. Extrinsisch sind die vier mittleren Formen.">';
+    s += '<text x="190" y="22" class="l">extrinsische Motivation</text><text x="690" y="22" text-anchor="middle" class="l">intrinsisch</text>';
+    s += '<line class="trenn" x1="128" y1="8" x2="128" y2="140"/><line class="trenn" x1="620" y1="8" x2="620" y2="140"/>';
+    s += '<polygon class="keil" points="20,128 760,92 760,128"/>';
+    lab.forEach(function (l, i) { s += '<text x="' + x[i] + '" y="62" text-anchor="middle">' + l + "</text>"; });
+    s += '<text x="20" y="148" class="l">nicht selbstbestimmt</text><text x="760" y="148" text-anchor="end" class="l">selbstbestimmt</text></svg>';
+    return s;
+  }
+  $("#kont-bild").innerHTML = kontBild();
+  var sortK = M.sortieren({ wurzel: $("#sort-kont"), karten: KARTEN, faecher: STELLEN, st: st, key: "kont", klasse: "m-faecher--kontinuum", satz: true, weiter: weiter, fertigText: "Lies die Karten von links nach rechts: Je weiter rechts, desto mehr gehört der Grund zu dir selbst." });
+  M.wahlen($("#wahl-ali"), W_ALI, st, weiter);
+  if (!st.tr) st.tr = {};
+  M.skala($("#tr"), ITEMS_R.map(function (x) { return x[0]; }), STUFEN4, st.tr, weiter);
+  function wort(m) { return m >= 2.5 ? "stimmst du voll zu" : m >= 1.5 ? "stimmst du eher zu" : m >= 0.5 ? "stimmst du eher nicht zu" : "stimmst du gar nicht zu"; }
+  function regMittel() {
+    var r = {}; ["ex", "in", "id", "it"].forEach(function (k) { var v = ITEMS_R.map(function (x, i) { return x[1] === k ? st.tr[i] : null; }).filter(function (v) { return v !== null && v !== undefined; }); r[k] = v.length ? v.reduce(function (a, b) { return a + b; }, 0) / v.length : 0; });
+    return r;
+  }
+  function regBild() {
+    var r = regMittel();
+    $("#reg-balken").innerHTML = ["ex", "in", "id", "it"].map(function (k) {
+      return "<div><b>" + REG_NAME[k] + '</b><span role="img" aria-label="' + REG_NAME[k] + ": " + wort(r[k]) + '"><i style="width:' + Math.round(r[k] / 3 * 100) + '%"></i></span><small>Diesen Gründen ' + wort(r[k]) + ".</small></div>";
+    }).join("");
+  }
+
+  /* ================= Geschichte ================= */
+  M.wahlen($("#wahl-geschichte"), W_GESCHICHTE, st, weiter);
+  function sprachen() {
+    var w6 = d6().wahl || {};
+    $("#sprachen").innerHTML = "<tr><th>Bucays Bild</th><th>Fachsprache</th><th>Deine Begründung</th></tr>" +
+      FACH6.map(function (r) { return "<tr><td>" + esc(r[0]) + '</td><td>' + esc(r[1]) + ' <span class="m-klein">· Stunde 1</span></td><td>' + esc(w6[r[2]] ? w6[r[2]].g : "") + "</td></tr>"; }).join("") +
+      W_GESCHICHTE.map(function (z) { return "<tr><td>" + esc(z.bild) + "</td><td>" + esc(FACH7[z.id]) + "</td><td>" + esc(st.wahl[z.id] ? st.wahl[z.id].g : "") + "</td></tr>"; }).join("") +
+      '<tr><td class="leer">Stunde 3: Die Frösche in der Sahne …</td><td class="leer"></td><td class="leer"></td></tr>';
+  }
+
+  /* ================= Netz ================= */
+  if (!st.netz) st.netz = {};
+  $("#kanten").innerHTML = KANTEN.map(function (k) {
+    return '<li data-n="' + k.id + '"><b>' + esc(k.von) + '</b><select aria-label="Verbindung von ' + esc(k.von) + " nach " + esc(k.nach) + '">' + REL.map(function (r) { return '<option value="' + r[0] + '"' + (st.netz[k.id] === r[0] ? " selected" : "") + ">" + r[1] + "</option>"; }).join("") + "</select><b>" + esc(k.nach) + "</b></li>";
+  }).join("");
+  function relWort(id) { var w = "?"; REL.forEach(function (r) { if (r[0] && r[0] === st.netz[id]) w = r[1].replace(/[:,]$/, ""); }); return w; }
+  function netzBild() {
+    function box(x, y, w, h, t1, t2, cls) { return '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="4"' + (cls ? ' class="' + cls + '"' : "") + '/><text x="' + (x + w / 2) + '" y="' + (y + (t2 ? h / 2 - 4 : h / 2 + 6)) + '" text-anchor="middle"' + (cls === "mitte" ? ' class="mitte"' : "") + ">" + t1 + "</text>" + (t2 ? '<text class="bsp" x="' + (x + w / 2) + '" y="' + (y + h / 2 + 18) + '" text-anchor="middle">' + t2 + "</text>" : ""); }
+    function pf(d, alt) { return '<path d="' + d + '" marker-end="url(#pf7)"' + (alt ? ' style="stroke:var(--stahl)"' : "") + "/>"; }
+    function lab(x, y, t, alt, a) { return '<text class="rel" x="' + x + '" y="' + y + '" text-anchor="' + (a || "middle") + '"' + (alt ? ' style="fill:var(--leise)"' : "") + ">" + esc(t) + "</text>"; }
+    var aria = "Begriffsnetz Stunde 1 und 2. Neu: Drei Grundbedürfnisse " + relWort("n5") + " intrinsische Motivation. Erwartete Belohnung für das Tun " + relWort("n6") + " intrinsische Motivation. Vier Regulationsformen " + relWort("n7") + " extrinsische Motivation. Internalisierung " + relWort("n8") + " extrinsische Motivation.";
+    return '<svg class="m-netz" viewBox="0 0 800 560" role="img" aria-label="' + esc(aria) + '">' +
+      '<defs><marker id="pf7" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--text);stroke:none"/></marker></defs>' +
+      pf("M200 74 L318 168", 1) + pf("M200 222 L296 222", 1) + pf("M482 222 L578 222", 1) + pf("M280 330 L350 266", 1) + pf("M500 330 L430 266", 1) +
+      pf("M150 450 L228 388") + pf("M400 450 L330 388") + pf("M640 450 L560 388") + pf("M640 350 L592 356") +
+      box(20, 20, 200, 56, "Bedingungen", "", "") + box(20, 196, 180, 52, "Motiv") + box(300, 180, 180, 84, "Motivation", "", "mitte") + box(580, 180, 200, 84, "Zielrichtung", "Ausdauer · Intensität") +
+      box(190, 330, 180, 56, "intrinsisch") + box(410, 330, 180, 56, "extrinsisch") + box(640, 322, 150, 56, "Internalisierung") +
+      box(20, 450, 250, 64, "drei Grundbedürfnisse", "Kompetenz · Autonomie · Eingebund.") + box(290, 450, 210, 64, "erwartete Belohnung", "für das Tun") + box(520, 450, 270, 64, "vier Regulationsformen", "external … integriert") +
+      lab(268, 118, "beeinflussen", 1, "start") + lab(248, 212, "setzt in Gang", 1) + lab(530, 212, "zeigt sich in", 1) + lab(390, 316, "sind Formen von", 1) +
+      lab(60, 420, relWort("n5"), 0, "start") + lab(372, 422, relWort("n6"), 0, "start") + lab(662, 426, relWort("n7"), 0, "start") + lab(790, 306, relWort("n8"), 0, "end") +
+      "</svg>";
+  }
+  function netzStand() { $("#netz-bild").innerHTML = netzBild(); $("#netz-pruefen").disabled = !KANTEN.every(function (k) { return st.netz[k.id]; }); }
+  $("#kanten").addEventListener("change", function (e) {
+    var li = e.target.closest("li"), id = li.getAttribute("data-n");
+    if (e.target.value) st.netz[id] = e.target.value; else delete st.netz[id];
+    var r = $(".m-rueck", li); if (r) r.remove(); $("#netz-rueck").innerHTML = ""; st.netzOk = false; M.merken(); netzStand(); weiter();
+  });
+  function netzPruefen(still) {
+    var offen = 0;
+    KANTEN.forEach(function (k) {
+      var li = $('[data-n="' + k.id + '"]'), alt = $(".m-rueck", li); if (alt) alt.remove();
+      var ok = st.netz[k.id] === k.r; if (!ok) offen++;
+      li.insertAdjacentHTML("beforeend", '<div class="m-rueck ' + (ok ? "m-rueck--gut" : "m-rueck--weiter") + '"><strong>' + (ok ? "Passt." : "Passt noch nicht.") + "</strong> " + esc(k.tipp) + "</div>");
+    });
+    st.netzOk = !offen; M.merken();
+    if (!still) $("#netz-rueck").innerHTML = offen ? '<div class="m-rueck m-rueck--weiter"><strong>' + (KANTEN.length - offen) + " von " + KANTEN.length + " Verbindungen passen.</strong> Ändere die anderen und prüfe noch einmal.</div>" : '<div class="m-rueck m-rueck--gut"><strong>Dein Netz steht.</strong> Lies den neuen Teil als Satz: Sind die drei Grundbedürfnisse erfüllt, …</div>';
+    weiter();
+  }
+  $("#netz-pruefen").addEventListener("click", function () { netzPruefen(false); });
+
+  /* ================= Sichern: Blick auf dich ================= */
+  var GRUPPEN6 = { a: "Selbstbestimmung (selbst einteilen, aussuchen)", v: "Vorgaben (Zeit, Ort, Inhalt vorgegeben)", k: "Kompetenz (das Gefühl, es zu können)", s: "soziale Eingebundenheit (Team, zusammen)" };
+  function blick() {
+    var t = d6().test, h = d6().hypo, html = "";
+    if (t && Object.keys(t).length) {
+      var p = (M.daten.profil && M.daten.profil.selbsttest1) || {}, g = p.gruppen || [];
+      if (g.length) {
+        html += "<p>In Stunde 1 hast du angetippt, wann du motiviert bist. Viele Sätze gehörten heimlich zu den drei Bedürfnissen:</p><ul>";
+        ["a", "k", "s", "v"].forEach(function (k) {
+          var v = g.map(function (x, i) { return x === k ? t[i] : null; }).filter(function (v) { return v !== null && v !== undefined; });
+          if (v.length) html += "<li><strong>" + GRUPPEN6[k] + ":</strong> Diesen Sätzen " + wort(v.reduce(function (a, b) { return a + b; }, 0) / v.length) + ".</li>";
+        });
+        html += "</ul>";
+      }
+      if (h) html += '<p class="m-dein">Deine Vermutung aus Stunde 1:</p><blockquote class="m-dein-text">Ich bin vor allem dann motiviert, wenn ' + esc(h) + "</blockquote>";
+    } else html += '<p class="m-klein">Dein Selbsttest aus Stunde 1 ist nicht auf diesem Gerät. Du kannst die Frage trotzdem beantworten.</p>';
+    var a = Object.keys(st.ta).length ? Object.keys(st.ta).reduce(function (s, i) { return s + st.ta[i]; }, 0) / Object.keys(st.ta).length : 0;
+    if (a) html += "<p>Im Kompetenz-Bogen von heute lag dein Durchschnitt bei den Sätzen eher " + (a >= 3.5 ? "im oberen" : a >= 2.5 ? "im mittleren" : "im unteren") + " Bereich.</p>";
+    $("#blick").innerHTML = html + '<p class="m-klein">Das sind Hinweise aus kurzen Bögen, kein Urteil über dich. Du entscheidest, was davon stimmt.</p>';
+  }
+
+  if (!st.kann) st.kann = {};
+  $("#kann").innerHTML = KANN.map(function (k, i) {
+    return "<li><span>" + esc(k) + '</span><span class="m-stufen" role="radiogroup" aria-label="' + esc(k) + '">' + KANN_STUFEN.map(function (s, j) { return '<label><input type="radio" name="kann' + i + '" value="' + j + '"' + (st.kann[i] === j ? " checked" : "") + "><span>" + s + "</span></label>"; }).join("") + "</span></li>";
+  }).join("");
+  $("#kann").addEventListener("change", function (e) { st.kann[e.target.name.slice(4)] = +e.target.value; M.merken(); });
+
+  /* ================= Fortschritt ================= */
+  function weiter() {
+    var aTest = Object.keys(st.ta).length === ITEMS_A.length;
+    $("#a-nach").hidden = !aTest;
+    $$(".m-item", $("#ta")).forEach(function (f) { f.classList.toggle("offen", Object.keys(st.ta).length >= 4 && !aTest && st.ta[f.getAttribute("data-i")] === undefined); });
+    var aOk = !!st.hypA && M.alleGewaehlt(W_A, st);
+    $("#spur-b").hidden = !aOk;
+    $("#b-nach").hidden = !M.alleGewaehlt(W_B1, st);
+    var bOk = !!st.hypB && M.alleGewaehlt(W_B2, st);
+    $("#spur-c").hidden = !bOk;
+    var cOk = !!st.hypC && M.alleGewaehlt(W_C, st);
+    $("#zu-josef").disabled = !cOk;
+    var jOk = BED.every(function (b, i) { return st.josef[i] && (st.beleg[i] || "").trim().length >= 5; });
+    $("#josef-nach").hidden = !jOk;
+    $("#zu-kont").disabled = !(jOk && M.alleGewaehlt(W_JOSEF, st));
+    var kOk = sortK.fertig();
+    $("#kont-nach").hidden = !kOk;
+    $("#reg-teil").hidden = !(kOk && M.alleGewaehlt(W_ALI, st));
+    var rOk = Object.keys(st.tr).length === ITEMS_R.length;
+    $("#reg-bild").hidden = !rOk; if (rOk) regBild();
+    $("#zu-geschichte").disabled = !(kOk && M.alleGewaehlt(W_ALI, st) && rOk);
+    var gOk = M.alleGewaehlt(W_GESCHICHTE, st);
+    $("#geschichte-nach").hidden = !gOk; if (gOk) sprachen();
+    $("#zu-netz").disabled = !gOk;
+    $("#zu-sichern").disabled = !st.netzOk;
+    blick();
+    M.daten.profil = M.daten.profil || {};
+    M.daten.profil.kompetenz2 = { antworten: st.ta };
+    M.daten.profil.regulation2 = { antworten: st.tr, gruppen: ITEMS_R.map(function (x) { return x[1]; }) };
+    M.daten.profil.beduerfnis2 = st.selbst || "";
+    M.merken();
+  }
+  M.festlegen(document, st, weiter);
+  netzStand(); if (st.netzOk) netzPruefen(true); weiter();
+
+  /* ================= Rahmen ================= */
+  M.ansicht($("#ansicht"));
+  M.schritte({ id: "ds07" });
+  M.loeschen({ id: "ds07", stundeWeg: function (d) { if (d.profil) { delete d.profil.kompetenz2; delete d.profil.regulation2; delete d.profil.beduerfnis2; } } });
+  $("#datei-speichern").addEventListener("click", M.alsDatei);
+  $("#datei-laden").addEventListener("change", function (e) {
+    if (!e.target.files[0]) return;
+    M.ausDatei(e.target.files[0], function (ok) { if (ok) location.reload(); else $("#datei-rueck").textContent = "Diese Datei passt nicht. Wähle die Datei »mein-motivprofil.json«."; });
+  });
+
+  /* ================= Druck: Lernmappe (4 Seiten) ================= */
+  function dein(t) { return '<div class="dein">' + esc(t || "") + "</div>"; }
+  function druckBauen() {
+    var w = st.wahl || {};
+    function wahlZeile(z) { var s = w[z.id]; return "<tr><td>" + esc(z.bild || z.text) + "</td><td>" + (s ? esc(z.opt[s.o][0]) : "") + "</td><td>" + (s ? esc(s.g) : "") + "</td></tr>"; }
+    $("#druck").innerHTML =
+      '<section class="m-seite"><p class="meta">Psycho-Labor · Motivation · Stunde 2 · Merkseite</p><h1>Wann wird ein Muss zum Wollen?</h1>' +
+      '<div class="kasten"><strong>Kernsatz:</strong> Intrinsische Motivation entsteht eher, wenn drei Grundbedürfnisse erfüllt sind. Auch extrinsische Motivation kann selbstbestimmt sein – je mehr der Grund zu mir selbst gehört.</div>' +
+      "<h2>Drei Grundbedürfnisse (Deci &amp; Ryan)</h2><table><tr><th>Bedürfnis</th><th>Bedeutung</th><th>Beleg</th></tr>" +
+      "<tr><td>Kompetenz</td><td>sich beim Handeln als fähig erleben</td><td>Aufgaben weder zu leicht noch zu schwer (Harter 1978); positive Rückmeldung stärkt</td></tr>" +
+      "<tr><td>Selbstbestimmung (Autonomie)</td><td>erleben, dass man selbst entscheidet</td><td>Unterminierungseffekt (Deci 1971): erwartete, greifbare Belohnung für das Tun kann die Freude untergraben; ehrliches Lob eher nicht (Deci, Koestner &amp; Ryan 1999)</td></tr>" +
+      "<tr><td>soziale Eingebundenheit</td><td>sich mit anderen verbunden fühlen</td><td>beliebte Kinder, gutes Klassenklima: höhere Motivation (Wigfield u. a. 2006; Jerusalem &amp; Schwarzer 1991) – Zusammenhang, keine bewiesene Ursache</td></tr></table>" +
+      "<h2>Kontinuum der Regulation</h2>" + kontBild() +
+      "<table><tr><th>Form</th><th>Grund</th><th>Beispiel</th></tr>" +
+      "<tr><td>external</td><td>Belohnung bekommen, Strafe vermeiden</td><td>Abitur, weil die Eltern Druck machen</td></tr>" +
+      "<tr><td>introjiziert</td><td>innerer Druck, schlechtes Gewissen; gehört nicht zum Selbst</td><td>Abitur, weil man sich sonst minderwertig vorkäme</td></tr>" +
+      "<tr><td>identifiziert</td><td>selbst für wichtig gehalten; Konflikte mit anderen Zielen möglich</td><td>Abitur für ein selbst gewähltes Studium (Ali)</td></tr>" +
+      "<tr><td>integriert</td><td>Ziel gehört zum Selbst, passt zu allen anderen Zielen; bleibt Mittel zum Zweck</td><td>Training, weil Gesundheit zu mir gehört</td></tr>" +
+      "<tr><td>intrinsisch</td><td>um der Sache selbst willen</td><td>Lesen, weil das Thema packt</td></tr></table>" +
+      "<p><strong>Internalisierung:</strong> Werte und Regeln von außen werden zu eigenen – die Motivation rückt nach rechts.</p>" +
+      '<p class="meta">Quellen: Deci &amp; Ryan (1993), Zeitschrift für Pädagogik 39 (2), 223–238 · Deci (1971) · Deci, Koestner &amp; Ryan (1999), Psychological Bulletin 125 (6) · Schiefele &amp; Schaffner (2015) · Harter (1978). Schaubild in Anlehnung an Deci &amp; Ryan (2002).</p></section>' +
+      '<section class="m-seite"><p class="meta">Merkseite, Seite 2</p><h2>Begriffsnetz <span class="meta">(Modell, Stunde 1 und 2)</span></h2>' + netzBild() +
+      "<h2>Denkwerkzeug: Zusammenhang oder Ursache?</h2><p>Treten zwei Dinge zusammen auf (Korrelation), heißt das noch nicht, dass das eine das andere verursacht (Kausalität). Es kann umgekehrt sein, oder ein Drittes beeinflusst beides. Ursachen zeigt erst ein Experiment wie das von Deci.</p>" +
+      "<h2>Zwei Sprachen: Der Kreis der 99</h2><table><tr><th>Bucays Bild</th><th>Fachsprache</th></tr>" + FACH6.map(function (r) { return "<tr><td>" + esc(r[0]) + "</td><td>" + esc(r[1]) + "</td></tr>"; }).join("") + W_GESCHICHTE.map(function (z) { return "<tr><td>" + esc(z.bild) + "</td><td>" + esc(FACH7[z.id]) + "</td></tr>"; }).join("") + "</table>" +
+      "<h2>Erinnern ohne Heft (Beginn von Stunde 3)</h2><ol><li>Nenne die drei Grundbedürfnisse und je ein Beispiel.</li><li>Was ist der Unterschied zwischen introjiziert und identifiziert?</li><li>Warum passt der Unterminierungseffekt nur teilweise auf den Kreis der 99?</li></ol></section>" +
+      '<section class="m-seite"><p class="meta">Zum Nachlesen · zusammengefasst</p><h1>Die Befunde</h1>' +
+      "<h3>Puzzeln für Geld (Deci 1971)</h3><p>Studierende lösen an drei Terminen Legepuzzles. Am zweiten Termin bekommt eine Gruppe für jedes gelöste Puzzle Geld, die andere nicht; am dritten Termin niemand. In freien Minuten ohne Versuchsleiter beschäftigte sich die bezahlte Gruppe am dritten Termin weniger mit den Puzzles als zu Beginn, die andere nicht.</p>" +
+      "<h3>Wann der Effekt auftritt (Deci, Koestner &amp; Ryan 1999)</h3><p>Eine Auswertung von 128 Experimenten: Erwartete, greifbare Belohnungen für das Tun senken die intrinsische Motivation. Ehrliches, informierendes Lob stärkt sie eher; unerwartete Belohnungen danach schaden kaum. Wie stark der Effekt ist, wird diskutiert.</p>" +
+      "<h3>Soziale Umwelt</h3><ul><li>Beliebte Kinder haben höhere Motivationswerte als wenig beliebte.</li><li>Kooperatives Lernen wirkt meist positiv auf die Motivation.</li><li>Aktivitäten mit Gleichaltrigen sind Jugendlichen besonders wichtig.</li><li>In Klassen mit schlechtem Klima: mehr Hilflosigkeit, Angst, weniger Selbstwertgefühl.</li></ul><p class=\"meta\">nach Wigfield u. a. (2006), Jerusalem &amp; Schwarzer (1991)</p>" +
+      "<h3>Josef in drei Bedürfnissen</h3><table><tr><th>Bedürfnis</th><th>meine Einschätzung (1–5)</th><th>mein Beleg</th></tr>" + BED.map(function (b, i) { return "<tr><td>" + b + "</td><td>" + (st.josef[i] || "") + "</td><td>" + esc(st.beleg[i] || "") + "</td></tr>"; }).join("") + "</table>" +
+      "<h3>Platz für Notizen</h3>" + Array(5).join('<div class="linie"></div>') + "</section>" +
+      '<section class="m-seite"><p class="meta">Meine Eingaben · nur für mich</p><h1>Mein Lernweg</h1>' +
+      "<h3>Meine Vermutungen</h3><p>Kompetent: " + esc(st.hypA || "") + " · Selbstbestimmt: " + esc(st.hypB || "") + " · Eingebunden: " + esc(st.hypC || "") + "</p>" +
+      "<h3>Meine Zuordnungen</h3><table><tr><th>Aussage</th><th>Meine Wahl</th><th>Meine Begründung</th></tr>" + W_JOSEF.concat(W_ALI, W_GESCHICHTE).map(wahlZeile).join("") + "</table>" +
+      "<h3>Stimmt die Botschaft? – mein Urteil</h3>" + dein(st.produkt) +
+      "<h3>Ein Blick auf mich (freiwillig)</h3>" + dein(st.selbst) + "</section>";
+  }
+  window.addEventListener("beforeprint", druckBauen);
+  $("#drucken").addEventListener("click", function () { druckBauen(); window.print(); });
+  if (/[?&]druck=/.test(location.search)) druckBauen();
+})();
+</script>
+</body>
+</html>

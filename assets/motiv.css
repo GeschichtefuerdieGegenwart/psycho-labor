@@ -168,3 +168,30 @@ details.m-hilfe>*:last-child{margin-bottom:0}
   .m-netz rect.mitte{fill:#eee;stroke:#000}
 }
 [data-fest]{margin:0 0 var(--space-6)}
+
+/* ab DS 7 */
+.m-chip--satz{border-radius:var(--radius-sm);text-align:left;white-space:normal;padding:8px 12px;font-weight:400;line-height:1.35;max-width:100%}
+.m-faecher--kontinuum{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:760px){.m-faecher--kontinuum{grid-template-columns:1fr}}
+.m-faecher--kontinuum .m-fach{border-top-width:6px}
+.m-faecher--kontinuum .m-fach:nth-child(1){border-top-color:var(--stahl)}
+.m-faecher--kontinuum .m-fach:nth-child(n+2):nth-child(-n+5){border-top-color:var(--petrol)}
+.m-faecher--kontinuum .m-fach:nth-child(6){border-top-color:var(--honigplatte)}
+.m-kont{width:100%;height:auto;display:block;margin:0 0 var(--space-4)}
+.m-kont text{font:700 16px var(--font-text);fill:var(--text)}
+.m-kont text.l{font-weight:400;fill:var(--leise)}
+.m-kont .keil{fill:var(--petrol-hi);stroke:var(--petrol);stroke-width:2}
+.m-kont .trenn{stroke:var(--stahl);stroke-width:2;stroke-dasharray:6 5}
+.m-balken{display:grid;gap:var(--space-3);margin:0 0 var(--space-4);max-width:var(--zeilenlaenge)}
+.m-balken div{display:grid;grid-template-columns:11rem 1fr;gap:var(--space-3);align-items:center}
+.m-balken b{font-weight:700}
+.m-balken span{display:block;height:28px;background:var(--karton);border-radius:var(--radius-sm);position:relative}
+.m-balken span i{position:absolute;inset:0 auto 0 0;background:var(--kuli);border-radius:var(--radius-sm)}
+.m-balken small{grid-column:2;font-size:1rem;color:var(--leise)}
+@media (max-width:640px){.m-balken div{grid-template-columns:1fr}.m-balken small{grid-column:1}}
+.m-befund{background:var(--flaeche);border-left:6px solid var(--petrol);padding:var(--space-4) var(--space-5);margin:0 0 var(--space-5);max-width:var(--zeilenlaenge)}
+.m-befund>:last-child{margin-bottom:0}
+.m-station{border-top:2px solid var(--linie);padding-top:var(--space-6);margin-top:var(--space-6)}
+.m-station:first-of-type{border-top:0;margin-top:0;padding-top:0}
+.m-luecke{font:italic 600 1.375rem/1.4 var(--font-stimme)}
+.m-raster--vier{grid-template-columns:repeat(auto-fit,minmax(min(100%,13rem),1fr))}

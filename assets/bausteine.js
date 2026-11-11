@@ -206,6 +206,14 @@
     datei: "ds06-antrieb.html"
   };
 
+  B.ds07 = {
+    ds: 7,
+    block: "m",
+    titel: "Wann wird ein Muss zum Wollen?",
+    thema: "Drei Grundbedürfnisse · Kontinuum der Regulation · Der Kreis der 99, zweite Lektüre",
+    datei: "ds07-wollen.html"
+  };
+
   B.wdh1 = {
     block: "w",
     ds: 5.5,
@@ -217,7 +225,6 @@
 
   /* Angekündigte Bausteine (noch nicht gebaut) */
   B.geplant = [
-    { ds: 7, block: "m", titel: "Wann wird ein Muss zum Wollen?", thema: "Drei Grundbedürfnisse · Regulationsformen (Deci und Ryan) · Der Kreis der 99, zweite Lektüre" },
     { ds: 8, block: "m", titel: "Wann lohnt sich Anstrengung?", thema: "Erwartung mal Wert (Eccles) · Leistungsmotivation · Die Frösche in der Sahne" },
     { ds: 9, block: "m", titel: "Wie erkläre ich mir Erfolg?", thema: "Attribution · Selbstwirksamkeit · Der angekettete Elefant" },
     { ds: 10, block: "m", titel: "Wer bin ich im Vergleich?", thema: "Selbstkonzept · Fischteicheffekt" },
