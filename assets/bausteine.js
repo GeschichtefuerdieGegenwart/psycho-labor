@@ -236,6 +236,14 @@
     }
   };
 
+  B.wdh1 = {
+    ds: 5.5,
+    label: "Wiederholung",
+    titel: "Wahrnehmung wiederholen",
+    thema: "Vor der Klassenarbeit: Fragen mit Rückmeldung, Fall, Diskussion, Probeklausur",
+    datei: "wiederholung-wahrnehmung.html"
+  };
+
   /* Angekündigte Bausteine (noch nicht gebaut) */
   B.geplant = [
     { ds: 7, titel: "Die Malstift-Studie", thema: "Belohnung und Motivation" },
