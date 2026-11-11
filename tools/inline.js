@@ -7,7 +7,8 @@ if (!src) { console.error("Bitte Quelldatei angeben."); process.exit(1); }
 const dir = path.dirname(src);
 let html = fs.readFileSync(src, "utf8");
 html = html.replace(/<link rel="stylesheet" href="([^"]+)">/g, (m, href) => {
-  const css = fs.readFileSync(path.join(dir, href), "utf8");
+  /* Schriften: im Quelltext relativ zur CSS-Datei, in der Einzeldatei relativ zur Seite */
+  const css = fs.readFileSync(path.join(dir, href), "utf8").replace(/url\("\.\.\/fonts\//g, 'url("assets/fonts/');
   return "<style>\n/* eingebettet: " + path.basename(href) + " */\n" + css + "\n</style>";
 });
 html = html.replace(/<script src="([^"]+)"><\/script>/g, (m, s) => {

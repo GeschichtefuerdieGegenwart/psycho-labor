@@ -1,0 +1,33 @@
+/* Designsystem »Gegenwart« – Tokens (Stand 27.10.2026), für den Block Motivation im Psycho-Labor.
+   Schriften liegen lokal in assets/fonts/. Themes: hell (Standard), dunkel, beamer über html[data-theme]. */
+@font-face{font-family:"Bricolage Grotesque";src:url("../fonts/BricolageGrotesque96pt-Bold.woff2") format("woff2");font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:"Bricolage Grotesque";src:url("../fonts/BricolageGrotesque-SemiBold.woff2") format("woff2");font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:"Fraunces";src:url("../fonts/Fraunces72pt-SemiBoldItalic.woff") format("woff");font-weight:600;font-style:italic;font-display:swap}
+@font-face{font-family:"Atkinson Hyperlegible Next";src:url("../fonts/AtkinsonHyperlegibleNext-Regular.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Atkinson Hyperlegible Next";src:url("../fonts/AtkinsonHyperlegibleNext-Bold.woff2") format("woff2");font-weight:700;font-style:normal;font-display:swap}
+:root{
+  --grund:#f3efe7;--flaeche:#faf8f3;--karton:#e9e2d7;--text:#2a2622;--leise:#625a52;--stahl:#7d7364;--linie:#e4dccf;
+  --honigplatte:#f2b233;--honig:#a26a1c;--auf-honig:#2a2622;--honig-hi:#f5e8cf;
+  --petrol:#1e6b67;--auf-petrol:#fffdf9;--petrol-hi:#dbeae6;--ueberdruck:#1c4b15;--auf-ueberdruck:#fffdf9;
+  --oxid:#9b402d;--oxid-hi:#f3dfd8;--kuli:#1e4fb5;--marker:#f3d54e;
+  --erfolg:#2e6b34;--erfolg-hi:#dcebdc;--warnung:#8a5300;--warnung-hi:#f5e8cf;--fehler:#b0281c;--fehler-hi:#f6dcd8;
+  --font-display:"Bricolage Grotesque",system-ui,sans-serif;--font-stimme:"Fraunces",Georgia,serif;--font-text:"Atkinson Hyperlegible Next",system-ui,sans-serif;
+  --space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:24px;--space-6:32px;--space-7:48px;--space-8:64px;--space-9:96px;
+  --radius-none:0;--radius-sm:4px;--radius-md:10px;--radius-pill:999px;
+  --platte:6px 6px 0 0 var(--platte-farbe,var(--karton));--platte-knopf:4px 4px 0 0 var(--linie);--fokus-innen:0 0 0 2px #fffdf9;
+  --dauer-druck:100ms;--dauer-schnell:160ms;--dauer-mittel:220ms;--dauer-langsam:300ms;--dauer-aus:150ms;--dauer-aufdecken:420ms;--dauer-wende:460ms;--dauer-reihe:440ms;--dauer-registrieren:280ms;--dauer-staffel:30ms;
+  --kurve-aus:cubic-bezier(0.23,1,0.32,1);--kurve-beidseits:cubic-bezier(0.77,0,0.175,1);--kurve-register:cubic-bezier(0.22,1,0.36,1);--kurve-feder:linear(0,0.5 14%,1.06 32%,0.98 52%,1.01 72%,1);
+  --inhalt:72rem;--zeilenlaenge:68ch;--knopf-hoehe:48px;--tablet-ziel:56px;--chip-hoehe:44px;
+}
+:root[data-theme="dunkel"]{
+  --grund:#181715;--flaeche:#22201d;--karton:#2d2a26;--text:#f3eadb;--leise:#b8ad9e;--stahl:#8f8576;--linie:#3a3631;
+  --honig:#f2b233;--honig-hi:#3a2a10;--petrol:#5cc3c0;--auf-petrol:#12100d;--petrol-hi:#17322f;--ueberdruck:#2f6b3a;--auf-ueberdruck:#f3eadb;
+  --oxid:#db826c;--oxid-hi:#3a221c;--kuli:#8fb0f0;--marker:#6b5a10;
+  --erfolg:#7cc488;--erfolg-hi:#1d3320;--warnung:#e0a34a;--warnung-hi:#3a2a10;--fehler:#f08a7e;--fehler-hi:#3d1c18;--fokus-innen:0 0 0 2px #181715;
+}
+:root[data-theme="beamer"]{
+  --grund:#ffffff;--flaeche:#f6f3ee;--karton:#ece7de;--text:#000000;--leise:#3a342e;--stahl:#4a433b;--linie:#c9c1b4;
+  --honig:#7a4f12;--auf-honig:#000000;--petrol:#0f4f4b;--auf-petrol:#ffffff;--ueberdruck:#13380e;--auf-ueberdruck:#ffffff;
+  --oxid:#7a2e1f;--kuli:#163c8c;--erfolg:#1f4f24;--warnung:#6b4000;--fehler:#8a1e14;--platte-knopf:4px 4px 0 0 #4a433b;--fokus-innen:0 0 0 2px #ffffff;
+}
+@media print{:root{--grund:#fff;--flaeche:#fff;--karton:#eee;--text:#000;--leise:#333;--stahl:#555;--linie:#bbb}}

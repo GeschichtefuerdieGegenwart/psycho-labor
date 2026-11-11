@@ -1,0 +1,170 @@
+/* Block Motivation im Psycho-Labor – Gestaltung nach dem Designsystem »Gegenwart«.
+   Braucht assets/gegenwart/tokens.css und assets/gegenwart/bundle.css. */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:auto}
+body{margin:0;background:var(--grund);color:var(--text);font:400 clamp(1.125rem,1.08rem + .2vw,1.25rem)/1.55 var(--font-text);font-variant-numeric:tabular-nums}
+h1,h2,h3{font-family:var(--font-display);margin:0 0 var(--space-4);text-wrap:balance}
+h1{font-weight:700;font-size:clamp(2.25rem,1.5rem + 3vw,3.75rem);line-height:1.08;letter-spacing:-.015em}
+h2{font-weight:600;font-size:clamp(1.75rem,1.3rem + 1.6vw,2.625rem);line-height:1.12;letter-spacing:-.01em}
+h3{font-weight:600;font-size:clamp(1.375rem,1.2rem + .6vw,1.75rem);line-height:1.2}
+p{margin:0 0 var(--space-4);max-width:var(--zeilenlaenge)}
+ul,ol{margin:0 0 var(--space-4);padding-left:1.3em;max-width:var(--zeilenlaenge)}
+li{margin-bottom:var(--space-2)}
+a{color:inherit;text-underline-offset:.2em;text-decoration-thickness:2px}
+:focus-visible{outline:3px solid var(--text);outline-offset:2px;box-shadow:var(--fokus-innen)}
+[hidden]{display:none!important}
+.m-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.m-meta{font-size:1rem;line-height:1.4;color:var(--leise);margin:0 0 var(--space-2)}
+.m-intro{font-size:clamp(1.25rem,1.15rem + .4vw,1.5rem);line-height:1.45}
+.m-frage{font:italic 600 clamp(1.5rem,1.3rem + .8vw,1.875rem)/1.25 var(--font-stimme);color:var(--oxid);margin:0 0 var(--space-5);max-width:26ch}
+.m-klein{font-size:1rem;line-height:1.5;color:var(--leise)}
+
+/* Kopf und Lernweg */
+.m-kopf{position:sticky;top:0;z-index:20;background:var(--grund);border-bottom:2px solid var(--text)}
+.m-kopf__in{max-width:var(--inhalt);margin:0 auto;padding:var(--space-2) var(--space-4);display:flex;align-items:center;gap:var(--space-4);flex-wrap:wrap}
+.m-marke{font:700 1.25rem/1 var(--font-display);text-decoration:none;display:inline-flex;align-items:center;min-height:44px}
+.m-marke b{display:inline-block;background:var(--honigplatte);color:var(--auf-honig);box-shadow:inset 0 0 0 2px var(--honig);padding:4px 8px;margin-left:8px;font:700 1rem/1.2 var(--font-text);border-radius:var(--radius-sm)}
+.m-weg{list-style:none;display:flex;gap:6px;margin:0;padding:0;flex:1;min-width:0;overflow-x:auto;max-width:none}
+.m-weg li{margin:0;flex:none}
+.m-weg button{-webkit-appearance:none;appearance:none;font:400 1rem/1.2 var(--font-text);min-height:44px;padding:0 12px;background:transparent;color:var(--leise);border:2px solid transparent;border-radius:var(--radius-sm);cursor:pointer;white-space:nowrap}
+.m-weg button[aria-current="step"]{color:var(--text);font-weight:700;border-color:var(--text);background:var(--flaeche)}
+.m-weg button.da::before{content:"✓ ";color:var(--erfolg)}
+main{max-width:var(--inhalt);margin:0 auto;padding:var(--space-6) var(--space-4) var(--space-8)}
+.m-schritt{display:none}
+.m-schritt.akt{display:block}
+:root:not([data-bewegung=weniger]) .m-schritt.akt{animation:m-ein var(--dauer-langsam) var(--kurve-aus)}
+@keyframes m-ein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.m-schritt.akt{animation:none!important}}
+.m-zeit{display:flex;gap:var(--space-2);flex-wrap:wrap;margin:0 0 var(--space-3);font-size:1rem;color:var(--leise)}
+.m-zeit span{box-shadow:inset 0 0 0 2px var(--stahl);border-radius:var(--radius-sm);padding:2px 8px;color:var(--text)}
+.m-weiter{display:flex;gap:var(--space-3);flex-wrap:wrap;align-items:center;margin-top:var(--space-6);padding-top:var(--space-5);border-top:2px solid var(--linie)}
+
+/* Flächen */
+.m-karte{background:var(--flaeche);border-radius:var(--radius-sm);padding:var(--space-5);box-shadow:6px 6px 0 0 var(--platte-farbe,var(--karton));margin:0 0 var(--space-6)}
+.m-karte--honig{--platte-farbe:var(--honigplatte)}
+.m-karte--petrol{--platte-farbe:var(--petrol)}
+.m-karte>:last-child,.g-kasten>:last-child{margin-bottom:0}
+.g-kasten{margin:0 0 var(--space-5)}
+.g-kasten p,.g-kasten ul,.g-kasten ol{margin-bottom:0}
+.g-kasten--sichern{background:var(--petrol-hi)}
+.m-raster{display:grid;gap:var(--space-5);grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr));margin:0 0 var(--space-5)}
+.m-raster .m-karte{margin:0}
+.m-status{display:inline-block;font-weight:700;font-size:1rem;box-shadow:inset 0 0 0 2px var(--stahl);border-radius:var(--radius-sm);padding:2px 8px;margin:0 0 var(--space-3)}
+.m-privat{display:inline-block;font-weight:700;font-size:1rem;background:var(--honig-hi);border-radius:var(--radius-sm);padding:2px 8px;margin:0 0 var(--space-3)}
+.m-dein{color:var(--kuli);font-weight:700}
+.m-dein::before{content:"● ";font-size:.7em;vertical-align:.15em}
+blockquote.m-dein-text{margin:0 0 var(--space-4);padding:var(--space-3) var(--space-4);border-left:6px solid var(--kuli);background:var(--flaeche);color:var(--text);max-width:var(--zeilenlaenge);white-space:pre-wrap}
+
+/* Eingaben */
+label.m-feld{display:grid;gap:var(--space-2);font-weight:700;margin:0 0 var(--space-4);max-width:var(--zeilenlaenge)}
+textarea,select{font:400 1.125rem/1.5 var(--font-text);color:var(--text);background:var(--flaeche);border:2px solid var(--stahl);border-radius:var(--radius-sm);padding:10px 12px;width:100%;min-height:var(--knopf-hoehe)}
+textarea{resize:vertical}
+textarea[readonly]{border-style:dashed;color:var(--kuli)}
+.m-zaehler{font-weight:400;font-size:1rem;color:var(--leise)}
+.g .g-option span{font-size:1.125rem;font-weight:700}
+.g .g-option__urteil{font-weight:400;font-size:1.0625rem;padding:0;border:0;min-height:0;background:transparent;box-shadow:none}
+.g .g-option span span::before,.g .g-option span span::after{display:none!important}
+.g{background:transparent}
+.g-wahl:not([data-zu]) .g-option__urteil{display:none!important}
+.g-wahl legend{font:600 1.25rem/1.3 var(--font-display)}
+.g-wahl{margin:0 0 var(--space-6);max-width:var(--zeilenlaenge)}
+.g-wahl label:not(.g-option){display:grid;gap:var(--space-2);font-weight:700}
+.g-wahl__fuss{display:flex;gap:var(--space-4);align-items:center;flex-wrap:wrap}
+.g-stempel{font-size:1rem;width:auto;height:auto;padding:6px 14px;transform:rotate(-3deg)}
+
+/* Selbsttest */
+.m-test{display:grid;gap:var(--space-2);margin:0 0 var(--space-5);padding:0;border:0}
+.m-item{display:grid;grid-template-columns:1fr auto;gap:var(--space-3);align-items:center;padding:var(--space-2) var(--space-3);background:var(--flaeche);border-radius:var(--radius-sm);border:0;margin:0}
+.m-item legend{float:left;padding:0;width:100%;font-size:1.0625rem}
+.m-item.offen{box-shadow:inset 6px 0 0 var(--honigplatte)}
+.m-stufen{display:flex;gap:6px}
+.m-stufen label{position:relative}
+.m-stufen input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.m-stufen span{display:grid;place-items:center;min-width:44px;min-height:44px;padding:0 8px;border:2px solid var(--stahl);border-radius:var(--radius-sm);background:var(--grund);font-weight:700;font-size:1rem}
+.m-stufen input:checked+span{background:var(--kuli);border-color:var(--kuli);color:var(--flaeche)}
+.m-stufen input:focus-visible+span{outline:3px solid var(--text);outline-offset:2px}
+.m-legende{display:flex;gap:var(--space-4);flex-wrap:wrap;font-size:1rem;color:var(--leise);margin:0 0 var(--space-3)}
+@media (max-width:640px){.m-item{grid-template-columns:1fr}}
+
+/* Sortieren */
+.m-stapel{display:flex;flex-wrap:wrap;gap:var(--space-2);min-height:56px;padding:var(--space-3);background:var(--karton);border-radius:var(--radius-sm);margin:0 0 var(--space-4)}
+.m-chip{-webkit-appearance:none;appearance:none;font:700 1.0625rem/1.2 var(--font-text);min-height:var(--chip-hoehe);padding:0 14px;background:var(--flaeche);color:var(--text);border:2px solid var(--stahl);border-radius:var(--radius-pill);cursor:pointer;touch-action:manipulation}
+.m-chip[aria-pressed="true"]{border-color:var(--kuli);background:var(--kuli);color:var(--flaeche)}
+.m-chip.falsch{border-color:var(--fehler);border-style:dashed}
+.m-chip.falsch::after{content:" – liegt noch nicht richtig";font-weight:400}
+.m-faecher{display:grid;gap:var(--space-4);grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr));margin:0 0 var(--space-4)}
+.m-fach{background:var(--flaeche);border:2px solid var(--stahl);border-radius:var(--radius-md);padding:var(--space-4);display:grid;gap:var(--space-3);align-content:start}
+.m-fach h3{font-size:1.25rem;margin:0}
+.m-fach p{font-size:1rem;margin:0;color:var(--leise)}
+.m-fach__liegt{display:flex;flex-wrap:wrap;gap:var(--space-2);min-height:44px}
+.m-rueck{padding:var(--space-3) var(--space-4);border-radius:var(--radius-sm);margin:0 0 var(--space-4);max-width:var(--zeilenlaenge)}
+.m-rueck--gut{background:var(--erfolg-hi);box-shadow:inset 6px 0 0 var(--erfolg)}
+.m-rueck--weiter{background:var(--warnung-hi);box-shadow:inset 6px 0 0 var(--warnung)}
+
+/* Zwei Sprachen */
+.m-sprachen{width:100%;border-collapse:collapse;margin:0 0 var(--space-5);font-size:1.0625rem}
+.m-sprachen th,.m-sprachen td{text-align:left;vertical-align:top;padding:var(--space-3);border-bottom:2px solid var(--linie)}
+.m-sprachen th{font:600 1.125rem/1.3 var(--font-display)}
+.m-sprachen td:first-child{font:italic 600 1.125rem/1.4 var(--font-stimme);width:46%}
+.m-sprachen td.leer{color:var(--leise)}
+
+@media (max-width:640px){.m-sprachen,.m-sprachen tbody,.m-sprachen tr,.m-sprachen td{display:block;width:100%!important}.m-sprachen tr:first-child{display:none}.m-sprachen td{border-bottom:0;padding:var(--space-2) 0}.m-sprachen tr{border-bottom:2px solid var(--linie);padding:var(--space-2) 0}}
+.m-sprachen td{overflow-wrap:anywhere}
+
+/* Begriffsnetz */
+.m-netz{width:100%;height:auto;display:block;background:var(--flaeche);border-radius:var(--radius-sm);margin:0 0 var(--space-4)}
+.m-netz rect{fill:var(--grund);stroke:var(--text);stroke-width:2}
+.m-netz rect.mitte{fill:var(--honigplatte);stroke:var(--honig)}
+.m-netz text{font:700 17px var(--font-text);fill:var(--text)}
+.m-netz text.mitte{fill:var(--auf-honig)}
+.m-netz text.bsp{font-weight:400;font-size:15px}
+.m-netz text.rel{fill:var(--kuli);font-size:16px}
+.m-netz path{stroke:var(--text);stroke-width:2;fill:none}
+.m-kanten{display:grid;gap:var(--space-3);margin:0 0 var(--space-4);padding:0;list-style:none;max-width:none}
+.m-kanten li{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,14rem) minmax(0,1fr);gap:var(--space-3);align-items:center;margin:0}
+.m-kanten b:last-of-type{text-align:left}
+.m-kanten .m-rueck{grid-column:1/-1;margin:0}
+@media (max-width:640px){.m-kanten li{grid-template-columns:1fr}}
+
+/* Raster und Selbsteinschätzung */
+.m-kriterien{width:100%;border-collapse:collapse;margin:0 0 var(--space-5);font-size:1.0625rem}
+.m-kriterien th,.m-kriterien td{text-align:left;vertical-align:top;padding:var(--space-3);border:2px solid var(--linie)}
+.m-kriterien th{width:9rem;font-family:var(--font-display)}
+.m-kann{display:grid;gap:var(--space-2);margin:0 0 var(--space-5);padding:0;list-style:none;max-width:none}
+.m-kann li{display:grid;grid-template-columns:1fr auto;gap:var(--space-3);align-items:center;background:var(--flaeche);padding:var(--space-2) var(--space-3);border-radius:var(--radius-sm);margin:0}
+@media (max-width:640px){.m-kann li{grid-template-columns:1fr}}
+details.m-hilfe{background:var(--honig-hi);border-radius:var(--radius-md);padding:var(--space-3) var(--space-4);margin:0 0 var(--space-4);max-width:var(--zeilenlaenge)}
+details.m-hilfe summary{font-weight:700;cursor:pointer;min-height:44px;display:flex;align-items:center}
+details.m-hilfe>*:last-child{margin-bottom:0}
+
+/* Fuß */
+.m-fuss{max-width:var(--inhalt);margin:0 auto;padding:var(--space-5) var(--space-4) var(--space-7);border-top:2px solid var(--linie);font-size:1rem;color:var(--leise);display:grid;gap:var(--space-3)}
+.m-fuss__zeile{display:flex;gap:var(--space-4);flex-wrap:wrap;align-items:center}
+.m-fuss select{width:auto;font-size:1rem;min-height:44px}
+.m-fuss label{display:inline-flex;gap:8px;align-items:center;min-height:44px;color:var(--text)}
+.m-loeschen{background:var(--fehler-hi);color:var(--text);padding:var(--space-4);border-radius:var(--radius-md);display:grid;gap:var(--space-3);max-width:var(--zeilenlaenge)}
+
+/* Druck */
+.m-druck{display:none}
+@media print{
+  @page{size:A4;margin:14mm}
+  body{font-size:10.5pt;line-height:1.4;background:#fff}
+  .m-kopf,main,.m-fuss{display:none!important}
+  .m-druck{display:block}
+  .m-druck h1{font-size:19pt;margin-bottom:6pt}
+  .m-druck h2{font-size:13pt;margin:10pt 0 4pt}
+  .m-druck h3{font-size:11pt;margin:8pt 0 3pt}
+  .m-druck p,.m-druck li{margin-bottom:4pt;max-width:none}
+  .m-druck ul,.m-druck ol{max-width:none;margin-bottom:6pt}
+  .m-seite{break-after:page;page-break-after:always}
+  .m-seite:last-child{break-after:auto;page-break-after:auto}
+  .m-druck table{width:100%;border-collapse:collapse;margin:0 0 8pt;font-size:10pt}
+  .m-druck th,.m-druck td{border:1pt solid #777;padding:3pt 5pt;text-align:left;vertical-align:top}
+  .m-druck .kasten{border:1.2pt solid #000;padding:6pt 8pt;margin:0 0 8pt}
+  .m-druck .linie{border-bottom:1pt solid #777;height:18pt}
+  .m-druck .dein{border-left:3pt solid #1e4fb5;padding-left:6pt;white-space:pre-wrap;min-height:14pt}
+  .m-druck .meta{font-size:9pt;color:#333}
+  .m-netz{max-width:150mm;border:1pt solid #777}
+  .m-netz rect.mitte{fill:#eee;stroke:#000}
+}
+[data-fest]{margin:0 0 var(--space-6)}
