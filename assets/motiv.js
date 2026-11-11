@@ -126,5 +126,57 @@
     $("#loeschen-nein").addEventListener("click", function () { box.hidden = true; auf.focus(); });
   };
 
+  /* ---------- Sortieren in Fächer (ab DS 7 gemeinsam genutzt) ----------
+     opt: { wurzel, karten: [[text, fach, tipp]], faecher: [{id, titel, text}], st, key, mind, weiter, satz, fertigText } */
+  M.sortieren = function (opt) {
+    var st = opt.st, key = opt.key, w = opt.wurzel, K = opt.karten, mind = opt.mind || 5;
+    if (!st[key]) st[key] = {};
+    var lage = st[key], gewaehlt = null, geprueft = false;
+    w.innerHTML = '<div class="m-stapel" aria-label="Kartenstapel"></div><div class="m-faecher' + (opt.klasse ? " " + opt.klasse : "") + '"></div>' +
+      '<div class="g-wahl__fuss" style="margin-bottom:var(--space-4)"><button type="button" class="g-knopf g-knopf--sekundaer" data-s="pruefen" disabled>Zwischenstand prüfen</button><button type="button" class="g-knopf g-knopf--still" data-s="zurueck" hidden>Falsche Karten zurück in den Stapel</button></div><div data-s="rueck" aria-live="polite"></div>';
+    var stapel = $(".m-stapel", w), faecher = $(".m-faecher", w), pruefen = $('[data-s="pruefen"]', w), zurueck = $('[data-s="zurueck"]', w), rueck = $('[data-s="rueck"]', w);
+    function chip(i, extra) { return '<button type="button" class="m-chip' + (opt.satz ? " m-chip--satz" : "") + (extra || "") + '" data-k="' + i + '" aria-pressed="' + (gewaehlt === i) + '">' + esc(K[i][0]) + "</button>"; }
+    function zeichnen() {
+      var frei = K.map(function (k, i) { return i; }).filter(function (i) { return !lage[i]; });
+      stapel.innerHTML = frei.length ? frei.map(function (i) { return chip(i); }).join("") : '<span class="m-klein">Alle Karten sind abgelegt.</span>';
+      faecher.innerHTML = opt.faecher.map(function (f) {
+        var drin = K.map(function (k, i) { return i; }).filter(function (i) { return lage[i] === f.id; });
+        return '<div class="m-fach"><h3>' + esc(f.titel) + "</h3>" + (f.text ? "<p>" + esc(f.text) + "</p>" : "") + '<div class="m-fach__liegt">' + drin.map(function (i) { return chip(i, geprueft && K[i][1] !== f.id ? " falsch" : ""); }).join("") + '</div><button type="button" class="g-knopf g-knopf--sekundaer" data-fach="' + f.id + '"' + (gewaehlt === null ? " disabled" : "") + ">Hierhin legen</button></div>";
+      }).join("");
+      var n = Object.keys(lage).length;
+      pruefen.disabled = n < mind; pruefen.textContent = n === K.length ? "Prüfen" : "Zwischenstand prüfen";
+    }
+    function fertig() { return K.every(function (k, i) { return lage[i] === k[1]; }); }
+    function leeren() { geprueft = false; rueck.innerHTML = ""; zurueck.hidden = true; }
+    w.addEventListener("click", function (e) {
+      var c = e.target.closest(".m-chip"), f = e.target.closest("[data-fach]");
+      if (c) { var i = +c.getAttribute("data-k"); if (lage[i]) { delete lage[i]; gewaehlt = i; } else gewaehlt = gewaehlt === i ? null : i; leeren(); M.merken(); zeichnen(); opt.weiter(); }
+      else if (f && gewaehlt !== null) { lage[gewaehlt] = f.getAttribute("data-fach"); gewaehlt = null; leeren(); M.merken(); zeichnen(); opt.weiter(); }
+    });
+    pruefen.addEventListener("click", function () {
+      geprueft = true; zeichnen();
+      var falsch = Object.keys(lage).filter(function (i) { return lage[i] !== K[i][1]; }), n = Object.keys(lage).length;
+      zurueck.hidden = !falsch.length;
+      if (falsch.length) rueck.innerHTML = '<div class="m-rueck m-rueck--weiter"><strong>' + (n - falsch.length) + " von " + n + " Karten liegen passend.</strong> Überlege bei den anderen noch einmal:<ul>" + falsch.map(function (i) { return "<li><strong>" + esc(K[i][0]) + "</strong> " + esc(K[i][2]) + "</li>"; }).join("") + "</ul></div>";
+      else if (n < K.length) rueck.innerHTML = '<div class="m-rueck m-rueck--gut"><strong>Bisher liegt alles passend.</strong> Lege die übrigen Karten ab.</div>';
+      else { st[key + "Ok"] = true; M.merken(); rueck.innerHTML = '<div class="m-rueck m-rueck--gut"><strong>Alle Karten liegen passend.</strong> ' + esc(opt.fertigText || "") + "</div>"; }
+      opt.weiter();
+    });
+    zurueck.addEventListener("click", function () { Object.keys(lage).forEach(function (i) { if (lage[i] !== K[i][1]) delete lage[i]; }); leeren(); M.merken(); zeichnen(); opt.weiter(); });
+    zeichnen();
+    if (st[key + "Ok"]) { geprueft = true; zeichnen(); rueck.innerHTML = '<div class="m-rueck m-rueck--gut"><strong>Alle Karten liegen passend.</strong> ' + esc(opt.fertigText || "") + "</div>"; }
+    return { fertig: function () { return !!st[key + "Ok"] && fertig(); } };
+  };
+
+  /* ---------- Antwortskala (Stufen-Knöpfe) ---------- */
+  M.skala = function (wurzel, items, stufen, ablage, nach) {
+    wurzel.innerHTML = items.map(function (it, i) {
+      return '<fieldset class="m-item" data-i="' + i + '"><legend>' + esc(it) + '</legend><div class="m-stufen">' + stufen.map(function (s) {
+        return '<label><input type="radio" name="' + wurzel.id + i + '" value="' + s[2] + '"' + (ablage[i] === s[2] ? " checked" : "") + '><span aria-hidden="true">' + esc(s[0]) + '</span><span class="m-sr">' + esc(s[1]) + "</span></label>";
+      }).join("") + "</div></fieldset>";
+    }).join("");
+    wurzel.addEventListener("change", function (e) { var f = e.target.closest(".m-item"); if (!f) return; ablage[f.getAttribute("data-i")] = +e.target.value; M.merken(); nach(); });
+  };
+
   window.Motiv = M;
 })();

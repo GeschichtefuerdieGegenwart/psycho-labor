@@ -22,6 +22,7 @@ Interaktive Selbstversuche und Modelle für das Wahlfach Psychologie (J2) – �
 | `ds03-gestalten.html` | DS 3: Gestalt-Labor |
 | `ds04-erwartungen.html` | DS 4: Spielkarten und Wortliste (Erwartungen) |
 | `ds05-andere.html` | DS 5: Lernweg zur Konformität – Herr Fotiou, Punkte, Linien im Gruppenchat, vier Stationen, Zusammenfassung (Fassung 2, siehe `docs/ds05-fassung2.md`) |
+| `ds07-wollen.html` | DS 7: Wann wird ein Muss zum Wollen? – Grundbedürfnisse, Kontinuum der Regulation, Kreis der 99 zweite Lektüre |
 | `ds06-antrieb.html` | DS 6: Was treibt mich an? – erster Lernweg im Block Motivation (Fassung 2, siehe `docs/motivation-block.md`) |
 | `wiederholung-wahrnehmung.html` | Wiederholung vor Klassenarbeit 1: Fragen mit Rückmeldung, Fall, Diskussion; Zusammenfassung, Probeklausur, Lernkarten, Erwartungshorizont als PDF (siehe `docs/wiederholung-wahrnehmung.md`) |
 | `src/` | Quelldateien; `node tools/inline.js src/<datei>.html` erzeugt die Einzeldatei im Hauptordner |

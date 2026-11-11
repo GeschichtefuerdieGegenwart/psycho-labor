@@ -1,6 +1,6 @@
-# Block Motivation (DS 6–11) und DS 6, Fassung 2
+# Block Motivation (DS 6–11): DS 6 und DS 7
 
-Stand: 11. November 2026 · Branch `motivation-ds06`
+Stand: 11. November 2026 · DS 6 live (PR #5) · DS 7 auf Branch `motivation-ds07`
 
 ## Entscheidungen
 
@@ -26,7 +26,7 @@ Speicherschlüssel für den ganzen Block: `psycholabor:motivation:v1`. Löschen:
 | DS | Leitfrage | Material | Bucay |
 | --- | --- | --- | --- |
 | 6 | Was treibt mich an? | M1–M3 | Der Kreis der 99, erste Lektüre |
-| 7 | Wann wird ein Muss zum Wollen? | M4–M5, Regulationsformen-Seite und Quiz | Der Kreis der 99, zweite Lektüre: Stimmt die Botschaft? |
+| 7 | Wann wird ein Muss zum Wollen? | M4–M5, Lösungsbilder, Regulationsseite und Quiz | Der Kreis der 99, zweite Lektüre: Stimmt die Botschaft? |
 | 8 | Wann lohnt sich Anstrengung? | M6, neu: Leistungsmotivation | Die Frösche in der Sahne |
 | 9 | Wie erkläre ich mir Erfolg? | M7, neu: Selbstwirksamkeit | Der angekettete Elefant |
 | 10 | Wer bin ich im Vergleich? | M8–M9 | – |
@@ -66,3 +66,40 @@ Nicht übernommen aus Fassung 1: der Versuch zum Anspruchsniveau mit Kursverglei
 Gelaufen: Durchlauf im Browser ohne Fehler; Wahl ohne Begründung bleibt gesperrt; Netz mit Fehlern sperrt den nächsten Schritt; Stand bleibt nach Neuladen; Löschen entfernt die Eingaben; Lernmappe 4 Seiten A4; 375, 768, 1280 px in Hell, Dunkel und Beamer ohne waagerechtes Scrollen; kein Bildschirmtext unter 16 px.
 
 Nicht gelaufen: echtes iPad (Safari, hoch und quer), Promethean-Board, VoiceOver, Zoom 200 %, Export nach GoodNotes, Datei speichern und laden auf dem iPad, Prüfung durch eine zweite Person, axe.
+
+## DS 7 – Ablauf (`ds07-wollen.html`)
+
+| Schritt | ID | Inhalt | Muster |
+| --- | --- | --- | --- |
+| Start | `#s-start` | Leitfrage, Lernweg, drei Abruffragen zu DS 6 mit Aufdecken, Hinweis aufs Motivprofil | Aufdecken nach eigener Antwort |
+| Grundbedürfnisse | `#s-beduerf` | drei Spuren wie in M4, nacheinander freigeschaltet: Kompetenz-Bogen (M4) → Lückensatz → Harter; Deci 1971 vorhersagen → Befund → Lückensatz → Selbstbestimmung, Bedingungen des Unterminierungseffekts, Lob; Befunde zur sozialen Umwelt → Lückensatz → Eingebundenheit, Denkwerkzeug Korrelation oder Kausalität | Vorhersage → Auflösung, Wahl mit Begründung |
+| Josef | `#s-josef` | drei Bedürfnisse 1–5 mit Beleg (M4, letzte Seite); wo ansetzen; was bewirkt die Belohnung der Eltern | Wahl mit Begründung |
+| Kontinuum | `#s-kont` | Schaubild (nach dem Lösungsbild, Deci & Ryan 2002), vier Formen (M5), acht Karten auf sechs Stellen, Ali aufgelöst (identifiziert, Beispiel aus M5), Selbsttest »Warum lerne ich?« | Zuordnen, Selbsteinschätzung |
+| Geschichte | `#s-geschichte` | »Der Kreis der 99« mit der Theorie: introjiziert, Unterminierungseffekt nur teilweise, Selbstbestimmung; Übersetzungstabelle wächst (mit den Begründungen aus DS 6) | Wahl mit Begründung |
+| Begriffsnetz | `#s-netz` | Netz aus DS 6 grau, vier neue Verbindungen | Zuordnen |
+| Sichern | `#s-sichern` | Urteil »Wer immer mehr will, verliert seine Freude« ab 50 Wörtern → Raster; Blick auf dich: Selbsttest aus DS 6 nach Bedürfnissen aufgeschlüsselt (freiwillig); Kann-Liste; Lernmappe 4 Seiten | Satzanfänge → Kriterienvergleich |
+
+Zeit: etwa 85 Minuten, straff. **Belastung:** mehr als sechs neue Begriffe (drei Bedürfnisse, Unterminierungseffekt, vier Regulationsformen, Internalisierung) – so im erprobten Material angelegt. Kürzungsmöglichkeiten: K1 Spur 3 (Eingebundenheit) als Plenumsgespräch statt Station · K2 Selbsttest »Warum lerne ich?« als Hausaufgabe · K3 Bild 3 der Geschichte streichen.
+
+**Verbindungen über die Stunden:** Ali (offen aus DS 6) wird aufgelöst; die Übersetzungstabelle zeigt die eigenen Begründungen aus DS 6; das Netz übernimmt DS 6; der Selbsttest aus DS 6 wird erst jetzt nach den drei Bedürfnissen aufgeschlüsselt (die Gruppen waren in DS 6 verdeckt).
+
+### Inhalte und Status (DS 7)
+
+| Element | Status |
+| --- | --- |
+| Kompetenz-Bogen, Befunde zur sozialen Umwelt, Josef-Raster | aus dem Unterrichtsmaterial M4, sprachlich geglättet |
+| Deci 1971 (Legepuzzles, drei Termine, freie Zeit) | belegt, vereinfacht; Lehrbuchwissen, nicht am Original geprüft |
+| Bedingungen des Unterminierungseffekts | Deci, Koestner & Ryan 1999 (Psychological Bulletin 125, 627–668; 128 Experimente) – aus Fachwissen, vor dem Einsatz prüfen |
+| Vier Regulationsformen, Abitur-Beispiele, »Regulator und Regulierter« | aus M5 (Deci & Ryan 1993), in eigenen Worten |
+| identifiziert/integriert: »Konflikt mit anderen Zielen« | aus dem Lösungsbild »Kurzbeschreibung« |
+| Selbsttest »Warum lerne ich?« | angelehnt an Ryan & Connell 1989, nicht geprüft, ohne integriert |
+| Bilder aus »Der Kreis der 99« (Unruhe, Geschenk, Singen) | eigene Zusammenfassung aus dem Gedächtnis – **mit dem Buch abgleichen**, besonders »singt bei der Arbeit« und »Geschenk« |
+| Lesart »Wer immer mehr will, verliert seine Freude« | als eine Lesart formuliert, nicht als Bucays Wortlaut |
+
+Korrigiert gegenüber dem Altmaterial: »Decy« → Deci; Unterminierungseffekt mit Bedingungen; »integriert« bleibt Mittel zum Zweck (die alte Regulationsseite nannte es »nicht instrumentell«); kein »Locus of Control«. Nicht übernommen: QR-Videos und Sims-Trailer (keine externen Links in Arbeitsphasen); das Quiz bleibt eigenes Material.
+
+### Prüfung DS 7
+
+Gelaufen: Durchlauf im Browser mit Daten aus DS 6, ohne Fehler; Spuren schalten nacheinander frei; falsche Karten auf dem Kontinuum mit Rückmeldung und Zurücklegen; Stand nach Neuladen; »Nur diese Stunde löschen« lässt DS 6 stehen; Lernmappe 4 Seiten; 375, 768, 1280 px in drei Ansichten ohne waagerechtes Scrollen; kein Bildschirmtext unter 16 px.
+
+Nicht gelaufen: iPad, Board, Datei laden auf dem iPad, VoiceOver, unabhängige Prüfung aus Schülersicht.
