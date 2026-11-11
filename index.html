@@ -6,53 +6,167 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Psycho-Labor">
 <title>Psycho-Labor – Warum ich so ticke</title>
-<link rel="stylesheet" href="assets/lab.css">
+<link rel="stylesheet" href="assets/gegenwart/tokens.css">
 <style>
-  .hero { padding: 26px 0 8px; }
-  .hero h1 { font-size: 42px; margin-bottom: 10px; }
-  .tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; margin: 18px 0 30px; }
-  .tile { display: block; text-decoration: none; color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); min-height: 150px; position: relative; }
-  .tile .ds { font: 700 14px var(--font); letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
-  .tile h3 { margin: 8px 0 6px; }
-  .tile p { margin: 0; color: var(--ink-soft); font-size: 16px; }
-  a.tile p { padding-right: 48px; }
-  .tile.soon { box-shadow: none; background: transparent; border-style: dashed; color: var(--ink-soft); }
-  .tile.soon .ds { color: var(--ink-soft); }
-  .tile .go { position: absolute; right: 18px; bottom: 16px; width: 40px; height: 40px; border-radius: 50%; background: var(--accent); color: #fff; display: grid; place-items: center; font-size: 22px; }
-  footer { color: var(--ink-soft); font-size: 15px; border-top: 1px solid var(--line); padding-top: 16px; }
+  *,*::before,*::after{box-sizing:border-box}
+  body{margin:0;background:var(--grund);color:var(--text);font:400 clamp(1.125rem,1.08rem + .2vw,1.25rem)/1.55 var(--font-text)}
+  h1,h2,h3{font-family:var(--font-display);margin:0;text-wrap:balance}
+  h1{font-weight:700;font-size:clamp(2.75rem,1.55rem + 4.9vw,5.75rem);line-height:1.02;letter-spacing:-.02em}
+  h2{font-weight:700;font-size:clamp(2.25rem,1.5rem + 3vw,3.75rem);line-height:1.08;letter-spacing:-.015em}
+  h3{font-weight:600;font-size:clamp(1.375rem,1.2rem + .6vw,1.75rem);line-height:1.2}
+  p{margin:0;max-width:68ch}
+  a{color:inherit}
+  :focus-visible{outline:3px solid var(--text);outline-offset:2px;box-shadow:var(--fokus-innen)}
+  .huelle{max-width:72rem;margin:0 auto;padding:0 var(--space-4)}
+  .meta{font-size:1rem;line-height:1.4;color:var(--leise)}
+  .frage{font:italic 600 clamp(1.5rem,1.3rem + .8vw,1.875rem)/1.25 var(--font-stimme)}
+
+  /* Kopf */
+  .kopf{padding:var(--space-7) 0 var(--space-6);display:grid;gap:var(--space-4)}
+  .kopf .intro{font-size:clamp(1.25rem,1.15rem + .4vw,1.5rem);line-height:1.45}
+
+  /* Fahrplan der Reihe */
+  .fahrplan{list-style:none;margin:0 0 var(--space-7);padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(9.5rem,1fr));gap:var(--space-2)}
+  .fahrplan li{margin:0}
+  .fahrplan a,.fahrplan span.st{display:grid;gap:2px;min-height:76px;padding:var(--space-3);border-radius:var(--radius-sm);text-decoration:none;border:2px solid var(--linie);background:transparent;color:var(--leise);height:100%}
+  .fahrplan b{font:600 1.125rem/1.2 var(--font-display);color:var(--text)}
+  .fahrplan small{font-size:1rem}
+  .fahrplan .w a{background:var(--petrol);border-color:var(--petrol);color:var(--auf-petrol)}
+  .fahrplan .w a b{color:var(--auf-petrol)}
+  .fahrplan .m a{background:var(--honigplatte);border-color:var(--honig);color:var(--auf-honig)}
+  .fahrplan .m a b{color:var(--auf-honig)}
+  .fahrplan .ka span.st{border-style:dashed;border-color:var(--stahl)}
+
+  /* Block-Bänder */
+  .block{padding:var(--space-7) 0 var(--space-8);border-top:2px solid var(--text)}
+  .block__kopf{display:grid;gap:var(--space-3);margin-bottom:var(--space-6)}
+  .schild{justify-self:start;font:700 1rem/1.3 var(--font-text);padding:4px 10px;border-radius:var(--radius-sm)}
+  .block--w .schild{background:var(--petrol);color:var(--auf-petrol)}
+  .block--m .schild{background:var(--honigplatte);color:var(--auf-honig);box-shadow:inset 0 0 0 2px var(--honig)}
+  .block--m{background:var(--flaeche)}
+  .block--m .frage{color:var(--oxid)}
+
+  /* Block 1: Versuche als Kachelraster */
+  .kacheln{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,16rem),1fr));gap:var(--space-5)}
+  .kachel{display:grid;gap:var(--space-2);align-content:start;background:var(--flaeche);padding:var(--space-5);border-radius:var(--radius-sm);box-shadow:6px 6px 0 0 var(--petrol);text-decoration:none;min-height:11rem}
+  .kachel .pfeil{align-self:end;font-weight:700;margin-top:var(--space-2)}
+  :root:not([data-bewegung=weniger]) .kachel,:root:not([data-bewegung=weniger]) .station a{transition:transform var(--dauer-schnell) var(--kurve-aus),box-shadow var(--dauer-schnell) var(--kurve-aus)}
+  @media (hover:hover) and (pointer:fine){.kachel:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 0 var(--petrol)}.station a:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 0 var(--honigplatte)}}
+  .kachel:active,.station a:active{transform:translate(4px,4px);box-shadow:2px 2px 0 0 var(--karton)}
+  .ka-linie{display:flex;align-items:center;gap:var(--space-4);margin-top:var(--space-7);font-weight:700}
+  .ka-linie::before,.ka-linie::after{content:"";flex:1;border-top:2px dashed var(--stahl)}
+
+  /* Block 2: Lernweg mit sechs Stationen */
+  .weg{list-style:none;margin:0;padding:0;display:grid;gap:var(--space-4);position:relative;max-width:none}
+  .weg::before{content:"";position:absolute;left:27px;top:28px;bottom:28px;border-left:2px solid var(--honig)}
+  .station{display:grid;grid-template-columns:56px 1fr;gap:var(--space-4);align-items:start;margin:0;position:relative}
+  .station .nr{width:56px;height:56px;border-radius:999px;display:grid;place-items:center;font:700 1.375rem/1 var(--font-display);background:var(--flaeche);border:2px solid var(--honig);color:var(--text);position:relative}
+  .station.offen .nr{background:var(--honigplatte);color:var(--auf-honig)}
+  .station a,.station .bald{display:grid;gap:var(--space-2);padding:var(--space-4) var(--space-5);border-radius:var(--radius-sm);text-decoration:none}
+  .station a{background:var(--grund);box-shadow:6px 6px 0 0 var(--honigplatte);border:2px solid var(--honig)}
+  .station .bald{border:2px dashed var(--stahl);color:var(--leise)}
+  .station .bald h3{color:var(--text)}
+  .station .stand{font-weight:700;font-size:1rem}
+  .drei{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr));gap:var(--space-5);margin-bottom:var(--space-6)}
+  .drei div{border-top:6px solid var(--honigplatte);padding-top:var(--space-3);display:grid;gap:var(--space-2);align-content:start}
+
+  .spaeter{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr));gap:var(--space-4)}
+  .spaeter div{border:2px dashed var(--stahl);border-radius:var(--radius-sm);padding:var(--space-4);display:grid;gap:var(--space-2);color:var(--leise)}
+  .spaeter h3{color:var(--text)}
+  footer{border-top:2px solid var(--linie);padding:var(--space-5) 0 var(--space-7);font-size:1rem;color:var(--leise);display:grid;gap:var(--space-3)}
+  footer select{font:400 1rem var(--font-text);min-height:44px;border:2px solid var(--stahl);border-radius:var(--radius-sm);background:var(--flaeche);color:var(--text);padding:0 8px}
+  footer label{color:var(--text)}
 </style>
 </head>
 <body>
-<header class="lab-top">
-  <a class="lab-logo" href="index.html"><span id="logo"></span>Psycho-Labor</a>
-  <span class="lab-title">Wahlfach Psychologie · Warum ich so ticke</span>
+<header class="huelle kopf">
+  <p class="meta">Psycho-Labor · Wahlfach Psychologie J2 · Warum ich so ticke</p>
+  <h1>Was passiert in deinem Kopf?</h1>
+  <p class="intro">Hier probierst du selbst aus, was die Psychologie über Wahrnehmen, Wollen, Erinnern und Denken herausgefunden hat. Jeder Versuch beginnt mit deiner Vermutung und endet mit der Frage: Was heißt das für mich?</p>
 </header>
-<main class="lab-main">
-  <section class="hero">
-    <span class="kicker">Selbstversuche und Modelle</span>
-    <h1>Was passiert in deinem Kopf?</h1>
-    <p class="lead">Hier probierst du selbst aus, was die Psychologie über Wahrnehmen, Wollen, Erinnern und Denken herausgefunden hat. Jeder Versuch beginnt mit deiner Vermutung und endet mit der Frage: Was heißt das für mich?</p>
-  </section>
-  <h2>Bausteine</h2>
-  <div class="tiles" id="tiles"></div>
-  <footer>
-    <p>Datenschutz: Alle Ergebnisse bleiben auf deinem iPad. Diese Seiten senden nichts ins Internet und brauchen keine Anmeldung.</p>
-    <p><a href="auswertung.html">Kursauswertung für die Lehrkraft</a></p>
-    <p class="urheberzeile" style="font-size:1rem;opacity:.72;margin-top:1.5rem">© 2026 Mario Walter · Inhalte CC BY-NC-SA 4.0 · Code MIT · mit KI-Unterstützung entwickelt</p>
-  </footer>
+
+<nav class="huelle" aria-label="Die Reihe im Überblick">
+  <ol class="fahrplan">
+    <li class="w"><a href="#wahrnehmung"><b>Wahrnehmung</b><small>Block 1 · Stunde 2–5</small></a></li>
+    <li class="ka"><span class="st"><b>Klassenarbeit 1</b><small>Wahrnehmung</small></span></li>
+    <li class="m"><a href="#motivation"><b>Motivation</b><small>Block 2 · Stunde 6–11 · läuft</small></a></li>
+    <li><span class="st"><b>Gedächtnis</b><small>in Planung</small></span></li>
+    <li><span class="st"><b>Denken</b><small>in Planung</small></span></li>
+    <li><span class="st"><b>Intelligenz</b><small>in Planung</small></span></li>
+  </ol>
+</nav>
+
+<main>
+<section class="block block--w" id="wahrnehmung">
+  <div class="huelle">
+    <div class="block__kopf">
+      <span class="schild">Block 1 · abgeschlossen</span>
+      <h2>Wahrnehmung</h2>
+      <p class="frage">Sehe ich die Welt, wie sie ist?</p>
+      <p>Vier Versuche: auswählen, ordnen und ergänzen, erwarten, sich anpassen. Dazu die Wiederholung vor der Klassenarbeit.</p>
+    </div>
+    <div class="kacheln" id="kacheln-w"></div>
+    <p class="ka-linie">Hier endet Block 1 · Klassenarbeit 1</p>
+  </div>
+</section>
+
+<section class="block block--m" id="motivation">
+  <div class="huelle">
+    <div class="block__kopf">
+      <span class="schild">Block 2 · läuft</span>
+      <h2>Motivation</h2>
+      <p class="frage">Wie lese ich meine eigene Motivation?</p>
+      <p>Sechs Stunden, ein Weg: erst ein Fall, dann Geschichten von Jorge Bucay, am Ende du selbst. Jede Stunde führt durch die ganze Doppelstunde.</p>
+    </div>
+    <div class="drei">
+      <div><h3>Mein Motivprofil</h3><p>Kurze Selbsttests, nur für dich. Sie sammeln sich über alle Stunden.</p></div>
+      <div><h3>Das Begriffsnetz</h3><p>Jede Stunde kommen Begriffe dazu. Du setzt die Verbindungen.</p></div>
+      <div><h3>Zwei Sprachen</h3><p>Das Bild der Geschichte und der Fachbegriff – nebeneinander.</p></div>
+    </div>
+    <ol class="weg" id="weg-m"></ol>
+  </div>
+</section>
+
+<section class="block" id="spaeter">
+  <div class="huelle">
+    <div class="block__kopf"><h2>Danach</h2><p>Diese Blöcke sind geplant, aber noch nicht gebaut.</p></div>
+    <div class="spaeter">
+      <div><h3>Gedächtnis</h3><p>Was bleibt hängen – und kann ich meinen Erinnerungen trauen?</p></div>
+      <div><h3>Denken</h3><p>Warum stecke ich bei Problemen fest? Entscheide ich vernünftig?</p></div>
+      <div><h3>Intelligenz</h3><p>Was sagt ein IQ-Wert – und kann ich klüger werden?</p></div>
+    </div>
+  </div>
+</section>
 </main>
-<script src="assets/lab.js"></script>
+
+<footer class="huelle">
+  <p><label>Ansicht <select id="ansicht"><option value="hell">Hell</option><option value="dunkel">Dunkel</option><option value="beamer">Beamer</option></select></label></p>
+  <p>Datenschutz: Alle Ergebnisse bleiben auf deinem Gerät. Diese Seiten senden nichts ins Internet und brauchen keine Anmeldung.</p>
+  <p><a href="auswertung.html">Kursauswertung für die Lehrkraft (Block 1)</a></p>
+  <p>© 2026 Mario Walter · Inhalte CC BY-NC-SA 4.0 · Code MIT · mit KI-Unterstützung entwickelt</p>
+</footer>
+
 <script src="assets/bausteine.js"></script>
 <script>
 (function () {
-  var B = window.BAUSTEINE, html = "";
-  document.getElementById("logo").innerHTML = Lab.logo;
-  var items = Object.keys(B).filter(function (k) { return B[k] && B[k].datei; }).map(function (k) { return B[k]; });
-  items.concat(B.geplant.map(function (g) { g.soon = true; return g; })).sort(function (a, b) { return a.ds - b.ds; }).forEach(function (b) {
-    if (b.soon) html += '<div class="tile soon"><div class="ds">DS ' + b.ds + ' · bald</div><h3>' + Lab.esc(b.titel) + "</h3><p>" + Lab.esc(b.thema) + "</p></div>";
-    else html += '<a class="tile" href="' + b.datei + '"><div class="ds">' + (b.label ? Lab.esc(b.label) : "DS " + b.ds) + "</div><h3>" + Lab.esc(b.titel) + "</h3><p>" + Lab.esc(b.thema) + '</p><span class="go">›</span></a>';
-  });
-  document.getElementById("tiles").innerHTML = html;
+  var B = window.BAUSTEINE;
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  var fertig = Object.keys(B).filter(function (k) { return B[k] && B[k].datei; }).map(function (k) { return B[k]; });
+  var alle = fertig.concat(B.geplant.map(function (g) { g.bald = true; return g; })).sort(function (a, b) { return a.ds - b.ds; });
+  document.getElementById("kacheln-w").innerHTML = alle.filter(function (b) { return b.block === "w"; }).map(function (b) {
+    return '<a class="kachel" href="' + b.datei + '"><span class="meta">' + (b.label ? esc(b.label) : "Stunde " + b.ds) + "</span><h3>" + esc(b.titel) + "</h3><p>" + esc(b.thema) + '</p><span class="pfeil">Öffnen <span aria-hidden="true">→</span></span></a>';
+  }).join("");
+  document.getElementById("weg-m").innerHTML = alle.filter(function (b) { return b.block === "m"; }).map(function (b, i) {
+    var innen = "<h3>" + esc(b.titel) + "</h3><p>" + esc(b.thema) + "</p>";
+    return '<li class="station' + (b.bald ? "" : " offen") + '"><span class="nr" aria-hidden="true">' + (i + 1) + "</span>" + (b.bald
+      ? '<div class="bald"><span class="meta">Stunde ' + b.ds + " · in Planung</span>" + innen + "</div>"
+      : '<a href="' + b.datei + '"><span class="stand">Stunde ' + b.ds + " · bereit</span>" + innen + '<span class="stand">Öffnen <span aria-hidden="true">→</span></span></a>') + "</li>";
+  }).join("");
+  var sel = document.getElementById("ansicht"), t = "hell";
+  try { t = localStorage.getItem("g-ansicht") || "hell"; if (localStorage.getItem("g-bewegung") === "weniger") document.documentElement.setAttribute("data-bewegung", "weniger"); } catch (e) {}
+  function setzen(v) { if (v === "hell") document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme", v); }
+  setzen(t); sel.value = t;
+  sel.addEventListener("change", function () { setzen(sel.value); try { localStorage.setItem("g-ansicht", sel.value); } catch (e) {} });
 })();
 </script>
 </body>
