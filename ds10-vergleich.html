@@ -525,7 +525,9 @@ button,input,select,textarea{font:inherit;color:inherit}
 .k-pfeil{display:grid;place-items:center;height:30px;color:var(--text);font:700 1.2rem/1 var(--font-text)}
 .k-mal{grid-area:mal;display:grid;place-items:center}
 .k-mal span{width:36px;height:36px;border-radius:999px;display:grid;place-items:center;background:var(--text);color:var(--grund);font:700 1.3rem/1 var(--font-display)}
-.k-kreis .k-chip{font-size:1rem;min-height:40px;padding:6px 10px}
+.k-kreis .k-chip{font-size:1rem;min-height:44px;padding:6px 10px}
+/* Nur zum Ansehen (frühere Begriffe, Bilder, Übersicht): kleiner, nicht antippbar */
+.k-kreis span.k-chip{min-height:36px}
 .k-kreis--klein .k-station{padding:10px}
 @media (max-width:700px){
   .k-kreis{grid-template-columns:28px minmax(0,1fr);grid-template-areas:"s1 ich" "s1b umgebung" "s2 pf1" "s3 erwartung" "s3b mal" "s3c wert" "s4 pf3" "s5 handeln" "s6 pf4" "s7 ergebnis" "s8 pf5" "s9 erklaerung"}
