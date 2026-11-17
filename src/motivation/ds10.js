@@ -16,9 +16,9 @@
       '<circle cx="' + gx + '" cy="' + ya + '" r="8" class="f-kuli"/><circle cx="' + gx + '" cy="' + yb + '" r="8" class="f-oxid"/>' +
       '<path class="l-kuli" d="M92 44 H126"/><text x="134" y="50">leistungsschwache Klasse</text>' +
       '<path class="l-oxid" d="M92 76 H126"/><text x="134" y="82">leistungsstarke Klasse</text>' +
-      '<text x="' + gx + '" y="' + (y0 + 24) + '" text-anchor="middle" class="t-klein">gleiche Leistung</text>' +
-      '<text x="' + (x1 + 10) + '" y="' + (y0 + 50) + '" text-anchor="end" class="t-leise t-klein">eigene Leistung →</text>' +
-      '<text x="26" y="' + ((y0 + yT) / 2) + '" text-anchor="middle" transform="rotate(-90 26 ' + ((y0 + yT) / 2) + ')" class="t-leise t-klein">Fähigkeitsselbstkonzept →</text></svg>';
+      '<text x="' + gx + '" y="' + (y0 + 24) + '" text-anchor="middle" class="t-18">gleiche Leistung</text>' +
+      '<text x="' + (x1 + 10) + '" y="' + (y0 + 50) + '" text-anchor="end" class="t-leise t-18">eigene Leistung →</text>' +
+      '<text x="26" y="' + ((y0 + yT) / 2) + '" text-anchor="middle" transform="rotate(-90 26 ' + ((y0 + yT) / 2) + ')" class="t-leise t-18">Fähigkeitsselbstkonzept →</text></svg>';
   }
 
   window.STUNDE = {
@@ -43,13 +43,13 @@
           { id: "q2", text: "Was passiert mit der Einschätzung in den ersten Schuljahren?", opt: [
             ["Sie steigt, weil die Kinder mehr können.", "kaum", "Die Kinder können mehr – aber sie vergleichen sich auch mehr. Das Selbstbild sinkt."],
             ["Sie sinkt und passt besser zu den tatsächlichen Leistungen.", "zentral", "Helmke nannte das den Weg »vom Optimisten zum Realisten«. Auch Wigfield fand: Die Einschätzung der eigenen Fähigkeiten sinkt in der Grundschule und noch einmal nach dem Wechsel auf die weiterführende Schule."],
-            ["Sie bleibt gleich.", "kaum", "Sie verändert sich deutlich – vor allem in den ersten Schuljahren."]] },
+            ["Sie bleibt gleich.", "kaum", "Sie verändert sich deutlich: Sie sinkt in den ersten Schuljahren – und bei vielen noch einmal nach dem Wechsel auf die weiterführende Schule."]] },
           { id: "q3", text: "Woher kommt die Veränderung vor allem?", opt: [
             ["Die Kinder werden schlechter.", "kaum", "Sie lernen ja dazu. Nicht die Leistung sinkt, sondern das Bild davon."],
-            ["Die Eltern loben weniger.", "begruendbar", "Rückmeldung von Eltern spielt eine Rolle. Im Material steht aber vor allem: Noten und Vergleiche."],
+            ["Die Eltern loben weniger.", "begruendbar", "Rückmeldung von Eltern spielt eine Rolle. Als wichtigste Gründe gelten aber Noten, Rückmeldungen in der Schule und der wachsende Vergleich mit anderen."],
             ["Sie bekommen Noten und vergleichen sich mit anderen.", "zentral", "Rückmeldungen und Vergleiche formen das Selbstbild. Genau darum geht es heute."]] }
         ] },
-        { typ: "befund", status: "belegte Quelle · vereinfacht", quelle: "Helmke (1998), Vom Optimisten zum Realisten?, in Weinert (Hrsg.), Entwicklung im Kindesalter, 115–132; Wigfield & Eccles (2000), aus dem Unterrichtsmaterial M6 und M9", html: "<p>Junge Kinder überschätzen sich fast alle. Mit den Schuljahren sinkt die Einschätzung und nähert sich den tatsächlichen Leistungen an. Die größte Veränderung kommt nach dem Übergang auf die weiterführende Schule.</p>" }
+        { typ: "befund", status: "belegte Quelle · vereinfacht", quelle: "Helmke (1998), Vom Optimisten zum Realisten?, in Weinert (Hrsg.), Entwicklung im Kindesalter, 115–132; Wigfield & Eccles (2000), aus dem Unterrichtsmaterial M6 und M9", html: "<p>Junge Kinder überschätzen sich fast alle. In den ersten Schuljahren sinkt die Einschätzung deutlich und passt besser zu den Leistungen. Nach dem Wechsel auf die weiterführende Schule sinkt sie bei vielen noch einmal (Wigfield). Als Gründe gelten Noten, Rückmeldungen und der wachsende Vergleich mit anderen.</p>" }
       ] },
       { id: "a3", nr: "3", titel: "Das Bild von mir", sozial: "Plenum, dann allein", min: 12, oeffnet: "ansage", bloecke: [
         { typ: "karten", karten: [
@@ -71,9 +71,9 @@
             ["»Sport liegt mir mehr als Musik.«", "dimensional", "Zwei Bereiche bei dir selbst."],
             ["»Ich schaffe 50 Meter unter acht Sekunden.«", "kriterial", "Ein fester Maßstab, an dem du dich misst."]
           ], fertigText: "Meistens mischen sich die Vergleiche. Wie sich das Selbstkonzept verändert, hängt davon ab, wie stark jemand welchen Vergleich gewichtet." },
-        { typ: "wahl", items: [{ id: "v0", text: "Josef sagt jetzt: »Ich bin in Mathe schlecht.« An der Realschule hielt er sich für gut. Welcher Vergleich steckt vor allem dahinter?", opt: [
-          ["ein sozialer Vergleich mit der neuen Klasse", "zentral", "In der neuen Klasse sind viele stärker – daran misst er sich jetzt. Genau das untersucht der nächste Auftrag."],
-          ["ein temporaler Vergleich mit seinen alten Noten", "begruendbar", "Auch das steckt drin: Sein Halbjahreszeugnis ist schlechter als sein Abschlusszeugnis. Seine Noten sind aber vor allem im Vergleich zur neuen Klasse gesunken."],
+        { typ: "wahl", items: [{ id: "v0", text: "Josef sagt jetzt: »Ich bin in Mathe schlecht.« An der Realschule hielt er sich für gut. Welcher Vergleich steckt dahinter?", opt: [
+          ["ein sozialer Vergleich mit der neuen Klasse", "zentral", "Was »gut« heißt, misst er jetzt an der neuen Klasse – und dort sind viele stärker. Genau das untersucht der nächste Auftrag."],
+          ["ein temporaler Vergleich mit seinen alten Noten", "zentral", "Er vergleicht mit seinen alten Noten: Sein Halbjahreszeugnis ist schlechter als sein Abschlusszeugnis. Warum das Bild gerade jetzt kippt, zeigt der nächste Auftrag."],
           ["ein dimensionaler Vergleich mit Deutsch", "kaum", "Über Deutsch sagt der Fall nichts."]] }] }
       ] },
       { id: "a4", nr: "4", titel: "Kleiner Fisch im großen Teich", sozial: "allein, dann Plenum", min: 14, oeffnet: "nach", bloecke: [
@@ -81,9 +81,9 @@
           ["Lena – sie lernt ja mit den Besten.", "kaum", "Das klingt plausibel, ist aber umgekehrt: Neben lauter Starken fühlt sich Lena eher klein.", "Lena"],
           ["Tom", "zentral", "Neben Schwächeren wirkt dieselbe Leistung größer. Das Selbstkonzept entsteht im Vergleich.", "Tom"],
           ["beide gleich – die Leistung ist ja gleich", "begruendbar", "Logisch gedacht. Das Selbstkonzept entsteht aber im Vergleich: Wer mehr Bessere um sich hat, sieht sich kleiner.", "gleich"]] }] },
-        { typ: "bild", svg: teichBild(), max: "34rem", unterschrift: "Modell nach Marsh (1987) – keine Messwerte. So ähnlich sieht die Grafik in deinem Material M8 aus." },
+        { typ: "bild", svg: teichBild(), max: "36rem", min: 512, name: "Schaubild Fischteicheffekt", unterschrift: "Modell nach Marsh (1987) – keine Messwerte. So ähnlich sieht die Grafik in deinem Material M8 aus." },
         { typ: "befund", status: "belegte Quelle", quelle: "Marsh (1987), The Big-Fish-Little-Pond Effect on Academic Self-Concept, Journal of Educational Psychology 79 (3), 280–295", html: "<p>Bei gleicher Leistung haben Schülerinnen und Schüler in leistungsstarken Klassen ein <b>niedrigeres</b> Fähigkeitsselbstkonzept als in leistungsschwächeren. Herbert Marsh nannte das den <b>Big-Fish-Little-Pond-Effekt</b>, auf Deutsch Fischteicheffekt. Er wurde in vielen Ländern gefunden.</p>" },
-        { typ: "kasten", art: "info", titel: "Und die Leistung? – noch offen", html: "<p>Ob man in einer starken Klasse auch mehr lernt, ist umstritten. Manche Studien finden einen kleinen Vorteil, andere keinen. Sicher ist nur der Effekt aufs Selbstkonzept.</p>" },
+        { typ: "kasten", art: "info", titel: "Und die Leistung? – noch offen", html: "<p>Ob man in einer starken Klasse auch mehr lernt, ist umstritten. Manche Studien finden einen kleinen Vorteil, andere keinen. Gut belegt ist vor allem der Effekt aufs Selbstkonzept.</p>" },
         { typ: "wahl", items: [
           { id: "jo1", text: "Josef war an der Realschule gut in Mathe. Jetzt ist keine Arbeit besser als 3–4. Was erklärt der Fischteicheffekt?", opt: [
             ["Josef ist schlechter geworden.", "kaum", "Das wissen wir nicht. Der Effekt zeigt: Das Selbstkonzept kann sinken, auch wenn die Leistung gleich bleibt."],
@@ -118,7 +118,7 @@
         { typ: "wahl", items: [{ id: "el4", text: "Bild 4: " + bild("el4") + " – Welcher Vergleich fehlt ihm?", opt: [
           ["der soziale Vergleich", "begruendbar", "Ein Vergleich mit anderen Elefanten könnte helfen – siehe gleich: Vorbilder. Was ihm vor allem fehlt, ist der Blick auf sein eigenes Wachstum."],
           ["der temporale Vergleich", "zentral", "Er vergleicht sich nie mit sich selbst früher: Sein Bild von sich stammt aus der Zeit, als er klein war. Sein Selbstkonzept ist veraltet."],
-          ["der kriteriale Vergleich", "kaum", "Einen festen Maßstab hat er: den Pflock. Er prüft ihn nur nie."]] }] },
+          ["der kriteriale Vergleich", "begruendbar", "Stimmt: Er prüft sich nie am Pflock. Vor allem fehlt ihm aber der Blick darauf, wie sehr er gewachsen ist – der temporale Vergleich."]] }] },
         { typ: "text", html: "<p>Albert Bandura (1977) nennt das Zutrauen, eine Handlung selbst ausführen zu können, <b>Selbstwirksamkeitserwartung</b>. Er beschreibt vier Quellen, aus denen es wächst.</p>" },
         { typ: "karten", karten: [
           { art: "honig", titel: "Eigene Erfolge", html: "<p>Ich habe es selbst geschafft. <b>Die stärkste Quelle.</b></p>" },

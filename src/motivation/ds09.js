@@ -15,7 +15,7 @@
     ["Glück oder Zufall", "u|ei", "Glück liegt außerhalb, wechselt und lässt sich nicht beeinflussen."],
     ["Wissen", "k|is", "Wissen liegt in dir und bleibt – und du kannst es durch Lernen verändern."],
     ["Aufgaben\u00ADschwierigkeit", "u|es", "Wie schwer die Aufgabe ist, liegt außerhalb von dir und bleibt gleich. Ändern kannst du sie nicht."],
-    ["Konzentrations\u00ADvermögen", "u|ii", "Konzentration liegt in dir und schwankt von Tag zu Tag. Steuern kannst du sie nur bedingt."],
+    ["Konzen\u00ADtration (Tagesform)", "u|ii", "Wie gut du dich gerade konzentrieren kannst, liegt in dir und schwankt von Tag zu Tag – müde, krank, abgelenkt. Steuern kannst du das kaum."],
     ["dauerhafte Nachhilfe", "k|es", "Hilfe von außen, die bleibt – und die du dir selbst holen kannst."],
     ["einmalige Nachhilfe", "k|ei", "Hilfe von außen, die nur einmal da ist – und die du dir holen kannst."]
   ];
@@ -36,7 +36,7 @@
       { id: "a1", nr: "1", titel: "Erst erinnern", sozial: "allein, ohne Heft", min: 4, oeffnet: "offen", bloecke: [
         { typ: "abruf", min: 3, fragen: E.MERK.ds08.abruf, antworten: [
           "Das Ziel, an dem ich meine Leistung messe. Nach Erfolg steigt es meist, nach Misserfolg sinkt es.",
-          "Dann ist die Motivation null – egal, wie groß der Wert ist.",
+          "Dann ist die Motivation – vereinfacht gesagt – null, egal, wie groß der Wert ist.",
           "Wichtigkeit, Interesse, Nützlichkeit, Kosten."] }
       ] },
       { id: "a2", nr: "2", titel: "Ali und Josef", sozial: "zu zweit", min: 8, oeffnet: "nach", bloecke: [
@@ -63,7 +63,7 @@
           { id: "at2", text: "»Das war einfach Pech.« – Was antwortet Alis Erklärung auf die drei Fragen?", opt: [
             ["in mir · bleibt · nicht beeinflussbar", "kaum", "Pech liegt nicht in Ali. Er schiebt die Ursache gerade von sich weg."],
             ["außerhalb · bleibt · nicht beeinflussbar", "begruendbar", "Außerhalb und nicht beeinflussbar stimmt. Aber Pech bleibt nicht – beim nächsten Mal kann es anders sein."],
-            ["außerhalb · ändert sich · nicht beeinflussbar", "zentral", "Genau: Pech liegt außerhalb, wechselt und lässt sich nicht steuern. Das schützt Alis Selbstwert – sagt ihm aber auch nicht, was er anders machen könnte."]] }
+            ["außerhalb · ändert sich · nicht beeinflussbar", "zentral", "Genau: Pech liegt außerhalb, wechselt und lässt sich nicht steuern. Was daraus für Alis nächste Arbeit folgt, sagst du in Auftrag 4 voraus."]] }
         ] },
         { typ: "text", html: "<h3>Ordne die Ursachen</h3><p>Acht Ursachen, acht Felder: Tippe eine Ursache an, dann das Feld, in das sie gehört. Jedes Feld bekommt genau eine.</p>" },
         { typ: "sortieren", id: "raster", karten: URSACHEN, raster: RASTER, fertigText: "Lies die obere Zeile noch einmal: Das sind die Ursachen, an denen man selbst etwas ändern kann." },
@@ -75,7 +75,7 @@
           { id: "p1", text: "Ali erklärt seine schlechte Note mit Pech. Was sagt die Theorie für die nächste Arbeit voraus?", opt: [
             ["Er erwartet wieder Misserfolg und lernt weniger.", "kaum", "Pech ist instabil: Beim nächsten Mal kann es anders laufen. Seine Erwartung bleibt eher erhalten."],
             ["Seine Erwartung bleibt, er gibt nicht auf – aber er ändert auch nichts an seinem Lernen.", "zentral", "Pech schützt Alis Selbstwert und seine Erwartung. Weil die Ursache außerhalb liegt und nicht kontrollierbar ist, sieht er aber keinen Grund, anders zu lernen."],
-            ["Er lernt mehr, weil er sich ärgert.", "begruendbar", "Möglich – aber nicht aus seiner Erklärung heraus. Ärger über Pech spornt selten zum Lernen an."]] },
+            ["Er lernt mehr, weil er sich ärgert.", "kaum", "Das sagt die Theorie nicht voraus: Pech lässt sich nicht steuern – mehr Lernen ist darauf keine Antwort."]] },
           { id: "p2", text: "Josef erklärt seine schlechte Note mit fehlender Begabung. Was sagt die Theorie voraus?", opt: [
             ["Er strengt sich jetzt erst recht an.", "kaum", "Wozu, wenn es an der Begabung liegt? Eine stabile, nicht kontrollierbare Ursache nimmt der Anstrengung den Sinn."],
             ["Er erwartet wieder Misserfolg – und strengt sich weniger an.", "zentral", "Begabung ist stabil und nicht kontrollierbar. Genau das zeigt sich im Fall: Er macht immer seltener Hausaufgaben. Die Vorhersage passt."],
@@ -88,13 +88,13 @@
         { typ: "merk", titel: "Ein günstiges Attributionsmuster", html: "<p><b>Nach Erfolg:</b> eigene Fähigkeit und Anstrengung – »Ich habe es verstanden und gut geübt.«</p><p><b>Nach Misserfolg:</b> eine Ursache, die sich ändern lässt – »Ich habe zu spät angefangen und falsch geübt.«</p><p class=\"k-klein\">Wer lernmotiviert ist und so erklärt, lernt auf lange Sicht mehr (Unterrichtsmaterial M7, nach Hasselhorn &amp; Gold 2013).</p>" }
       ] },
       { id: "a5", nr: "5", titel: "Gelernt, dass nichts hilft", sozial: "zuhören, dann allein", min: 18, oeffnet: "ansage", bloecke: [
-        { typ: "befund", status: "belegte Quelle · vereinfacht", quelle: "Seligman & Maier (1967), Journal of Experimental Psychology 74", html: "<p><b>Ein Tierversuch aus den 1960er-Jahren:</b> Hunde bekamen leichte Stromstöße. Eine Gruppe konnte sie mit einem Hebel abstellen. Eine zweite Gruppe nicht – bei ihr endeten die Stöße, egal was sie tat. Danach kamen alle in eine Box, in der sie den Stößen leicht entkommen konnten: Sie mussten nur über eine niedrige Wand springen.</p><p class=\"k-klein\">Versuche wie dieser sind heute streng geregelt und umstritten. Wir besprechen ihn, weil er die Forschung zur Hilflosigkeit begründet hat.</p>" },
+        { typ: "befund", status: "belegte Quelle · vereinfacht", quelle: "Seligman & Maier (1967), Journal of Experimental Psychology 74", html: "<p><b>Ein Tierversuch aus den 1960er-Jahren:</b> Hunde bekamen schmerzhafte Stromstöße. Eine Gruppe konnte sie abschalten, indem sie mit der Schnauze gegen eine Platte drückte. Eine zweite Gruppe nicht – bei ihr endeten die Stöße, egal was sie tat. Danach kamen alle in eine Box, in der sie den Stößen leicht entkommen konnten: Sie mussten nur über eine niedrige Wand springen.</p><p class=\"k-klein\">Versuche wie dieser sind heute streng geregelt und umstritten. Wir besprechen ihn, weil er die Forschung zur Hilflosigkeit begründet hat.</p>" },
         { typ: "wahl", items: [{ id: "h1", stimmkarte: true, text: "Deine Vorhersage: Was tun die Hunde der zweiten Gruppe in der neuen Box?", opt: [
           ["Sie springen schnell über die Wand – sie kennen die Stöße ja schon.", "kaum", "Klingt logisch, so kam es aber nicht.", "springen"],
           ["Sie bleiben liegen und versuchen es kaum.", "zentral", "So kam es bei den meisten. Sie hatten gelernt: Was ich tue, ändert nichts.", "bleiben liegen"],
-          ["Sie suchen nach dem Hebel aus dem ersten Teil.", "begruendbar", "Eine kluge Überlegung. Beobachtet wurde aber vor allem, dass sie es gar nicht erst versuchten.", "suchen Hebel"]] }] },
-        { typ: "befund", status: "belegte Quelle · vereinfacht", html: "<p><b>Befund:</b> Die meisten Hunde der zweiten Gruppe versuchten gar nicht erst zu entkommen. Die Hunde der ersten Gruppe sprangen über die Wand. Seligman nannte das <b>erlernte Hilflosigkeit</b>: Wer erlebt, dass sein Handeln nichts bewirkt, erwartet das auch in neuen Situationen – und hört auf, es zu versuchen.</p>" },
-        { typ: "kasten", art: "info", titel: "Fünfzig Jahre später", html: "<p>Neuere Forschung dreht die Deutung teilweise um: Aufgeben ist die Grundreaktion auf lang anhaltende, belastende Ereignisse. Gelernt wird etwas anderes – die Erfahrung, dass man <b>etwas bewirken kann</b>. Diese Erfahrung schützt (Maier &amp; Seligman 2016).</p>" },
+          ["Sie suchen nach der Platte aus dem ersten Teil.", "begruendbar", "Eine kluge Überlegung. Beobachtet wurde aber vor allem, dass sie es kaum versuchten.", "suchen Platte"]] }] },
+        { typ: "befund", status: "belegte Quelle · vereinfacht", html: "<p><b>Befund:</b> Die meisten Hunde der zweiten Gruppe versuchten kaum zu entkommen. Die Hunde der ersten Gruppe sprangen über die Wand. Seligman nannte das <b>erlernte Hilflosigkeit</b>: Wer erlebt, dass sein Handeln nichts bewirkt, erwartet das auch in neuen Situationen – und hört auf, es zu versuchen.</p>" },
+        { typ: "kasten", art: "info", titel: "Fünfzig Jahre später", html: "<p>Neuere Forschung dreht die Deutung teilweise um: Aufgeben ist die Grundreaktion auf lang anhaltende, belastende Ereignisse. Gelernt wird etwas anderes – die Erfahrung, dass man <b>etwas bewirken kann</b>. Diese Erfahrung schützt (Maier &amp; Seligman 2016).</p><p>Nach der klassischen Deutung lernt man: Was ich tue, ändert nichts. Nach der neueren fehlt die gelernte Erfahrung, etwas bewirken zu können. In beiden Deutungen fehlt am Ende dasselbe: die Erwartung, etwas zu bewirken.</p>" },
         { typ: "geschichte", titel: "Der angekettete Elefant", hoerauftrag: "Achte darauf: Was hat der Elefant gelernt – und wann?" },
         { typ: "wahl", items: [
           { id: "el1", text: "Bild 1: " + bild("el1") + " – Was hat er gelernt?", opt: [

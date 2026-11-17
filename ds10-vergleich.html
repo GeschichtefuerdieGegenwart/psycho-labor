@@ -505,7 +505,9 @@ button,input,select,textarea{font:inherit;color:inherit}
 .k-raster__kopf{font:700 1rem/1.25 var(--font-text);padding:8px;background:var(--karton);border-radius:var(--radius-sm);display:grid;align-content:center}
 .k-raster .k-fach{padding:10px;border-width:2px}
 .k-raster .k-fach .g-knopf{min-height:44px;padding:6px 10px;font-size:1rem}
-@media (max-width:900px){.k-raster{grid-template-columns:1fr}.k-raster__kopf--leer{display:none}}
+/* Das Raster bleibt ein Raster, solange das Blatt breit genug ist (auch am iPad hochkant). Erst darunter eine Spalte – dann trägt jedes Feld seine Spalte als Beschriftung. */
+.k-raster__ort{display:none;margin:0 0 6px;font-weight:700;font-size:1rem}
+@container blatt (max-width:40rem){.k-raster{grid-template-columns:1fr}.k-raster__kopf--leer,.k-raster__kopf--spalte{display:none}.k-raster__ort{display:block}}
 
 /* ---------- Motivationskreis ---------- */
 .k-kreis{display:grid;grid-template-columns:34px minmax(0,1fr) 40px minmax(0,1fr);grid-template-areas:"s1 ich . umgebung" "s2 pf1 . pf2" "s3 erwartung mal wert" "s4 pf3 pf3 pf3" "s5 handeln handeln handeln" "s6 pf4 pf4 pf4" "s7 ergebnis ergebnis ergebnis" "s8 pf5 pf5 pf5" "s9 erklaerung erklaerung erklaerung";gap:0 var(--space-2);position:relative}
@@ -632,6 +634,8 @@ details.k-hilfe>*:last-child{margin-bottom:var(--space-3)}
 .k-svg .t-leise{fill:var(--leise);font-weight:400}
 .k-svg .t-gross{font:700 21px/1 var(--font-display)}
 .k-svg .t-klein{font-size:16px}
+.k-svg .t-18{font-size:18px}
+.k-svg .t-20{font-size:20px}
 .k-svg .l-text{stroke:var(--text);fill:none;stroke-width:2}
 .k-svg .l-leise{stroke:var(--stahl);fill:none;stroke-width:2}
 .k-svg .l-linie{stroke:var(--linie);fill:none;stroke-width:1.5}
@@ -740,6 +744,84 @@ select{max-width:100%}
 /* Kartenreihen ohne Waisen: drei nebeneinander, vier als zwei mal zwei */
 @media (min-width:641px){.k-karten--drei{grid-template-columns:repeat(3,minmax(0,1fr))}.k-karten--vier{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:640px){.k-karten--drei,.k-karten--vier{grid-template-columns:1fr}}
+/* ===== Fassung 2.1: Gestaltungsregeln aus Kidu 4.46, GGK M22 4.1 und Demokratiebildung 3.0 ===== */
+/* Screen-Width Rule: Legeseiten nutzen die Breite; Fließtext bleibt bei 72ch */
+.k-seite{container-type:inline-size;container-name:blatt}
+.k-seite p{max-width:72ch}
+@media (min-width:981px){.k-rahmen[data-schmal] .k-seite{max-width:min(84rem,100%)}}
+/* Two-Line Rule: Nummer im Kreis und als kleine Zeile, die Überschrift trägt nur den Titel */
+.k-kicker{margin:0 0 2px;font-size:1rem;font-weight:700;color:var(--leise);letter-spacing:.01em}
+.k-auftrag__kopf h2{margin:0 0 6px}
+/* Deckblatt: erste Handlung im ersten Bildschirm (First-Action, Beamer Rule) */
+.k-deckblatt{display:grid;gap:var(--space-5);align-items:start}
+.k-deckblatt__text{display:grid;gap:var(--space-3)}
+.k-deckblatt__text>*{margin:0}
+.k-deckblatt__ziele{margin:0}
+@container blatt (min-width:54rem){.k-deckblatt{grid-template-columns:minmax(0,1.5fr) minmax(16rem,1fr)}}
+/* Legefläche: links, was zu legen ist (läuft mit), rechts das Ziel – kein Hin- und Herscrollen (GGK M22 4.1) */
+.k-legen{display:grid;gap:var(--space-4)}
+.k-legen>*{min-width:0}
+.k-legen__stapel{display:grid;gap:var(--space-3);align-content:start}
+.k-legen__stapel>*{margin:0}
+.k-legen__titel{font-size:1rem;font-weight:700;color:var(--leise)}
+@container blatt (min-width:52rem){
+  .k-legen:not(.k-legen--oben){grid-template-columns:minmax(14rem,17rem) minmax(0,1fr);gap:var(--space-5);align-items:start}
+  .k-legen:not(.k-legen--oben) .k-legen__stapel{position:sticky;top:84px;max-height:calc(100vh - 100px);overflow-y:auto;padding:var(--space-3);background:var(--grund);border:2px solid var(--linie);border-radius:var(--radius-md)}
+  .k-legen:not(.k-legen--oben) .k-legen__stapel{display:block}
+  .k-legen:not(.k-legen--oben) .k-legen__stapel>*+*{margin-top:var(--space-3)}
+  .k-legen:not(.k-legen--oben) .k-stapel{flex-direction:column;flex-wrap:nowrap;align-items:stretch;background:transparent;padding:0;min-height:0}
+  .k-legen:not(.k-legen--oben) .k-stapel .k-chip{width:100%}
+}
+@media (min-width:981px){.k-legen--oben .k-legen__stapel{position:sticky;top:64px;z-index:5;background:var(--flaeche);padding:8px 0 10px;border-bottom:2px solid var(--linie)}}
+/* Schmales Register auf Legeseiten (»Eine Seitenleiste kostet Breite«): nur die Nummern, Bedienung unten */
+@media (min-width:981px){
+  .k-rahmen[data-schmal]{grid-template-columns:76px minmax(0,1fr)}
+  .k-rahmen[data-schmal] .k-register{padding:var(--space-4) 8px var(--space-6)}
+  .k-rahmen[data-schmal] .k-register__kopf,.k-rahmen[data-schmal] .k-register__fuss,.k-rahmen[data-schmal] .k-reg__text{display:none}
+  .k-rahmen[data-schmal] .k-reg{grid-template-columns:38px;justify-content:center;padding:8px 4px}
+  .k-rahmen[data-schmal]~.k-unten{display:block}
+  .k-rahmen[data-schmal]~.k-unten .k-register__fuss{max-width:84rem;margin:0 auto;padding:var(--space-4) clamp(12px,2.6vw,40px)}
+}
+/* Hochkant am Tablet: Der Stapel bleibt oben stehen, während man zu den Fächern scrollt */
+@media (max-width:980px) and (min-height:900px){
+  .k-legen__stapel{display:block;position:sticky;top:132px;z-index:5;background:var(--flaeche);max-height:32vh;overflow-y:auto;padding:8px 0 10px;border-bottom:2px solid var(--linie)}
+  .k-legen__stapel>*+*{margin-top:var(--space-2)}
+}
+/* Kleine Hilfe in einer Zeile (Analyse): gleiche Zielgröße, weniger Gewicht */
+details.k-hilfe.k-hilfe--klein{background:transparent;padding:0;border-radius:0;max-width:none}
+details.k-hilfe--klein summary{font-weight:600;font-size:1rem;color:var(--leise);text-decoration:underline;text-underline-offset:3px}
+details.k-hilfe--klein[open]{padding:0 0 var(--space-2) var(--space-3);border-left:4px solid var(--honig)}
+details.k-hilfe--klein[open] summary{color:var(--text)}
+/* Freiwillig überspringen */
+.k-frei{display:flex;gap:var(--space-3);align-items:center;flex-wrap:wrap;margin:var(--space-3) 0}
+.k-frei>*{margin:0}
+/* Schaubilder: Schrift schrumpft mit der Grafik – unter der Mindestbreite scrollt das Bild in sich */
+.k-bild-rahmen{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+.k-bild-rahmen>svg{min-width:var(--min-bild,0)}
+.k-bild-rahmen:focus-visible{outline:3px solid var(--text);outline-offset:2px}
+/* Einheitsseite nach der Screen-Width Rule: Übersichten nutzen die Breite, Fließtext bleibt lesbar */
+.h-seite{max-width:min(96rem,100%)}
+.h-seite p{max-width:72ch}
+.h-hero__text{display:grid;gap:var(--space-3);align-content:start}
+.h-hero__text>*{margin:0}
+.h-blick{display:grid;gap:var(--space-3);align-content:start;padding:var(--space-4) var(--space-5);background:var(--flaeche);border:2px solid var(--text);border-radius:var(--radius-md);box-shadow:6px 6px 0 0 var(--honigplatte)}
+.h-blick>*{margin:0}
+.h-blick h2{font-size:1.3rem}
+.h-blick dl{display:grid;gap:var(--space-3);margin:0}
+.h-blick dl>div{display:grid;grid-template-columns:minmax(5.5rem,auto) 1fr;gap:var(--space-3);align-items:baseline;padding-top:var(--space-2);border-top:1px solid var(--linie)}
+.h-blick dt{margin:0;white-space:nowrap}
+.h-blick dt b{font:700 1.9rem/1 var(--font-display)}
+.h-blick dt span{font-size:1rem;color:var(--leise)}
+.h-blick dd{margin:0;font-size:1rem;line-height:1.35}
+@media (min-width:960px){.h-hero{grid-template-columns:minmax(0,1.55fr) minmax(19rem,1fr);column-gap:clamp(24px,4vw,64px);align-items:start}}
+@media (min-width:700px){.h-lk{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (min-width:1700px){.h-lk{grid-template-columns:repeat(8,minmax(0,1fr))}}
+/* Landkarte im Deckblatt einer Stunde: zwei Reihen zu vier statt Waisen */
+@container blatt (min-width:40rem){.k-seite .k-landkarte{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (min-width:700px){.h-ka{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* Kontrast (gemessen): Beschriftung der Rückwirkung in Hell, Kopf des Auftragskastens in Dunkel */
+:root:not([data-theme]) .k-kreis__schiene span{color:#8a5a14}
+:root[data-theme="dunkel"] .k-kasten--auftrag .k-kasten__kopf{color:#7a4f12}
 
 </style>
 </head>
@@ -1327,12 +1409,12 @@ window.EINHEIT = (function () {
 
   /* Begriffe zum Verorten: z = zentrale Station, b = auch begründbare Stationen, kt = Rückmeldung bei »passt kaum« */
   E.BEGRIFFE = {
-    motiv: { ds: "ds06", name: "Motiv", z: "ich", zt: "Ein Motiv bringt die Person mit: einen Beweggrund, den man von außen nicht sieht.",
+    motiv: { ds: "ds06", name: "Motiv", z: "ich", zt: "Ein Motiv bringt die Person dauerhaft mit: eine Vorliebe für bestimmte Ziele.",
       b: { wert: "Ein Motiv macht ein Ziel wertvoll. Es ist aber schon vor der Situation da – als Teil der Person." },
-      kt: "Ein Motiv ist ein Beweggrund in der Person. Er liegt vor dem Handeln, nicht danach." },
+      kt: "Ein Motiv bringt die Person mit – darum gehört es zu »Ich«. Erwartung und Wert fragen, wie ich eine bestimmte Aufgabe einschätze; Ergebnis und Erklärung kommen erst nach dem Handeln." },
     bedingungen: { ds: "ds06", name: "Bedingungen (z. B. Interesse, Vorwissen)", z: "ich", zt: "Interesse und Vorwissen bringt die Person mit. Sie beeinflussen, ob Motivation entsteht.",
       b: { umgebung: "Manche Bedingungen liegen in der Situation – etwa, ob ich mitentscheiden darf.", erwartung: "Vorwissen beeinflusst, ob ich mir etwas zutraue. Das kommt in Stunde 3 genauer." },
-      kt: "Bedingungen sind vor dem Handeln da. Sie beeinflussen, ob Motivation überhaupt entsteht." },
+      kt: "Interesse und Vorwissen bringe ich mit, bevor eine Aufgabe beginnt – darum »Ich«. Sie beeinflussen, ob Motivation überhaupt entsteht." },
     intrinsisch: { ds: "ds06", name: "intrinsische Motivation", z: "wert", zt: "Der Wert liegt in der Tätigkeit selbst: Ich tue es um der Sache willen.",
       b: { handeln: "Es ist eine Form von Motivation. Der Kreis fragt genauer, woher sie ihren Wert bezieht – aus der Sache selbst." },
       kt: "Intrinsisch beschreibt, wofür ich etwas tue. Im Kreis ist das die Frage nach dem Wert." },
@@ -1348,13 +1430,13 @@ window.EINHEIT = (function () {
       kt: "Die Grundbedürfnisse sind angeboren. Sie liegen in der Person, nicht im Ergebnis oder seiner Erklärung." },
     belohnung: { ds: "ds07", name: "erwartete Belohnung für das Tun", z: "umgebung", zt: "Die Belohnung kommt aus der Situation. Sie kann die Freude an der Sache untergraben – unter Bedingungen.",
       b: { wert: "Sie verschiebt den Wert nach außen: Ich tue es für die Belohnung. Ausgelöst wird das aber von der Umgebung." },
-      kt: "Eine Belohnung bietet die Situation an. Sie steht vor dem Handeln, nicht an seinem Ende." },
+      kt: "Eine Belohnung, die man für das Tun erwartet, bietet die Situation an – darum »Umgebung«. Sie wirkt, bevor ich handle; das Ergebnis ist etwas anderes." },
     regulation: { ds: "ds07", name: "Regulationsformen (external … integriert)", z: "wert", zt: "Sie beschreiben, wie sehr der Grund für mein Tun zu mir gehört – also, wofür ich es tue.",
-      b: { ich: "Je weiter rechts auf dem Kontinuum, desto mehr gehört der Grund zum Selbst." },
+      b: { ich: "Je weiter rechts auf dem Kontinuum, desto mehr gehört der Grund zum Selbst.", handeln: "Es sind Formen von Motivation. Der Kreis fragt genauer: Woher kommt der Grund? – das ist der Wert." },
       kt: "Die Regulationsformen beantworten die Frage »Wofür tue ich es?« – das ist der Wert." },
     internalisierung: { ds: "ds07", name: "Internalisierung", z: "wert", zt: "Werte von außen werden zu eigenen: Der Grund für mein Tun rückt nach innen.",
-      b: { ich: "Was internalisiert ist, wird Teil des Selbst.", umgebung: "Die Werte kommen zuerst von außen – von Eltern, Schule, Freunden." },
-      kt: "Internalisierung verändert, warum ich etwas tue. Sie geschieht vor dem Handeln, nicht danach." },
+      b: { ich: "Was internalisiert ist, wird Teil des Selbst.", umgebung: "Die Werte kommen zuerst von außen – von Eltern, Schule, Freunden.", handeln: "Es geht um Motivation, das stimmt. Der Kreis fragt genauer: Woher kommt der Grund? – das ist der Wert." },
+      kt: "Internalisierung verändert, wofür ich etwas tue – das ist die Frage nach dem Wert. Mit »Schaffe ich das?« oder einem Ergebnis hat sie nichts zu tun." },
 
     anspruch: { ds: "ds08", name: "Anspruchsniveau", z: "ergebnis", zt: "Das Anspruchsniveau entscheidet, ob ein Ergebnis als Erfolg erlebt wird: Erfolg ist, was mein Ziel erreicht.",
       b: { erwartung: "Ich setze es mir vor dem Handeln – nah an dem, was ich mir zutraue. Nach Erfolg steigt es meist, nach Misserfolg sinkt es." },
@@ -1365,7 +1447,7 @@ window.EINHEIT = (function () {
     erwartung: { ds: "ds08", name: "Erfolgserwartung", z: "erwartung", zt: "Das ist genau die Frage »Schaffe ich das?«.",
       b: { ich: "Sie hängt eng mit dem Bild von den eigenen Fähigkeiten zusammen. Im Modell ist sie aber ein eigener Faktor." },
       kt: "Die Erfolgserwartung ist die Einschätzung vor dem Handeln: Schaffe ich das?" },
-    wertkomp: { ds: "ds08", name: "Wert: Wichtigkeit, Interesse, Nützlichkeit, Kosten", z: "wert", zt: "Das sind die vier Seiten des Werts nach Eccles: Lohnt es sich – und wofür?",
+    wertkomp: { ds: "ds08", name: "Wert: Wichtigkeit, Interesse, Nützlichkeit, Kosten", z: "wert", zt: "Das sind die vier Seiten des Werts nach Eccles und Wigfield: Lohnt es sich – und wofür?",
       b: { ich: "Was mir wichtig ist und was mich interessiert, bringe ich mit. Im Modell wird daraus der Wert einer Aufgabe." },
       kt: "Die vier Komponenten beschreiben, was eine Aufgabe wert ist." },
 
@@ -1374,9 +1456,9 @@ window.EINHEIT = (function () {
     stabilitaet: { ds: "ds09", name: "Stabilität der Ursache", z: "erklaerung", zt: "Ob eine Ursache bleibt oder sich ändert, ist eine Frage an die Erklärung.",
       b: { erwartung: "Genau hier wirkt sie: Wer stabil erklärt, erwartet beim nächsten Mal dasselbe. Das ist die Rückwirkung im Kreis." },
       kt: "Stabil oder instabil ist eine Eigenschaft der Erklärung eines Ergebnisses." },
-    hilflosigkeit: { ds: "ds09", name: "erlernte Hilflosigkeit", z: "erwartung", zt: "Gelernt wird eine Erwartung: Was ich tue, ändert nichts. Darum wird es gar nicht erst versucht.",
+    hilflosigkeit: { ds: "ds09", name: "erlernte Hilflosigkeit", z: "erwartung", zt: "Nach der klassischen Deutung lernt man: Was ich tue, ändert nichts. Nach neuerer Forschung ist Aufgeben die Grundreaktion, und es fehlt die gelernte Erfahrung, etwas bewirken zu können. In beiden Deutungen fehlt die Erwartung, etwas zu bewirken.",
       b: { erklaerung: "Sie entsteht aus einer Erklärung: Die Ursache liegt außerhalb meiner Kontrolle.", handeln: "Sichtbar wird sie im Handeln – oder genauer: im Nicht-Handeln." },
-      kt: "Erlernte Hilflosigkeit ist eine gelernte Erwartung, dass Handeln nichts bewirkt." },
+      kt: "Erlernte Hilflosigkeit betrifft die Erwartung: Es fehlt die Erwartung, mit dem eigenen Handeln etwas zu bewirken." },
 
     selbstkonzept: { ds: "ds10", name: "Fähigkeitsselbstkonzept", z: "ich", zt: "Das Bild von meinen Fähigkeiten bringe ich in jede Situation mit.",
       b: { erwartung: "Es bestimmt mit, was ich mir zutraue – darum wirkt es direkt auf die Erwartung." },
@@ -1394,8 +1476,8 @@ window.EINHEIT = (function () {
     vorsatz: { ds: "ds11", name: "Wenn-dann-Plan", z: "handeln", zt: "Ein Vorsatz bringt mich vom Wollen ins Tun.",
       b: { umgebung: "Er knüpft das Tun an eine Situation: Wenn ich nach Hause komme, …" },
       kt: "Ein Wenn-dann-Plan hilft beim Umsetzen – also beim Handeln." },
-    loslassen: { ds: "ds11", name: "Loslassen unerreichbarer Ziele", z: "erwartung", zt: "Ist ein Ziel wirklich unerreichbar, sinkt die Erwartung gegen null. Dann ist Loslassen oft gesünder als Festhalten.",
-      b: { wert: "Loslassen heißt auch: dem alten Ziel weniger Wert geben und ein neues suchen.", erklaerung: "Es beginnt mit einer ehrlichen Erklärung: Liegt es an etwas, das ich ändern kann?" },
+    loslassen: { ds: "ds11", name: "Loslassen unerreichbarer Ziele", z: "erwartung", zt: "Ist ein Ziel wirklich unerreichbar, sinkt die Erwartung gegen null. Dann geht Loslassen oft mit mehr Wohlbefinden einher als Festhalten.",
+      b: { wert: "Loslassen heißt auch: dem alten Ziel weniger Wert geben und ein neues suchen.", erklaerung: "Es beginnt mit einer ehrlichen Erklärung: Liegt es an etwas, das ich ändern kann?", handeln: "Loslassen ist auch eine Entscheidung: aufhören und ein neues Ziel suchen." },
       kt: "Loslassen ist eine Antwort auf eine sehr niedrige Erwartung." }
   };
 
@@ -1445,8 +1527,8 @@ window.EINHEIT = (function () {
     { id: "k4", kurz: "keine Ruhe mehr", ds: "ds07", geschichte: "Der Kreis der 99", bild: "Der Diener kommt nicht mehr zur Ruhe, bis die fehlende Münze da ist.", fach: "introjizierte Regulation: innerer Druck, der nicht zu ihm gehört" },
     { id: "k5", kurz: "Geschenk, kein Lohn", ds: "ds07", geschichte: "Der Kreis der 99", bild: "Die Münzen waren ein Geschenk, kein Lohn für seine Arbeit.", fach: "Unterminierungseffekt – nur teilweise: keine Belohnung für das Tun" },
     { id: "k6", kurz: "singt bei der Arbeit", ds: "ds07", geschichte: "Der Kreis der 99", bild: "Am Anfang singt der Diener bei der Arbeit.", fach: "Selbstbestimmung geht verloren" },
-    { id: "fr1", kurz: "erster Frosch hört auf", ds: "ds08", geschichte: "Die Frösche in der Sahne", bild: "Der erste Frosch fragt, welchen Sinn es hat, sich für eine aussichtslose Sache abzustrampeln – und hört auf.", fach: "Erfolgserwartung sinkt auf null – mit ihr der Wert des Strampelns (Erwartung × Wert = 0)" },
-    { id: "fr2", kurz: "zweiter strampelt weiter", ds: "ds08", geschichte: "Die Frösche in der Sahne", bild: "Auch der zweite Frosch hält die Lage für aussichtslos – und strampelt trotzdem weiter.", fach: "Wert liegt im Kämpfen selbst; erwartet wird das Weiterkämpfen, nicht das Entkommen" },
+    { id: "fr1", kurz: "erster Frosch hört auf", ds: "ds08", geschichte: "Die Frösche in der Sahne", bild: "Der erste Frosch fragt, welchen Sinn es hat, sich für eine aussichtslose Sache abzustrampeln – und hört auf.", fach: "Erwartung null, Wert hoch: Erwartung × Wert = 0" },
+    { id: "fr2", kurz: "zweiter strampelt weiter", ds: "ds08", geschichte: "Die Frösche in der Sahne", bild: "Auch der zweite Frosch hält die Lage für aussichtslos – und strampelt trotzdem weiter.", fach: "umstritten: Weiterkämpfen als eigener Wert – oder Grenze des Modells" },
     { id: "fr3", kurz: "Butter – er springt heraus", ds: "ds08", geschichte: "Die Frösche in der Sahne", bild: "Aus der Sahne wird Butter – der zweite Frosch springt heraus.", fach: "Erfolg wirkt zurück: Erwartung und Anspruchsniveau steigen" },
     { id: "el1", kurz: "zerrt vergeblich", ds: "ds09", geschichte: "Der angekettete Elefant", bild: "Der kleine Elefant zerrt tagelang am Pflock – vergeblich. Eines Tages gibt er auf.", fach: "erlernte Hilflosigkeit entsteht: Handeln bewirkt nichts" },
     { id: "el2", kurz: "versucht es nicht mehr", ds: "ds09", geschichte: "Der angekettete Elefant", bild: "Der große Elefant könnte den Pflock mühelos herausreißen. Er versucht es nicht.", fach: "erlernte Hilflosigkeit zeigt sich: alte Erfahrung, neue Lage" },
@@ -1459,10 +1541,10 @@ window.EINHEIT = (function () {
   /* Merkseiten: je Stunde Kernsatz, höchstens sechs Begriffe, ein Denkwerkzeug, Abruf für die nächste Stunde */
   E.MERK = {
     ds06: {
-      kernsatz: "Motivation sieht man nicht. Man erkennt sie am Verhalten – daran, wofür sich jemand entscheidet, wie lange er dranbleibt und wie sehr er sich anstrengt. Ob ihr Wert in der Sache selbst liegt oder außerhalb, unterscheidet intrinsische und extrinsische Motivation.",
+      kernsatz: "Motiv und Motivation sieht man nicht. Man erkennt Motivation am Verhalten – daran, wofür sich jemand entscheidet, wie lange er dranbleibt und wie sehr er sich anstrengt. Ob ihr Wert in der Sache selbst liegt oder außerhalb, unterscheidet intrinsische und extrinsische Motivation.",
       begriffe: [
-        ["Motiv", "Beweggrund, von außen nicht erkennbar; aktiviert Verhalten", "Josef möchte seinen Vater nicht enttäuschen."],
-        ["Motivation", "Vorgang, in dem ein Motiv Verhalten in Gang setzt und auf ein Ziel ausrichtet; Hasselhorn: »aktuelle Ausrichtung des momentanen Lebensvollzugs auf einen als positiv bewerteten Zielzustand«. Lernmotivation: Motivation, die sich auf das Lernen richtet", "Melissa setzt sich hin und lernt – jetzt."],
+        ["Motiv", "was jemand dauerhaft mitbringt: eine Vorliebe für bestimmte Ziele, etwa etwas zu leisten oder dazuzugehören; man erschließt es aus dem Verhalten", "Josef möchte seinen Vater nicht enttäuschen."],
+        ["Motivation", "was jetzt wirkt, wenn ein Motiv auf einen passenden Anreiz der Situation trifft; Rheinberg (zitiert bei Hasselhorn &amp; Gold): »aktivierende Ausrichtung des momentanen Lebensvollzuges auf einen positiv bewerteten Zielzustand«. Lernmotivation: Motivation, die sich auf das Lernen richtet", "Melissa setzt sich hin und lernt – jetzt."],
         ["Bedingungen", "beeinflussen, ob Motivation entsteht: Interesse, Selbstbestimmung, soziale Eingebundenheit, Vorwissen", "»Ich check es ohnehin nicht.«"],
         ["Verhaltensmerkmale", "Zielrichtung, Ausdauer, Intensität (auch: Verarbeitungstiefe)", "Josef fängt immer seltener an (Zielrichtung)."],
         ["intrinsisch", "um der Sache selbst willen; das Ziel liegt in der Handlung (Interesse, Neugier, Flow)", "Melissa vergisst beim Lernen die Zeit."],
@@ -1470,7 +1552,7 @@ window.EINHEIT = (function () {
       ],
       denkwerkzeug: ["Beschreiben – erklären – bewerten", "<b>Beschreiben:</b> Was kann ich beobachten? · <b>Erklären:</b> Welcher Grund könnte dahinterstehen? · <b>Bewerten:</b> Wie finde ich das? – Psychologie beginnt beim Beschreiben. »Faul« ist eine Bewertung, keine Erklärung."],
       abruf: ["Was ist der Unterschied zwischen Motiv und Motivation?", "Woran erkennt man Motivation von außen? Nenne drei Merkmale.", "Was hat sich beim Diener im Kreis der 99 verändert – in Fachsprache?"],
-      quellen: "Unterrichtsmaterial M1–M3 · Deci &amp; Ryan (1993), Zeitschrift für Pädagogik 39 (2), 223–238 · Hasselhorn &amp; Gold, Pädagogische Psychologie · Csikszentmihalyi (1975)"
+      quellen: "Unterrichtsmaterial M1–M3 · Deci &amp; Ryan (1993), Zeitschrift für Pädagogik 39 (2), 223–238 · Rheinberg, Motivation (zitiert bei Hasselhorn &amp; Gold, Pädagogische Psychologie) · Csikszentmihalyi (1975)"
     },
     ds07: {
       kernsatz: "Intrinsische Motivation entsteht eher, wenn drei Grundbedürfnisse erfüllt sind. Auch extrinsische Motivation kann selbstbestimmt sein – je mehr der Grund zu mir selbst gehört.",
@@ -1489,15 +1571,15 @@ window.EINHEIT = (function () {
     ds08: {
       kernsatz: "Ob ich mich anstrenge, hängt an zwei Fragen: Schaffe ich das? (Erwartung) und Was ist es mir wert? (Wert). Ist eine der Antworten »gar nicht«, bleibt die Motivation aus.",
       begriffe: [
-        ["Anspruchsniveau", "das Ziel, an dem jemand seine Leistung misst; steigt meist nach Erfolg, sinkt nach Misserfolg (Hoppe 1930)", "Nach einem Treffer stellen sich viele weiter weg."],
+        ["Anspruchsniveau", "das Ziel, an dem jemand seine Leistung misst; steigt meist nach Erfolg, sinkt nach Misserfolg (Hoppe 1930)", "Nach einer guten Note nimmt man sich oft mehr vor."],
         ["Leistungsmotiv", "eher Erfolg suchen (Hoffnung auf Erfolg) oder eher Misserfolg meiden (Furcht vor Misserfolg)", "Wer Misserfolg meidet, wählt oft sehr leichte oder sehr schwere Aufgaben."],
         ["Risikowahl (Atkinson)", "Antrieb = Erfolgswahrscheinlichkeit × Anreiz; für Erfolgsuchende am größten bei mittlerer Schwierigkeit", "ein Ziel »schwer, aber machbar«"],
         ["Erfolgserwartung", "Einschätzung, ob ich eine Aufgabe schaffe", "»Ich check es ohnehin nicht.« (Josef)"],
-        ["Wert (Eccles)", "Wichtigkeit · Interesse · Nützlichkeit · Kosten", "»Mathe brauche ich für die Ausbildung.« (Nützlichkeit)"],
+        ["Wert (Eccles und Wigfield)", "Wichtigkeit · Interesse · Nützlichkeit · Kosten", "»Mathe brauche ich für die Ausbildung.« (Nützlichkeit)"],
         ["Erwartung × Wert", "Motivation entsteht, wenn beides da ist; ist ein Faktor null, ist die Motivation null (vereinfacht)", "Die Belohnung hebt Josefs Wert – seine Erwartung bleibt klein."]
       ],
       denkwerkzeug: ["Ein Konstrukt messen", "Motivation sieht man nicht. Man macht sie messbar über etwas Beobachtbares – zum Beispiel die gewählte Entfernung im Zielspiel – oder über Fragen wie im Selbsttest. Jede Messung erfasst nur einen Ausschnitt: Die Wahl im Spiel ist nicht »die« Motivation eines Menschen."],
-      abruf: ["Was ist das Anspruchsniveau, und wie verändert es sich nach Erfolg?", "Erwartung mal Wert: Was passiert, wenn die Erwartung null ist?", "Nenne die vier Wertkomponenten nach Eccles."],
+      abruf: ["Was ist das Anspruchsniveau, und wie verändert es sich nach Erfolg?", "Erwartung mal Wert: Was passiert, wenn die Erwartung null ist?", "Nenne die vier Wertkomponenten nach Eccles und Wigfield."],
       quellen: "Unterrichtsmaterial M6 · Hoppe (1930), Psychologische Forschung 14 · Atkinson (1957), Psychological Review 64 · Atkinson &amp; Litwin (1960) · Wigfield &amp; Eccles (2000), Contemporary Educational Psychology 25, 68–81 · Nagengast u. a. (2011), Psychological Science 22"
     },
     ds09: {
@@ -1508,7 +1590,7 @@ window.EINHEIT = (function () {
         ["stabil – instabil", "Bleibt die Ursache, oder ändert sie sich?", "Begabung bleibt, Anstrengung ändert sich."],
         ["kontrollierbar – nicht kontrollierbar", "Kann ich die Ursache beeinflussen?", "Wissen, Anstrengung, Nachhilfe – Begabung, Glück"],
         ["günstiges Attributionsmuster", "Erfolg: eigene Fähigkeit und Anstrengung · Misserfolg: instabil und kontrollierbar (Anstrengung, Lernweg)", "»Ich habe falsch geübt – nächstes Mal rechne ich alte Arbeiten.«"],
-        ["erlernte Hilflosigkeit", "Wer erlebt, dass sein Handeln nichts bewirkt, erwartet das auch später und versucht es nicht mehr (Seligman)", "der große Elefant am kleinen Pflock"]
+        ["erlernte Hilflosigkeit", "Wer erlebt, dass sein Handeln nichts bewirkt, versucht es später oft nicht mehr – es fehlt die Erwartung, etwas bewirken zu können (Seligman; neu gedeutet von Maier &amp; Seligman 2016)", "der große Elefant am kleinen Pflock"]
       ],
       denkwerkzeug: ["Prognose: Was sagt eine Theorie voraus?", "Eine gute Theorie erklärt nicht nur hinterher, sie sagt vorher, was passiert – und lässt sich daran prüfen. Die Attributionstheorie sagt voraus: Wer einen Misserfolg stabil erklärt, erwartet wieder Misserfolg und strengt sich weniger an."],
       abruf: ["Nenne die drei Fragen, die die Attributionstheorie an eine Erklärung stellt.", "Welche Erklärung eines Misserfolgs ist für die Motivation günstig – und warum?", "Was hat der Elefant gelernt – in Fachsprache?"],
@@ -1533,7 +1615,7 @@ window.EINHEIT = (function () {
       begriffe: [
         ["Rubikon-Modell", "vier Phasen: abwägen – planen – handeln – bewerten; die Entscheidung (der Rubikon) trennt das Ob vom Wie (Heckhausen &amp; Gollwitzer 1987)", "Josef entscheidet sich für Nachhilfe."],
         ["Motivation und Volition", "Motivation: abwägen, ob ich etwas will · Volition: den Willen umsetzen und dranbleiben", "das Handy stumm schalten, als eine Nachricht kommt"],
-        ["Wenn-dann-Plan (Vorsatz)", "verknüpft eine Situation mit einer Handlung; hilft nachweislich, Ziele zu erreichen (Gollwitzer &amp; Sheeran 2006)", "»Wenn ich nach Hause komme, packe ich zuerst das Matheheft aus.«"],
+        ["Wenn-dann-Plan (Vorsatz)", "verknüpft eine Situation mit einer Handlung; hilft im Durchschnitt deutlich, Ziele zu erreichen – belegt in vielen Studien (Gollwitzer &amp; Sheeran 2006)", "»Wenn ich nach Hause komme, packe ich zuerst das Matheheft aus.«"],
         ["Loslassen unerreichbarer Ziele", "sich von einem unerreichbaren Ziel lösen und ein neues suchen; geht mit mehr Wohlbefinden einher (Wrosch u. a. 2003)", "nach drei Absagen ein anderes Studienfach prüfen"],
         ["Analyse einer Geschichte", "Bild finden → Station im Kreis → Fachbegriff → Botschaft → mit Forschung prüfen", "der Elefant: erlernte Hilflosigkeit"]
       ],
@@ -1547,7 +1629,7 @@ window.EINHEIT = (function () {
   E.KOENNEN = [
     { typ: "Erklären", text: "einen Begriff, ein Modell oder einen Befund in eigenen Worten mit Beispiel darstellen", ziele: [
       "Motiv, Motivation und Lernmotivation erklären", "die drei Grundbedürfnisse und das Kontinuum der Regulation erklären", "den Unterminierungseffekt mit seinen Bedingungen erklären",
-      "Anspruchsniveau, Risikowahl und das Erwartung-mal-Wert-Modell erklären", "Attribution und erlernte Hilflosigkeit erklären", "Selbstkonzept, Vergleiche, Fischteicheffekt und Selbstwirksamkeit erklären", "das Rubikon-Modell und Wenn-dann-Pläne erklären"] },
+      "Anspruchsniveau, Risikowahl und das Erwartungs-Wert-Modell (Erwartung mal Wert) erklären", "Attribution und erlernte Hilflosigkeit erklären", "Selbstkonzept, Vergleiche, Fischteicheffekt und Selbstwirksamkeit erklären", "das Rubikon-Modell und Wenn-dann-Pläne erklären"] },
     { typ: "Anwenden", text: "einen Fall oder eine unbekannte Geschichte mit Fachbegriffen deuten", ziele: [
       "Bedingungen, Formen und Verhaltensmerkmale in einem Fall unterscheiden", "Gründe auf dem Kontinuum einordnen", "Verhalten mit Erwartung mal Wert erklären", "ein günstiges Attributionsmuster formulieren und begründen"] },
     { typ: "Auswerten", text: "ein kleines Ergebnis beschreiben und prüfen: Was zeigt es – und was nicht?", ziele: [
@@ -1579,9 +1661,9 @@ window.EINHEIT = (function () {
       '<circle cx="' + gx + '" cy="' + ya + '" r="8" class="f-kuli"/><circle cx="' + gx + '" cy="' + yb + '" r="8" class="f-oxid"/>' +
       '<path class="l-kuli" d="M92 44 H126"/><text x="134" y="50">leistungsschwache Klasse</text>' +
       '<path class="l-oxid" d="M92 76 H126"/><text x="134" y="82">leistungsstarke Klasse</text>' +
-      '<text x="' + gx + '" y="' + (y0 + 24) + '" text-anchor="middle" class="t-klein">gleiche Leistung</text>' +
-      '<text x="' + (x1 + 10) + '" y="' + (y0 + 50) + '" text-anchor="end" class="t-leise t-klein">eigene Leistung →</text>' +
-      '<text x="26" y="' + ((y0 + yT) / 2) + '" text-anchor="middle" transform="rotate(-90 26 ' + ((y0 + yT) / 2) + ')" class="t-leise t-klein">Fähigkeitsselbstkonzept →</text></svg>';
+      '<text x="' + gx + '" y="' + (y0 + 24) + '" text-anchor="middle" class="t-18">gleiche Leistung</text>' +
+      '<text x="' + (x1 + 10) + '" y="' + (y0 + 50) + '" text-anchor="end" class="t-leise t-18">eigene Leistung →</text>' +
+      '<text x="26" y="' + ((y0 + yT) / 2) + '" text-anchor="middle" transform="rotate(-90 26 ' + ((y0 + yT) / 2) + ')" class="t-leise t-18">Fähigkeitsselbstkonzept →</text></svg>';
   }
 
   window.STUNDE = {
@@ -1606,13 +1688,13 @@ window.EINHEIT = (function () {
           { id: "q2", text: "Was passiert mit der Einschätzung in den ersten Schuljahren?", opt: [
             ["Sie steigt, weil die Kinder mehr können.", "kaum", "Die Kinder können mehr – aber sie vergleichen sich auch mehr. Das Selbstbild sinkt."],
             ["Sie sinkt und passt besser zu den tatsächlichen Leistungen.", "zentral", "Helmke nannte das den Weg »vom Optimisten zum Realisten«. Auch Wigfield fand: Die Einschätzung der eigenen Fähigkeiten sinkt in der Grundschule und noch einmal nach dem Wechsel auf die weiterführende Schule."],
-            ["Sie bleibt gleich.", "kaum", "Sie verändert sich deutlich – vor allem in den ersten Schuljahren."]] },
+            ["Sie bleibt gleich.", "kaum", "Sie verändert sich deutlich: Sie sinkt in den ersten Schuljahren – und bei vielen noch einmal nach dem Wechsel auf die weiterführende Schule."]] },
           { id: "q3", text: "Woher kommt die Veränderung vor allem?", opt: [
             ["Die Kinder werden schlechter.", "kaum", "Sie lernen ja dazu. Nicht die Leistung sinkt, sondern das Bild davon."],
-            ["Die Eltern loben weniger.", "begruendbar", "Rückmeldung von Eltern spielt eine Rolle. Im Material steht aber vor allem: Noten und Vergleiche."],
+            ["Die Eltern loben weniger.", "begruendbar", "Rückmeldung von Eltern spielt eine Rolle. Als wichtigste Gründe gelten aber Noten, Rückmeldungen in der Schule und der wachsende Vergleich mit anderen."],
             ["Sie bekommen Noten und vergleichen sich mit anderen.", "zentral", "Rückmeldungen und Vergleiche formen das Selbstbild. Genau darum geht es heute."]] }
         ] },
-        { typ: "befund", status: "belegte Quelle · vereinfacht", quelle: "Helmke (1998), Vom Optimisten zum Realisten?, in Weinert (Hrsg.), Entwicklung im Kindesalter, 115–132; Wigfield & Eccles (2000), aus dem Unterrichtsmaterial M6 und M9", html: "<p>Junge Kinder überschätzen sich fast alle. Mit den Schuljahren sinkt die Einschätzung und nähert sich den tatsächlichen Leistungen an. Die größte Veränderung kommt nach dem Übergang auf die weiterführende Schule.</p>" }
+        { typ: "befund", status: "belegte Quelle · vereinfacht", quelle: "Helmke (1998), Vom Optimisten zum Realisten?, in Weinert (Hrsg.), Entwicklung im Kindesalter, 115–132; Wigfield & Eccles (2000), aus dem Unterrichtsmaterial M6 und M9", html: "<p>Junge Kinder überschätzen sich fast alle. In den ersten Schuljahren sinkt die Einschätzung deutlich und passt besser zu den Leistungen. Nach dem Wechsel auf die weiterführende Schule sinkt sie bei vielen noch einmal (Wigfield). Als Gründe gelten Noten, Rückmeldungen und der wachsende Vergleich mit anderen.</p>" }
       ] },
       { id: "a3", nr: "3", titel: "Das Bild von mir", sozial: "Plenum, dann allein", min: 12, oeffnet: "ansage", bloecke: [
         { typ: "karten", karten: [
@@ -1634,9 +1716,9 @@ window.EINHEIT = (function () {
             ["»Sport liegt mir mehr als Musik.«", "dimensional", "Zwei Bereiche bei dir selbst."],
             ["»Ich schaffe 50 Meter unter acht Sekunden.«", "kriterial", "Ein fester Maßstab, an dem du dich misst."]
           ], fertigText: "Meistens mischen sich die Vergleiche. Wie sich das Selbstkonzept verändert, hängt davon ab, wie stark jemand welchen Vergleich gewichtet." },
-        { typ: "wahl", items: [{ id: "v0", text: "Josef sagt jetzt: »Ich bin in Mathe schlecht.« An der Realschule hielt er sich für gut. Welcher Vergleich steckt vor allem dahinter?", opt: [
-          ["ein sozialer Vergleich mit der neuen Klasse", "zentral", "In der neuen Klasse sind viele stärker – daran misst er sich jetzt. Genau das untersucht der nächste Auftrag."],
-          ["ein temporaler Vergleich mit seinen alten Noten", "begruendbar", "Auch das steckt drin: Sein Halbjahreszeugnis ist schlechter als sein Abschlusszeugnis. Seine Noten sind aber vor allem im Vergleich zur neuen Klasse gesunken."],
+        { typ: "wahl", items: [{ id: "v0", text: "Josef sagt jetzt: »Ich bin in Mathe schlecht.« An der Realschule hielt er sich für gut. Welcher Vergleich steckt dahinter?", opt: [
+          ["ein sozialer Vergleich mit der neuen Klasse", "zentral", "Was »gut« heißt, misst er jetzt an der neuen Klasse – und dort sind viele stärker. Genau das untersucht der nächste Auftrag."],
+          ["ein temporaler Vergleich mit seinen alten Noten", "zentral", "Er vergleicht mit seinen alten Noten: Sein Halbjahreszeugnis ist schlechter als sein Abschlusszeugnis. Warum das Bild gerade jetzt kippt, zeigt der nächste Auftrag."],
           ["ein dimensionaler Vergleich mit Deutsch", "kaum", "Über Deutsch sagt der Fall nichts."]] }] }
       ] },
       { id: "a4", nr: "4", titel: "Kleiner Fisch im großen Teich", sozial: "allein, dann Plenum", min: 14, oeffnet: "nach", bloecke: [
@@ -1644,9 +1726,9 @@ window.EINHEIT = (function () {
           ["Lena – sie lernt ja mit den Besten.", "kaum", "Das klingt plausibel, ist aber umgekehrt: Neben lauter Starken fühlt sich Lena eher klein.", "Lena"],
           ["Tom", "zentral", "Neben Schwächeren wirkt dieselbe Leistung größer. Das Selbstkonzept entsteht im Vergleich.", "Tom"],
           ["beide gleich – die Leistung ist ja gleich", "begruendbar", "Logisch gedacht. Das Selbstkonzept entsteht aber im Vergleich: Wer mehr Bessere um sich hat, sieht sich kleiner.", "gleich"]] }] },
-        { typ: "bild", svg: teichBild(), max: "34rem", unterschrift: "Modell nach Marsh (1987) – keine Messwerte. So ähnlich sieht die Grafik in deinem Material M8 aus." },
+        { typ: "bild", svg: teichBild(), max: "36rem", min: 512, name: "Schaubild Fischteicheffekt", unterschrift: "Modell nach Marsh (1987) – keine Messwerte. So ähnlich sieht die Grafik in deinem Material M8 aus." },
         { typ: "befund", status: "belegte Quelle", quelle: "Marsh (1987), The Big-Fish-Little-Pond Effect on Academic Self-Concept, Journal of Educational Psychology 79 (3), 280–295", html: "<p>Bei gleicher Leistung haben Schülerinnen und Schüler in leistungsstarken Klassen ein <b>niedrigeres</b> Fähigkeitsselbstkonzept als in leistungsschwächeren. Herbert Marsh nannte das den <b>Big-Fish-Little-Pond-Effekt</b>, auf Deutsch Fischteicheffekt. Er wurde in vielen Ländern gefunden.</p>" },
-        { typ: "kasten", art: "info", titel: "Und die Leistung? – noch offen", html: "<p>Ob man in einer starken Klasse auch mehr lernt, ist umstritten. Manche Studien finden einen kleinen Vorteil, andere keinen. Sicher ist nur der Effekt aufs Selbstkonzept.</p>" },
+        { typ: "kasten", art: "info", titel: "Und die Leistung? – noch offen", html: "<p>Ob man in einer starken Klasse auch mehr lernt, ist umstritten. Manche Studien finden einen kleinen Vorteil, andere keinen. Gut belegt ist vor allem der Effekt aufs Selbstkonzept.</p>" },
         { typ: "wahl", items: [
           { id: "jo1", text: "Josef war an der Realschule gut in Mathe. Jetzt ist keine Arbeit besser als 3–4. Was erklärt der Fischteicheffekt?", opt: [
             ["Josef ist schlechter geworden.", "kaum", "Das wissen wir nicht. Der Effekt zeigt: Das Selbstkonzept kann sinken, auch wenn die Leistung gleich bleibt."],
@@ -1681,7 +1763,7 @@ window.EINHEIT = (function () {
         { typ: "wahl", items: [{ id: "el4", text: "Bild 4: " + bild("el4") + " – Welcher Vergleich fehlt ihm?", opt: [
           ["der soziale Vergleich", "begruendbar", "Ein Vergleich mit anderen Elefanten könnte helfen – siehe gleich: Vorbilder. Was ihm vor allem fehlt, ist der Blick auf sein eigenes Wachstum."],
           ["der temporale Vergleich", "zentral", "Er vergleicht sich nie mit sich selbst früher: Sein Bild von sich stammt aus der Zeit, als er klein war. Sein Selbstkonzept ist veraltet."],
-          ["der kriteriale Vergleich", "kaum", "Einen festen Maßstab hat er: den Pflock. Er prüft ihn nur nie."]] }] },
+          ["der kriteriale Vergleich", "begruendbar", "Stimmt: Er prüft sich nie am Pflock. Vor allem fehlt ihm aber der Blick darauf, wie sehr er gewachsen ist – der temporale Vergleich."]] }] },
         { typ: "text", html: "<p>Albert Bandura (1977) nennt das Zutrauen, eine Handlung selbst ausführen zu können, <b>Selbstwirksamkeitserwartung</b>. Er beschreibt vier Quellen, aus denen es wächst.</p>" },
         { typ: "karten", karten: [
           { art: "honig", titel: "Eigene Erfolge", html: "<p>Ich habe es selbst geschafft. <b>Die stärkste Quelle.</b></p>" },
@@ -1928,6 +2010,7 @@ window.EINHEIT = (function () {
     if (AKT === a) return { s: "hier", t: "du bist hier" };
     if (!offen(a)) return a.oeffnet === "ansage" ? { s: "ansage", t: "öffnet auf Ansage" } : { s: "gesperrt", t: "öffnet nach deiner Antwort" };
     if (a.bloecke && a.bloecke.some(interaktiv) && fertig(a)) return { s: "erledigt", t: "✓ erledigt" };
+    if (a.bloecke && !a.bloecke.some(interaktiv) && a.bloecke.some(function (b) { return b.optional; })) return { s: "offen", t: "freiwillig" };
     return { s: "offen", t: "offen" };
   }
 
@@ -1968,10 +2051,13 @@ window.EINHEIT = (function () {
 
   function zeigen(id, fokus) {
     var a = auftragVon(id) || auftraege()[0];
-    AKT = a; S.ort = a.id; sichern();
+    /* Das Deckblatt überschreibt den Ort nicht – sonst wüsste »Weiter, wo du warst« nicht mehr, wo du warst */
+    AKT = a; if (a.id !== "start") S.ort = a.id; sichern();
     var blatt = $("#blatt");
     blatt.innerHTML = "";
-    var seite = el('<article class="k-seite k-neu" aria-labelledby="t-' + a.id + '"></article>');
+    var seite = el('<article class="k-seite' + (fokus ? " k-neu" : "") + '" aria-labelledby="t-' + a.id + '"></article>');
+    /* Legen und Verorten brauchen Fläche: Dort wird das Register zur schmalen Nummernleiste (GGK-Labor, M22 4.1) */
+    var rahmen = $(".k-rahmen"); if (rahmen) { if (breit(a)) rahmen.setAttribute("data-schmal", ""); else rahmen.removeAttribute("data-schmal"); }
     seite.appendChild(el('<div class="k-blattkopf"><span>Psychologie · Motivation</span><span>Stunde ' + stundeVon(ST.id).nr + " · Arbeitsblatt</span><span>Datum: " + heute() + "</span></div>"));
     if (a.id === "start") startSeite(seite, a);
     else if (a.id === "z") zusammenfassung(seite, a);
@@ -1989,8 +2075,10 @@ window.EINHEIT = (function () {
     if (reg && leiste && window.innerWidth <= 980) leiste.scrollLeft = Math.max(0, reg.offsetLeft - leiste.clientWidth / 2 + reg.offsetWidth / 2);
   }
   function auftragKopf(a) {
-    return '<header class="k-auftrag__kopf"><span class="k-nr" aria-hidden="true">' + esc(a.nr) + '</span><div><h2 id="t-' + a.id + '">Arbeitsauftrag ' + esc(a.nr) + ": " + esc(a.titel) + '</h2><p class="k-meta">' + (a.sozial ? "<span>" + esc(a.sozial) + "</span>" : "") + (a.min ? "<span>" + a.min + " Minuten</span>" : "") + (a.zusatz ? "<span>" + esc(a.zusatz) + "</span>" : "") + "</p></div></header>";
+    return '<header class="k-auftrag__kopf"><span class="k-nr" aria-hidden="true">' + esc(a.nr) + '</span><div><p class="k-kicker" aria-hidden="true">Arbeitsauftrag ' + esc(a.nr) + '</p><h2 id="t-' + a.id + '"><span class="k-sr">Arbeitsauftrag ' + esc(a.nr) + ": </span>" + esc(a.titel) + '</h2><p class="k-meta">' + (a.sozial ? "<span>" + esc(a.sozial) + "</span>" : "") + (a.min ? "<span>" + a.min + " Minuten</span>" : "") + (a.zusatz ? "<span>" + esc(a.zusatz) + "</span>" : "") + "</p></div></header>";
   }
+  /* Legeseiten (Kreis, Fächer, Raster) brauchen die Breite: Stapel und Ziel nebeneinander statt Hin- und Herscrollen */
+  function breit(a) { return !!(a && a.bloecke && offen(a) && (a.breit || a.bloecke.some(function (b) { return b.typ === "verorten" || b.typ === "sortieren" || b.breit; }))); }
   function naechster(a) { var i = index(a); return auftraege()[i + 1] || null; }
   function vorheriger(a) { var i = index(a); return auftraege()[i - 1] || null; }
   function fussLeiste(a) {
@@ -2027,7 +2115,7 @@ window.EINHEIT = (function () {
   }
 
   /* ---------- Bausteine einer Auftragsseite ---------- */
-  function ctx() { return { S: S, D: D, E: E, ST: ST, LK: LK, sichern: sichern, aktualisieren: aktualisieren, esc: esc, $: $, $$: $$, el: el, worte: worte, stunde: stunde, kreisHTML: kreisHTML, wort: wortStufe, stationName: stationName, begriffeVon: begriffeVon, frueher: frueher }; }
+  function ctx() { return { S: S, D: D, E: E, ST: ST, LK: LK, sichern: sichern, aktualisieren: aktualisieren, esc: esc, $: $, $$: $$, el: el, worte: worte, stunde: stunde, kreisHTML: kreisHTML, wort: wortStufe, stationName: stationName, begriffeVon: begriffeVon, frueher: frueher, bildRahmen: bildRahmen }; }
   function auftragSeite(seite, a) {
     seite.innerHTML += auftragKopf(a);
     var box = el('<div class="k-bloecke"></div>');
@@ -2072,7 +2160,13 @@ window.EINHEIT = (function () {
   BAUSTEINE.tabelle = { bauen: function (b) {
     return el('<div><table class="k-tabelle">' + (b.kopf ? "<thead><tr>" + b.kopf.map(function (k) { return '<th scope="col">' + esc(k) + "</th>"; }).join("") + "</tr></thead>" : "") + "<tbody>" + b.zeilen.map(function (z) { return "<tr>" + z.map(function (c) { return "<td>" + c + "</td>"; }).join("") + "</tr>"; }).join("") + "</tbody></table>" + (b.status ? '<p class="k-klein">' + esc(b.status) + "</p>" : "") + "</div>");
   } };
-  BAUSTEINE.bild = { bauen: function (b) { return el('<figure class="k-bild"' + (b.max ? ' style="max-width:' + b.max + '"' : "") + ">" + b.svg + (b.unterschrift ? "<figcaption>" + b.unterschrift + "</figcaption>" : "") + "</figure>"); } };
+  /* Schaubild: SVG-Schrift schrumpft mit der Grafik (wirksame Größe = Schrift × gezeigte Breite ÷ viewBox-Breite).
+     Unter 92 % der viewBox-Breite wird nicht weiter verkleinert – dann verschiebt man das Bild in seinem Rahmen. */
+  function bildRahmen(svg, min, name) {
+    var vb = /viewBox="0 0 (\d+)/.exec(svg), w = min || (vb ? Math.round(+vb[1] * 0.92) : 0);
+    return '<div class="k-bild-rahmen" tabindex="0" role="region" aria-label="' + esc(name || "Schaubild") + ', auf schmalen Bildschirmen seitlich verschiebbar" style="--min-bild:' + w + 'px">' + svg + "</div>";
+  }
+  BAUSTEINE.bild = { bauen: function (b) { return el('<figure class="k-bild"' + (b.max ? ' style="max-width:' + b.max + '"' : "") + ">" + bildRahmen(b.svg, b.min, b.name) + (b.unterschrift ? "<figcaption>" + b.unterschrift + "</figcaption>" : "") + "</figure>"); } };
   BAUSTEINE.landkarte = { bauen: function () { return el("<div>" + landkarteHTML(ST.id) + "</div>"); } };
 
   /* Erst erinnern: Antworten erscheinen erst nach dem Aufdecken */
@@ -2213,7 +2307,7 @@ window.EINHEIT = (function () {
     return m >= 2.5 ? "stimmst du voll zu" : m >= 1.5 ? "stimmst du eher zu" : m >= 0.5 ? "stimmst du eher nicht zu" : "stimmst du gar nicht zu";
   }
   BAUSTEINE.skala = {
-    erledigt: function (b) { var a = S.skala[b.id] || {}; return b.items.every(function (x, i) { return a[i] !== undefined; }); },
+    erledigt: function (b) { var a = S.skala[b.id] || {}; return !!S.skala[b.id + ":frei"] || b.items.every(function (x, i) { return a[i] !== undefined; }); },
     bauen: function (b) {
       var a = S.skala[b.id] || (S.skala[b.id] = {}), st = STUFEN[b.stufen || "vier"];
       var k = el('<div class="k-skala">' + (b.privat !== false ? '<p><span class="k-pille k-pille--privat">Nur für dich</span></p>' : "") + (b.einleitung ? "<p>" + b.einleitung + "</p>" : "") + '<p class="k-legende" aria-hidden="true">' + st.map(function (s) { return "<span><b>" + esc(s[0]) + "</b> " + esc(s[1]) + "</span>"; }).join("") + "</p>" + (b.stamm ? "<p><b>" + esc(b.stamm) + '</b> <span class="k-klein" data-k="stand" aria-live="polite"></span></p>' : '<p class="k-klein" data-k="stand" aria-live="polite"></p>') + '<div class="k-test"></div></div>');
@@ -2229,6 +2323,15 @@ window.EINHEIT = (function () {
         $$(".k-item", k).forEach(function (f) { f.classList.toggle("k-offen", n >= Math.ceil(b.items.length / 2) && !alle && a[f.getAttribute("data-i")] === undefined); });
       }
       k.addEventListener("change", function (e) { var f = e.target.closest(".k-item"); if (!f) return; a[f.getAttribute("data-i")] = +e.target.value; stand(); aktualisieren(); });
+      if (b.freiwillig !== false) {
+        var frei = el('<div class="k-frei"><p class="k-klein">Freiwillig: Du kannst den Bogen überspringen und an eine ausgedachte Person denken – oder an jemanden in deinem Alter.</p><button type="button" class="g-knopf g-knopf--still" data-k="frei">Bogen überspringen</button><span class="k-klein" data-k="frei-stand" aria-live="polite"></span></div>');
+        /* Freiwillig steht vorne, nicht erst nach 21 Sätzen */
+        k.insertBefore(frei, $(".k-test", k));
+        var fk = $('[data-k="frei"]', frei);
+        function freiStand() { var x = !!S.skala[b.id + ":frei"]; fk.hidden = x; $('[data-k="frei-stand"]', frei).textContent = x ? "Übersprungen – du kannst trotzdem jederzeit antippen." : ""; }
+        fk.addEventListener("click", function () { S.skala[b.id + ":frei"] = 1; freiStand(); aktualisieren(); });
+        freiStand();
+      }
       stand();
       return k;
     }
@@ -2246,19 +2349,19 @@ window.EINHEIT = (function () {
       var geprueft = !!st.ok;
       var faecher = b.faecher || [];
       if (b.raster) { faecher = []; b.raster.zeilen.forEach(function (z) { b.raster.spalten.forEach(function (s) { faecher.push({ id: z.id + "|" + s.id, titel: z.titel + " · " + s.titel, zeile: z, spalte: s }); }); }); }
-      var k = el('<div class="k-sortieren"><div class="k-stapel" aria-label="Kartenstapel"></div><div data-k="faecher"></div><div class="k-zeile" style="margin-top:var(--space-3)"><button type="button" class="g-knopf g-knopf--sekundaer" data-k="pruefen" disabled>Zwischenstand prüfen</button><button type="button" class="g-knopf g-knopf--still" data-k="zurueck" hidden>Falsche Karten zurück in den Stapel</button></div><div data-k="rueck" aria-live="polite" style="margin-top:var(--space-3)"></div></div>');
+      var k = el('<div class="k-sortieren"><div class="k-legen' + (b.raster ? " k-legen--oben" : "") + '"><div class="k-legen__stapel"><p class="k-legen__titel">Noch zu legen</p><div class="k-stapel" aria-label="Kartenstapel"></div><div class="k-zeile"><button type="button" class="g-knopf g-knopf--sekundaer" data-k="pruefen" disabled>Zwischenstand prüfen</button><button type="button" class="g-knopf g-knopf--still" data-k="zurueck" hidden>Falsche Karten zurück in den Stapel</button></div></div><div class="k-legen__ziel" data-k="faecher"></div></div><div data-k="rueck" aria-live="polite" style="margin-top:var(--space-3)"></div></div>');
       function chip(i, extra) { return '<button type="button" class="k-chip' + (b.satz ? " k-chip--satz" : "") + (extra || "") + '" data-c="' + i + '" aria-pressed="' + (gew === i) + '">' + esc(K[i][0]) + "</button>"; }
       function fach(f) {
         var drin = K.map(function (x, i) { return i; }).filter(function (i) { return st.lage[i] === f.id; });
-        return '<div class="k-fach" data-f="' + esc(f.id) + '">' + (b.raster ? "" : "<h4>" + esc(f.titel) + "</h4>" + (f.text ? "<p>" + esc(f.text) + "</p>" : "")) + '<div class="k-fach__liegt">' + drin.map(function (i) { return chip(i, geprueft && K[i][1] !== f.id ? '" data-urteil="kaum' : ""); }).join("") + '</div><button type="button" class="g-knopf g-knopf--sekundaer" data-hier="' + esc(f.id) + '"' + (gew === null ? " disabled" : "") + ' aria-label="Hierhin legen: ' + esc(f.titel) + '">Hierhin</button></div>';
+        return '<div class="k-fach" data-f="' + esc(f.id) + '">' + (b.raster ? '<p class="k-raster__ort">' + esc(f.ort || "") + "</p>" : "<h4>" + esc(f.titel) + "</h4>" + (f.text ? "<p>" + esc(f.text) + "</p>" : "")) + '<div class="k-fach__liegt">' + drin.map(function (i) { return chip(i, geprueft && K[i][1] !== f.id ? '" data-urteil="kaum' : ""); }).join("") + '</div><button type="button" class="g-knopf g-knopf--sekundaer" data-hier="' + esc(f.id) + '"' + (gew === null ? " disabled" : "") + ' aria-label="Hierhin legen: ' + esc(f.titel) + '">Hierhin</button></div>';
       }
       function malen() {
         var frei = K.map(function (x, i) { return i; }).filter(function (i) { return !st.lage[i]; });
         $(".k-stapel", k).innerHTML = frei.length ? frei.map(function (i) { return chip(i); }).join("") : '<span class="k-klein">Alle Karten sind abgelegt.</span>';
         var h;
         if (b.raster) {
-          h = '<div class="k-raster" style="--spalten:' + b.raster.spalten.length + '"><div class="k-raster__kopf k-raster__kopf--leer"></div>' + b.raster.spalten.map(function (s) { return '<div class="k-raster__kopf">' + esc(s.titel) + "</div>"; }).join("");
-          b.raster.zeilen.forEach(function (z) { h += '<div class="k-raster__kopf">' + esc(z.titel) + "</div>" + b.raster.spalten.map(function (s) { return fach({ id: z.id + "|" + s.id, titel: z.titel + ", " + s.titel }); }).join(""); });
+          h = '<div class="k-raster" style="--spalten:' + b.raster.spalten.length + '"><div class="k-raster__kopf k-raster__kopf--leer"></div>' + b.raster.spalten.map(function (s) { return '<div class="k-raster__kopf k-raster__kopf--spalte">' + esc(s.titel) + "</div>"; }).join("");
+          b.raster.zeilen.forEach(function (z) { h += '<div class="k-raster__kopf">' + esc(z.titel) + "</div>" + b.raster.spalten.map(function (s) { return fach({ id: z.id + "|" + s.id, titel: z.titel + ", " + s.titel, ort: s.titel }); }).join(""); });
           h += "</div>";
         } else h = '<div class="k-faecher' + (faecher.length === 3 ? " k-faecher--drei" : "") + '">' + faecher.map(fach).join("") + "</div>";
         $('[data-k="faecher"]', k).innerHTML = h;
@@ -2273,7 +2376,7 @@ window.EINHEIT = (function () {
         $('[data-k="zurueck"]', k).hidden = !falsch.length;
         if (falsch.length) r.innerHTML = '<div class="k-rueck k-rueck--weiter"><strong>' + (n - falsch.length) + " von " + n + " Karten liegen passend.</strong> Überlege bei den anderen noch einmal:<ul>" + falsch.map(function (i) { return "<li><strong>" + esc(K[i][0]) + "</strong> " + esc(K[i][2]) + "</li>"; }).join("") + "</ul></div>";
         else if (n < K.length) r.innerHTML = '<div class="k-rueck k-rueck--gut"><strong>Bisher liegt alles passend.</strong> Lege die übrigen Karten ab.</div>';
-        else r.innerHTML = '<div class="k-rueck k-rueck--gut"><strong>Alle Karten liegen passend.</strong> ' + esc(b.fertigText || "") + "</div>";
+        else r.innerHTML = '<div class="k-rueck k-rueck--gut"><strong>Alle Karten liegen passend.</strong> ' + esc(b.fertigText || "") + '</div><details class="k-hilfe" style="margin-top:var(--space-3)"><summary>Warum die Karten so liegen</summary><ul>' + K.map(function (x) { return "<li><strong>" + esc(x[0]) + "</strong> " + esc(x[2]) + "</li>"; }).join("") + "</ul></details>";
       }
       k.addEventListener("click", function (e) {
         var c = e.target.closest(".k-chip"), f = e.target.closest("[data-hier]");
@@ -2300,7 +2403,7 @@ window.EINHEIT = (function () {
     bauen: function () {
       if (!S.verorten) S.verorten = { lage: {}, geprueft: false, ok: false };
       var V = S.verorten, ids = begriffeVon(ST.id), gew = null;
-      var k = el('<div class="k-verorten"><p>Tippe einen Begriff an, dann die Station, an die er gehört. Gepunktet: Begriffe aus früheren Stunden – so, wie du sie gelegt hast, sonst an ihrem üblichen Platz.</p><div class="k-stapel" aria-label="Begriffe dieser Stunde"></div><div data-k="kreis"></div><div class="k-zeile" style="margin-top:var(--space-3)"><button type="button" class="g-knopf g-knopf--primaer" data-k="pruefen" disabled>Prüfen</button></div><div data-k="rueck" aria-live="polite" style="margin-top:var(--space-3)"></div><p class="k-klein">Modell: eigene Vereinfachung nach dem Grundmodell der Motivationspsychologie (Person und Situation → Motivation → Handeln), der Idee »Erwartung mal Wert« und der Attributionstheorie. Was lässt es weg? Zum Beispiel Gefühle, Gewohnheiten und Zufall.</p></div>');
+      var k = el('<div class="k-verorten"><p>Tippe einen Begriff an, dann die Station, an die er gehört. Gepunktet: Begriffe aus früheren Stunden – so, wie du sie gelegt hast, sonst an ihrem üblichen Platz.</p><div class="k-legen"><div class="k-legen__stapel"><p class="k-legen__titel">Begriffe dieser Stunde</p><div class="k-stapel" aria-label="Begriffe dieser Stunde"></div><div class="k-zeile"><button type="button" class="g-knopf g-knopf--primaer" data-k="pruefen" disabled>Prüfen</button></div></div><div class="k-legen__ziel" data-k="kreis"></div></div><div data-k="rueck" aria-live="polite" style="margin-top:var(--space-3)"></div><p class="k-klein">Modell: eigene Vereinfachung nach dem Grundmodell der Motivationspsychologie (Person und Situation → Motivation → Handeln), der Idee »Erwartung mal Wert« und der Attributionstheorie. Was lässt es weg? Zum Beispiel Gefühle, Gewohnheiten und Zufall.</p></div>');
       function chipHTML(bid) {
         var u = V.geprueft && V.lage[bid] ? urteilVerorten(bid, V.lage[bid])[0] : "";
         return '<button type="button" class="k-chip" data-b="' + bid + '" aria-pressed="' + (gew === bid) + '"' + (u ? ' data-urteil="' + u + '"' : "") + ">" + esc(E.BEGRIFFE[bid].name) + (u ? '<span class="k-sr"> – ' + WORT[u] + "</span>" : "") + "</button>";
@@ -2464,12 +2567,14 @@ window.EINHEIT = (function () {
 
   /* ---------- Start und Zusammenfassung ---------- */
   function startSeite(seite, a) {
-    var s = stundeVon(ST.id);
-    seite.innerHTML += '<p class="k-leise" style="margin:0 0 6px;font-weight:700">Stunde ' + s.nr + " von " + stundenListe().length + " · " + esc(ST.material || "") + " · Doppelstunde, " + ST.minuten + ' Minuten</p><h1 id="t-start">' + esc(s.titel) + '</h1><p class="k-frage">' + esc(ST.frage) + "</p>" +
-      '<div class="k-zwei" style="margin:var(--space-5) 0"><div><h3>Darum geht es</h3>' + ST.darum + '</div><div><h3>So arbeitest du mit diesem Blatt</h3><ul><li>Links stehen alle Aufträge. Du siehst immer, wo du bist und was noch kommt.</li><li>Jeder Auftrag hat eine eigene Seite. Du scrollst von oben nach unten.</li><li>Manche Aufträge öffnen sich erst nach deiner Antwort, manche auf Ansage deiner Lehrkraft.</li><li>Am Ende steht die Zusammenfassung zum Abheften: Wissen und Können.</li></ul></div></div>' +
+    var s = stundeVon(ST.id), erster = auftraege()[1], ort = S.ort && S.ort !== "start" ? auftragVon(S.ort) : null;
+    /* First-Action Rule: Der erste Knopf steht im ersten Bildschirm, auch am Beamer (1280 × 720). Weitermachen hat einen eigenen Knopf. */
+    seite.innerHTML += '<div class="k-deckblatt"><div class="k-deckblatt__text"><p class="k-kicker">Stunde ' + s.nr + " von " + stundenListe().length + " · " + esc(ST.material || "") + " · " + ST.minuten + ' Minuten</p><h1 id="t-start">' + esc(s.titel) + '</h1><p class="k-frage">' + esc(ST.frage) + '</p><div class="k-zeile"><button type="button" class="g-knopf g-knopf--primaer" data-geh="' + erster.id + '">Los geht’s: Auftrag ' + esc(erster.nr) + ' <span aria-hidden="true">→</span></button>' +
+      (ort && ort !== erster ? '<button type="button" class="g-knopf g-knopf--sekundaer" data-geh="' + ort.id + '">Weiter, wo du warst: ' + (ort.id === "z" ? "Zusammenfassung" : "Auftrag " + esc(ort.nr)) + "</button>" : "") + "</div></div>" +
+      '<div class="k-merk k-deckblatt__ziele"><p class="k-merk__titel">Am Ende kannst du …</p><ul>' + ST.ziele.map(function (z) { return "<li>" + z + "</li>"; }).join("") + "</ul></div></div>" +
+      '<div class="k-zwei" style="margin:var(--space-6) 0"><div><h3>Darum geht es</h3>' + ST.darum + '</div><div><h3>So arbeitest du mit diesem Blatt</h3><ul><li>Links stehen alle Aufträge. Du siehst immer, wo du bist und was noch kommt.</li><li>Jeder Auftrag hat eine eigene Seite. Du scrollst von oben nach unten.</li><li>Manche Aufträge öffnen sich erst nach deiner Antwort, manche auf Ansage deiner Lehrkraft.</li><li>Am Ende steht die Zusammenfassung zum Abheften: Wissen und Können.</li></ul></div></div>' +
       '<h3>Die Einheit · ' + esc(E.LEITFRAGE) + "</h3>" + landkarteHTML(ST.id) +
-      '<div class="k-zwei" style="margin-top:var(--space-6)"><div class="k-merk"><p class="k-merk__titel">Am Ende kannst du …</p><ul>' + ST.ziele.map(function (z) { return "<li>" + z + "</li>"; }).join("") + "</ul></div>" +
-      '<div class="k-kasten k-kasten--info"><div class="k-kasten__kopf">Gut zu wissen</div><p>Wir gehen gemeinsam am Board durch die Stunde; du arbeitest an deinem Gerät mit. Was du eintippst, bleibt auf deinem Gerät. Selbsttests sind nur für dich – sie sind ein Denkanstoß, keine Diagnose.</p>' + (ST.hinweis ? "<p>" + ST.hinweis + "</p>" : "") + "</div></div>";
+      '<div class="k-kasten k-kasten--info" style="margin-top:var(--space-6)"><div class="k-kasten__kopf">Gut zu wissen</div><p>Wir gehen gemeinsam am Board durch die Stunde; du arbeitest an deinem Gerät mit. Was du eintippst, bleibt auf deinem Gerät. Selbsttests sind freiwillig und nur für dich – ein Denkanstoß, keine Diagnose.</p>' + (ST.hinweis ? "<p>" + ST.hinweis + "</p>" : "") + "</div>";
     seite.appendChild(fussLeiste(a));
   }
   function merkHTML() {
@@ -2569,7 +2674,7 @@ window.EINHEIT = (function () {
     $$('[data-k="ansicht"]').forEach(function (s) { s.value = ansichtLaden(); });
     window.addEventListener("hashchange", function () { var id = location.hash.slice(1); if (id && (!AKT || id !== AKT.id) && auftragVon(id)) zeigen(id, true); });
     window.addEventListener("beforeprint", druckBauen);
-    var start = location.hash.slice(1) || S.ort || "start";
+    var start = location.hash.slice(1) || "start";
     zeigen(auftragVon(start) ? start : "start", false);
     if (/[?&]druck=/.test(location.search)) druckBauen();
   }

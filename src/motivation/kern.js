@@ -180,6 +180,7 @@
     if (AKT === a) return { s: "hier", t: "du bist hier" };
     if (!offen(a)) return a.oeffnet === "ansage" ? { s: "ansage", t: "öffnet auf Ansage" } : { s: "gesperrt", t: "öffnet nach deiner Antwort" };
     if (a.bloecke && a.bloecke.some(interaktiv) && fertig(a)) return { s: "erledigt", t: "✓ erledigt" };
+    if (a.bloecke && !a.bloecke.some(interaktiv) && a.bloecke.some(function (b) { return b.optional; })) return { s: "offen", t: "freiwillig" };
     return { s: "offen", t: "offen" };
   }
 
@@ -220,10 +221,13 @@
 
   function zeigen(id, fokus) {
     var a = auftragVon(id) || auftraege()[0];
-    AKT = a; S.ort = a.id; sichern();
+    /* Das Deckblatt überschreibt den Ort nicht – sonst wüsste »Weiter, wo du warst« nicht mehr, wo du warst */
+    AKT = a; if (a.id !== "start") S.ort = a.id; sichern();
     var blatt = $("#blatt");
     blatt.innerHTML = "";
-    var seite = el('<article class="k-seite k-neu" aria-labelledby="t-' + a.id + '"></article>');
+    var seite = el('<article class="k-seite' + (fokus ? " k-neu" : "") + '" aria-labelledby="t-' + a.id + '"></article>');
+    /* Legen und Verorten brauchen Fläche: Dort wird das Register zur schmalen Nummernleiste (GGK-Labor, M22 4.1) */
+    var rahmen = $(".k-rahmen"); if (rahmen) { if (breit(a)) rahmen.setAttribute("data-schmal", ""); else rahmen.removeAttribute("data-schmal"); }
     seite.appendChild(el('<div class="k-blattkopf"><span>Psychologie · Motivation</span><span>Stunde ' + stundeVon(ST.id).nr + " · Arbeitsblatt</span><span>Datum: " + heute() + "</span></div>"));
     if (a.id === "start") startSeite(seite, a);
     else if (a.id === "z") zusammenfassung(seite, a);
@@ -241,8 +245,10 @@
     if (reg && leiste && window.innerWidth <= 980) leiste.scrollLeft = Math.max(0, reg.offsetLeft - leiste.clientWidth / 2 + reg.offsetWidth / 2);
   }
   function auftragKopf(a) {
-    return '<header class="k-auftrag__kopf"><span class="k-nr" aria-hidden="true">' + esc(a.nr) + '</span><div><h2 id="t-' + a.id + '">Arbeitsauftrag ' + esc(a.nr) + ": " + esc(a.titel) + '</h2><p class="k-meta">' + (a.sozial ? "<span>" + esc(a.sozial) + "</span>" : "") + (a.min ? "<span>" + a.min + " Minuten</span>" : "") + (a.zusatz ? "<span>" + esc(a.zusatz) + "</span>" : "") + "</p></div></header>";
+    return '<header class="k-auftrag__kopf"><span class="k-nr" aria-hidden="true">' + esc(a.nr) + '</span><div><p class="k-kicker" aria-hidden="true">Arbeitsauftrag ' + esc(a.nr) + '</p><h2 id="t-' + a.id + '"><span class="k-sr">Arbeitsauftrag ' + esc(a.nr) + ": </span>" + esc(a.titel) + '</h2><p class="k-meta">' + (a.sozial ? "<span>" + esc(a.sozial) + "</span>" : "") + (a.min ? "<span>" + a.min + " Minuten</span>" : "") + (a.zusatz ? "<span>" + esc(a.zusatz) + "</span>" : "") + "</p></div></header>";
   }
+  /* Legeseiten (Kreis, Fächer, Raster) brauchen die Breite: Stapel und Ziel nebeneinander statt Hin- und Herscrollen */
+  function breit(a) { return !!(a && a.bloecke && offen(a) && (a.breit || a.bloecke.some(function (b) { return b.typ === "verorten" || b.typ === "sortieren" || b.breit; }))); }
   function naechster(a) { var i = index(a); return auftraege()[i + 1] || null; }
   function vorheriger(a) { var i = index(a); return auftraege()[i - 1] || null; }
   function fussLeiste(a) {
@@ -279,7 +285,7 @@
   }
 
   /* ---------- Bausteine einer Auftragsseite ---------- */
-  function ctx() { return { S: S, D: D, E: E, ST: ST, LK: LK, sichern: sichern, aktualisieren: aktualisieren, esc: esc, $: $, $$: $$, el: el, worte: worte, stunde: stunde, kreisHTML: kreisHTML, wort: wortStufe, stationName: stationName, begriffeVon: begriffeVon, frueher: frueher }; }
+  function ctx() { return { S: S, D: D, E: E, ST: ST, LK: LK, sichern: sichern, aktualisieren: aktualisieren, esc: esc, $: $, $$: $$, el: el, worte: worte, stunde: stunde, kreisHTML: kreisHTML, wort: wortStufe, stationName: stationName, begriffeVon: begriffeVon, frueher: frueher, bildRahmen: bildRahmen }; }
   function auftragSeite(seite, a) {
     seite.innerHTML += auftragKopf(a);
     var box = el('<div class="k-bloecke"></div>');
@@ -324,7 +330,13 @@
   BAUSTEINE.tabelle = { bauen: function (b) {
     return el('<div><table class="k-tabelle">' + (b.kopf ? "<thead><tr>" + b.kopf.map(function (k) { return '<th scope="col">' + esc(k) + "</th>"; }).join("") + "</tr></thead>" : "") + "<tbody>" + b.zeilen.map(function (z) { return "<tr>" + z.map(function (c) { return "<td>" + c + "</td>"; }).join("") + "</tr>"; }).join("") + "</tbody></table>" + (b.status ? '<p class="k-klein">' + esc(b.status) + "</p>" : "") + "</div>");
   } };
-  BAUSTEINE.bild = { bauen: function (b) { return el('<figure class="k-bild"' + (b.max ? ' style="max-width:' + b.max + '"' : "") + ">" + b.svg + (b.unterschrift ? "<figcaption>" + b.unterschrift + "</figcaption>" : "") + "</figure>"); } };
+  /* Schaubild: SVG-Schrift schrumpft mit der Grafik (wirksame Größe = Schrift × gezeigte Breite ÷ viewBox-Breite).
+     Unter 92 % der viewBox-Breite wird nicht weiter verkleinert – dann verschiebt man das Bild in seinem Rahmen. */
+  function bildRahmen(svg, min, name) {
+    var vb = /viewBox="0 0 (\d+)/.exec(svg), w = min || (vb ? Math.round(+vb[1] * 0.92) : 0);
+    return '<div class="k-bild-rahmen" tabindex="0" role="region" aria-label="' + esc(name || "Schaubild") + ', auf schmalen Bildschirmen seitlich verschiebbar" style="--min-bild:' + w + 'px">' + svg + "</div>";
+  }
+  BAUSTEINE.bild = { bauen: function (b) { return el('<figure class="k-bild"' + (b.max ? ' style="max-width:' + b.max + '"' : "") + ">" + bildRahmen(b.svg, b.min, b.name) + (b.unterschrift ? "<figcaption>" + b.unterschrift + "</figcaption>" : "") + "</figure>"); } };
   BAUSTEINE.landkarte = { bauen: function () { return el("<div>" + landkarteHTML(ST.id) + "</div>"); } };
 
   /* Erst erinnern: Antworten erscheinen erst nach dem Aufdecken */
@@ -465,7 +477,7 @@
     return m >= 2.5 ? "stimmst du voll zu" : m >= 1.5 ? "stimmst du eher zu" : m >= 0.5 ? "stimmst du eher nicht zu" : "stimmst du gar nicht zu";
   }
   BAUSTEINE.skala = {
-    erledigt: function (b) { var a = S.skala[b.id] || {}; return b.items.every(function (x, i) { return a[i] !== undefined; }); },
+    erledigt: function (b) { var a = S.skala[b.id] || {}; return !!S.skala[b.id + ":frei"] || b.items.every(function (x, i) { return a[i] !== undefined; }); },
     bauen: function (b) {
       var a = S.skala[b.id] || (S.skala[b.id] = {}), st = STUFEN[b.stufen || "vier"];
       var k = el('<div class="k-skala">' + (b.privat !== false ? '<p><span class="k-pille k-pille--privat">Nur für dich</span></p>' : "") + (b.einleitung ? "<p>" + b.einleitung + "</p>" : "") + '<p class="k-legende" aria-hidden="true">' + st.map(function (s) { return "<span><b>" + esc(s[0]) + "</b> " + esc(s[1]) + "</span>"; }).join("") + "</p>" + (b.stamm ? "<p><b>" + esc(b.stamm) + '</b> <span class="k-klein" data-k="stand" aria-live="polite"></span></p>' : '<p class="k-klein" data-k="stand" aria-live="polite"></p>') + '<div class="k-test"></div></div>');
@@ -481,6 +493,15 @@
         $$(".k-item", k).forEach(function (f) { f.classList.toggle("k-offen", n >= Math.ceil(b.items.length / 2) && !alle && a[f.getAttribute("data-i")] === undefined); });
       }
       k.addEventListener("change", function (e) { var f = e.target.closest(".k-item"); if (!f) return; a[f.getAttribute("data-i")] = +e.target.value; stand(); aktualisieren(); });
+      if (b.freiwillig !== false) {
+        var frei = el('<div class="k-frei"><p class="k-klein">Freiwillig: Du kannst den Bogen überspringen und an eine ausgedachte Person denken – oder an jemanden in deinem Alter.</p><button type="button" class="g-knopf g-knopf--still" data-k="frei">Bogen überspringen</button><span class="k-klein" data-k="frei-stand" aria-live="polite"></span></div>');
+        /* Freiwillig steht vorne, nicht erst nach 21 Sätzen */
+        k.insertBefore(frei, $(".k-test", k));
+        var fk = $('[data-k="frei"]', frei);
+        function freiStand() { var x = !!S.skala[b.id + ":frei"]; fk.hidden = x; $('[data-k="frei-stand"]', frei).textContent = x ? "Übersprungen – du kannst trotzdem jederzeit antippen." : ""; }
+        fk.addEventListener("click", function () { S.skala[b.id + ":frei"] = 1; freiStand(); aktualisieren(); });
+        freiStand();
+      }
       stand();
       return k;
     }
@@ -498,19 +519,19 @@
       var geprueft = !!st.ok;
       var faecher = b.faecher || [];
       if (b.raster) { faecher = []; b.raster.zeilen.forEach(function (z) { b.raster.spalten.forEach(function (s) { faecher.push({ id: z.id + "|" + s.id, titel: z.titel + " · " + s.titel, zeile: z, spalte: s }); }); }); }
-      var k = el('<div class="k-sortieren"><div class="k-stapel" aria-label="Kartenstapel"></div><div data-k="faecher"></div><div class="k-zeile" style="margin-top:var(--space-3)"><button type="button" class="g-knopf g-knopf--sekundaer" data-k="pruefen" disabled>Zwischenstand prüfen</button><button type="button" class="g-knopf g-knopf--still" data-k="zurueck" hidden>Falsche Karten zurück in den Stapel</button></div><div data-k="rueck" aria-live="polite" style="margin-top:var(--space-3)"></div></div>');
+      var k = el('<div class="k-sortieren"><div class="k-legen' + (b.raster ? " k-legen--oben" : "") + '"><div class="k-legen__stapel"><p class="k-legen__titel">Noch zu legen</p><div class="k-stapel" aria-label="Kartenstapel"></div><div class="k-zeile"><button type="button" class="g-knopf g-knopf--sekundaer" data-k="pruefen" disabled>Zwischenstand prüfen</button><button type="button" class="g-knopf g-knopf--still" data-k="zurueck" hidden>Falsche Karten zurück in den Stapel</button></div></div><div class="k-legen__ziel" data-k="faecher"></div></div><div data-k="rueck" aria-live="polite" style="margin-top:var(--space-3)"></div></div>');
       function chip(i, extra) { return '<button type="button" class="k-chip' + (b.satz ? " k-chip--satz" : "") + (extra || "") + '" data-c="' + i + '" aria-pressed="' + (gew === i) + '">' + esc(K[i][0]) + "</button>"; }
       function fach(f) {
         var drin = K.map(function (x, i) { return i; }).filter(function (i) { return st.lage[i] === f.id; });
-        return '<div class="k-fach" data-f="' + esc(f.id) + '">' + (b.raster ? "" : "<h4>" + esc(f.titel) + "</h4>" + (f.text ? "<p>" + esc(f.text) + "</p>" : "")) + '<div class="k-fach__liegt">' + drin.map(function (i) { return chip(i, geprueft && K[i][1] !== f.id ? '" data-urteil="kaum' : ""); }).join("") + '</div><button type="button" class="g-knopf g-knopf--sekundaer" data-hier="' + esc(f.id) + '"' + (gew === null ? " disabled" : "") + ' aria-label="Hierhin legen: ' + esc(f.titel) + '">Hierhin</button></div>';
+        return '<div class="k-fach" data-f="' + esc(f.id) + '">' + (b.raster ? '<p class="k-raster__ort">' + esc(f.ort || "") + "</p>" : "<h4>" + esc(f.titel) + "</h4>" + (f.text ? "<p>" + esc(f.text) + "</p>" : "")) + '<div class="k-fach__liegt">' + drin.map(function (i) { return chip(i, geprueft && K[i][1] !== f.id ? '" data-urteil="kaum' : ""); }).join("") + '</div><button type="button" class="g-knopf g-knopf--sekundaer" data-hier="' + esc(f.id) + '"' + (gew === null ? " disabled" : "") + ' aria-label="Hierhin legen: ' + esc(f.titel) + '">Hierhin</button></div>';
       }
       function malen() {
         var frei = K.map(function (x, i) { return i; }).filter(function (i) { return !st.lage[i]; });
         $(".k-stapel", k).innerHTML = frei.length ? frei.map(function (i) { return chip(i); }).join("") : '<span class="k-klein">Alle Karten sind abgelegt.</span>';
         var h;
         if (b.raster) {
-          h = '<div class="k-raster" style="--spalten:' + b.raster.spalten.length + '"><div class="k-raster__kopf k-raster__kopf--leer"></div>' + b.raster.spalten.map(function (s) { return '<div class="k-raster__kopf">' + esc(s.titel) + "</div>"; }).join("");
-          b.raster.zeilen.forEach(function (z) { h += '<div class="k-raster__kopf">' + esc(z.titel) + "</div>" + b.raster.spalten.map(function (s) { return fach({ id: z.id + "|" + s.id, titel: z.titel + ", " + s.titel }); }).join(""); });
+          h = '<div class="k-raster" style="--spalten:' + b.raster.spalten.length + '"><div class="k-raster__kopf k-raster__kopf--leer"></div>' + b.raster.spalten.map(function (s) { return '<div class="k-raster__kopf k-raster__kopf--spalte">' + esc(s.titel) + "</div>"; }).join("");
+          b.raster.zeilen.forEach(function (z) { h += '<div class="k-raster__kopf">' + esc(z.titel) + "</div>" + b.raster.spalten.map(function (s) { return fach({ id: z.id + "|" + s.id, titel: z.titel + ", " + s.titel, ort: s.titel }); }).join(""); });
           h += "</div>";
         } else h = '<div class="k-faecher' + (faecher.length === 3 ? " k-faecher--drei" : "") + '">' + faecher.map(fach).join("") + "</div>";
         $('[data-k="faecher"]', k).innerHTML = h;
@@ -525,7 +546,7 @@
         $('[data-k="zurueck"]', k).hidden = !falsch.length;
         if (falsch.length) r.innerHTML = '<div class="k-rueck k-rueck--weiter"><strong>' + (n - falsch.length) + " von " + n + " Karten liegen passend.</strong> Überlege bei den anderen noch einmal:<ul>" + falsch.map(function (i) { return "<li><strong>" + esc(K[i][0]) + "</strong> " + esc(K[i][2]) + "</li>"; }).join("") + "</ul></div>";
         else if (n < K.length) r.innerHTML = '<div class="k-rueck k-rueck--gut"><strong>Bisher liegt alles passend.</strong> Lege die übrigen Karten ab.</div>';
-        else r.innerHTML = '<div class="k-rueck k-rueck--gut"><strong>Alle Karten liegen passend.</strong> ' + esc(b.fertigText || "") + "</div>";
+        else r.innerHTML = '<div class="k-rueck k-rueck--gut"><strong>Alle Karten liegen passend.</strong> ' + esc(b.fertigText || "") + '</div><details class="k-hilfe" style="margin-top:var(--space-3)"><summary>Warum die Karten so liegen</summary><ul>' + K.map(function (x) { return "<li><strong>" + esc(x[0]) + "</strong> " + esc(x[2]) + "</li>"; }).join("") + "</ul></details>";
       }
       k.addEventListener("click", function (e) {
         var c = e.target.closest(".k-chip"), f = e.target.closest("[data-hier]");
@@ -552,7 +573,7 @@
     bauen: function () {
       if (!S.verorten) S.verorten = { lage: {}, geprueft: false, ok: false };
       var V = S.verorten, ids = begriffeVon(ST.id), gew = null;
-      var k = el('<div class="k-verorten"><p>Tippe einen Begriff an, dann die Station, an die er gehört. Gepunktet: Begriffe aus früheren Stunden – so, wie du sie gelegt hast, sonst an ihrem üblichen Platz.</p><div class="k-stapel" aria-label="Begriffe dieser Stunde"></div><div data-k="kreis"></div><div class="k-zeile" style="margin-top:var(--space-3)"><button type="button" class="g-knopf g-knopf--primaer" data-k="pruefen" disabled>Prüfen</button></div><div data-k="rueck" aria-live="polite" style="margin-top:var(--space-3)"></div><p class="k-klein">Modell: eigene Vereinfachung nach dem Grundmodell der Motivationspsychologie (Person und Situation → Motivation → Handeln), der Idee »Erwartung mal Wert« und der Attributionstheorie. Was lässt es weg? Zum Beispiel Gefühle, Gewohnheiten und Zufall.</p></div>');
+      var k = el('<div class="k-verorten"><p>Tippe einen Begriff an, dann die Station, an die er gehört. Gepunktet: Begriffe aus früheren Stunden – so, wie du sie gelegt hast, sonst an ihrem üblichen Platz.</p><div class="k-legen"><div class="k-legen__stapel"><p class="k-legen__titel">Begriffe dieser Stunde</p><div class="k-stapel" aria-label="Begriffe dieser Stunde"></div><div class="k-zeile"><button type="button" class="g-knopf g-knopf--primaer" data-k="pruefen" disabled>Prüfen</button></div></div><div class="k-legen__ziel" data-k="kreis"></div></div><div data-k="rueck" aria-live="polite" style="margin-top:var(--space-3)"></div><p class="k-klein">Modell: eigene Vereinfachung nach dem Grundmodell der Motivationspsychologie (Person und Situation → Motivation → Handeln), der Idee »Erwartung mal Wert« und der Attributionstheorie. Was lässt es weg? Zum Beispiel Gefühle, Gewohnheiten und Zufall.</p></div>');
       function chipHTML(bid) {
         var u = V.geprueft && V.lage[bid] ? urteilVerorten(bid, V.lage[bid])[0] : "";
         return '<button type="button" class="k-chip" data-b="' + bid + '" aria-pressed="' + (gew === bid) + '"' + (u ? ' data-urteil="' + u + '"' : "") + ">" + esc(E.BEGRIFFE[bid].name) + (u ? '<span class="k-sr"> – ' + WORT[u] + "</span>" : "") + "</button>";
@@ -716,12 +737,14 @@
 
   /* ---------- Start und Zusammenfassung ---------- */
   function startSeite(seite, a) {
-    var s = stundeVon(ST.id);
-    seite.innerHTML += '<p class="k-leise" style="margin:0 0 6px;font-weight:700">Stunde ' + s.nr + " von " + stundenListe().length + " · " + esc(ST.material || "") + " · Doppelstunde, " + ST.minuten + ' Minuten</p><h1 id="t-start">' + esc(s.titel) + '</h1><p class="k-frage">' + esc(ST.frage) + "</p>" +
-      '<div class="k-zwei" style="margin:var(--space-5) 0"><div><h3>Darum geht es</h3>' + ST.darum + '</div><div><h3>So arbeitest du mit diesem Blatt</h3><ul><li>Links stehen alle Aufträge. Du siehst immer, wo du bist und was noch kommt.</li><li>Jeder Auftrag hat eine eigene Seite. Du scrollst von oben nach unten.</li><li>Manche Aufträge öffnen sich erst nach deiner Antwort, manche auf Ansage deiner Lehrkraft.</li><li>Am Ende steht die Zusammenfassung zum Abheften: Wissen und Können.</li></ul></div></div>' +
+    var s = stundeVon(ST.id), erster = auftraege()[1], ort = S.ort && S.ort !== "start" ? auftragVon(S.ort) : null;
+    /* First-Action Rule: Der erste Knopf steht im ersten Bildschirm, auch am Beamer (1280 × 720). Weitermachen hat einen eigenen Knopf. */
+    seite.innerHTML += '<div class="k-deckblatt"><div class="k-deckblatt__text"><p class="k-kicker">Stunde ' + s.nr + " von " + stundenListe().length + " · " + esc(ST.material || "") + " · " + ST.minuten + ' Minuten</p><h1 id="t-start">' + esc(s.titel) + '</h1><p class="k-frage">' + esc(ST.frage) + '</p><div class="k-zeile"><button type="button" class="g-knopf g-knopf--primaer" data-geh="' + erster.id + '">Los geht’s: Auftrag ' + esc(erster.nr) + ' <span aria-hidden="true">→</span></button>' +
+      (ort && ort !== erster ? '<button type="button" class="g-knopf g-knopf--sekundaer" data-geh="' + ort.id + '">Weiter, wo du warst: ' + (ort.id === "z" ? "Zusammenfassung" : "Auftrag " + esc(ort.nr)) + "</button>" : "") + "</div></div>" +
+      '<div class="k-merk k-deckblatt__ziele"><p class="k-merk__titel">Am Ende kannst du …</p><ul>' + ST.ziele.map(function (z) { return "<li>" + z + "</li>"; }).join("") + "</ul></div></div>" +
+      '<div class="k-zwei" style="margin:var(--space-6) 0"><div><h3>Darum geht es</h3>' + ST.darum + '</div><div><h3>So arbeitest du mit diesem Blatt</h3><ul><li>Links stehen alle Aufträge. Du siehst immer, wo du bist und was noch kommt.</li><li>Jeder Auftrag hat eine eigene Seite. Du scrollst von oben nach unten.</li><li>Manche Aufträge öffnen sich erst nach deiner Antwort, manche auf Ansage deiner Lehrkraft.</li><li>Am Ende steht die Zusammenfassung zum Abheften: Wissen und Können.</li></ul></div></div>' +
       '<h3>Die Einheit · ' + esc(E.LEITFRAGE) + "</h3>" + landkarteHTML(ST.id) +
-      '<div class="k-zwei" style="margin-top:var(--space-6)"><div class="k-merk"><p class="k-merk__titel">Am Ende kannst du …</p><ul>' + ST.ziele.map(function (z) { return "<li>" + z + "</li>"; }).join("") + "</ul></div>" +
-      '<div class="k-kasten k-kasten--info"><div class="k-kasten__kopf">Gut zu wissen</div><p>Wir gehen gemeinsam am Board durch die Stunde; du arbeitest an deinem Gerät mit. Was du eintippst, bleibt auf deinem Gerät. Selbsttests sind nur für dich – sie sind ein Denkanstoß, keine Diagnose.</p>' + (ST.hinweis ? "<p>" + ST.hinweis + "</p>" : "") + "</div></div>";
+      '<div class="k-kasten k-kasten--info" style="margin-top:var(--space-6)"><div class="k-kasten__kopf">Gut zu wissen</div><p>Wir gehen gemeinsam am Board durch die Stunde; du arbeitest an deinem Gerät mit. Was du eintippst, bleibt auf deinem Gerät. Selbsttests sind freiwillig und nur für dich – ein Denkanstoß, keine Diagnose.</p>' + (ST.hinweis ? "<p>" + ST.hinweis + "</p>" : "") + "</div>";
     seite.appendChild(fussLeiste(a));
   }
   function merkHTML() {
@@ -821,7 +844,7 @@
     $$('[data-k="ansicht"]').forEach(function (s) { s.value = ansichtLaden(); });
     window.addEventListener("hashchange", function () { var id = location.hash.slice(1); if (id && (!AKT || id !== AKT.id) && auftragVon(id)) zeigen(id, true); });
     window.addEventListener("beforeprint", druckBauen);
-    var start = location.hash.slice(1) || S.ort || "start";
+    var start = location.hash.slice(1) || "start";
     zeigen(auftragVon(start) ? start : "start", false);
     if (/[?&]druck=/.test(location.search)) druckBauen();
   }

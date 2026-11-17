@@ -11,7 +11,7 @@ Interaktive Selbstversuche und Modelle für das Wahlfach Psychologie (J2) – �
 - Die Seiten senden keine Daten. Ergebnisse werden nur im Browser des jeweiligen iPads gespeichert (localStorage).
 - Für den Kursvergleich zeigt jede Schülerin einen QR-Code. Die Lehrkraft scannt ihn mit der Kamera-App; die Daten stehen im Anker der Adresse (`#d=…`), werden nicht an den Server übertragen und landen nur auf dem Gerät der Lehrkraft.
 - Keine Namen, keine Konten, keine externen Skripte oder Schriftarten.
-- Block Motivation: kein Kursvergleich. Selbsttests und Texte bleiben im Browser (`psycholabor:motivation:v2`; Eingaben aus `…:v1` werden übernommen) und lassen sich als Datei sichern.
+- Block Motivation: kein Kursvergleich. Selbsttests sind freiwillig und lassen sich überspringen; persönliche Texte kommen nicht in die Lernmappe. Alles bleibt im Browser (`psycholabor:motivation:v2`; Eingaben aus `…:v1` werden übernommen) und lässt sich als Datei sichern.
 
 ## Aufbau
 

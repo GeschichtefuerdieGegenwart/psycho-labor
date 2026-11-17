@@ -32,7 +32,7 @@
     STUNDEN.forEach(function (s) {
       K.begriffeVon(s.id).forEach(function (bid) {
         var l = K.lageVon(bid, false); if (!l) return; n++;
-        (chips[l] = chips[l] || []).push('<span class="k-chip h-chip" title="Stunde ' + s.nr + '">' + esc(E.BEGRIFFE[bid].name) + ' <small>' + s.nr + "</small></span>");
+        (chips[l] = chips[l] || []).push('<span class="k-chip h-chip" title="Stunde ' + s.nr + '">' + esc(E.BEGRIFFE[bid].name) + '<span class="k-sr"> (Stunde ' + s.nr + ")</span></span>");
       });
     });
     return { html: K.kreisHTML({ chips: chips }), n: n };
@@ -106,7 +106,7 @@
     var t = (st("ds06").skala || {}).m1 || {};
     if (Object.keys(t).length) {
       var G = { a: "Selbstbestimmung (selbst einteilen, aussuchen)", k: "das Gefühl, es zu schaffen", s: "zusammen mit anderen", v: "Vorgaben (Zeit, Ort, Inhalt)" };
-      teile.push("<h3>Stunde 1: Wann bin ich motiviert?</h3><ul>" + ["a", "k", "s", "v"].map(function (g) { var m = mittel(t, g, E.M1); return m === null ? "" : "<li><b>" + G[g] + ":</b> Diesen Sätzen " + K.wortStufe(m) + ".</li>"; }).join("") + "</ul>" + ((st("ds06").fest || {}).hypo ? '<p>Deine Vermutung: »Ich bin vor allem dann motiviert, wenn ' + esc(st("ds06").fest.hypo) + "«</p>" : ""));
+      teile.push("<h3>Stunde 1: Wann bin ich motiviert?</h3><ul>" + ["a", "k", "s", "v"].map(function (g) { var m = mittel(t, g, E.M1); return m === null ? "" : "<li><b>" + G[g] + ":</b> Diesen Sätzen " + K.wortStufe(m) + ".</li>"; }).join("") + "</ul>" + ((st("ds06").fest || {}).hypo ? '<p>Deine Vermutung: »… vor allem dann motiviert, wenn ' + esc(st("ds06").fest.hypo) + "«</p>" : ""));
     }
     var r = (st("ds07").skala || {}).regulation || {};
     if (Object.keys(r).length) {
@@ -114,10 +114,27 @@
       teile.push("<h3>Stunde 2: Warum lerne ich für ein Fach?</h3><ul>" + RG.map(function (x) { var m = mittel(r, x[0], IR); return m === null ? "" : "<li><b>" + x[1] + ":</b> Diesen Gründen " + K.wortStufe(m) + ".</li>"; }).join("") + "</ul>");
     }
     var w = st("ds08").wurf || [];
-    if (w.length && w[0] && w[0].l) teile.push("<h3>Stunde 3: Zielspiel</h3><p>Erster Wurf von der " + w[0].l + "-Meter-Linie. " + w.map(function (x, i) { return "Wurf " + (i + 1) + ": " + (x.l || "–") + " m, " + (x.t == null ? "–" : x.t ? "Treffer" : "daneben"); }).join(" · ") + "</p>");
+    if (st("ds08").strich) teile.push("<h3>Stunde 3: Zielspiel</h3><p>Du hast vorne die Strichliste geführt.</p>");
+    else if (w.length && w[0] && w[0].l) teile.push("<h3>Stunde 3: Zielspiel</h3><p>Erster Wurf von der " + w[0].l + "-Meter-Linie. " + w.map(function (x, i) { return "Wurf " + (i + 1) + ": " + (x.l || "–") + " m, " + (x.t == null ? "–" : x.t ? "Treffer" : "daneben"); }).join(" · ") + "</p>");
     var frei = [["ds07", "selbst", "Welches Bedürfnis mir wichtig ist"], ["ds08", "unddu", "Das Modell und mein Selbsttest"], ["ds11", "eigen", "Meine Gedanken zu einer Geschichte"]].map(function (x) { var v = (st(x[0]).fest || {})[x[1]]; return v ? "<li><b>" + x[2] + ":</b> " + esc(v) + "</li>" : ""; }).join("");
     if (frei) teile.push("<h3>Deine freiwilligen Notizen</h3><ul>" + frei + "</ul>");
     return teile.length ? teile.join("") + '<p class="k-klein">Hinweise aus kurzen Bögen und Spielen – kein Urteil über dich und keine Diagnose. Du entscheidest, was davon stimmt.</p>' : '<p class="k-klein">Noch keine Selbsttests auf diesem Gerät.</p>';
+  }
+
+  /* Auf einen Blick: nur Zahlen zum eigenen Stand – nichts, was eine Antwort vorwegnimmt */
+  function blick(n, k) {
+    var fertig = STUNDEN.filter(function (s) { return stand(s.id).s === "fertig"; }).length;
+    var alleBegriffe = STUNDEN.reduce(function (a, s) { return a + K.begriffeVon(s.id).length; }, 0);
+    var karten = 0, gewusst = 0, nochNicht = 0;
+    STUNDEN.forEach(function (s) { if (!istBegonnen(s.id)) return; E.MERK[s.id].begriffe.forEach(function (b, i) { karten++; var v = EH.karten[s.id + ":" + i]; if (v === 2) gewusst++; else if (v === 0) nochNicht++; }); });
+    var ziele = 0, eingeschaetzt = 0; E.KOENNEN.forEach(function (t, ti) { t.ziele.forEach(function (z, zi) { ziele++; if (EH.koennen[ti + ":" + zi] !== undefined) eingeschaetzt++; }); });
+    function zeile(zahl, von, text) { return '<div><dt><b>' + zahl + '</b>' + (von ? '<span> von ' + von + "</span>" : "") + "</dt><dd>" + text + "</dd></div>"; }
+    return '<aside class="h-blick" aria-labelledby="t-blick"><h2 id="t-blick">Auf einen Blick</h2><dl>' +
+      zeile(fertig, STUNDEN.length, "Stunden mit Kreis und Lernspur abgeschlossen") +
+      zeile(k.n, alleBegriffe, "Begriffe in deinem Motivationskreis") +
+      zeile(karten ? gewusst : "–", karten || "", karten ? "Lernkarten gewusst" + (nochNicht ? " · " + nochNicht + " noch nicht" : "") : "Lernkarten: erscheinen, sobald du eine Stunde bearbeitest") +
+      zeile(eingeschaetzt, ziele, "Punkte aus »Das muss ich können« eingeschätzt") +
+      '</dl><p class="k-klein">Alles liegt nur auf diesem Gerät. <a href="#sichern">Stand als Datei sichern</a>, bevor du das Gerät wechselst.</p></aside>';
   }
 
   /* ---------- Druck: Lernübersicht der Einheit (höchstens vier Seiten) ---------- */
@@ -139,11 +156,11 @@
   $("#app").innerHTML =
     '<header class="k-kopf"><span class="k-zeichen" aria-hidden="true">M</span><div class="k-kopf__titel"><b>Einheit Motivation</b><small>Dein Überblick wächst · sechs Doppelstunden</small></div><nav aria-label="Zurück"><a class="k-kopflink k-kopflink--haupt" href="index.html"><span aria-hidden="true">←</span> Psycho-Labor</a></nav></header>' +
     '<main class="h-seite" id="inhalt">' +
-    '<section class="h-hero"><p class="k-leise" style="margin:0;font-weight:700">Psychologie · Block 2 · nach Klassenarbeit 1</p><h1>Motivation</h1><p class="k-frage">' + esc(E.LEITFRAGE) + '</p><p class="k-intro">Sechs Doppelstunden, ein Weg: erst ein Fall, dann drei Geschichten von Jorge Bucay, am Ende du selbst. Hier wächst dein Überblick – mit jeder Stunde, die du auf diesem Gerät bearbeitest.</p>' +
-    (n ? '<p><a class="g-knopf g-knopf--primaer" href="' + n.datei + '">Weiter mit Stunde ' + n.nr + ": " + esc(n.titel) + ' <span aria-hidden="true">→</span></a></p>' : '<p><a class="g-knopf g-knopf--primaer" href="#lernkarten">Alle Stunden bearbeitet – jetzt üben <span aria-hidden="true">→</span></a></p>') + "</section>" +
+    '<section class="h-hero"><div class="h-hero__text"><p class="k-leise" style="margin:0;font-weight:700">Psychologie · Block 2 · nach Klassenarbeit&nbsp;1</p><h1>Motivation</h1><p class="k-frage">' + esc(E.LEITFRAGE) + '</p><p class="k-intro">Sechs Doppelstunden, ein Weg: erst ein Fall, dann drei Geschichten von Jorge Bucay, am Ende du selbst. Hier wächst dein Überblick – mit jeder Stunde, die du auf diesem Gerät bearbeitest.</p>' +
+    (n ? '<p><a class="g-knopf g-knopf--primaer" href="' + n.datei + '">Weiter mit Stunde ' + n.nr + ": " + esc(n.titel) + ' <span aria-hidden="true">→</span></a></p>' : '<p><a class="g-knopf g-knopf--primaer" href="#lernkarten">Alle Stunden bearbeitet – jetzt üben <span aria-hidden="true">→</span></a></p>') + "</div>" + blick(n, k) + "</section>" +
     '<nav class="h-nav" aria-label="Abschnitte">' + abschnitte.map(function (a) { return '<a href="#' + a[0] + '">' + a[1] + "</a>"; }).join("") + "</nav>" +
     '<section class="h-abschnitt" id="landkarte" aria-labelledby="t-lk"><h2 id="t-lk">Landkarte</h2>' + landkarte() + "</section>" +
-    '<section class="h-abschnitt" id="kreis" aria-labelledby="t-kr"><h2 id="t-kr">Dein Motivationskreis</h2><p>Hier liegen alle Begriffe, die du am Ende einer Stunde verortet hast – an der Stelle, an die du sie gelegt hast. Die kleine Zahl zeigt die Stunde. ' + (k.n ? "" : "<b>Noch leer:</b> Am Ende jeder Stunde legst du die neuen Begriffe hinein.") + "</p>" + k.html + '<p class="k-klein">Modell: eigene Vereinfachung nach dem Grundmodell der Motivationspsychologie (Person und Situation → Motivation → Handeln), der Idee »Erwartung mal Wert« und der Attributionstheorie. Was lässt es weg? Zum Beispiel Gefühle, Gewohnheiten und Zufall.</p><h3>Deine Verbindungen</h3>' + verbindungen() + "</section>" +
+    '<section class="h-abschnitt" id="kreis" aria-labelledby="t-kr"><h2 id="t-kr">Dein Motivationskreis</h2><p>Hier liegen alle Begriffe, die du am Ende einer Stunde verortet hast – an der Stelle, an die du sie gelegt hast. ' + (k.n ? "" : "<b>Noch leer:</b> Am Ende jeder Stunde legst du die neuen Begriffe hinein.") + "</p>" + k.html + '<p class="k-klein">Modell: eigene Vereinfachung nach dem Grundmodell der Motivationspsychologie (Person und Situation → Motivation → Handeln), der Idee »Erwartung mal Wert« und der Attributionstheorie. Was lässt es weg? Zum Beispiel Gefühle, Gewohnheiten und Zufall.</p><h3>Deine Verbindungen</h3>' + verbindungen() + "</section>" +
     '<section class="h-abschnitt" id="spur" aria-labelledby="t-sp"><h2 id="t-sp">Deine Lernspur</h2><p class="k-frage" style="font-size:1.4rem">' + esc(E.LEITFRAGE) + "</p>" + lernspur() + "</section>" +
     '<section class="h-abschnitt" id="sprachen" aria-labelledby="t-zs"><h2 id="t-zs">Zwei Sprachen</h2><p>Bucay erzählt in Bildern, die Psychologie in Fachbegriffen. Deine Übersetzungstabelle aus allen Geschichten – mit deinen Begründungen.</p>' + sprachen(false) + "</section>" +
     '<section class="h-abschnitt" id="lernkarten" aria-labelledby="t-lk2"><h2 id="t-lk2">Lernkarten</h2><p>Erst erinnern, dann umdrehen: Was du dir selbst erklären kannst, sitzt. Karten, die du noch nicht wusstest, kommen zuerst wieder.</p><div id="h-karten"></div></section>' +

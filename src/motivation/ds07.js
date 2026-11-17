@@ -31,7 +31,7 @@
     { id: "j2", text: "Was bewirkt die versprochene Belohnung der Eltern nach Deci und Ryan am ehesten?", opt: [
       ["Sie untergräbt Josefs Freude an Mathe.", "begruendbar", "Der Gedanke passt zum Unterminierungseffekt. Der setzt aber voraus, dass Josef vorher Freude an Mathe hatte – die ist gerade weg."],
       ["Sie macht Josef intrinsisch motiviert.", "kaum", "Eine Belohnung von außen ist extrinsisch. Sie kann Verhalten anstoßen, aber nicht Freude an der Sache erzeugen."],
-      ["Sie setzt außen an (external) und stärkt sein Kompetenzerleben nicht.", "zentral", "Wer nicht glaubt, es zu schaffen, dem hilft ein Anreiz wenig. Das Bedürfnis, das am wenigsten erfüllt ist, bleibt unberührt."]] }
+      ["Sie setzt mit einem Anreiz von außen an und stärkt sein Kompetenzerleben nicht.", "zentral", "Wer nicht glaubt, es zu schaffen, dem hilft ein Anreiz wenig. Das Bedürfnis, das am wenigsten erfüllt ist, bleibt unberührt."]] }
   ];
   var STELLEN = [
     { id: "am", titel: "Amotivation", text: "keine Motivation" },
@@ -76,12 +76,16 @@
   ];
 
   function kontBild() {
+    /* Beschriftung in zwei Reihen: So bleibt die Schrift auch am iPad hochkant bei mindestens 16 px (wirksame Größe) */
     var x = [70, 190, 310, 430, 550, 690], lab = ["Amotivation", "external", "introjiziert", "identifiziert", "integriert", "intrinsisch"];
-    var s = '<svg class="k-svg" viewBox="0 0 780 160" role="img" aria-label="Kontinuum der Regulation von links nach rechts: Amotivation, external, introjiziert, identifiziert, integriert, intrinsisch. Von nicht selbstbestimmt zu selbstbestimmt. Extrinsisch sind die vier mittleren Formen.">';
-    s += '<path class="l-text" d="M132 34 V24 H608 V34"/><text x="370" y="16" text-anchor="middle" class="t-klein">extrinsische Motivation</text>';
-    s += '<polygon class="f-petrol-hi" points="20,132 760,96 760,132"/><path class="l-leise" d="M20 132 L760 96"/>';
-    lab.forEach(function (l, i) { s += '<circle cx="' + x[i] + '" cy="' + (128 - (x[i] - 20) / 740 * 36 + 4) + '" r="6" class="f-text"/><text x="' + x[i] + '" y="62" text-anchor="middle">' + l + "</text>"; });
-    s += '<text x="20" y="154" class="t-leise t-klein">nicht selbstbestimmt</text><text x="760" y="154" text-anchor="end" class="t-leise t-klein">selbstbestimmt</text></svg>';
+    var s = '<svg class="k-svg" viewBox="0 0 780 196" role="img" aria-label="Kontinuum der Regulation von links nach rechts: Amotivation, external, introjiziert, identifiziert, integriert, intrinsisch. Von nicht selbstbestimmt zu selbstbestimmt. Extrinsisch sind die vier mittleren Formen.">';
+    s += '<path class="l-text" d="M132 36 V26 H608 V36"/><text x="370" y="18" text-anchor="middle" class="t-18">extrinsische Motivation</text>';
+    s += '<polygon class="f-petrol-hi" points="20,166 760,130 760,166"/><path class="l-leise" d="M20 166 L760 130"/>';
+    lab.forEach(function (l, i) {
+      var cy = 166 - (x[i] - 20) / 740 * 36 - 4, ty = i % 2 ? 92 : 62;
+      s += '<path class="l-leise" d="M' + x[i] + " " + (ty + 8) + " V" + (cy - 9) + '"/><circle cx="' + x[i] + '" cy="' + cy + '" r="6" class="f-text"/><text x="' + x[i] + '" y="' + ty + '" text-anchor="middle" class="t-20">' + l + "</text>";
+    });
+    s += '<text x="20" y="190" class="t-leise t-18">nicht selbstbestimmt</text><text x="760" y="190" text-anchor="end" class="t-leise t-18">selbstbestimmt</text></svg>';
     return s;
   }
   var GRUPPEN6 = { a: "Selbstbestimmung (selbst einteilen, aussuchen)", k: "Kompetenz (das Gefühl, es zu schaffen)", s: "soziale Eingebundenheit (Team, zusammen)", v: "Vorgaben (Zeit, Ort, Inhalt vorgegeben)" };
@@ -98,7 +102,7 @@
     auftraege: [
       { id: "a1", nr: "1", titel: "Erst erinnern", sozial: "allein, ohne Heft", min: 4, oeffnet: "offen", bloecke: [
         { typ: "abruf", min: 3, fragen: E.MERK.ds06.abruf, antworten: [
-          "Ein Motiv ist ein Beweggrund, den man von außen nicht sieht. Motivation ist der Vorgang, in dem er jetzt Verhalten in Gang setzt und auf ein Ziel ausrichtet.",
+          "Ein Motiv bringt jemand dauerhaft mit – eine Vorliebe für bestimmte Ziele. Motivation ist, was jetzt wirkt, wenn ein Motiv auf einen passenden Anreiz der Situation trifft. Beides erschließt man aus dem Verhalten.",
           "Zielrichtung, Ausdauer, Intensität.",
           "Er ist stark motiviert, aber anders: von intrinsisch (Freude am Tun) zu extrinsisch (Arbeit für die Münze)."] },
         { typ: "eigen", bauen: function (c) {
@@ -107,7 +111,7 @@
         } }
       ] },
       { id: "a2", nr: "2", titel: "Spur 1: Wann bleibe ich gern dran?", sozial: "allein", min: 8, oeffnet: "nach", zusatz: "Spur 1 von 3", bloecke: [
-        { typ: "text", html: "<p>Deci und Ryan nehmen an: Jeder Mensch hat drei angeborene <b>Grundbedürfnisse</b>. Sind sie erfüllt, tritt intrinsische Motivation eher auf. Welche drei? Folge den Spuren und stelle bei jeder eine Vermutung auf.</p>" },
+        { typ: "text", html: "<p>Deci und Ryan nehmen an: Jeder Mensch hat drei angeborene <b>Grundbedürfnisse</b>. Sind sie erfüllt, tritt intrinsische Motivation eher auf. Ihre Theorie heißt <b>Selbstbestimmungstheorie</b>. Welche drei Bedürfnisse? Folge den Spuren und stelle bei jeder eine Vermutung auf.</p>" },
         { typ: "skala", id: "kompetenz", stufen: "fuenf", items: ITEMS_A, einleitung: "Ein kurzer Selbsttest: Wie sehr trifft jeder Satz auf dich zu?" },
         { typ: "fest", id: "hypA", luecke: true, label: "Ich bin besonders häufig intrinsisch motiviert, wenn ich mich dabei … fühle.", platzhalter: "ein Wort", mind: 3, max: 60, zeilen: 1, kurz: "Meine Vermutung zu Spur 1 (ein Wort)" },
         { typ: "karten", karten: [{ art: "honig", titel: "Grundbedürfnis nach Kompetenz", html: "<p>Menschen wollen sich beim Handeln als fähig erleben. Wird das erfüllt, steigt die Wahrscheinlichkeit für intrinsische Motivation. Kompetent fühlen wir uns, wenn eine Aufgabe <b>weder zu leicht noch zu schwer</b> ist (Harter 1978). Positive Rückmeldung kann das Kompetenzerleben stärken.</p><p class=\"k-klein\">Aber: Man kann sich beim Vokabellernen kompetent fühlen, ohne intrinsisch motiviert zu sein. Kompetenz allein reicht nicht.</p>" }] },
@@ -118,7 +122,7 @@
         { typ: "wahl", items: W_B1 },
         { typ: "befund", status: "belegte Quelle · vereinfacht", html: "<p><b>Befund:</b> Die Gruppe, die Geld bekommen hatte, beschäftigte sich am dritten Termin in der freien Zeit <b>weniger</b> mit den Puzzles als vorher. Die andere Gruppe nicht. Das nennt man <b>Unterminierungseffekt</b>: Eine Belohnung von außen kann die Freude an einer Tätigkeit untergraben.</p>" },
         { typ: "fest", id: "hypB", luecke: true, label: "Die Belohnung hat den Personen das Gefühl genommen, … zu sein.", platzhalter: "ein Wort", mind: 3, max: 60, zeilen: 1, kurz: "Meine Vermutung zu Spur 2 (ein Wort)" },
-        { typ: "karten", karten: [{ art: "honig", titel: "Grundbedürfnis nach Selbstbestimmung (Autonomie)", html: "<p>Menschen wollen erleben, dass sie selbst entscheiden, was sie tun. Kommt eine Belohnung dazu, verschiebt sich der Grund nach außen: »Ich tue es fürs Geld«. Je mehr wir eine Handlung als frei gewählt erleben, desto wahrscheinlicher ist intrinsische Motivation.</p>" }] },
+        { typ: "karten", karten: [{ art: "honig", titel: "Grundbedürfnis nach Selbstbestimmung", html: "<p>Menschen wollen erleben, dass sie selbst entscheiden, was sie tun – man spricht auch von Autonomie. Kommt eine Belohnung dazu, verschiebt sich der Grund nach außen: »Ich tue es fürs Geld«. Je mehr wir eine Handlung als frei gewählt erleben, desto wahrscheinlicher ist intrinsische Motivation.</p>" }] },
         { typ: "kasten", art: "info", titel: "Wann der Effekt auftritt", html: "<p>Eine Auswertung von 128 Experimenten zeigt: Untergraben wird die Freude vor allem durch <b>erwartete, greifbare</b> Belohnungen (Geld, Preise), die man <b>für das Tun</b> bekommt. Ehrliches Lob stärkt die Motivation eher. Eine Überraschung danach schadet kaum (Deci, Koestner &amp; Ryan 1999). Wie stark der Effekt ist, wird bis heute diskutiert.</p>" },
         { typ: "wahl", items: W_B2 }
       ] },
@@ -151,7 +155,7 @@
       ] },
       { id: "a6", nr: "6", titel: "Vom Muss zum Wollen", sozial: "allein, dann Plenum", min: 17, oeffnet: "nach", bloecke: [
         { typ: "text", html: "<p>Zurück zur offenen Frage: Ali lernt fürs Studium – extrinsisch und trotzdem aus eigenem Antrieb? Deci und Ryan sagen: Extrinsische Motivation gibt es in vier Formen. Sie liegen auf einem <b>Kontinuum</b> zwischen fremdbestimmt und selbstbestimmt.</p>" },
-        { typ: "bild", svg: kontBild(), unterschrift: "Modell: Kontinuum der Regulation, in Anlehnung an Deci &amp; Ryan (2002)" },
+        { typ: "bild", svg: kontBild(), min: 700, name: "Schaubild Kontinuum der Regulation", unterschrift: "Modell: Kontinuum der Regulation, in Anlehnung an Deci &amp; Ryan (2002)" },
         { typ: "karten", karten: [
           { art: "petrol", titel: "external", html: "<p>Ich tue es, um eine Belohnung zu bekommen oder einer Strafe zu entgehen. Der Anstoß kommt von außen.</p>" },
           { art: "petrol", titel: "introjiziert", html: "<p>Ich tue es, »weil es sich gehört« oder weil ich sonst ein schlechtes Gewissen hätte. Der Druck kommt von innen, gehört aber nicht zu mir: Antreiber und Angetriebener sind verschieden, obwohl beide in mir wohnen.</p>" },
@@ -191,7 +195,7 @@
       ] },
       { id: "a9", nr: "9", titel: "Stimmt die Botschaft?", sozial: "allein", min: 12, oeffnet: "nach", bloecke: [
         { typ: "schreiben", id: "botschaft", operator: "Stellung nehmen", mind: 50,
-          aufgabe: "Eine Lesart der Geschichte lautet: <em>»Wer immer mehr will, verliert seine Freude.«</em> Beurteile diese Botschaft mit der Selbstbestimmungstheorie: Wo hat die Geschichte recht, wo greift sie zu kurz?",
+          aufgabe: "Eine Lesart der Geschichte lautet: <em>»Wer immer mehr will, verliert seine Freude.«</em> Beurteile diese Botschaft mit der Selbstbestimmungstheorie von Deci und Ryan (Grundbedürfnisse, Kontinuum): Wo hat die Geschichte recht, wo greift sie zu kurz?",
           hinweis: "Schreibe fünf bis acht Sätze und nutze mindestens zwei Begriffe von heute.",
           beispiel: "<p>»Die Geschichte hat recht, wenn sie zeigt, wie der Diener seine Freude verliert: Am Anfang arbeitet er intrinsisch motiviert, denn … Nach Deci und Ryan kommt es aber nicht darauf an, ob man mehr will, sondern …«</p>",
           satzanfaenge: ["Die Geschichte hat recht, wenn …, denn beim Diener …", "Nach Deci und Ryan kommt es aber nicht darauf an, ob man mehr will, sondern …", "Ein Gegenbeispiel ist …, der/die sein Ziel selbst gewählt hat und …", "Insgesamt halte ich die Botschaft für …, weil …"],
@@ -205,16 +209,16 @@
         { typ: "eigen", bauen: function (c) {
           var d6 = c.D.st.ds06 || {}, t = (d6.skala && d6.skala.m1) || {}, h = (d6.fest && d6.fest.hypo) || "", html = "";
           if (Object.keys(t).length) {
-            html += "<p>In Stunde 1 hast du angetippt, wann du motiviert bist. Viele Sätze gehörten heimlich zu den drei Bedürfnissen:</p><ul>";
+            html += "<p>In Stunde 1 hast du angetippt, wann du motiviert bist. Viele Sätze gehörten, ohne dass es dastand, zu den drei Bedürfnissen:</p><ul>";
             ["a", "k", "s", "v"].forEach(function (k) { var m = mittel(t, k, E.M1); if (m !== null) html += "<li><b>" + GRUPPEN6[k] + ":</b> Diesen Sätzen " + c.wort(m) + ".</li>"; });
             html += "</ul>";
-            if (h) html += '<p>Deine Vermutung aus Stunde 1:</p><blockquote class="k-dein-text">Ich bin vor allem dann motiviert, wenn ' + esc(h) + "</blockquote>";
+            if (h) html += '<p>Deine Vermutung aus Stunde 1:</p><blockquote class="k-dein-text">… vor allem dann motiviert, wenn ' + esc(h) + "</blockquote>";
           } else html += '<p class="k-klein">Dein Selbsttest aus Stunde 1 ist nicht auf diesem Gerät. Du kannst die Frage trotzdem beantworten.</p>';
           var ta = c.S.skala.kompetenz || {}, n = Object.keys(ta).length;
-          if (n) { var a = Object.keys(ta).reduce(function (s, i) { return s + ta[i]; }, 0) / n; html += "<p>Im Kompetenz-Bogen von heute lag dein Durchschnitt eher " + (a >= 3.5 ? "im oberen" : a >= 2.5 ? "im mittleren" : "im unteren") + " Bereich.</p>"; }
+          if (n) { var a = Object.keys(ta).reduce(function (s, i) { return s + ta[i]; }, 0) / n; html += "<p>Den Sätzen im Kompetenz-Bogen von heute hast du im Schnitt " + (a >= 3.5 ? "eher zugestimmt" : a >= 2.5 ? "teils zugestimmt" : "eher nicht zugestimmt") + ". Das hieße: Ob du dich kompetent fühlst, spielt für deine Motivation nach deinem Eindruck eine " + (a >= 3.5 ? "größere" : a >= 2.5 ? "mittlere" : "kleinere") + " Rolle. Über dein Können sagt der Bogen nichts.</p>"; }
           return "<div>" + html + '<p class="k-klein">Das sind Hinweise aus kurzen Bögen, kein Urteil über dich. Du entscheidest, was davon stimmt.</p></div>';
         } },
-        { typ: "fest", id: "selbst", optional: true, label: "Welches der drei Bedürfnisse ist dir beim Lernen besonders wichtig? Begründe mit einem Beispiel. (freiwillig)", platzhalter: "Mir ist … besonders wichtig. Das merke ich zum Beispiel, wenn …", mind: 15, max: 500, kurz: "Ein Blick auf mich (freiwillig)" },
+        { typ: "fest", id: "selbst", optional: true, druck: false, label: "Welches der drei Bedürfnisse ist dir beim Lernen besonders wichtig? Begründe mit einem Beispiel. (freiwillig)", platzhalter: "Mir ist … besonders wichtig. Das merke ich zum Beispiel, wenn …", mind: 15, max: 500, kurz: "Ein Blick auf mich (freiwillig)" },
         { typ: "kann", items: ["Ich kann die drei Grundbedürfnisse erklären und mit einem Befund belegen.", "Ich kann Gründe für eine Handlung auf dem Kontinuum einordnen.", "Ich kann die Botschaft einer Geschichte mit der Theorie prüfen."] },
         { typ: "text", html: "<details class=\"k-hilfe\"><summary>Für Schnelle</summary><p>Wähle ein Spiel oder eine App, die du gern nutzt. Zeige an je einem Beispiel, wie sie Kompetenz, Selbstbestimmung und soziale Eingebundenheit anspricht. Wo nutzt sie extrinsische Anreize?</p></details>" }
       ] }

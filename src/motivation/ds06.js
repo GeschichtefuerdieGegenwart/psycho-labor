@@ -83,13 +83,14 @@
           var n = c.el('<div class="k-karte k-karte--honig"><h3>Das fällt auf</h3><div data-x></div><p class="k-klein">Der Bogen ist kein geprüfter Test. Er sagt nichts darüber, wie du »bist«. Er hilft dir nur, eine Vermutung aufzustellen.</p></div>');
           n.kNeu = function () {
             var a = c.S.skala.m1 || {};
+            if (c.S.skala["m1:frei"] && !Object.keys(a).length) { c.$("[data-x]", n).innerHTML = "<p>Du hast den Bogen übersprungen. Denk für deine Vermutung an eine ausgedachte Person – oder an viele in deinem Alter.</p>"; return; }
             function liste(w) { var z = E.M1.filter(function (it, i) { return a[i] === w; }); return z.length ? "<ul>" + z.map(function (x) { return "<li>… " + esc(x[0]) + "</li>"; }).join("") + "</ul>" : '<p class="k-klein">Hier hast du nichts so deutlich angetippt.</p>'; }
             c.$("[data-x]", n).innerHTML = "<p><b>Dem stimmst du voll zu:</b></p>" + liste(3) + "<p><b>Dem stimmst du gar nicht zu:</b></p>" + liste(0);
           };
           n.kNeu();
           return n;
         } },
-        { typ: "fest", id: "hypo", label: "Meine Vermutung: Ich bin vor allem dann motiviert, wenn …", platzhalter: "… ich selbst entscheiden kann, wie ich …", mind: 15, max: 300, kurz: "Meine Vermutung über mich: Ich bin vor allem dann motiviert, wenn …" }
+        { typ: "fest", id: "hypo", druck: false, label: "Meine Vermutung: Ich bin – oder viele in meinem Alter sind – vor allem dann motiviert, wenn …", platzhalter: "… man selbst entscheiden kann, wie …", mind: 15, max: 300, kurz: "Meine Vermutung: Ich bin – oder viele in meinem Alter sind – vor allem dann motiviert, wenn …" }
       ] },
       { id: "a2", nr: "2", titel: "Vier aus einer Klasse", sozial: "zu zweit", min: 10, oeffnet: "nach", bloecke: [
         { typ: "text", html: "<p>Josef, Slobodan, Ali und Melissa gehen in die 11. Klasse eines beruflichen Gymnasiums. Sie begleiten uns durch die ganze Einheit.</p>" },
@@ -101,11 +102,12 @@
         { typ: "wahl", items: W_FALL, druck: "kurz" }
       ] },
       { id: "a3", nr: "3", titel: "Motiv und Motivation", sozial: "Plenum, dann allein", min: 15, oeffnet: "ansage", bloecke: [
-        { typ: "text", html: "<p>Warum jemand etwas tut, sieht man von außen nicht. Man sieht nur, was er tut. Die Psychologie trennt deshalb zwei Dinge.</p>" },
+        { typ: "text", html: "<p>Was jemand dauerhaft mitbringt und was ihn gerade jetzt antreibt, ist nicht dasselbe. Die Psychologie trennt deshalb zwei Dinge. Beide sieht man nicht direkt – man erschließt sie aus dem Verhalten.</p>" },
         { typ: "karten", karten: [
-          { art: "honig", titel: "Motiv", html: "<p>Ein Beweggrund, den man von außen nicht erkennt. Er aktiviert Verhalten.</p><p class=\"k-klein\">Beispiel: Josef möchte seinen Vater nicht enttäuschen.</p>" },
-          { art: "honig", titel: "Motivation", html: "<p>Der Vorgang, in dem ein Motiv Verhalten in Gang setzt und auf ein Ziel ausrichtet – jetzt, in dieser Situation. Richtet sie sich aufs Lernen, spricht man von <b>Lernmotivation</b>.</p><p class=\"k-klein\">Hasselhorn: »aktuelle Ausrichtung des momentanen Lebensvollzugs auf einen als positiv bewerteten Zielzustand«.</p>" }
+          { art: "honig", titel: "Motiv", html: "<p>Was jemand <b>dauerhaft</b> mitbringt: eine Vorliebe für bestimmte Ziele – etwa etwas zu leisten oder dazuzugehören. Ein Motiv ist auch dann da, wenn es gerade nicht wirkt.</p><p class=\"k-klein\">Beispiel: Josef möchte seinen Vater nicht enttäuschen.</p>" },
+          { art: "honig", titel: "Motivation", html: "<p>Was <b>jetzt</b> wirkt, wenn ein Motiv auf einen passenden Anreiz der Situation trifft: Sie setzt Verhalten in Gang und richtet es auf ein Ziel aus. Richtet sie sich aufs Lernen, spricht man von <b>Lernmotivation</b>.</p><p class=\"k-klein\">Rheinberg (zitiert bei Hasselhorn &amp; Gold): »aktivierende Ausrichtung des momentanen Lebensvollzuges auf einen positiv bewerteten Zielzustand«.</p>" }
         ] },
+        { typ: "kasten", art: "info", titel: "Woran man Motivation von außen erkennt", html: "<ul><li><b>Zielrichtung:</b> wofür sich jemand entscheidet – Hausaufgaben oder Handy?</li><li><b>Ausdauer:</b> wie lange jemand dranbleibt</li><li><b>Intensität:</b> wie sehr sich jemand anstrengt</li><li><b>Verarbeitungstiefe:</b> wie gründlich jemand lernt</li></ul><p>Daneben gibt es Arten von Motivation – zwei davon, <b>intrinsisch</b> und <b>extrinsisch</b>, lernst du in Auftrag 4 genauer kennen – und Bedingungen, die schon vorher da sind.</p>" },
         { typ: "text", html: "<h3>Was dazugehört: lege die Karten ab</h3><p>Tippe eine Karte an, dann das Fach, in das sie gehört. Eine abgelegte Karte holst du durch Antippen zurück. Ab fünf Karten kannst du den Zwischenstand prüfen.</p>" },
         { typ: "sortieren", id: "begriffe", karten: KARTEN, faecher: FAECHER, fertigText: "Merke dir die Reihenfolge: Bedingungen beeinflussen, welche Motivationsform entsteht. Die Form zeigt sich im Verhalten." },
         { typ: "text", html: "<h3>Am Fall anwenden</h3>" },
