@@ -47,12 +47,12 @@ Zeitdiagnose am vollen Stand (alle Aufträge aufgedeckt, alle Rückmeldungen sic
 
 | Stunde | Aufträge (Planzeit) | Wörter am vollen Stand | Gerätezeit, langsam | Puffer für Plenum |
 | --- | --- | --- | --- | --- |
-| 1 | 7 Aufträge, 80 Min. + Start und Zusammenfassung | 3 020 | 46 Min. | 34 Min. |
-| 2 | 9 Aufträge, 84 Min. | 3 770 | 50 Min. | 34 Min. |
-| 3 | 7 Aufträge, 80 Min. | 3 120 | 43 Min. | 37 Min. (Zielspiel 15 Min.) |
-| 4 | 7 Aufträge, 74 Min. | 2 850 | 40 Min. | 34 Min. |
-| 5 | 8 Aufträge, 78 Min. | 3 140 | 44 Min. | 34 Min. |
-| 6 | 7 Aufträge, 76 Min. | 2 600 | 35 Min. | 41 Min. |
+| 1 | 7 Aufträge, 80 Min. + Start und Zusammenfassung | 3 030 | 46 Min. | 34 Min. |
+| 2 | 9 Aufträge, 84 Min. | 3 780 | 50 Min. | 34 Min. |
+| 3 | 7 Aufträge, 80 Min. | 3 160 | 43 Min. | 37 Min. (Zielspiel 15 Min.) |
+| 4 | 7 Aufträge, 74 Min. | 2 860 | 40 Min. | 34 Min. |
+| 5 | 8 Aufträge, 78 Min. | 3 160 | 44 Min. | 34 Min. |
+| 6 | 7 Aufträge, 76 Min. | 2 610 | 35 Min. | 41 Min. |
 
 Stunde 2 ist die dichteste. Kürzungen zur Auswahl, falls es eng wird: **K1** Spur 3 im Plenum statt am Gerät (−4 Min.) · **K2** den Selbsttest »Warum lerne ich?« nach Hause geben (−4 Min.) · **K3** »Ein Blick auf dich« nur für Schnelle (−3 Min.).
 
