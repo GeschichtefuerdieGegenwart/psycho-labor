@@ -67,6 +67,7 @@
   .station .bald{border:2px dashed var(--stahl);color:var(--leise)}
   .station .bald h3{color:var(--text)}
   .station .stand{font-weight:700;font-size:1rem}
+  .einheit-link{display:inline-flex;align-items:center;gap:10px;min-height:48px;margin-top:var(--space-2);padding:10px 18px;border-radius:var(--radius-sm);background:var(--text);color:var(--grund);font-weight:700;text-decoration:none}
   .drei{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr));gap:var(--space-5);margin-bottom:var(--space-6)}
   .drei div{border-top:6px solid var(--honigplatte);padding-top:var(--space-3);display:grid;gap:var(--space-2);align-content:start}
 
@@ -89,7 +90,7 @@
   <ol class="fahrplan">
     <li class="w"><a href="#wahrnehmung"><b>Wahrnehmung</b><small>Block 1 · Stunde 2–5</small></a></li>
     <li class="ka"><span class="st"><b>Klassenarbeit 1</b><small>Wahrnehmung</small></span></li>
-    <li class="m"><a href="#motivation"><b>Motivation</b><small>Block 2 · Stunde 6–11 · läuft</small></a></li>
+    <li class="m"><a href="#motivation"><b>Motivation</b><small>Block 2 · Doppelstunde 6–11 · läuft</small></a></li>
     <li><span class="st"><b>Gedächtnis</b><small>in Planung</small></span></li>
     <li><span class="st"><b>Denken</b><small>in Planung</small></span></li>
     <li><span class="st"><b>Intelligenz</b><small>in Planung</small></span></li>
@@ -115,13 +116,14 @@
     <div class="block__kopf">
       <span class="schild">Block 2 · läuft</span>
       <h2>Motivation</h2>
-      <p class="frage">Wie lese ich meine eigene Motivation?</p>
-      <p>Sechs Stunden, ein Weg: erst ein Fall, dann Geschichten von Jorge Bucay, am Ende du selbst. Jede Stunde führt durch die ganze Doppelstunde.</p>
+      <p class="frage">Was treibt mich an – und was bremst mich?</p>
+      <p>Sechs Doppelstunden, ein Weg: erst ein Fall, dann drei Geschichten von Jorge Bucay, am Ende du selbst. Jede Stunde ist ein Arbeitsblatt mit Aufträgen und endet gleich: verorten, vernetzen, ein Satz in die Lernspur.</p>
+      <p><a class="einheit-link" href="motivation.html">Zur Einheitsseite: Dein Überblick wächst <span aria-hidden="true">→</span></a></p>
     </div>
     <div class="drei">
       <div><h3>Mein Motivprofil</h3><p>Kurze Selbsttests, nur für dich. Sie sammeln sich über alle Stunden.</p></div>
-      <div><h3>Das Begriffsnetz</h3><p>Jede Stunde kommen Begriffe dazu. Du setzt die Verbindungen.</p></div>
-      <div><h3>Zwei Sprachen</h3><p>Das Bild der Geschichte und der Fachbegriff – nebeneinander.</p></div>
+      <div><h3>Der Motivationskreis</h3><p>Jede Stunde legst du die neuen Begriffe in denselben Kreis und knüpfst eine Verbindung.</p></div>
+      <div><h3>Zwei Sprachen</h3><p>Das Bild der Geschichte und der Fachbegriff – nebeneinander. Am Ende analysierst du eine Geschichte selbst.</p></div>
     </div>
     <ol class="weg" id="weg-m"></ol>
   </div>
@@ -159,8 +161,8 @@
   document.getElementById("weg-m").innerHTML = alle.filter(function (b) { return b.block === "m"; }).map(function (b, i) {
     var innen = "<h3>" + esc(b.titel) + "</h3><p>" + esc(b.thema) + "</p>";
     return '<li class="station' + (b.bald ? "" : " offen") + '"><span class="nr" aria-hidden="true">' + (i + 1) + "</span>" + (b.bald
-      ? '<div class="bald"><span class="meta">Stunde ' + b.ds + " · in Planung</span>" + innen + "</div>"
-      : '<a href="' + b.datei + '"><span class="stand">Stunde ' + b.ds + " · bereit</span>" + innen + '<span class="stand">Öffnen <span aria-hidden="true">→</span></span></a>') + "</li>";
+      ? '<div class="bald"><span class="meta">Doppelstunde ' + b.ds + " · in Planung</span>" + innen + "</div>"
+      : '<a href="' + b.datei + '"><span class="stand">Stunde ' + (i + 1) + " von 6 · Doppelstunde " + b.ds + "</span>" + innen + '<span class="stand">Öffnen <span aria-hidden="true">→</span></span></a>') + "</li>";
   }).join("");
   var sel = document.getElementById("ansicht"), t = "hell";
   try { t = localStorage.getItem("g-ansicht") || "hell"; if (localStorage.getItem("g-bewegung") === "weniger") document.documentElement.setAttribute("data-bewegung", "weniger"); } catch (e) {}

@@ -11,7 +11,7 @@ Interaktive Selbstversuche und Modelle für das Wahlfach Psychologie (J2) – �
 - Die Seiten senden keine Daten. Ergebnisse werden nur im Browser des jeweiligen iPads gespeichert (localStorage).
 - Für den Kursvergleich zeigt jede Schülerin einen QR-Code. Die Lehrkraft scannt ihn mit der Kamera-App; die Daten stehen im Anker der Adresse (`#d=…`), werden nicht an den Server übertragen und landen nur auf dem Gerät der Lehrkraft.
 - Keine Namen, keine Konten, keine externen Skripte oder Schriftarten.
-- Block Motivation: kein Kursvergleich. Selbsttests und Texte bleiben im Browser (`psycholabor:motivation:v1`) und lassen sich als Datei sichern.
+- Block Motivation: kein Kursvergleich. Selbsttests und Texte bleiben im Browser (`psycholabor:motivation:v2`; Eingaben aus `…:v1` werden übernommen) und lassen sich als Datei sichern.
 
 ## Aufbau
 
@@ -22,17 +22,18 @@ Interaktive Selbstversuche und Modelle für das Wahlfach Psychologie (J2) – �
 | `ds03-gestalten.html` | DS 3: Gestalt-Labor |
 | `ds04-erwartungen.html` | DS 4: Spielkarten und Wortliste (Erwartungen) |
 | `ds05-andere.html` | DS 5: Lernweg zur Konformität – Herr Fotiou, Punkte, Linien im Gruppenchat, vier Stationen, Zusammenfassung (Fassung 2, siehe `docs/ds05-fassung2.md`) |
-| `ds07-wollen.html` | DS 7: Wann wird ein Muss zum Wollen? – Grundbedürfnisse, Kontinuum der Regulation, Kreis der 99 zweite Lektüre |
-| `ds06-antrieb.html` | DS 6: Was treibt mich an? – erster Lernweg im Block Motivation (Fassung 2, siehe `docs/motivation-block.md`) |
+| `motivation.html` | Einheitsseite Motivation: Landkarte, Motivationskreis, Lernspur, Zwei Sprachen, Lernkarten, »Das muss ich können«, Lernübersicht als PDF |
+| `ds06-antrieb.html` … `ds11-lesen.html` | Block Motivation, Stunde 1–6 (DS 6–11): Was treibt mich an? · Wann wird ein Muss zum Wollen? · Wann lohnt sich Anstrengung? · Wie erkläre ich mir Erfolg? · Wer bin ich im Vergleich? · Wie lese ich mich selbst? – siehe `docs/motivation-einheit.md` |
 | `wiederholung-wahrnehmung.html` | Wiederholung vor Klassenarbeit 1: Fragen mit Rückmeldung, Fall, Diskussion; Zusammenfassung, Probeklausur, Lernkarten, Erwartungshorizont als PDF (siehe `docs/wiederholung-wahrnehmung.md`) |
 | `src/` | Quelldateien; `node tools/inline.js src/<datei>.html` erzeugt die Einzeldatei im Hauptordner |
+| `src/motivation/`, `tools/bau_motivation.js` | Einheit Motivation: gemeinsamer Kern (`kern.js`, `kern.css`), Daten je Stunde (`ds06.js` …), Einheitsdaten; `node tools/bau_motivation.js` baut alle sieben Seiten |
 | `PRODUCT.md`, `DESIGN.md` | Zweck, Rahmen und Gestaltungsregeln des Labors |
 | `auswertung.html` | Kursauswertung für die Lehrkraft |
 | `assets/lab.css`, `assets/lab.js` | gemeinsames Design und Werkzeuge |
 | `assets/bausteine.js` | Verzeichnis der Bausteine (für Startseite und Auswertung) |
 | `assets/szenen-ds02.js` | selbst gezeichnete Bildpaare für DS 2 |
 | `assets/gegenwart/` | Bausteine aus dem Designsystem Gegenwart (Wahl, Balken, Bewegung), in Psycho-Labor-Farben |
-| `assets/gegenwart/tokens.css`, `assets/motiv.css`, `assets/motiv.js` | Block Motivation: Tokens des Designsystems Gegenwart, Gestaltung und gemeinsame Werkzeuge (Speicher, Schritte, Wahl, Datei) |
+| `assets/gegenwart/tokens.css`, `bundle.css`, `bundle.js` | Designsystem Gegenwart (Tokens, Bausteine), genutzt vom Block Motivation |
 | `assets/fonts/` | Schriften des Designsystems (lokal, Lizenzen in `LIZENZ.md`) |
 | `assets/qrcode.js` | QR-Code-Erzeugung (Kazuhiko Arase, MIT-Lizenz) |
 

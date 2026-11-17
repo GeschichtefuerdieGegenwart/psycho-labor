@@ -197,22 +197,13 @@
     }
   };
 
-  /* DS 6 ist seit Fassung 2 ein durchgängiger Lernweg ohne Kursvergleich per QR (Block Motivation, Design »Gegenwart«). */
-  B.ds06 = {
-    ds: 6,
-    block: "m",
-    titel: "Was treibt mich an?",
-    thema: "Motiv und Motivation · intrinsisch und extrinsisch · Der Kreis der 99",
-    datei: "ds06-antrieb.html"
-  };
-
-  B.ds07 = {
-    ds: 7,
-    block: "m",
-    titel: "Wann wird ein Muss zum Wollen?",
-    thema: "Drei Grundbedürfnisse · Kontinuum der Regulation · Der Kreis der 99, zweite Lektüre",
-    datei: "ds07-wollen.html"
-  };
+  /* Block Motivation (Fassung 2, 17.11.2026): sechs Stunden auf einem gemeinsamen Kern (src/motivation/), Einheitsseite motivation.html */
+  B.ds06 = { ds: 6, block: "m", titel: "Was treibt mich an?", thema: "Motiv und Motivation · intrinsisch und extrinsisch · Der Kreis der 99", datei: "ds06-antrieb.html" };
+  B.ds07 = { ds: 7, block: "m", titel: "Wann wird ein Muss zum Wollen?", thema: "Drei Grundbedürfnisse · Kontinuum der Regulation · Der Kreis der 99, zweite Lektüre", datei: "ds07-wollen.html" };
+  B.ds08 = { ds: 8, block: "m", titel: "Wann lohnt sich Anstrengung?", thema: "Zielspiel · Anspruchsniveau und Risikowahl · Erwartung mal Wert · Die Frösche in der Sahne", datei: "ds08-anstrengung.html" };
+  B.ds09 = { ds: 9, block: "m", titel: "Wie erkläre ich mir Erfolg?", thema: "Attribution · erlernte Hilflosigkeit · Der angekettete Elefant", datei: "ds09-erklaeren.html" };
+  B.ds10 = { ds: 10, block: "m", titel: "Wer bin ich im Vergleich?", thema: "Selbstkonzept · Fischteicheffekt · Selbstwirksamkeit · Der Elefant, zweite Lektüre", datei: "ds10-vergleich.html" };
+  B.ds11 = { ds: 11, block: "m", titel: "Wie lese ich mich selbst?", thema: "Vom Wollen zum Tun · Wenn-dann-Pläne · eine Geschichte selbst analysieren", datei: "ds11-lesen.html" };
 
   B.wdh1 = {
     block: "w",
@@ -224,12 +215,7 @@
   };
 
   /* Angekündigte Bausteine (noch nicht gebaut) */
-  B.geplant = [
-    { ds: 8, block: "m", titel: "Wann lohnt sich Anstrengung?", thema: "Erwartung mal Wert (Eccles) · Leistungsmotivation · Die Frösche in der Sahne" },
-    { ds: 9, block: "m", titel: "Wie erkläre ich mir Erfolg?", thema: "Attribution · Selbstwirksamkeit · Der angekettete Elefant" },
-    { ds: 10, block: "m", titel: "Wer bin ich im Vergleich?", thema: "Selbstkonzept · Fischteicheffekt" },
-    { ds: 11, block: "m", titel: "Wie lese ich mich selbst?", thema: "Alles vernetzen · eine Geschichte mit allen Theorien · eigene Analyse · vom Wollen zum Tun" }
-  ];
+  B.geplant = [];
 
   window.BAUSTEINE = B;
 })();
