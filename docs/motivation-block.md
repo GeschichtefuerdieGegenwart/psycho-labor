@@ -1,4 +1,6 @@
-# Block Motivation (DS 6–11): DS 6 und DS 7
+# Block Motivation (DS 6–11): DS 6 und DS 7 · Fassung 1
+
+> **Abgelöst** durch `docs/motivation-einheit.md` (Fassung 2, 17.11.2026): ein Kern für sechs Stunden, Motivationskreis statt Begriffsnetz, Speicherschlüssel `psycholabor:motivation:v2`. Dieser Text beschreibt Fassung 1 und bleibt zur Nachvollziehbarkeit stehen.
 
 Stand: 11. November 2026 · DS 6 live (PR #5) · DS 7 auf Branch `motivation-ds07`
 
