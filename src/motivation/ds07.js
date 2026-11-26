@@ -104,7 +104,8 @@
         { typ: "abruf", min: 3, fragen: E.MERK.ds06.abruf, antworten: [
           "Ein Motiv bringt jemand dauerhaft mit – eine Vorliebe für bestimmte Ziele. Motivation ist, was jetzt wirkt, wenn ein Motiv auf einen passenden Anreiz der Situation trifft. Beides erschließt man aus dem Verhalten.",
           "Zielrichtung, Ausdauer, Intensität.",
-          "Er ist stark motiviert, aber anders: von intrinsisch (Freude am Tun) zu extrinsisch (Arbeit für die Münze)."] },
+          "Er ist stark motiviert, aber anders: von intrinsisch (Freude am Tun) zu extrinsisch (Arbeit für die Münze).",
+          "»Motivation ist die aktuelle Ausrichtung des momentanen Lebensvollzugs auf einen als positiv bewerteten Zielzustand.« Prüfe die drei Teile: aktuell/momentan · Ausrichtung · positiv bewerteter Zielzustand."] },
         { typ: "eigen", bauen: function (c) {
           var t = (c.D.st.ds06 && c.D.st.ds06.skala && c.D.st.ds06.skala.m1) || {};
           return '<p class="k-klein">' + (Object.keys(t).length ? "Dein Selbsttest aus Stunde 1 ist auf diesem Gerät. Du brauchst ihn am Ende der Stunde." : "Dein Selbsttest aus Stunde 1 ist nicht auf diesem Gerät. Hast du ihn als Datei gesichert, lade ihn im Register unten. Sonst geht es auch ohne.") + "</p>";

@@ -154,11 +154,30 @@
           muster: function (S) { var g = S.analyse && S.analyse.g; return g ? MUSTER[g] : Object.keys(MUSTER).map(function (k) { return MUSTER[k]; }).join("<hr>"); },
           danach: "Bei Rot oder Gelb: Lies die Zeile in der möglichen Lösung nach und ergänze deinen Text in einer anderen Farbe – in GoodNotes oder auf Papier." }
       ] },
-      { id: "a6", nr: "6", titel: "Und du?", sozial: "allein, freiwillig", min: 4, oeffnet: "nach", bloecke: [
+      { id: "tom", nr: "6", titel: "Probeaufgabe: Tom", sozial: "allein", min: 20, oeffnet: "ansage", zusatz: "Probeaufgabe · 15 Punkte", bloecke: [
+        { typ: "text", html: "<p>Diese Aufgabe ist so gebaut wie in der Klassenarbeit: Definition nennen, ein Verhalten mit dem Dreischritt aus Stunde 1 erklären, eine Aussage beurteilen. Die Punkte stehen dabei.</p>" },
+        { typ: "karten", status: "ausgedachter Fall", karten: [{ art: "petrol", titel: "Material: Tom (16)", html: "<p>Tom sitzt in der Doppelstunde Mathematik. Er meldet sich nicht und hat das Arbeitsblatt nicht angefangen. Unter dem Tisch zeichnet er seit einer Stunde am Logo für seine Band, die in vier Wochen ihren ersten Auftritt hat. Dreimal radiert er den Schriftzug aus und beginnt neu. Als seine Sitznachbarin ihn anspricht, reagiert er nicht. Die Lehrerin sagt später: »Tom ist einfach nicht motiviert.«</p>" }] },
+        { typ: "schreiben", id: "tom", operator: "nennen · erklären · beurteilen", mind: 120, ampel: true, optional: true,
+          aufgabe: "1. Nenne die Definition von Motivation. (2 Punkte) 2. Erkläre Toms Verhalten mithilfe der Definition und des Dreischritts Bedingung – Form – Merkmal. (9 Punkte) 3. Beurteile die Aussage der Lehrerin. (4 Punkte)",
+          hinweis: "Nummeriere die drei Teile. Kennzeichne Vermutungen. Beim Beurteilen: erst Stellung, dann Begründung am Fall, dann eine Einschränkung.",
+          beispiel: "<p>»1. Motivation ist … 2. Tom zeichnet seit einer Stunde am Logo für seine Band. Dieses Verhalten lässt sich mit Motivation erklären: Er richtet sein Handeln auf den Zielzustand aus, dass …«</p>",
+          satzanfaenge: ["Motivation ist die aktuelle Ausrichtung …", "Tom richtet sein Handeln vermutlich auf den Zielzustand aus, dass …", "Die Motivation entsteht, weil das Motiv … auf den Anreiz … trifft.", "Sie ist …, denn das Positive liegt …", "Erkennbar ist sie an der Zielrichtung (…), an der Intensität (…) und an der Ausdauer (…).", "Die Aussage der Lehrerin ist so nicht haltbar, weil …", "Allerdings …"],
+          wortspeicher: ["Zielzustand", "vermutlich", "Motiv", "Anreiz", "intrinsisch", "extrinsisch", "Zielrichtung", "Intensität", "Ausdauer", "Beobachtung", "Vermutung"],
+          kriterien: [
+            ["1 Definition (2)", "Ich nenne die Definition im Wortlaut: aktuell/momentan · Ausrichtung · positiv bewerteter Zielzustand."],
+            ["2 Zielzustand (2)", "Ich nenne Toms Zielzustand als Zustand und begründe, warum er ihn vermutlich positiv bewertet."],
+            ["2 Bedingung (2)", "Ich nenne ein Motiv als Vermutung und den Anreiz (Auftritt in vier Wochen)."],
+            ["2 Form (2)", "Ich ordne die Form zu und begründe sie am Fall – intrinsisch und extrinsisch sind beide vertretbar."],
+            ["2 Merkmal (3)", "Ich belege Zielrichtung, Intensität und Ausdauer je mit einer Stelle aus dem Fall."],
+            ["3 Beurteilen (4)", "Ich nehme Stellung, zeige, dass Tom auf einen anderen Zielzustand ausgerichtet ist, formuliere es treffender und schränke ein."]],
+          muster: "<p><b>1.</b> Motivation ist die aktuelle Ausrichtung des momentanen Lebensvollzugs auf einen als positiv bewerteten Zielzustand.</p><p><b>2.</b> Tom zeichnet in der Mathestunde seit einer Stunde am Logo für seine Band. Dieses Verhalten lässt sich mit Motivation erklären: Er richtet sein Handeln auf den Zielzustand aus, dass das Logo fertig ist und zum Auftritt passt. Diesen Zustand bewertet er vermutlich positiv, weil ihm die Band wichtig ist. Die Motivation entsteht, weil sein Motiv – vermutlich etwas Eigenes zu gestalten oder zur Band zu gehören – auf einen Anreiz trifft: den ersten Auftritt in vier Wochen. Sie ist eher intrinsisch, denn das Zeichnen und Tüfteln selbst scheint ihn zu fesseln; vertretbar ist auch extrinsisch, wenn man das Logo als Mittel für den Auftritt sieht. Erkennbar ist die Motivation an der Zielrichtung (Logo statt Arbeitsblatt), an der Intensität (er reagiert nicht auf die Sitznachbarin) und an der Ausdauer (eine Stunde, dreimal neu begonnen).</p><p><b>3.</b> Die Aussage der Lehrerin ist so nicht haltbar. Tom zeigt Zielrichtung, Intensität und Ausdauer – er ist motiviert, aber auf einen anderen Zielzustand. Treffender wäre: Im Mathematikunterricht erkennt Tom gerade keinen Zielzustand, den er positiv bewertet. Einschränkend gilt: Die Lehrerin beobachtet zu Recht, dass er nicht mitarbeitet; Motive sind nicht sichtbar, und auch diese Erklärung bleibt eine Vermutung.</p><p class=\"k-klein\">Erwartungshorizont: 2 + 9 + 4 = 15 Punkte (AFB I 2, AFB II 9, AFB III 4).</p>",
+          danach: "Bei Rot oder Gelb: Lies die Zeile in der möglichen Lösung nach und ergänze deinen Text in einer anderen Farbe." }
+      ] },
+      { id: "a6", nr: "7", titel: "Und du?", sozial: "allein, freiwillig", min: 4, oeffnet: "nach", bloecke: [
         { typ: "kasten", art: "privat", titel: "Nur für dich", html: "<p>Welche der drei Geschichten passt zu einer Situation, die du kennst – oder zu einer Figur aus einem Film oder Buch? Was würde der Motivationskreis dazu sagen?</p><p class=\"k-klein\">Freiwillig. Dein Text bleibt auf deinem Gerät und kommt nicht in die Lernmappe. Es geht ums Nachdenken, nicht um eine Diagnose.</p>" },
         { typ: "fest", id: "eigen", optional: true, druck: false, label: "Meine Gedanken (freiwillig)", mind: 10, max: 600, zeilen: 4, kurz: "Meine Gedanken zu einer Geschichte (freiwillig)" }
       ] },
-      { id: "a7", nr: "7", titel: "Rückblick auf die Einheit", sozial: "allein, dann am Board", min: 8, oeffnet: "nach", bloecke: [
+      { id: "a7", nr: "8", titel: "Rückblick auf die Einheit", sozial: "allein, dann am Board", min: 8, oeffnet: "nach", bloecke: [
         { typ: "verorten" },
         { typ: "text", html: "<h3>Eine Verbindung knüpfen</h3>" },
         { typ: "verbindung", einleitung: "Die letzte Verbindung: Verbinde einen Begriff von heute mit einem aus einer früheren Stunde. Zum Beispiel: Was hat der Wenn-dann-Plan mit der Selbstwirksamkeit zu tun?" },
