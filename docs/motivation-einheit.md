@@ -58,6 +58,22 @@ Sechs Doppelstunden auf einem gemeinsamen Kern, dazu eine Einheitsseite. Grundla
 - **Analyse ohne Hilfe:** In Stunde 6 steht die Fachsprache je Bild hinter »Hilfe: Fachsprache zeigen«. Neu als Zugang ohne Hilfe: die Fabel »Der Fuchs und die Trauben« (nacherzählt nach Äsop, gemeinfrei) mit eigener möglicher Lösung – sie erscheint bewusst nicht in der Übersetzungstabelle der Einheit.
 - **Sortierkarten eindeutig:** »Konzentration (Tagesform)« statt »Konzentrationsvermögen«; Eccles-Karte »Ich sehe mich als jemand, der Mathe kann – darum ist mir eine gute Note wichtig.«
 
+## Baustein »Motivation erklären« (26. November 2026)
+
+Quelle: Claude-Dokument »Baustein Motivationsdefinition – Bedingung, Form, Merkmal (DS 6)« der Lehrkraft. Verbindlicher Wortlaut der Definition: »Motivation ist die aktuelle Ausrichtung des momentanen Lebensvollzugs auf einen als positiv bewerteten Zielzustand.« Er ersetzt auf allen Seiten Rheinbergs Fassung (»aktivierende Ausrichtung …«); in den Quellen steht »nach Rheinberg«.
+
+| Wo | Was |
+| --- | --- |
+| DS 6, Auftrag 5 `dr1` (auf Ansage, Plenum am Board, 15 Min.) | Einstieg »Tom ist einfach nicht motiviert«, Definition, drei Teile, Zielzustand mit drei Regeln, Dreischritt, Merksatz, Modellbeispiel Aylin (erst eigener Zustandssatz, dann Lösung), Satzgerüst |
+| DS 6, Auftrag 6 `dr2` (6 Min.) | Aufgabe 1 b und c: Zielzustand oder nicht? (Einfachwahl, sechs Sätze) · Welcher Schritt? (Zuordnen, sechs Aussagen über Mara) |
+| DS 6, Auftrag 7 `dr3` (10 Min.) | Aufgabe 2: Jonas mit Satzanfängen, Schreiben mit drei Zugängen, Kriterien, mögliche Lösung |
+| DS 6, Auftrag 8 `dr4` (10 Min.) | Aufgabe 3: Kim und Noah, Vergleich, »Für Schnelle« (Absage), Selbstkontrolle in fünf Fragen |
+| DS 7, Auftrag 1 | Aufgabe 1 a als vierte Abruffrage: Definition aus dem Kopf |
+| DS 11, Auftrag 6 `tom` (auf Ansage, freiwillig, sperrt nichts) | Aufgabe 4: Probeaufgabe Tom, 15 Punkte (AFB I 2 · II 9 · III 4), Ampel-Raster nach dem Erwartungshorizont, mögliche Lösung |
+| Merkseite DS 6, Lernkarten, »Das muss ich können« | Definition im Wortlaut, Dreischritt im Kernsatz, zwei neue Ziele (angehängt, damit gespeicherte Einschätzungen passen) |
+
+Bisherige Aufträge 5–7 in DS 6 heißen jetzt 9–11, in DS 11 6–7 jetzt 7–8 (IDs unverändert, gespeicherte Eingaben passen). Merkmale heißen wie im Rest der Einheit **Zielrichtung**, Intensität, Ausdauer. DS 6 wird mit dem Baustein länger als 90 Minuten (rund 41 Minuten dazu): Der Baustein kann als eigene Einheit am Board laufen; Aufträge öffnen auf Ansage.
+
 ## Der Motivationskreis
 
 Eigene Vereinfachung (Modell) nach dem Grundmodell der Motivationspsychologie (Person und Situation → Motivation → Handeln), der Idee »Erwartung mal Wert« und der Attributionstheorie:
@@ -107,7 +123,7 @@ Angaben aus dem Gedächtnis, nicht online geprüft:
 - Nagengast u. a. (2011), Psychological Science 22 (Zusammenspiel von Erwartung und Wert)
 - Deci (1971), Journal of Personality and Social Psychology 18 · Deci, Koestner & Ryan (1999), Psychological Bulletin 125, 128 Experimente
 - Weiner (1985), Psychological Review 92 · Seligman & Maier (1967), Journal of Experimental Psychology 74 (»Failure to escape traumatic shock«; Abschalten durch Drücken einer Platte, nach der Zusammenfassung in Maier & Seligman 2016) · Maier & Seligman (2016), Psychological Review 123
-- **Definition Motivation:** Rheinberg, »aktivierende Ausrichtung des momentanen Lebensvollzuges auf einen positiv bewerteten Zielzustand« (Rheinberg, Motivation, Kohlhammer). Ihr Material M2 schreibt »aktuelle Ausrichtung …« und nennt Hasselhorn – bitte an Hasselhorn & Gold prüfen, ob dort Rheinberg zitiert wird.
+- **Definition Motivation:** Im Kurs gilt der Wortlaut der Lehrkraft (»aktuelle Ausrichtung … als positiv bewerteten Zielzustand«, nach Rheinberg). Rheinberg selbst: »aktivierende Ausrichtung des momentanen Lebensvollzuges auf einen positiv bewerteten Zielzustand« (Rheinberg, Motivation, Kohlhammer). Ihr Material M2 schreibt »aktuelle Ausrichtung …« und nennt Hasselhorn – bitte an Hasselhorn & Gold prüfen, ob dort Rheinberg zitiert wird.
 - **Helmke (1998) und Wigfield:** ob der stärkste Rückgang des Fähigkeitsselbstkonzepts in den ersten Schuljahren oder nach dem Wechsel liegt, an M9 prüfen; die Seite nennt jetzt beides vorsichtig.
 - Marsh (1987) nach M8 · Helmke (1998) nach M9 · Bandura (1977), Psychological Review 84
 - Heckhausen & Gollwitzer (1987), Motivation and Emotion 11 · Gollwitzer & Sheeran (2006), Advances in Experimental Social Psychology 38, 94 Studien, mittlere bis große Wirkung · Wrosch u. a. (2003), Personality and Social Psychology Bulletin 29
