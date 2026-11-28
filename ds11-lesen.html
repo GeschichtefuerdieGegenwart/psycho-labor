@@ -1387,11 +1387,11 @@ window.EINHEIT = (function () {
   E.STUNDEN = [
     { id: "ka1", ka: true, titel: "Klassenarbeit 1", kurz: "Wahrnehmung · geschrieben" },
     { id: "ds06", nr: 1, titel: "Was treibt mich an?", kurz: "Motiv, Motivation · intrinsisch, extrinsisch", datei: "ds06-antrieb.html", geschichte: "Der Kreis der 99" },
-    { id: "ds07", nr: 2, titel: "Wann wird ein Muss zum Wollen?", kurz: "Grundbedürfnisse · Kontinuum der Regulation", datei: "ds07-wollen.html", geschichte: "Der Kreis der 99" },
+    { id: "ds07", nr: 2, titel: "Wann wird ein Muss zum Wollen?", kurz: "Grundbedürfnisse · Kontinuum der Regulation", datei: "ds07-wollen.html", geschichte: "Linsen · Der Kreis der 99" },
     { id: "ds08", nr: 3, titel: "Wann lohnt sich Anstrengung?", kurz: "Anspruchsniveau · Erwartung mal Wert", datei: "ds08-anstrengung.html", geschichte: "Die Frösche in der Sahne" },
-    { id: "ds09", nr: 4, titel: "Wie erkläre ich mir Erfolg?", kurz: "Attribution · erlernte Hilflosigkeit", datei: "ds09-erklaeren.html", geschichte: "Der angekettete Elefant" },
-    { id: "ds10", nr: 5, titel: "Wer bin ich im Vergleich?", kurz: "Selbstkonzept · Fischteich · Selbstwirksamkeit", datei: "ds10-vergleich.html", geschichte: "Der angekettete Elefant" },
-    { id: "ds11", nr: 6, titel: "Wie lese ich mich selbst?", kurz: "Vom Wollen zum Tun · Geschichten analysieren", datei: "ds11-lesen.html", geschichte: "alle drei" },
+    { id: "ds09", nr: 4, titel: "Wie erkläre ich mir Erfolg?", kurz: "Attribution · erlernte Hilflosigkeit", datei: "ds09-erklaeren.html", geschichte: "Die taube Ehefrau · Der angekettete Elefant" },
+    { id: "ds10", nr: 5, titel: "Wer bin ich im Vergleich?", kurz: "Selbstkonzept · Fischteich · Selbstwirksamkeit", datei: "ds10-vergleich.html", geschichte: "Der wahre Wert des Rings · Der angekettete Elefant" },
+    { id: "ds11", nr: 6, titel: "Wie lese ich mich selbst?", kurz: "Vom Wollen zum Tun · Geschichten analysieren", datei: "ds11-lesen.html", geschichte: "Die Frösche in der Sahne · eine Geschichte selbst analysieren" },
     { id: "ka2", ka: true, titel: "Klassenarbeit 2", kurz: "Motivation · auf Papier" }
   ];
 
@@ -1519,20 +1519,45 @@ window.EINHEIT = (function () {
   ];
   E.ARTEN = ["erklärt", "beeinflusst", "ist ein Beispiel für", "ist das Gegenteil von", "baut auf"];
 
-  /* Zwei Sprachen: Bucays Bilder in eigenen Worten → Fachsprache. id = Wahl-Aufgabe in der Stunde. */
+  /* Eine Geschichte je Inhalt (Fassung 2.2, 28.11.2026). Nur Geschichten, deren Handlung gesichert ist: im Kurs aus dem Buch
+     vorgelesen (Kreis, Frösche, Elefant) oder in dieser Fassung an einer zweiten Quelle bestätigt (Linsen, Die taube Ehefrau,
+     Der wahre Wert des Rings). Die Einheitsseite zeigt nur Zeilen begonnener Stunden – sonst verriete sie spätere Aufgaben. */
+  E.JE_INHALT = [
+    { ds: "ds06", geschichte: "Der Kreis der 99", inhalt: "intrinsische und extrinsische Motivation" },
+    { ds: "ds07", geschichte: "Linsen", inhalt: "Kontinuum der Regulation (Theorie der organismischen Integration)" },
+    { ds: "ds07", geschichte: "Der Kreis der 99", inhalt: "Unterminierungseffekt und Selbstbestimmung" },
+    { ds: "ds08", geschichte: "Die Frösche in der Sahne", inhalt: "Erwartung mal Wert" },
+    { ds: "ds09", geschichte: "Die taube Ehefrau", inhalt: "internal oder external" },
+    { ds: "ds09", geschichte: "Der angekettete Elefant", inhalt: "erlernte Hilflosigkeit" },
+    { ds: "ds10", geschichte: "Der wahre Wert des Rings", inhalt: "Vergleiche und Bezugsrahmen" },
+    { ds: "ds10", geschichte: "Der angekettete Elefant", inhalt: "Fähigkeitsselbstkonzept und Selbstwirksamkeit" },
+    { ds: "ds11", geschichte: "Die Frösche in der Sahne", inhalt: "Einzelfall oder Befund" }
+  ];
+  E.inhaltVon = function (geschichte, ds) {
+    var r = ""; E.JE_INHALT.forEach(function (z) { if (z.ds === ds && z.geschichte === geschichte) r = z.inhalt; }); return r;
+  };
+
+  /* Zwei Sprachen: Bucays Bilder in eigenen Worten → Fachsprache. id = Wahl-Aufgabe in der Stunde.
+     Reihenfolge je Stunde wie im Ablauf der Stunde (die Tabellen gruppieren nach Geschichte und Stunde). */
   E.BILDER = [
     { id: "k1", kurz: "fröhlich ohne Lohn", ds: "ds06", geschichte: "Der Kreis der 99", bild: "Der Diener ist fröhlich bei der Arbeit, obwohl ihm niemand etwas dafür versprochen hat.", fach: "intrinsische Motivation" },
     { id: "k2", kurz: "die fehlende Münze", ds: "ds06", geschichte: "Der Kreis der 99", bild: "Die eine Münze, die zum Hundert fehlt.", fach: "extrinsischer Anreiz: Ziel außerhalb der Handlung" },
     { id: "k3", kurz: "mehr Arbeit, keine Freude", ds: "ds06", geschichte: "Der Kreis der 99", bild: "Der Diener arbeitet mehr als je zuvor – und die Freude ist weg.", fach: "Wechsel der Motivationsform; Intensität steigt, Freude sinkt" },
+    { id: "li1", kurz: "schmeichelt für ein bequemes Leben", ds: "ds07", geschichte: "Linsen", bild: "Der Höfling schmeichelt dem König und lebt dafür bequem am Hof.", fach: "externale Regulation: Er tut es für einen Lohn von außen" },
+    { id: "li2", kurz: "lieber Linsen", ds: "ds07", geschichte: "Linsen", bild: "Diogenes isst lieber einfache Linsen, als dem König zu schmeicheln.", fach: "selbstbestimmt (identifiziert oder integriert): Die Linsen sind Mittel zum Zweck, aber der Zweck – frei bleiben – gehört zu ihm" },
     { id: "k4", kurz: "keine Ruhe mehr", ds: "ds07", geschichte: "Der Kreis der 99", bild: "Der Diener kommt nicht mehr zur Ruhe, bis die fehlende Münze da ist.", fach: "introjizierte Regulation: innerer Druck, der nicht zu ihm gehört" },
     { id: "k5", kurz: "Geschenk, kein Lohn", ds: "ds07", geschichte: "Der Kreis der 99", bild: "Die Münzen waren ein Geschenk, kein Lohn für seine Arbeit.", fach: "Unterminierungseffekt – nur teilweise: keine Belohnung für das Tun" },
     { id: "k6", kurz: "singt bei der Arbeit", ds: "ds07", geschichte: "Der Kreis der 99", bild: "Am Anfang singt der Diener bei der Arbeit.", fach: "Selbstbestimmung geht verloren" },
     { id: "fr1", kurz: "erster Frosch hört auf", ds: "ds08", geschichte: "Die Frösche in der Sahne", bild: "Der erste Frosch fragt, welchen Sinn es hat, sich für eine aussichtslose Sache abzustrampeln – und hört auf.", fach: "Erwartung null, Wert hoch: Erwartung × Wert = 0" },
     { id: "fr2", kurz: "zweiter strampelt weiter", ds: "ds08", geschichte: "Die Frösche in der Sahne", bild: "Auch der zweite Frosch hält die Lage für aussichtslos – und strampelt trotzdem weiter.", fach: "umstritten: Weiterkämpfen als eigener Wert – oder Grenze des Modells" },
     { id: "fr3", kurz: "Butter – er springt heraus", ds: "ds08", geschichte: "Die Frösche in der Sahne", bild: "Aus der Sahne wird Butter – der zweite Frosch springt heraus.", fach: "Erfolg wirkt zurück: Erwartung und Anspruchsniveau steigen" },
+    { id: "te1", kurz: "sie hört schlecht", ds: "ds09", geschichte: "Die taube Ehefrau", bild: "Der Mann ist überzeugt: Seine Frau hört immer schlechter.", fach: "externale Attribution: Er sucht die Ursache bei ihr" },
+    { id: "te2", kurz: "er hört schlecht", ds: "ds09", geschichte: "Die taube Ehefrau", bild: "Sie hat ihm jedes Mal geantwortet. Schlecht hört er selbst.", fach: "Eine Attribution ist eine subjektive Erklärung und kann falsch sein: Die Ursache liegt bei ihm (internal)" },
     { id: "el1", kurz: "zerrt vergeblich", ds: "ds09", geschichte: "Der angekettete Elefant", bild: "Der kleine Elefant zerrt tagelang am Pflock – vergeblich. Eines Tages gibt er auf.", fach: "erlernte Hilflosigkeit entsteht: Handeln bewirkt nichts" },
     { id: "el2", kurz: "versucht es nicht mehr", ds: "ds09", geschichte: "Der angekettete Elefant", bild: "Der große Elefant könnte den Pflock mühelos herausreißen. Er versucht es nicht.", fach: "erlernte Hilflosigkeit zeigt sich: alte Erfahrung, neue Lage" },
     { id: "el3", kurz: "glaubt, er kann nicht", ds: "ds09", geschichte: "Der angekettete Elefant", bild: "Er glaubt, dass er es nicht kann – weil er es damals nicht konnte.", fach: "ungünstige Attribution: internal, stabil, nicht kontrollierbar" },
+    { id: "ri1", kurz: "Markt und Juwelier", ds: "ds10", geschichte: "Der wahre Wert des Rings", bild: "Der Markt bietet kaum etwas, der Juwelier viel mehr.", fach: "kriterialer Vergleich: fester Maßstab" },
+    { id: "ri2", kurz: "wie der Ring", ds: "ds10", geschichte: "Der wahre Wert des Rings", bild: "Du bist wie der Ring: Nicht jeder erkennt deinen Wert.", fach: "Spiegel der anderen (Cooley)" },
     { id: "el4", kurz: "nie wieder geprüft", ds: "ds10", geschichte: "Der angekettete Elefant", bild: "Er hat seine Kraft nie wieder auf die Probe gestellt.", fach: "kein temporaler Vergleich: veraltetes Selbstkonzept" },
     { id: "el5", kurz: "noch einmal versuchen", ds: "ds10", geschichte: "Der angekettete Elefant", bild: "Ob man etwas kann, erfährt man nur, wenn man es noch einmal mit ganzem Herzen versucht.", fach: "Selbstwirksamkeit wächst durch eigene Erfolgserfahrung (Bandura)" },
     { id: "fr4", kurz: "nur einer erzählt", ds: "ds11", geschichte: "Die Frösche in der Sahne", bild: "Erzählt wird vom Frosch, der es geschafft hat.", fach: "Einzelfall: Wer kämpfte und unterging, erzählt keine Geschichte" }
@@ -1566,7 +1591,7 @@ window.EINHEIT = (function () {
       ],
       denkwerkzeug: ["Zusammenhang oder Ursache?", "Treten zwei Dinge zusammen auf (Korrelation), heißt das noch nicht, dass das eine das andere verursacht (Kausalität). Es kann umgekehrt sein, oder ein Drittes beeinflusst beides. Ursachen zeigt erst ein Experiment wie das von Deci."],
       abruf: ["Nenne die drei Grundbedürfnisse nach Deci und Ryan.", "Was ist der Unterschied zwischen introjiziert und identifiziert?", "Woran erkennt man Motivation von außen?"],
-      quellen: "Unterrichtsmaterial M4–M5 · Deci &amp; Ryan (1993) · Deci (1971) · Deci, Koestner &amp; Ryan (1999), Psychological Bulletin 125 (6) · Harter (1978) · Wigfield u. a. (2006) · Jerusalem &amp; Schwarzer (1991) · Schaubild in Anlehnung an Deci &amp; Ryan (2002)"
+      quellen: "Unterrichtsmaterial M4–M5 · Deci &amp; Ryan (1993) · Deci (1971) · Deci, Koestner &amp; Ryan (1999), Psychological Bulletin 125 (6) · Harter (1978) · Wigfield u. a. (2006) · Jerusalem &amp; Schwarzer (1991) · Schaubild in Anlehnung an Deci &amp; Ryan (2002) · Jorge Bucay: Komm, ich erzähl dir eine Geschichte (Linsen, Der Kreis der 99); die Anekdote von Diogenes erzählt schon Diogenes Laertios (II 68)"
     },
     ds08: {
       kernsatz: "Ob ich mich anstrenge, hängt an zwei Fragen: Schaffe ich das? (Erwartung) und Was ist es mir wert? (Wert). Ist eine der Antworten »gar nicht«, bleibt die Motivation aus.",
@@ -1594,7 +1619,7 @@ window.EINHEIT = (function () {
       ],
       denkwerkzeug: ["Prognose: Was sagt eine Theorie voraus?", "Eine gute Theorie erklärt nicht nur hinterher, sie sagt vorher, was passiert – und lässt sich daran prüfen. Die Attributionstheorie sagt voraus: Wer einen Misserfolg stabil erklärt, erwartet wieder Misserfolg und strengt sich weniger an."],
       abruf: ["Nenne die drei Fragen, die die Attributionstheorie an eine Erklärung stellt.", "Welche Erklärung eines Misserfolgs ist für die Motivation günstig – und warum?", "Was hat der Elefant gelernt – in Fachsprache?"],
-      quellen: "Unterrichtsmaterial M7 · Weiner (1985), Psychological Review 92 · Heider (1958) · Hasselhorn &amp; Gold (2013) · Seligman &amp; Maier (1967), Journal of Experimental Psychology 74 · Maier &amp; Seligman (2016), Psychological Review 123"
+      quellen: "Unterrichtsmaterial M7 · Weiner (1985), Psychological Review 92 · Heider (1958) · Hasselhorn &amp; Gold (2013) · Seligman &amp; Maier (1967), Journal of Experimental Psychology 74 · Maier &amp; Seligman (2016), Psychological Review 123 · Jorge Bucay: Komm, ich erzähl dir eine Geschichte (Die taube Ehefrau, Der angekettete Elefant)"
     },
     ds10: {
       kernsatz: "Das Bild von meinen Fähigkeiten entsteht im Vergleich – mit anderen, mit mir früher, zwischen Fächern. Es bestimmt mit, was ich mir zutraue, und wirkt auf meine Leistung zurück.",
@@ -1819,7 +1844,7 @@ window.EINHEIT = (function () {
           danach: "Bei Rot oder Gelb: Lies die Zeile in der möglichen Lösung nach und ergänze deinen Text in einer anderen Farbe." }
       ] },
       { id: "a6", nr: "7", titel: "Und du?", sozial: "allein, freiwillig", min: 4, oeffnet: "nach", bloecke: [
-        { typ: "kasten", art: "privat", titel: "Nur für dich", html: "<p>Welche der drei Geschichten passt zu einer Situation, die du kennst – oder zu einer Figur aus einem Film oder Buch? Was würde der Motivationskreis dazu sagen?</p><p class=\"k-klein\">Freiwillig. Dein Text bleibt auf deinem Gerät und kommt nicht in die Lernmappe. Es geht ums Nachdenken, nicht um eine Diagnose.</p>" },
+        { typ: "kasten", art: "privat", titel: "Nur für dich", html: "<p>Welche Geschichte aus dieser Einheit passt zu einer Situation, die du kennst – oder zu einer Figur aus einem Film oder Buch? Was würde der Motivationskreis dazu sagen?</p><p class=\"k-klein\">Freiwillig. Dein Text bleibt auf deinem Gerät und kommt nicht in die Lernmappe. Es geht ums Nachdenken, nicht um eine Diagnose.</p>" },
         { typ: "fest", id: "eigen", optional: true, druck: false, label: "Meine Gedanken (freiwillig)", mind: 10, max: 600, zeilen: 4, kurz: "Meine Gedanken zu einer Geschichte (freiwillig)" }
       ] },
       { id: "a7", nr: "8", titel: "Rückblick auf die Einheit", sozial: "allein, dann am Board", min: 8, oeffnet: "nach", bloecke: [
@@ -1994,7 +2019,8 @@ window.EINHEIT = (function () {
   function sprachenHTML(bisId) {
     var z = sprachenZeilen(bisId), letzte = null;
     return '<table class="k-tabelle"><thead><tr><th scope="col">Bucays Bild</th><th scope="col">Fachsprache</th><th scope="col">Deine Begründung</th></tr></thead><tbody>' + z.map(function (r) {
-      var kopf = r.b.geschichte + r.st.nr !== letzte ? '<tr><td colspan="3"><b>' + esc(r.b.geschichte) + '</b> <span class="k-klein">· Stunde ' + r.st.nr + "</span></td></tr>" : "";
+      var inh = E.inhaltVon ? E.inhaltVon(r.b.geschichte, r.b.ds) : "";
+      var kopf = r.b.geschichte + r.st.nr !== letzte ? '<tr><td colspan="3"><b>' + esc(r.b.geschichte) + '</b> <span class="k-klein">· Stunde ' + r.st.nr + (inh ? " · zu: " + esc(inh) : "") + "</span></td></tr>" : "";
       letzte = r.b.geschichte + r.st.nr;
       return kopf + '<tr><td style="font:italic 600 1.05rem/1.4 var(--font-stimme)">' + esc(r.b.bild) + "</td><td>" + esc(r.b.fach) + '</td><td class="k-dein">' + esc(r.eigen) + "</td></tr>";
     }).join("") + "</tbody></table>";
@@ -2011,9 +2037,21 @@ window.EINHEIT = (function () {
   function erledigt(b) { var t = BAUSTEINE[b.typ]; return t && t.erledigt ? !!t.erledigt(b) : true; }
   function sperrt(b) { if (b.sperrt === false || b.optional) return false; var t = BAUSTEINE[b.typ]; return !!(t && t.erledigt) && t.sperrt !== false; }
   function fertig(a) { if (!a || !a.bloecke) return true; return a.bloecke.every(function (b) { return !interaktiv(b) || erledigt(b); }); }
+  /* Ein Auftrag, an dem schon gearbeitet wurde, bleibt offen – auch wenn eine neue Fassung davor einen Auftrag einschiebt
+     (Fassung 2.2: Geschichten-Aufträge in Stunde 2, 4 und 5). Sonst läge eigene Arbeit hinter »öffnet nach deiner Antwort«. */
+  function hatArbeit(a) {
+    return (a.bloecke || []).some(function (b) {
+      if (b.typ === "wahl") return b.items.some(function (z) { return !!S.wahl[z.id]; });
+      if (b.typ === "fest" || b.typ === "rueckblick") return !!S.fest[b.id];
+      if (b.typ === "sortieren") { var st = S.sort[b.id]; return !!(st && st.lage && Object.keys(st.lage).length); }
+      if (b.typ === "schreiben") { var w = S.schreiben[b.id]; return !!(w && (w.fest || (w.text && String(w.text).trim()))); }
+      return false;
+    });
+  }
   function offen(a) {
     /* Stunden mit übernommenen Eingaben aus Fassung 1 sind schon gelaufen: Alle Aufträge bleiben offen, auch neue wie »Verorten« */
     if (LK || a.id === "start" || S.uebernommen) return true;
+    if (hatArbeit(a)) return true;
     if (a.oeffnet === "ansage") return !!S.ansage[a.id];
     if (a.oeffnet === "nach") { var i = index(a); for (var j = i - 1; j >= 0; j--) { var v = auftraege()[j]; if (v.id !== "start") return fertig(v); } return true; }
     return true;
@@ -2637,6 +2675,17 @@ window.EINHEIT = (function () {
   function nameBegriff(id) { if (E.BEGRIFFE && E.BEGRIFFE[id]) return E.BEGRIFFE[id].name; var n = id; (E.WAHRNEHMUNG || []).forEach(function (w) { if (w[0] === id) n = w[1]; }); return n; }
 
   /* ---------- Druck: Merkseite (zwei Seiten) und Können ---------- */
+  /* Zwei Sprachen auf der Merkseite: eine Zeile je Geschichte mit dem Inhalt, zu dem sie gehört (Fassung 2.2) */
+  function sprachenDruck(spr) {
+    var letzte = null;
+    /* Die Zeile je Geschichte ersetzt die Kopfzeile der Tabelle – so bleibt die Merkseite bei zwei Seiten */
+    return "<h2>Zwei Sprachen: Bucays Bild → Fachsprache</h2><table>" + spr.map(function (r) {
+      var kopf = "";
+      if (r.b.geschichte !== letzte) { var inh = E.inhaltVon ? E.inhaltVon(r.b.geschichte, r.b.ds) : ""; kopf = '<tr><td colspan="2"><b>' + esc(r.b.geschichte) + "</b>" + (inh ? " · zu: " + esc(inh) : "") + "</td></tr>"; }
+      letzte = r.b.geschichte;
+      return kopf + "<tr><td>" + esc(r.b.bild) + "</td><td>" + esc(r.b.fach) + "</td></tr>";
+    }).join("") + "</table>";
+  }
   function druckBauen() {
     var s = stundeVon(ST.id), m = ST.merkseite;
     var kreis = (E.STATIONEN || []).map(function (st) {
@@ -2647,7 +2696,7 @@ window.EINHEIT = (function () {
     $("#druck").innerHTML =
       '<section class="d-seite"><p class="d-meta">Psycho-Labor · Einheit Motivation · Stunde ' + s.nr + " · Merkseite · " + heute() + "</p><h1>" + esc(s.titel) + '</h1><p class="d-meta">Leitfrage der Einheit: ' + esc(E.LEITFRAGE) + '</p><div class="d-kasten"><b>Kernsatz:</b> ' + m.kernsatz + "</div><h2>Begriffe</h2><table><tr><th>Begriff</th><th>Bedeutung</th><th>Beispiel</th></tr>" + m.begriffe.map(function (z) { return "<tr><td>" + esc(z[0]) + "</td><td>" + z[1] + "</td><td>" + z[2] + "</td></tr>"; }).join("") + "</table><h2>Denkwerkzeug: " + esc(m.denkwerkzeug[0]) + "</h2><p>" + m.denkwerkzeug[1] + "</p>" + (m.extra1 || "") + "</section>" +
       '<section class="d-seite"><p class="d-meta">Merkseite, Seite 2</p><h2>Der Motivationskreis (Modell, bis heute)</h2><p class="d-meta">Ich und Umgebung → Erwartung × Wert → Motivation und Handeln → Ergebnis → Erklärung → wirkt zurück auf Ich und Erwartung.</p><div class="d-kreis">' + kreis + "</div>" + (m.extra2 || "") +
-      (spr.length ? "<h2>Zwei Sprachen: " + esc(spr[0].b.geschichte) + "</h2><table><tr><th>Bucays Bild</th><th>Fachsprache</th></tr>" + spr.map(function (r) { return "<tr><td>" + esc(r.b.bild) + "</td><td>" + esc(r.b.fach) + "</td></tr>"; }).join("") + "</table>" : "") +
+      (spr.length ? sprachenDruck(spr) : "") +
       "<h2>Erinnern ohne Heft (Beginn der nächsten Stunde)</h2><ol>" + m.abruf.map(function (f) { return "<li>" + f + "</li>"; }).join("") + '</ol><p class="d-meta">Quellen: ' + m.quellen + "</p></section>" +
       '<section class="d-seite"><p class="d-meta">Können · meine Ergebnisse · nur für mich</p><h1>Mein Lernweg in Stunde ' + s.nr + "</h1>" + koennenHTML(true) + "</section>";
   }

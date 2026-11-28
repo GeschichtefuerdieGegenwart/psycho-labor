@@ -174,7 +174,7 @@
           danach: "Bei Rot oder Gelb: Lies die Zeile in der möglichen Lösung nach und ergänze deinen Text in einer anderen Farbe." }
       ] },
       { id: "a6", nr: "7", titel: "Und du?", sozial: "allein, freiwillig", min: 4, oeffnet: "nach", bloecke: [
-        { typ: "kasten", art: "privat", titel: "Nur für dich", html: "<p>Welche der drei Geschichten passt zu einer Situation, die du kennst – oder zu einer Figur aus einem Film oder Buch? Was würde der Motivationskreis dazu sagen?</p><p class=\"k-klein\">Freiwillig. Dein Text bleibt auf deinem Gerät und kommt nicht in die Lernmappe. Es geht ums Nachdenken, nicht um eine Diagnose.</p>" },
+        { typ: "kasten", art: "privat", titel: "Nur für dich", html: "<p>Welche Geschichte aus dieser Einheit passt zu einer Situation, die du kennst – oder zu einer Figur aus einem Film oder Buch? Was würde der Motivationskreis dazu sagen?</p><p class=\"k-klein\">Freiwillig. Dein Text bleibt auf deinem Gerät und kommt nicht in die Lernmappe. Es geht ums Nachdenken, nicht um eine Diagnose.</p>" },
         { typ: "fest", id: "eigen", optional: true, druck: false, label: "Meine Gedanken (freiwillig)", mind: 10, max: 600, zeilen: 4, kurz: "Meine Gedanken zu einer Geschichte (freiwillig)" }
       ] },
       { id: "a7", nr: "8", titel: "Rückblick auf die Einheit", sozial: "allein, dann am Board", min: 8, oeffnet: "nach", bloecke: [

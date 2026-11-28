@@ -151,7 +151,8 @@
   function sprachenHTML(bisId) {
     var z = sprachenZeilen(bisId), letzte = null;
     return '<table class="k-tabelle"><thead><tr><th scope="col">Bucays Bild</th><th scope="col">Fachsprache</th><th scope="col">Deine Begründung</th></tr></thead><tbody>' + z.map(function (r) {
-      var kopf = r.b.geschichte + r.st.nr !== letzte ? '<tr><td colspan="3"><b>' + esc(r.b.geschichte) + '</b> <span class="k-klein">· Stunde ' + r.st.nr + "</span></td></tr>" : "";
+      var inh = E.inhaltVon ? E.inhaltVon(r.b.geschichte, r.b.ds) : "";
+      var kopf = r.b.geschichte + r.st.nr !== letzte ? '<tr><td colspan="3"><b>' + esc(r.b.geschichte) + '</b> <span class="k-klein">· Stunde ' + r.st.nr + (inh ? " · zu: " + esc(inh) : "") + "</span></td></tr>" : "";
       letzte = r.b.geschichte + r.st.nr;
       return kopf + '<tr><td style="font:italic 600 1.05rem/1.4 var(--font-stimme)">' + esc(r.b.bild) + "</td><td>" + esc(r.b.fach) + '</td><td class="k-dein">' + esc(r.eigen) + "</td></tr>";
     }).join("") + "</tbody></table>";
@@ -168,9 +169,21 @@
   function erledigt(b) { var t = BAUSTEINE[b.typ]; return t && t.erledigt ? !!t.erledigt(b) : true; }
   function sperrt(b) { if (b.sperrt === false || b.optional) return false; var t = BAUSTEINE[b.typ]; return !!(t && t.erledigt) && t.sperrt !== false; }
   function fertig(a) { if (!a || !a.bloecke) return true; return a.bloecke.every(function (b) { return !interaktiv(b) || erledigt(b); }); }
+  /* Ein Auftrag, an dem schon gearbeitet wurde, bleibt offen – auch wenn eine neue Fassung davor einen Auftrag einschiebt
+     (Fassung 2.2: Geschichten-Aufträge in Stunde 2, 4 und 5). Sonst läge eigene Arbeit hinter »öffnet nach deiner Antwort«. */
+  function hatArbeit(a) {
+    return (a.bloecke || []).some(function (b) {
+      if (b.typ === "wahl") return b.items.some(function (z) { return !!S.wahl[z.id]; });
+      if (b.typ === "fest" || b.typ === "rueckblick") return !!S.fest[b.id];
+      if (b.typ === "sortieren") { var st = S.sort[b.id]; return !!(st && st.lage && Object.keys(st.lage).length); }
+      if (b.typ === "schreiben") { var w = S.schreiben[b.id]; return !!(w && (w.fest || (w.text && String(w.text).trim()))); }
+      return false;
+    });
+  }
   function offen(a) {
     /* Stunden mit übernommenen Eingaben aus Fassung 1 sind schon gelaufen: Alle Aufträge bleiben offen, auch neue wie »Verorten« */
     if (LK || a.id === "start" || S.uebernommen) return true;
+    if (hatArbeit(a)) return true;
     if (a.oeffnet === "ansage") return !!S.ansage[a.id];
     if (a.oeffnet === "nach") { var i = index(a); for (var j = i - 1; j >= 0; j--) { var v = auftraege()[j]; if (v.id !== "start") return fertig(v); } return true; }
     return true;
@@ -794,6 +807,17 @@
   function nameBegriff(id) { if (E.BEGRIFFE && E.BEGRIFFE[id]) return E.BEGRIFFE[id].name; var n = id; (E.WAHRNEHMUNG || []).forEach(function (w) { if (w[0] === id) n = w[1]; }); return n; }
 
   /* ---------- Druck: Merkseite (zwei Seiten) und Können ---------- */
+  /* Zwei Sprachen auf der Merkseite: eine Zeile je Geschichte mit dem Inhalt, zu dem sie gehört (Fassung 2.2) */
+  function sprachenDruck(spr) {
+    var letzte = null;
+    /* Die Zeile je Geschichte ersetzt die Kopfzeile der Tabelle – so bleibt die Merkseite bei zwei Seiten */
+    return "<h2>Zwei Sprachen: Bucays Bild → Fachsprache</h2><table>" + spr.map(function (r) {
+      var kopf = "";
+      if (r.b.geschichte !== letzte) { var inh = E.inhaltVon ? E.inhaltVon(r.b.geschichte, r.b.ds) : ""; kopf = '<tr><td colspan="2"><b>' + esc(r.b.geschichte) + "</b>" + (inh ? " · zu: " + esc(inh) : "") + "</td></tr>"; }
+      letzte = r.b.geschichte;
+      return kopf + "<tr><td>" + esc(r.b.bild) + "</td><td>" + esc(r.b.fach) + "</td></tr>";
+    }).join("") + "</table>";
+  }
   function druckBauen() {
     var s = stundeVon(ST.id), m = ST.merkseite;
     var kreis = (E.STATIONEN || []).map(function (st) {
@@ -804,7 +828,7 @@
     $("#druck").innerHTML =
       '<section class="d-seite"><p class="d-meta">Psycho-Labor · Einheit Motivation · Stunde ' + s.nr + " · Merkseite · " + heute() + "</p><h1>" + esc(s.titel) + '</h1><p class="d-meta">Leitfrage der Einheit: ' + esc(E.LEITFRAGE) + '</p><div class="d-kasten"><b>Kernsatz:</b> ' + m.kernsatz + "</div><h2>Begriffe</h2><table><tr><th>Begriff</th><th>Bedeutung</th><th>Beispiel</th></tr>" + m.begriffe.map(function (z) { return "<tr><td>" + esc(z[0]) + "</td><td>" + z[1] + "</td><td>" + z[2] + "</td></tr>"; }).join("") + "</table><h2>Denkwerkzeug: " + esc(m.denkwerkzeug[0]) + "</h2><p>" + m.denkwerkzeug[1] + "</p>" + (m.extra1 || "") + "</section>" +
       '<section class="d-seite"><p class="d-meta">Merkseite, Seite 2</p><h2>Der Motivationskreis (Modell, bis heute)</h2><p class="d-meta">Ich und Umgebung → Erwartung × Wert → Motivation und Handeln → Ergebnis → Erklärung → wirkt zurück auf Ich und Erwartung.</p><div class="d-kreis">' + kreis + "</div>" + (m.extra2 || "") +
-      (spr.length ? "<h2>Zwei Sprachen: " + esc(spr[0].b.geschichte) + "</h2><table><tr><th>Bucays Bild</th><th>Fachsprache</th></tr>" + spr.map(function (r) { return "<tr><td>" + esc(r.b.bild) + "</td><td>" + esc(r.b.fach) + "</td></tr>"; }).join("") + "</table>" : "") +
+      (spr.length ? sprachenDruck(spr) : "") +
       "<h2>Erinnern ohne Heft (Beginn der nächsten Stunde)</h2><ol>" + m.abruf.map(function (f) { return "<li>" + f + "</li>"; }).join("") + '</ol><p class="d-meta">Quellen: ' + m.quellen + "</p></section>" +
       '<section class="d-seite"><p class="d-meta">Können · meine Ergebnisse · nur für mich</p><h1>Mein Lernweg in Stunde ' + s.nr + "</h1>" + koennenHTML(true) + "</section>";
   }

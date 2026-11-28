@@ -26,10 +26,22 @@
     }).join("") + "</tbody></table>";
   }
 
+  /* Eine Geschichte je Inhalt: »Die taube Ehefrau« zu internal oder external (Fassung 2.2). Bilder in eigenen Worten, kein Zitat. */
+  var W_EHEFRAU = [
+    { id: "te1", text: "Bild 1: " + bild("te1") + " – Wo sucht er die Ursache dafür, dass sie ihm nicht antwortet?", opt: [
+      ["external: bei ihr", "zentral", "Für ihn liegt es an ihr. Von ihm aus gesehen ist das eine externale Erklärung."],
+      ["internal: bei sich", "kaum", "Gerade nicht: Dass es an ihm liegen könnte, zeigt sich erst ganz am Ende."],
+      ["external: im Zufall", "kaum", "External stimmt, aber er macht nicht den Zufall verantwortlich, sondern ihr Gehör."]] },
+    { id: "te2", text: "Bild 2: " + bild("te2") + " – Was zeigt die Geschichte über Attributionen?", opt: [
+      ["Eine Attribution kann falsch sein.", "zentral", "Attribution heißt: was jemand für die Ursache hält. Er hält sie für external – tatsächlich liegt sie bei ihm, also internal."],
+      ["Externale Erklärungen sind immer falsch.", "kaum", "Zu weit: Manchmal liegt eine Ursache wirklich außen, etwa bei einer zu schweren Arbeit. Die Geschichte erzählt einen Fall, keine Regel."],
+      ["Man sollte innen und außen prüfen.", "begruendbar", "Ein kluger Rat für den Alltag. Die Theorie selbst prüft nicht, ob eine Erklärung stimmt: Sie beschreibt, welche Erklärung jemand wählt – und was daraus folgt."]] }
+  ];
+
   window.STUNDE = {
     id: "ds09", minuten: 90, material: "nach M7",
     frage: "Warum macht dieselbe schlechte Note den einen mutlos – und den anderen nicht?",
-    darum: "<p>Ali und Josef haben beide schlechte Noten geschrieben. Ali nimmt es leicht, Josef gibt auf. Heute untersuchst du, wie Menschen sich Erfolg und Misserfolg erklären – und was diese Erklärungen für das nächste Mal bedeuten. Am Ende hörst du Bucays Geschichte vom angeketteten Elefanten.</p>",
+    darum: "<p>Ali und Josef haben beide schlechte Noten geschrieben. Ali nimmt es leicht, Josef gibt auf. Heute untersuchst du, wie Menschen sich Erfolg und Misserfolg erklären – und was diese Erklärungen für das nächste Mal bedeuten. Dazu hörst du zwei Geschichten von Jorge Bucay: über einen Mann, der sich um das Gehör seiner Frau sorgt, und über den angeketteten Elefanten.</p>",
     ziele: ["erklären, was eine Attribution ist, und Ursachen nach drei Fragen ordnen,", "vorhersagen, wie eine Erklärung auf die Motivation wirkt,", "erlernte Hilflosigkeit erklären und ein günstiges Muster formulieren."],
     hinweis: "In dieser Stunde geht es auch um Aufgeben und Hilflosigkeit. Wenn dich das persönlich betrifft, sprich mit jemandem, dem du vertraust.",
     auftraege: [
@@ -63,13 +75,17 @@
           { id: "at2", text: "»Das war einfach Pech.« – Was antwortet Alis Erklärung auf die drei Fragen?", opt: [
             ["in mir · bleibt · nicht beeinflussbar", "kaum", "Pech liegt nicht in Ali. Er schiebt die Ursache gerade von sich weg."],
             ["außerhalb · bleibt · nicht beeinflussbar", "begruendbar", "Außerhalb und nicht beeinflussbar stimmt. Aber Pech bleibt nicht – beim nächsten Mal kann es anders sein."],
-            ["außerhalb · ändert sich · nicht beeinflussbar", "zentral", "Genau: Pech liegt außerhalb, wechselt und lässt sich nicht steuern. Was daraus für Alis nächste Arbeit folgt, sagst du in Auftrag 4 voraus."]] }
+            ["außerhalb · ändert sich · nicht beeinflussbar", "zentral", "Genau: Pech liegt außerhalb, wechselt und lässt sich nicht steuern. Was daraus für Alis nächste Arbeit folgt, sagst du in Auftrag 5 voraus."]] }
         ] },
         { typ: "text", html: "<h3>Ordne die Ursachen</h3><p>Acht Ursachen, acht Felder: Tippe eine Ursache an, dann das Feld, in das sie gehört. Jedes Feld bekommt genau eine.</p>" },
         { typ: "sortieren", id: "raster", karten: URSACHEN, raster: RASTER, fertigText: "Lies die obere Zeile noch einmal: Das sind die Ursachen, an denen man selbst etwas ändern kann." },
         { typ: "befund", status: "belegte Quelle · vereinfacht", quelle: "Weiner (1985), Psychological Review 92; Stangl, Online-Lexikon für Psychologie und Pädagogik (2020), aus dem Unterrichtsmaterial M7", html: "<p><b>Weiner (1985):</b> Für die Erwartung zählt vor allem die <b>Stabilität</b>. Wer einen Misserfolg mit etwas Stabilem erklärt (Begabung, Schwierigkeit), erwartet beim nächsten Mal wieder Misserfolg. Ob die Ursache in mir liegt, beeinflusst vor allem Gefühle: Stolz nach Erfolg, Scham nach Misserfolg.</p><p>Studien zeigen außerdem: Die meisten Menschen führen Erfolg eher auf sich selbst zurück und Misserfolg eher auf die Umstände. Das schützt den Selbstwert.</p>" }
       ] },
-      { id: "a4", nr: "4", titel: "Was sagt die Theorie voraus?", sozial: "allein", min: 9, oeffnet: "nach", bloecke: [
+      { id: "te", nr: "4", titel: "Die taube Ehefrau", sozial: "zuhören, dann allein", min: 7, oeffnet: "ansage", bloecke: [
+        { typ: "geschichte", titel: "Die taube Ehefrau", hoerauftrag: "Achte darauf: <b>Wo sucht der Mann die Ursache für das Problem?</b>" },
+        { typ: "wahl", items: W_EHEFRAU, druck: "kurz" }
+      ] },
+      { id: "a4", nr: "5", titel: "Was sagt die Theorie voraus?", sozial: "allein", min: 9, oeffnet: "nach", bloecke: [
         { typ: "text", html: "<h3>Denkwerkzeug: Prognose</h3><p>Eine gute Theorie erklärt nicht nur hinterher. Sie sagt vorher, was passiert – und lässt sich daran prüfen. Was sagt die Attributionstheorie voraus?</p>" },
         { typ: "wahl", items: [
           { id: "p1", text: "Ali erklärt seine schlechte Note mit Pech. Was sagt die Theorie für die nächste Arbeit voraus?", opt: [
@@ -87,7 +103,7 @@
         ] },
         { typ: "merk", titel: "Ein günstiges Attributionsmuster", html: "<p><b>Nach Erfolg:</b> eigene Fähigkeit und Anstrengung – »Ich habe es verstanden und gut geübt.«</p><p><b>Nach Misserfolg:</b> eine Ursache, die sich ändern lässt – »Ich habe zu spät angefangen und falsch geübt.«</p><p class=\"k-klein\">Wer lernmotiviert ist und so erklärt, lernt auf lange Sicht mehr (Unterrichtsmaterial M7, nach Hasselhorn &amp; Gold 2013).</p>" }
       ] },
-      { id: "a5", nr: "5", titel: "Gelernt, dass nichts hilft", sozial: "zuhören, dann allein", min: 18, oeffnet: "ansage", bloecke: [
+      { id: "a5", nr: "6", titel: "Gelernt, dass nichts hilft", sozial: "zuhören, dann allein", min: 18, oeffnet: "ansage", bloecke: [
         { typ: "befund", status: "belegte Quelle · vereinfacht", quelle: "Seligman & Maier (1967), Journal of Experimental Psychology 74", html: "<p><b>Ein Tierversuch aus den 1960er-Jahren:</b> Hunde bekamen schmerzhafte Stromstöße. Eine Gruppe konnte sie abschalten, indem sie mit der Schnauze gegen eine Platte drückte. Eine zweite Gruppe nicht – bei ihr endeten die Stöße, egal was sie tat. Danach kamen alle in eine Box, in der sie den Stößen leicht entkommen konnten: Sie mussten nur über eine niedrige Wand springen.</p><p class=\"k-klein\">Versuche wie dieser sind heute streng geregelt und umstritten. Wir besprechen ihn, weil er die Forschung zur Hilflosigkeit begründet hat.</p>" },
         { typ: "wahl", items: [{ id: "h1", stimmkarte: true, text: "Deine Vorhersage: Was tun die Hunde der zweiten Gruppe in der neuen Box?", opt: [
           ["Sie springen schnell über die Wand – sie kennen die Stöße ja schon.", "kaum", "Klingt logisch, so kam es aber nicht.", "springen"],
@@ -113,14 +129,14 @@
         { typ: "sprachen" },
         { typ: "kasten", art: "privat", titel: "Wenn dich das betrifft", html: "<p>Hast du selbst oft das Gefühl, dass nichts, was du tust, etwas ändert? Dann sprich mit jemandem, dem du vertraust – mit Freundinnen und Freunden, der Familie, einer Lehrkraft oder der Beratung an der Schule. Das ist kein Zeichen von Schwäche. Dieser Unterricht kann so etwas nicht klären.</p>" }
       ] },
-      { id: "a6", nr: "6", titel: "Verorten und vernetzen", sozial: "allein, dann am Board", min: 6, oeffnet: "nach", bloecke: [
+      { id: "a6", nr: "7", titel: "Verorten und vernetzen", sozial: "allein, dann am Board", min: 6, oeffnet: "nach", bloecke: [
         { typ: "verorten" },
         { typ: "text", html: "<h3>Eine Verbindung knüpfen</h3>" },
         { typ: "verbindung", einleitung: "Verbinde einen Begriff von heute mit einem früheren. Zum Beispiel: Wie hängt die Stabilität einer Ursache mit der Erfolgserwartung zusammen?" },
         { typ: "text", html: "<h3>Deine Lernspur</h3>" },
         { typ: "lernspur", satzanfang: "Wie ich mir eine schlechte Note erkläre, entscheidet mit, ob …" }
       ] },
-      { id: "a7", nr: "7", titel: "Ein günstiges Muster für Josef", sozial: "allein", min: 15, oeffnet: "nach", bloecke: [
+      { id: "a7", nr: "8", titel: "Ein günstiges Muster für Josef", sozial: "allein", min: 15, oeffnet: "nach", bloecke: [
         { typ: "schreiben", id: "muster", operator: "anwenden und begründen", mind: 60,
           aufgabe: "Formuliere, was Josef zu sich sagen könnte, wenn er (1) eine gute und (2) wieder eine schlechte Note bekommt – so, dass seine Motivation wächst. Erkläre zuerst, was eine Attribution ist, und begründe dann mit der Attributionstheorie.",
           hinweis: "Ordne beide Sätze den drei Fragen zu: Wo liegt die Ursache? Bleibt sie? Kann Josef sie beeinflussen?",

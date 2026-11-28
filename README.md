@@ -26,6 +26,7 @@ Interaktive Selbstversuche und Modelle für das Wahlfach Psychologie (J2) – �
 | `ds06-antrieb.html` … `ds11-lesen.html` | Block Motivation, Stunde 1–6 (DS 6–11): Was treibt mich an? · Wann wird ein Muss zum Wollen? · Wann lohnt sich Anstrengung? · Wie erkläre ich mir Erfolg? · Wer bin ich im Vergleich? · Wie lese ich mich selbst? – siehe `docs/motivation-einheit.md` |
 | `wiederholung-wahrnehmung.html` | Wiederholung vor Klassenarbeit 1: Fragen mit Rückmeldung, Fall, Diskussion; Zusammenfassung, Probeklausur, Lernkarten, Erwartungshorizont als PDF (siehe `docs/wiederholung-wahrnehmung.md`) |
 | `src/` | Quelldateien; `node tools/inline.js src/<datei>.html` erzeugt die Einzeldatei im Hauptordner |
+| `tools/moodle_paket.py` | Moodle-Datei: `python3 tools/moodle_paket.py` baut `dist/Psycho-Labor_Moodle.zip` (Startseite `index.html`, alle Seiten, `assets/`, Lizenzen, Anleitung) und prüft Verweise und fremde Server |
 | `src/motivation/`, `tools/bau_motivation.js` | Einheit Motivation: gemeinsamer Kern (`kern.js`, `kern.css`), Daten je Stunde (`ds06.js` …), Einheitsdaten; `node tools/bau_motivation.js` baut alle sieben Seiten |
 | `PRODUCT.md`, `DESIGN.md` | Zweck, Rahmen und Gestaltungsregeln des Labors |
 | `auswertung.html` | Kursauswertung für die Lehrkraft |
@@ -44,6 +45,8 @@ DS 5 bindet ein YouTube-Video ein, das erst nach Antippen lädt (`youtube-nocook
 ## Arbeitsweise
 
 Änderungen kommen über einen Branch und einen Pull Request. Zusammengeführt wird erst nach Freigabe durch die Lehrkraft.
+
+Für Moodle wird das Labor als eine ZIP-Datei ausgeliefert (siehe `tools/moodle_paket.py`); in Moodle als »Datei« hochladen, entpacken, `index.html` als Hauptdatei festlegen.
 
 ## Urheber und Lizenz
 

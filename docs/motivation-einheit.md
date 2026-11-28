@@ -1,20 +1,20 @@
-# Einheit Motivation (DS 6–11) · Fassung 2.1
+# Einheit Motivation (DS 6–11) · Fassung 2.2
 
-Stand: 17. November 2026, zweiter Durchgang · Branch `motivation-einheit` · löst Fassung 1 (`docs/motivation-block.md`) ab
+Stand: 28. November 2026 · Fassung 2.2 »Eine Geschichte je Inhalt« auf Branch `geschichten-je-inhalt` (Fassung 2.1 vom 17. November auf `motivation-einheit`) · löst Fassung 1 (`docs/motivation-block.md`) ab
 
 Leitfrage der Einheit: **Was treibt mich an – und was bremst mich?**
 
 ## Worum es geht
 
-Sechs Doppelstunden auf einem gemeinsamen Kern, dazu eine Einheitsseite. Grundlage sind das erprobte Material M1–M9 der Lehrkraft (Termini, Fall Josef, Aufgaben) und drei Geschichten von Jorge Bucay, die über die Einheit hinweg vom Übersetzen zur eigenen Analyse führen.
+Sechs Doppelstunden auf einem gemeinsamen Kern, dazu eine Einheitsseite. Grundlage sind das erprobte Material M1–M9 der Lehrkraft (Termini, Fall Josef, Aufgaben) und sechs Geschichten von Jorge Bucay – zu jedem Inhalt eine (Fassung 2.2) –, die über die Einheit hinweg vom Übersetzen zur eigenen Analyse führen.
 
 | Datei | Stunde | Leitfrage | Material | Bucay |
 | --- | --- | --- | --- | --- |
 | `ds06-antrieb.html` | 1 | Was treibt mich an? | M1–M3 | Der Kreis der 99 – übersetzen |
-| `ds07-wollen.html` | 2 | Wann wird ein Muss zum Wollen? | M4–M5 | Der Kreis der 99 – Botschaft prüfen |
+| `ds07-wollen.html` | 2 | Wann wird ein Muss zum Wollen? | M4–M5 | Linsen – Kontinuum der Regulation · Der Kreis der 99 – Botschaft prüfen |
 | `ds08-anstrengung.html` | 3 | Wann lohnt sich Anstrengung? | M6, neu: Leistungsmotivation | Die Frösche – mit Erwartung mal Wert |
-| `ds09-erklaeren.html` | 4 | Wie erkläre ich mir Erfolg? | M7, neu: erlernte Hilflosigkeit | Der Elefant – Attribution, Hilflosigkeit |
-| `ds10-vergleich.html` | 5 | Wer bin ich im Vergleich? | M8, M9, »Das Selbstkonzept«, neu: Selbstwirksamkeit | Der Elefant – Selbstbild |
+| `ds09-erklaeren.html` | 4 | Wie erkläre ich mir Erfolg? | M7, neu: erlernte Hilflosigkeit | Die taube Ehefrau – internal oder external · Der Elefant – Hilflosigkeit |
+| `ds10-vergleich.html` | 5 | Wer bin ich im Vergleich? | M8, M9, »Das Selbstkonzept«, neu: Selbstwirksamkeit | Der wahre Wert des Rings – Vergleiche · Der Elefant – Selbstbild |
 | `ds11-lesen.html` | 6 | Wie lese ich mich selbst? | neu: Rubikon (knapp), Wenn-dann-Pläne | Frösche, zweite Lektüre; eine Geschichte selbst analysieren |
 | `motivation.html` | – | Einheitsseite »Dein Überblick wächst« | – | Übersetzungstabelle aller Geschichten |
 
@@ -89,13 +89,50 @@ Zeitdiagnose am vollen Stand (alle Aufträge aufgedeckt, alle Rückmeldungen sic
 | Stunde | Aufträge (Planzeit) | Wörter am vollen Stand | Gerätezeit, langsam | Puffer für Plenum |
 | --- | --- | --- | --- | --- |
 | 1 | 7 Aufträge, 80 Min. + Start und Zusammenfassung | 3 170 | 47 Min. | 33 Min. |
-| 2 | 9 Aufträge, 84 Min. | 3 900 | 51 Min. | 33 Min. |
+| 2 | 10 Aufträge, 90 Min. (Fassung 2.2: +6 für Linsen) | 4 240 | 55 Min. | 35 Min. |
 | 3 | 7 Aufträge, 80 Min. | 3 320 | 44 Min. | 36 Min. (Zielspiel 15 Min.) |
-| 4 | 7 Aufträge, 74 Min. | 2 940 | 40 Min. | 34 Min. |
-| 5 | 8 Aufträge, 78 Min. | 3 230 | 45 Min. | 33 Min. |
+| 4 | 8 Aufträge, 81 Min. (Fassung 2.2: +7 für Die taube Ehefrau) | 3 260 | 44 Min. | 37 Min. |
+| 5 | 9 Aufträge, 85 Min. (Fassung 2.2: +7 für den Ring) | 3 610 | 49 Min. | 36 Min. |
 | 6 | 7 Aufträge, 76 Min. | 2 630 | 35 Min. | 41 Min. |
 
 Gemessen nach dem zweiten Durchgang (Fassung 2.1); die Erklärkarte in Stunde 1, die Strichliste und die genaueren Rückmeldungen kosten zusammen gut zwei Minuten. Wer in Stunde 6 die unbekannte Fabel wählt, liest rund 60 Wörter mehr. Stunde 2 ist die dichteste. Kürzungen zur Auswahl, falls es eng wird: **K1** Spur 3 im Plenum statt am Gerät (−4 Min.) · **K2** den Selbsttest »Warum lerne ich?« nach Hause geben (−4 Min.) · **K3** »Ein Blick auf dich« nur für Schnelle (−3 Min.).
+
+**Fassung 2.2:** Die Werte für Stunde 2, 4 und 5 sind die Werte von Fassung 2.1 plus der neue Geschichten-Auftrag, gemessen am vollen Stand des Auftrags (337, 317 und 376 Wörter; je zwei Wahlaufgaben). Mit Start und Zusammenfassung (8 Min.) kommen die Planzeiten auf 98, 89 und 93 Minuten. Stunde 2 braucht damit **K1 und K2** (−8 Min.). Für Stunde 5 neu zur Auswahl: **K4** »Henne oder Ei?« kurz im Plenum statt am Gerät (−3 Min.).
+
+## Fassung 2.2: Eine Geschichte je Inhalt (28. November 2026)
+
+Auftrag der Lehrkraft: zu jedem Inhalt die passende Geschichte, nur Gesichertes, im eingeführten Arbeitsblatt; danach als Moodle-Datei. Grundlage ist die Karte »Bucay-Geschichten im Psychologiekurs« (Claude-Dokument vom 28.11.2026).
+
+| Inhalt | Geschichte | Stunde · Auftrag | Bilder |
+| --- | --- | --- | --- |
+| intrinsische und extrinsische Motivation | Der Kreis der 99 | 1 · 9 | k1–k3 |
+| Kontinuum der Regulation (Theorie der organismischen Integration) | **Linsen** (neu) | 2 · 7 `li` | li1 Höfling: external · li2 Diogenes: identifiziert oder integriert (beide zentral, mit Gesprächsauftrag) |
+| Unterminierungseffekt und Selbstbestimmung | Der Kreis der 99, zweite Lektüre | 2 · 8 | k4–k6 |
+| Erwartung mal Wert | Die Frösche in der Sahne | 3 · 5 | fr1–fr3 |
+| internal oder external | **Die taube Ehefrau** (neu) | 4 · 4 `te` | te1 Ursache bei ihr (external) · te2 Attribution kann falsch sein |
+| erlernte Hilflosigkeit | Der angekettete Elefant | 4 · 6 | el1–el3 |
+| Vergleiche und Bezugsrahmen | **Der wahre Wert des Rings** (neu) | 5 · 5 `ri` | ri1 kriterialer Vergleich · ri2 Was lässt die Geschichte weg? (zwei zentrale Lesarten, Gesprächsauftrag) |
+| Fähigkeitsselbstkonzept und Selbstwirksamkeit | Der angekettete Elefant, zweite Lektüre | 5 · 7 | el4–el5 |
+| Einzelfall oder Befund | Die Frösche in der Sahne, zweite Lektüre | 6 · 4 | fr4 |
+
+**Was »gesichert« heißt:** Kreis, Frösche und Elefant liest die Lehrkraft im Kurs aus dem Buch. Die drei neuen Geschichten sind in dieser Fassung an einer zweiten Quelle bestätigt: »Linsen« als antike Anekdote bei Diogenes Laertios II 68 (dort Gemüse statt Linsen, der Höfling heißt Aristipp; LacusCurtius, Loeb-Übersetzung 1925), »Die taube Ehefrau« als verbreiteter Witz (Folklore-Archiv der University of Southern California), »Der wahre Wert des Rings« in einer unabhängigen Nacherzählung (Markt bietet wenig, Juwelier viel, Moral: nicht jeder erkennt den Wert). Bucays Wortlaut lag nicht vor: Die Bilder sind eigene Worte und vor dem Einsatz am Buch zu prüfen.
+
+**Bewusst nicht aufgenommen:**
+- Wahrnehmung: »Der Mann, der glaubte, er sei tot« passt genau zur Hypothesentheorie in DS 4 (Widersprechendes wird umgedeutet). Die Handlung ist in dieser Fassung an keiner zweiten Quelle bestätigt – Einbau erst nach Prüfung am Buch. Für DS 2, 3 und 5 fand sich keine gesicherte Geschichte, die mehr wäre als ein Vergleich.
+- Rubikon und Wenn-dann-Pläne: Auf den Seiten steht bewusst keine Geschichte. Die Klassenarbeit braucht eine, die noch niemand kennt; die Analyse »ohne Hilfe« in Stunde 6 nutzt weiter die Fabel nach Äsop.
+- Fischteicheffekt: keine gesicherte Geschichte; er bleibt beim Fall Josef.
+
+**Gestaltung:** dieselben Bausteine wie bisher – Kasten »Zuhören · Tablet umdrehen« (die Geschichte steht nicht auf der Seite), Bilder in eigenen Worten als Wahlaufgaben mit Rückmeldung je Option erst nach dem Festlegen, Übersetzungstabelle. Neu: Jede Geschichte trägt in allen Übersetzungstabellen die Zeile »zu: Inhalt«. Die Einheitsseite zeigt unter »Zwei Sprachen« die Tabelle »Eine Geschichte je Inhalt« – nur für begonnene Stunden, damit nichts eine spätere Aufgabe vorwegnimmt. Die neuen Wahlaufgaben stehen nicht im Teil »Können« der Lernmappe (`druck: "kurz"`); ihre Bilder und die Fachsprache stehen auf der Merkseite.
+
+**Druck, am vollen Stand gemessen** (alle Wahlaufgaben festgelegt, Stand über eine andere Seite geschrieben): Lernmappe Stunde 2, 4 und 5 je 3 Seiten wie vorher; Lernübersicht der Einheit 4 Seiten wie vorher. Dafür: Merkseite ohne Tabellenkopf in »Zwei Sprachen« (die Zeile je Geschichte ersetzt ihn), Ring-Bilder kurz gefasst; in der Lernübersicht der Einheit druckt »Zwei Sprachen« ohne die Spalte »Deine Begründung« und läuft in »Das muss ich können« weiter.
+
+**Gespeicherter Stand:** neue Wahl-IDs li1, li2, te1, te2, ri1, ri2 im selben Schlüssel `psycholabor:motivation:v2`. Durch die neuen Aufträge verschieben sich die Nummern (Stunde 2 ab 8, Stunde 4 ab 5, Stunde 5 ab 6), die IDs bleiben. Neu im Kern: Ein Auftrag, an dem schon gearbeitet wurde, bleibt offen, auch wenn davor ein neuer Auftrag steht (geprüft mit altem Stand in Stunde 4).
+
+**Prüfung gelaufen:** Register und Nummern · keine Rückmeldung vor dem Festlegen, danach sichtbar · Übersetzungstabellen mit »zu: Inhalt« · fünf Breiten (1440, 1180, 820, 768, 390 px) ohne Überlauf, keine Schrift unter 16 px, kein Ziel unter 44 px · Seitenzahlen gegen Fassung 2.1 · Konsole ohne Fehler · Moodle-Paket entpackt per `file://`: alle 14 Seiten laden, Schriften geladen, keine Anfragen nach außen. **Nicht gelaufen:** echtes iPad, VoiceOver, Upload in Moodle, Kontrastmessung (keine neuen Farben).
+
+## Moodle-Datei
+
+`python3 tools/moodle_paket.py` baut `dist/Psycho-Labor_Moodle.zip` (nicht im Repository): Startseite `index.html`, alle Seiten, `assets/` mit Schriften, Lizenzen und `ANLEITUNG-MOODLE.txt`. Das Skript bricht ab, wenn ein relativer Verweis fehlt oder eine Seite etwas von einem fremden Server lädt, und zählt Dateien, nicht Einträge. In Moodle: als »Datei« hochladen, entpacken, `index.html` als Hauptdatei – das Hochladen selbst prüft die Lehrkraft.
 
 ## Speicher, Datei, Datenschutz
 
@@ -129,6 +166,7 @@ Angaben aus dem Gedächtnis, nicht online geprüft:
 - Heckhausen & Gollwitzer (1987), Motivation and Emotion 11 · Gollwitzer & Sheeran (2006), Advances in Experimental Social Psychology 38, 94 Studien, mittlere bis große Wirkung · Wrosch u. a. (2003), Personality and Social Psychology Bulletin 29
 - **Äsop, »Der Fuchs und die Trauben«** (Stunde 6) ist in eigenen Worten nacherzählt; die Fabel ist gemeinfrei.
 - **Bucays Bilder** zum Elefanten (Stunde 4 und 5) und der Satz am Ende der Geschichte (»noch einmal mit ganzem Herzen versuchen«, Stunde 5) sind aus der Erinnerung formuliert – vor dem Einsatz am Buch prüfen. Die Bilder zu den Fröschen folgen der Abschrift in Klassenarbeit 2 (2025).
+- **Fassung 2.2:** die Bilder zu »Linsen« (Kapitel 37, S. 221–224), »Die taube Ehefrau« (Kapitel 18, S. 105–108) und »Der wahre Wert des Rings« (Kapitel 5, S. 23–26; Seiten der illustrierten Jubiläumsausgabe 2018) am Buch prüfen – besonders, ob bei Bucay der Höfling Aristipp heißt und wer dem Ring den Wert zuspricht.
 
 ## Nur die Lehrkraft kann
 

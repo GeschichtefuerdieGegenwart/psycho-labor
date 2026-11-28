@@ -50,11 +50,25 @@
   function sprachen(druck) {
     var z = K.sprachenZeilen().filter(function (r) { return istBegonnen(r.b.ds); }), letzte = null;
     if (!z.length) return '<p class="k-klein">Die Tabelle füllt sich, sobald du die erste Geschichte übersetzt hast.</p>';
-    return "<table" + (druck ? "" : ' class="k-tabelle"') + '><thead><tr><th scope="col">Bucays Bild</th><th scope="col">Fachsprache</th><th scope="col">Deine Begründung</th></tr></thead><tbody>' + z.map(function (r) {
-      var kopf = r.b.geschichte + r.st.nr !== letzte ? '<tr><td colspan="3"><b>' + esc(r.b.geschichte) + "</b> · Stunde " + r.st.nr + "</td></tr>" : "";
+    /* Im Druck ohne »Deine Begründung«: Die Begründungen stehen in der Lernmappe jeder Stunde und hier am Bildschirm.
+       So bleibt die Lernübersicht bei vier Seiten, auch mit sechs Geschichten (Fassung 2.2). */
+    var sp = druck ? 2 : 3;
+    return "<table" + (druck ? "" : ' class="k-tabelle"') + '><thead><tr><th scope="col">Bucays Bild</th><th scope="col">Fachsprache</th>' + (druck ? "" : '<th scope="col">Deine Begründung</th>') + "</tr></thead><tbody>" + z.map(function (r) {
+      var inh = E.inhaltVon ? E.inhaltVon(r.b.geschichte, r.b.ds) : "";
+      var kopf = r.b.geschichte + r.st.nr !== letzte ? '<tr><td colspan="' + sp + '"><b>' + esc(r.b.geschichte) + "</b> · Stunde " + r.st.nr + (inh ? " · zu: " + esc(inh) : "") + "</td></tr>" : "";
       letzte = r.b.geschichte + r.st.nr;
-      return kopf + "<tr><td><i>" + esc(r.b.bild) + "</i></td><td>" + esc(r.b.fach) + '</td><td class="k-dein">' + esc(r.eigen) + "</td></tr>";
+      return kopf + "<tr><td><i>" + esc(r.b.bild) + "</i></td><td>" + esc(r.b.fach) + "</td>" + (druck ? "" : '<td class="k-dein">' + esc(r.eigen) + "</td>") + "</tr>";
     }).join("") + "</tbody></table>";
+  }
+
+  /* Eine Geschichte je Inhalt – nur Zeilen begonnener Stunden, damit nichts eine spätere Aufgabe vorwegnimmt (Fassung 2.2) */
+  function jeInhalt() {
+    var z = (E.JE_INHALT || []).filter(function (r) { return istBegonnen(r.ds); });
+    if (!z.length) return "";
+    return '<h3>Eine Geschichte je Inhalt</h3><table class="k-tabelle"><thead><tr><th scope="col">Inhalt</th><th scope="col">Geschichte</th><th scope="col">Stunde</th></tr></thead><tbody>' + z.map(function (r) {
+      var nr = ""; STUNDEN.forEach(function (s) { if (s.id === r.ds) nr = s.nr; });
+      return "<tr><td>" + esc(r.inhalt) + "</td><td><i>" + esc(r.geschichte) + "</i></td><td>" + nr + "</td></tr>";
+    }).join("") + '</tbody></table><h3 style="margin-top:var(--space-5)">Deine Übersetzungstabelle</h3>';
   }
 
   /* ---------- Lernkarten: Begriff → selbst erklären → umdrehen → einschätzen ---------- */
@@ -146,7 +160,7 @@
     $("#druck").innerHTML =
       '<section class="d-seite"><p class="d-meta">Psycho-Labor · Einheit Motivation · Lernübersicht</p><h1>Motivation – das Wichtigste</h1><p class="d-meta">Leitfrage: ' + esc(E.LEITFRAGE) + "</p><h2>Kernsätze</h2><ol>" + STUNDEN.map(function (s) { return "<li><b>" + esc(s.titel) + "</b> " + E.MERK[s.id].kernsatz + "</li>"; }).join("") + "</ol><h2>Denkwerkzeuge</h2><table><tr><th>Stunde</th><th>Denkwerkzeug</th><th>Worum es geht</th></tr>" + STUNDEN.map(function (s) { var d = E.MERK[s.id].denkwerkzeug; return "<tr><td>" + s.nr + "</td><td>" + esc(d[0]) + "</td><td>" + d[1] + "</td></tr>"; }).join("") + "</table></section>" +
       '<section class="d-seite"><p class="d-meta">Mein Überblick</p><h2>Mein Motivationskreis <span class="d-meta">(Modell, eigene Vereinfachung)</span></h2><p class="d-meta">Ich und Umgebung → Erwartung × Wert → Motivation und Handeln → Ergebnis → Erklärung → wirkt zurück auf Ich und Erwartung.</p><div class="d-kreis">' + kr + "</div><h2>Meine Verbindungen</h2>" + verbindungen() + "<h2>Meine Lernspur</h2><ol>" + STUNDEN.map(function (s) { return "<li>" + esc(st(s.id).lernspur || "–") + "</li>"; }).join("") + "</ol></section>" +
-      '<section class="d-seite"><p class="d-meta">Zwei Sprachen</p><h2>Bucays Bilder in Fachsprache</h2>' + sprachen(true) + "</section>" +
+      '<section class="d-seite" style="break-after:auto;page-break-after:auto"><p class="d-meta">Zwei Sprachen</p><h2>Bucays Bilder in Fachsprache</h2>' + sprachen(true) + "</section>" +
       '<section class="d-seite"><p class="d-meta">Vorbereitung auf die Klassenarbeit</p><h2>Das muss ich können</h2>' + E.KOENNEN.map(function (t) { return "<h3>" + esc(t.typ) + " – " + esc(t.text) + "</h3><ul>" + t.ziele.map(function (z) { return "<li>" + esc(z) + "</li>"; }).join("") + "</ul>"; }).join("") + "</section>";
   }
 
@@ -162,7 +176,7 @@
     '<section class="h-abschnitt" id="landkarte" aria-labelledby="t-lk"><h2 id="t-lk">Landkarte</h2>' + landkarte() + "</section>" +
     '<section class="h-abschnitt" id="kreis" aria-labelledby="t-kr"><h2 id="t-kr">Dein Motivationskreis</h2><p>Hier liegen alle Begriffe, die du am Ende einer Stunde verortet hast – an der Stelle, an die du sie gelegt hast. ' + (k.n ? "" : "<b>Noch leer:</b> Am Ende jeder Stunde legst du die neuen Begriffe hinein.") + "</p>" + k.html + '<p class="k-klein">Modell: eigene Vereinfachung nach dem Grundmodell der Motivationspsychologie (Person und Situation → Motivation → Handeln), der Idee »Erwartung mal Wert« und der Attributionstheorie. Was lässt es weg? Zum Beispiel Gefühle, Gewohnheiten und Zufall.</p><h3>Deine Verbindungen</h3>' + verbindungen() + "</section>" +
     '<section class="h-abschnitt" id="spur" aria-labelledby="t-sp"><h2 id="t-sp">Deine Lernspur</h2><p class="k-frage" style="font-size:1.4rem">' + esc(E.LEITFRAGE) + "</p>" + lernspur() + "</section>" +
-    '<section class="h-abschnitt" id="sprachen" aria-labelledby="t-zs"><h2 id="t-zs">Zwei Sprachen</h2><p>Bucay erzählt in Bildern, die Psychologie in Fachbegriffen. Deine Übersetzungstabelle aus allen Geschichten – mit deinen Begründungen.</p>' + sprachen(false) + "</section>" +
+    '<section class="h-abschnitt" id="sprachen" aria-labelledby="t-zs"><h2 id="t-zs">Zwei Sprachen</h2><p>Bucay erzählt in Bildern, die Psychologie in Fachbegriffen. Zu jedem Inhalt gehört eine Geschichte. Darunter steht deine Übersetzungstabelle aus allen Geschichten – mit deinen Begründungen.</p>' + jeInhalt() + sprachen(false) + "</section>" +
     '<section class="h-abschnitt" id="lernkarten" aria-labelledby="t-lk2"><h2 id="t-lk2">Lernkarten</h2><p>Erst erinnern, dann umdrehen: Was du dir selbst erklären kannst, sitzt. Karten, die du noch nicht wusstest, kommen zuerst wieder.</p><div id="h-karten"></div></section>' +
     '<section class="h-abschnitt" id="klassenarbeit" aria-labelledby="t-ka"><h2 id="t-ka">Das muss ich können</h2><p>Die Klassenarbeit stellt vier Arten von Aufgaben. Schätze ehrlich ein, wo du stehst – nur für dich.</p>' + koennen() + denkwerkzeuge() + "</section>" +
     '<section class="h-abschnitt" id="profil" aria-labelledby="t-pr"><h2 id="t-pr">Mein Motivprofil</h2><details class="k-hilfe h-privat"><summary>Nur für dich – aufklappen</summary>' + profil() + "</details></section>" +
