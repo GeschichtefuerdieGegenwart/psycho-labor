@@ -21,10 +21,22 @@
       '<text x="26" y="' + ((y0 + yT) / 2) + '" text-anchor="middle" transform="rotate(-90 26 ' + ((y0 + yT) / 2) + ')" class="t-leise t-18">Fähigkeitsselbstkonzept →</text></svg>';
   }
 
+  /* Eine Geschichte je Inhalt: »Der wahre Wert des Rings« zu Vergleichen und Bezugsrahmen (Fassung 2.2). Bilder in eigenen Worten, kein Zitat. */
+  var W_RING = [
+    { id: "ri1", text: "Bild 1: " + bild("ri1") + " – Woher kommt der Unterschied?", opt: [
+      ["Der Juwelier misst an einem festen Maßstab.", "zentral", "Ein kriterialer Vergleich: Gold und Steine sind sein Maßstab. Die Leute auf dem Markt urteilen ohne diesen Maßstab – frag also: Verglichen womit?"],
+      ["Der Juwelier ist großzügiger als der Markt.", "kaum", "Davon erzählt die Geschichte nichts. Der Unterschied liegt im Maßstab, nicht in der Laune."],
+      ["Der Markt hat recht, denn dort urteilen viele.", "kaum", "Viele gleiche Urteile wirken überzeugend. Wer ohne Maßstab urteilt, wird durch eine Mehrheit aber nicht genauer."]] },
+    { id: "ri2", text: "Bild 2: " + bild("ri2") + " – Prüfe die Botschaft: Was lässt die Geschichte weg?", opt: [
+      ["den Vergleich mit mir selbst früher", "zentral", "Die Geschichte kennt nur fremde Urteile. Ob der junge Mann selbst wächst – der temporale Vergleich –, fragt sie nicht. Besprecht: Was bräuchte er dafür?"],
+      ["dass auch der Juwelier ein Fremder ist", "zentral", "Gut gesehen: Auch der Juwelier urteilt von außen. Das Selbstkonzept entsteht aus Rückmeldungen – die Frage ist, wessen Maßstab man vertraut. Besprecht: Wer wäre für euch so ein Juwelier?"],
+      ["nichts – die Botschaft gilt immer", "kaum", "Jede Geschichte erzählt einen Fall mit einer Botschaft. Prüfen heißt fragen, was sie weglässt."]] }
+  ];
+
   window.STUNDE = {
     id: "ds10", minuten: 90, material: "nach M8, M9 und dem Text »Das Selbstkonzept«",
     frage: "Warum hält sich jemand in einer Klasse für schlecht – und in einer anderen für gut, mit derselben Leistung?",
-    darum: "<p>Josef war an der Realschule gut in Mathe. Jetzt hält er sich für schlecht. Ist er schlechter geworden – oder nur sein Bild von sich? Heute untersuchst du, wie das Bild von den eigenen Fähigkeiten entsteht, warum es vom »Teich« abhängt und wie Zutrauen wachsen kann. Der Elefant kommt noch einmal vor.</p>",
+    darum: "<p>Josef war an der Realschule gut in Mathe. Jetzt hält er sich für schlecht. Ist er schlechter geworden – oder nur sein Bild von sich? Heute untersuchst du, wie das Bild von den eigenen Fähigkeiten entsteht, warum es vom »Teich« abhängt und wie Zutrauen wachsen kann. Dazu hörst du eine Geschichte über den Wert eines Rings, und der Elefant kommt noch einmal vor.</p>",
     ziele: ["erklären, was ein Selbstkonzept ist und aus welchen Vergleichen es entsteht,", "den Fischteicheffekt erklären und auf Josef anwenden,", "die Quellen der Selbstwirksamkeit nennen und zu einer Behauptung Stellung nehmen."],
     auftraege: [
       { id: "a1", nr: "1", titel: "Erst erinnern", sozial: "allein, ohne Heft", min: 4, oeffnet: "offen", bloecke: [
@@ -96,7 +108,11 @@
         ] },
         { typ: "fest", id: "eltern", label: "Warum wird diese Grafik oft Eltern gezeigt, deren Kinder in der vierten Klasse sind?", platzhalter: "Weil die Eltern bald entscheiden …", mind: 15, max: 400, zeilen: 3, kurz: "Warum die Grafik Eltern von Viertklässlern gezeigt wird" }
       ] },
-      { id: "a5", nr: "5", titel: "Henne oder Ei?", sozial: "allein", min: 6, oeffnet: "nach", bloecke: [
+      { id: "ri", nr: "5", titel: "Der wahre Wert des Rings", sozial: "zuhören, dann allein", min: 7, oeffnet: "ansage", bloecke: [
+        { typ: "geschichte", titel: "Der wahre Wert des Rings", hoerauftrag: "Achte darauf: <b>Wer bestimmt hier, was der Ring wert ist – und womit wird verglichen?</b>" },
+        { typ: "wahl", items: W_RING, druck: "kurz" }
+      ] },
+      { id: "a5", nr: "6", titel: "Henne oder Ei?", sozial: "allein", min: 6, oeffnet: "nach", bloecke: [
         { typ: "karten", karten: [
           { art: "honig", titel: "Skill-Development", html: "<p><b>Leistung → Selbstkonzept.</b> Gute Leistungen machen ein gutes Bild von den eigenen Fähigkeiten.</p>" },
           { art: "petrol", titel: "Self-Enhancement", html: "<p><b>Selbstkonzept → Leistung.</b> Wer sich viel zutraut, lernt mehr und leistet mehr.</p>" }
@@ -113,7 +129,7 @@
             ["Man kann nichts tun – es ist ein Teufelskreis.", "kaum", "Ein Kreis lässt sich in beide Richtungen drehen."]] }
         ] }
       ] },
-      { id: "a6", nr: "6", titel: "Wie wächst Zutrauen?", sozial: "zuhören, dann allein", min: 14, oeffnet: "ansage", bloecke: [
+      { id: "a6", nr: "7", titel: "Wie wächst Zutrauen?", sozial: "zuhören, dann allein", min: 14, oeffnet: "ansage", bloecke: [
         { typ: "geschichte", titel: "Der angekettete Elefant – zweite Lektüre", wie: "Zuhören · noch einmal", hoerauftrag: "Diesmal mit der Frage: Was müsste der Elefant erleben, damit er es wieder versucht?" },
         { typ: "wahl", items: [{ id: "el4", text: "Bild 4: " + bild("el4") + " – Welcher Vergleich fehlt ihm?", opt: [
           ["der soziale Vergleich", "begruendbar", "Ein Vergleich mit anderen Elefanten könnte helfen – siehe gleich: Vorbilder. Was ihm vor allem fehlt, ist der Blick auf sein eigenes Wachstum."],
@@ -151,14 +167,14 @@
         ] },
         { typ: "sprachen" }
       ] },
-      { id: "a7", nr: "7", titel: "Verorten und vernetzen", sozial: "allein, dann am Board", min: 6, oeffnet: "nach", bloecke: [
+      { id: "a7", nr: "8", titel: "Verorten und vernetzen", sozial: "allein, dann am Board", min: 6, oeffnet: "nach", bloecke: [
         { typ: "verorten" },
         { typ: "text", html: "<h3>Eine Verbindung knüpfen</h3>" },
         { typ: "verbindung", einleitung: "Verbinde einen Begriff von heute mit einem früheren. Zum Beispiel: Was hat der Fischteicheffekt mit der Erfolgserwartung zu tun?" },
         { typ: "text", html: "<h3>Deine Lernspur</h3>" },
         { typ: "lernspur", satzanfang: "Was ich mir zutraue, hängt auch davon ab, mit wem …" }
       ] },
-      { id: "a8", nr: "8", titel: "Lieber großer Fisch?", sozial: "allein", min: 14, oeffnet: "nach", bloecke: [
+      { id: "a8", nr: "9", titel: "Lieber großer Fisch?", sozial: "allein", min: 14, oeffnet: "nach", bloecke: [
         { typ: "schreiben", id: "teich", operator: "Stellung nehmen", mind: 60,
           aufgabe: "»Eltern sollten ihr Kind lieber auf eine Schule schicken, auf der es zu den Besten gehört.« Nimm Stellung zu dieser Aussage.",
           hinweis: "Nutze den Fischteicheffekt und den wechselseitigen Zusammenhang von Selbstkonzept und Leistung. Wäge ab und komm zu einem eigenen Urteil.",

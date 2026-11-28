@@ -74,6 +74,17 @@
       ["Kompetenz", "kaum", "Er kann seine Arbeit weiterhin gut. Er arbeitet sogar mehr."],
       ["soziale Eingebundenheit", "begruendbar", "Möglich, wenn er sich von anderen zurückzieht. Den Kern trifft es nicht."]] }
   ];
+  /* Eine Geschichte je Inhalt: »Linsen« zum Kontinuum der Regulation (Fassung 2.2). Bilder in eigenen Worten, kein Zitat. */
+  var W_LINSEN = [
+    { id: "li1", text: "Bild 1: " + bild("li1") + " – Wo steht der Höfling auf dem Kontinuum?", opt: [
+      ["external", "zentral", "Er schmeichelt für einen Lohn von außen: ein bequemes Leben am Hof. Fiele der Lohn weg, ließe er es."],
+      ["identifiziert", "begruendbar", "Ein bequemes Leben ist ihm selbst wichtig – insofern begründbar. Das Schmeicheln selbst tut er aber nur für den Lohn."],
+      ["introjiziert", "kaum", "Von schlechtem Gewissen oder innerem Druck erzählt die Geschichte nichts. Sie nennt nur den Lohn."]] },
+    { id: "li2", text: "Bild 2: " + bild("li2") + " – Wo steht Diogenes auf dem Kontinuum?", opt: [
+      ["intrinsisch", "kaum", "Er isst die Linsen nicht, weil sie ihm so gut schmecken. Sie sind Mittel zum Zweck: Er bleibt frei."],
+      ["identifiziert", "zentral", "Er hält die Freiheit selbst für wichtig und nimmt dafür einfaches Essen in Kauf. Besprecht: Was spräche dafür, dass sie sogar integriert ist?"],
+      ["integriert", "zentral", "Die Linsen sind Mittel zum Zweck – aber der Zweck gehört ganz zu ihm. Besprecht: Woran würdet ihr erkennen, dass das zu all seinen Zielen passt?"]] }
+  ];
 
   function kontBild() {
     /* Beschriftung in zwei Reihen: So bleibt die Schrift auch am iPad hochkant bei mindestens 16 px (wirksame Größe) */
@@ -97,7 +108,7 @@
   window.STUNDE = {
     id: "ds07", minuten: 90, material: "nach M4 und M5",
     frage: "Was braucht ein Mensch, damit er etwas von sich aus tut?",
-    darum: "<p>In Stunde 1 blieb eine Frage offen: Kann man für ein Ziel außerhalb der Sache lernen – und es trotzdem selbst wollen? Heute folgst du drei Spuren zu drei Grundbedürfnissen, ordnest Gründe auf einem Kontinuum und liest den Kreis der 99 ein zweites Mal.</p>",
+    darum: "<p>In Stunde 1 blieb eine Frage offen: Kann man für ein Ziel außerhalb der Sache lernen – und es trotzdem selbst wollen? Heute folgst du drei Spuren zu drei Grundbedürfnissen und ordnest Gründe auf einem Kontinuum. Eine ganz kurze Geschichte von Bucay passt genau dazu, und den Kreis der 99 hörst du ein zweites Mal.</p>",
     ziele: ["die drei Grundbedürfnisse nach Deci und Ryan erklären,", "Gründe für eine Handlung auf dem Kontinuum der Regulation einordnen,", "die Botschaft einer Geschichte mit der Theorie prüfen."],
     auftraege: [
       { id: "a1", nr: "1", titel: "Erst erinnern", sozial: "allein, ohne Heft", min: 4, oeffnet: "offen", bloecke: [
@@ -182,19 +193,24 @@
           return n;
         } }
       ] },
-      { id: "a7", nr: "7", titel: "Der Kreis der 99 – zweite Lektüre", sozial: "allein, dann Plenum", min: 12, oeffnet: "ansage", bloecke: [
+      { id: "li", nr: "7", titel: "Linsen", sozial: "zuhören, dann allein", min: 6, oeffnet: "ansage", bloecke: [
+        { typ: "geschichte", titel: "Linsen", hoerauftrag: "Eine ganz kurze Geschichte. Achte darauf: <b>Wofür tut jeder der beiden, was er tut?</b>" },
+        { typ: "wahl", items: W_LINSEN, druck: "kurz" },
+        { typ: "text", html: "<p class=\"k-klein\">Die Anekdote ist sehr alt: Schon Diogenes Laertios erzählt sie (Leben der Philosophen, Buch II, 68). Dort wäscht Diogenes Gemüse, und der Mann am Hof heißt Aristipp.</p>" }
+      ] },
+      { id: "a7", nr: "8", titel: "Der Kreis der 99 – zweite Lektüre", sozial: "allein, dann Plenum", min: 12, oeffnet: "ansage", bloecke: [
         { typ: "geschichte", titel: "Der Kreis der 99 – zweite Lektüre", wie: "Zuhören · kurz zusammengefasst", hoerauftrag: "In Stunde 1 hast du die Geschichte übersetzt. Jetzt prüfst du sie mit dem, was du heute gelernt hast." },
         { typ: "wahl", items: W_GESCHICHTE },
         { typ: "sprachen" }
       ] },
-      { id: "a8", nr: "8", titel: "Verorten und vernetzen", sozial: "allein, dann am Board", min: 6, oeffnet: "nach", bloecke: [
+      { id: "a8", nr: "9", titel: "Verorten und vernetzen", sozial: "allein, dann am Board", min: 6, oeffnet: "nach", bloecke: [
         { typ: "verorten" },
         { typ: "text", html: "<h3>Eine Verbindung knüpfen</h3>" },
         { typ: "verbindung", einleitung: "Verbinde einen Begriff von heute mit einem aus Stunde 1. Zum Beispiel: Was hat eine erwartete Belohnung mit extrinsischer Motivation zu tun?" },
         { typ: "text", html: "<h3>Deine Lernspur</h3>" },
         { typ: "lernspur", satzanfang: "Ein Muss wird eher zum Wollen, wenn …" }
       ] },
-      { id: "a9", nr: "9", titel: "Stimmt die Botschaft?", sozial: "allein", min: 12, oeffnet: "nach", bloecke: [
+      { id: "a9", nr: "10", titel: "Stimmt die Botschaft?", sozial: "allein", min: 12, oeffnet: "nach", bloecke: [
         { typ: "schreiben", id: "botschaft", operator: "Stellung nehmen", mind: 50,
           aufgabe: "Eine Lesart der Geschichte lautet: <em>»Wer immer mehr will, verliert seine Freude.«</em> Beurteile diese Botschaft mit der Selbstbestimmungstheorie von Deci und Ryan (Grundbedürfnisse, Kontinuum): Wo hat die Geschichte recht, wo greift sie zu kurz?",
           hinweis: "Schreibe fünf bis acht Sätze und nutze mindestens zwei Begriffe von heute.",
